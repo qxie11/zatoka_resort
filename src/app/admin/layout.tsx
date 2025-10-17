@@ -10,7 +10,7 @@ export default async function AdminLayout({
   const session = await getServerSession();
 
   if (!session) {
-    redirect("/login?error=Вам нужно войти, чтобы просмотреть эту страницу.");
+    redirect(`/login?error=${encodeURIComponent("Вам нужно войти, чтобы просмотреть эту страницу.")}`);
   }
 
   return <>{children}</>;
