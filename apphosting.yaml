@@ -5,3 +5,8 @@ runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
+  # The following environment variable is needed for NextAuth to work correctly in App Hosting.
+  # See https://next-auth.js.org/deployment#next.js-app-router
+  env:
+    - variable: NEXTAUTH_URL
+      value: https://__HOSTING_URL__
