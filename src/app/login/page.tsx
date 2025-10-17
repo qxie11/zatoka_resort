@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -26,14 +27,14 @@ export default function LoginPage() {
     const result = await signIn("credentials", {
       username,
       password,
-      redirect: false, // We'll handle redirection manually
+      redirect: false,
     });
+
+    setLoading(false);
 
     if (result?.error) {
       setError("Неверное имя пользователя или пароль.");
-      setLoading(false);
     } else if (result?.ok) {
-      // Successful sign in
       router.push("/admin");
     }
   };
