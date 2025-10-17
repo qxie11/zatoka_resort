@@ -14,3 +14,10 @@ export type Amenity = {
     icon: string;
     description: string;
 }
+
+export type Booking = {
+  id: string;
+  roomId: string;
+  startDate: Date;
+  endDate: Date;
+};

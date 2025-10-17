@@ -1,4 +1,4 @@
-import type { Room, Amenity } from '@/lib/types';
+import type { Room, Amenity, Booking } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const getImage = (id: string) => {
@@ -62,4 +62,11 @@ export const amenities: Amenity[] = [
   { name: 'Парковка', icon: 'Car', description: 'Безопасная парковка для всех наших гостей.' },
   { name: 'Обслуживание номеров', icon: 'ConciergeBell', description: 'Круглосуточное обслуживание номеров для вашего удобства.'},
   { name: 'Фитнес-центр', icon: 'Dumbbell', description: 'Поддерживайте форму в нашем полностью оборудованном тренажерном зале.'}
+];
+
+export const bookings: Booking[] = [
+    { id: 'booking1', roomId: 'standard', startDate: new Date(2024, 7, 10), endDate: new Date(2024, 7, 15) },
+    { id: 'booking2', roomId: 'standard', startDate: new Date(2024, 7, 20), endDate: new Date(2024, 7, 22) },
+    { id: 'booking3', roomId: 'deluxe', startDate: new Date(2024, 7, 5), endDate: new Date(2024, 7, 12) },
+    { id: 'booking4', roomId: 'family', startDate: new Date(2024, 8, 1), endDate: new Date(2024, 8, 10) },
 ];
