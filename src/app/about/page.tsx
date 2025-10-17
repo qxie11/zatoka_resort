@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { amenities } from "@/lib/data";
 import { Waves, Wifi, UtensilsCrossed, Sun, HeartPulse, Car, ConciergeBell, Dumbbell } from "lucide-react";
 import type { LucideProps } from 'lucide-react';
+import { WavyUnderline } from '@/components/ui/wavy-underline';
 
 export const metadata: Metadata = {
   title: "О нас - Отдых в Затоке",
@@ -38,6 +39,7 @@ export default function AboutPage() {
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Создавая незабываемый отдых</h1>
+            <WavyUnderline />
             <p className="mt-4 max-w-3xl mx-auto text-muted-foreground text-lg">
                 Откройте для себя историю, страсть и людей, которые делают "Отдых в Затоке" уникальным местом на побережье Черного моря.
             </p>
@@ -98,13 +100,14 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Наша преданная команда</h2>
+              <WavyUnderline />
               <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Улыбающиеся лица, стоящие за вашим идеальным отдыхом.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {teamMembers.map((member) => {
                 const memberImage = PlaceHolderImages.find(p => p.id === member.imageId);
                 return (
-                 <Card key={member.name} className="text-center border-0 shadow-none">
+                 <Card key={member.name} className="text-center border-0 shadow-none bg-transparent">
                     <CardHeader>
                         {memberImage && (
                             <Image
@@ -131,6 +134,7 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Удобства и услуги</h2>
+              <WavyUnderline />
               <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Мы предоставляем широкий спектр услуг, чтобы сделать ваше пребывание комфортным и незабываемым.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

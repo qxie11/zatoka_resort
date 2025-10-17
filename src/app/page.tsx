@@ -7,6 +7,7 @@ import { amenities, rooms } from '@/lib/data';
 import { ArrowRight, BedDouble, Star, Waves, Wifi, UtensilsCrossed, Sun, HeartPulse, Car, ConciergeBell, Dumbbell } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { LucideProps } from 'lucide-react';
+import { WavyUnderline } from '@/components/ui/wavy-underline';
 
 const iconMap: { [key: string]: React.FC<LucideProps> } = {
   Waves,
@@ -54,9 +55,7 @@ export default function Home() {
         <section className="py-16 lg:py-24 bg-background">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Добро пожаловать в "Отдых в Затоке"</h2>
-            <div className="flex justify-center my-4">
-              <div className="w-24 h-1 bg-primary rounded-full" />
-            </div>
+            <WavyUnderline />
             <p className="mt-4 max-w-3xl mx-auto text-muted-foreground text-lg">
               Расположенный на безмятежном побережье Черного моря, "Отдых в Затоке" предлагает идеальное сочетание роскоши, комфорта и природной красоты. Ищете ли вы романтический уик-энд или семейное приключение, наш отель - ваше идеальное место для незабываемого отдыха.
             </p>
@@ -67,6 +66,7 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Наши избранные номера</h2>
+               <WavyUnderline />
               <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Элегантно оформленные номера для вашего максимального комфорта.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -108,6 +108,7 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Удобства отеля</h2>
+               <WavyUnderline />
               <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Все, что нужно для идеального отдыха.</p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
