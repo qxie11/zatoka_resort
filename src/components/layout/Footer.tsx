@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border/40 bg-background/95">
+    <footer className="border-t bg-background">
       <div className="container mx-auto max-w-7xl px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="flex flex-col items-start">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <Waves className="h-6 w-6 text-primary" />
-              <span className="font-headline text-xl font-bold">Отдых в Затоке</span>
+              <span className="text-xl font-bold">Отдых в Затоке</span>
             </Link>
             <p className="text-muted-foreground text-sm">
               Ваш безмятежный морской отдых на побережье Черного моря.

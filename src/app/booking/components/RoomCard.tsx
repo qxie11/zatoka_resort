@@ -34,7 +34,7 @@ export default function RoomCard({ room }: RoomCardProps) {
       </div>
       <div className="flex flex-col justify-between w-full md:w-2/3">
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">{room.name}</CardTitle>
+          <CardTitle className="text-2xl">{room.name}</CardTitle>
           <div className="flex items-center gap-2 mt-2 text-muted-foreground text-sm">
             <BedDouble className="h-4 w-4" />
             <span>До {room.capacity} гостей</span>
@@ -55,7 +55,7 @@ export default function RoomCard({ room }: RoomCardProps) {
             <p className="text-xl font-bold text-primary">{room.price} грн</p>
             <p className="text-sm text-muted-foreground">за ночь</p>
           </div>
-          <Button onClick={handleBooking} className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90">Забронировать</Button>
+          <Button onClick={handleBooking} className="w-full sm:w-auto">Забронировать</Button>
         </CardFooter>
       </div>
     </Card>

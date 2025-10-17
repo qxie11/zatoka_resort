@@ -4,6 +4,13 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { Inter as FontSans } from "next/font/google"
+
+const fontSans = FontSans({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-sans",
+})
+
 
 const APP_NAME = "Отдых в Затоке";
 const APP_DEFAULT_TITLE = "Отдых в Затоке | Ваш морской отель в Одесской области";
@@ -47,7 +54,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#64B5F6",
+  themeColor: "#FFFFFF",
 };
 
 
@@ -58,12 +65,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
-      </head>
-      <body className={cn("min-h-screen bg-background font-body antialiased", "font-body")}>
+      <head />
+      <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
           <div className="relative flex min-h-dvh flex-col bg-background">
             <Header />
             <main className="flex-1">{children}</main>

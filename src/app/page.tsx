@@ -39,13 +39,13 @@ export default function Home() {
           )}
           <div className="absolute inset-0 bg-black/50" />
           <div className="relative container mx-auto h-full flex flex-col items-center justify-center text-center text-white px-4">
-            <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
               Ваш морской побег в Затоке
             </h1>
             <p className="mt-4 max-w-2xl text-lg md:text-xl text-primary-foreground/90">
               Испытайте несравненный комфорт и захватывающие виды на Черное море в "Отдыхе в Затоке".
             </p>
-            <Button asChild size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Button asChild size="lg" className="mt-8">
               <Link href="/booking">Забронировать <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
           </div>
@@ -53,7 +53,7 @@ export default function Home() {
 
         <section className="py-16 lg:py-24 bg-background">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="font-headline text-3xl md:text-4xl font-semibold">Добро пожаловать в "Отдых в Затоке"</h2>
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Добро пожаловать в "Отдых в Затоке"</h2>
             <div className="flex justify-center my-4">
               <div className="w-24 h-1 bg-primary rounded-full" />
             </div>
@@ -63,22 +63,22 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-16 lg:py-24 bg-card">
+        <section className="py-16 lg:py-24 bg-secondary/50">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="font-headline text-3xl md:text-4xl font-semibold">Наши избранные номера</h2>
+              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Наши избранные номера</h2>
               <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Элегантно оформленные номера для вашего максимального комфорта.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredRooms.map((room) => (
-                <Card key={room.id} className="overflow-hidden flex flex-col group transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                <Card key={room.id} className="overflow-hidden flex flex-col group transition-all duration-300 hover:scale-105 hover:shadow-xl">
                   <CardHeader className="p-0">
                      <div className="relative h-64 w-full">
                         <Image src={room.imageUrl} alt={room.name} fill className="object-cover" data-ai-hint={room.imageHint} />
                      </div>
                   </CardHeader>
                   <CardContent className="pt-6 flex-grow">
-                    <CardTitle className="font-headline text-xl">{room.name}</CardTitle>
+                    <CardTitle className="text-xl">{room.name}</CardTitle>
                     <div className="flex items-center gap-2 mt-2 text-muted-foreground">
                         <BedDouble className="h-4 w-4" />
                         <span>{room.capacity} Гостей</span>
@@ -87,7 +87,7 @@ export default function Home() {
                   </CardContent>
                   <CardFooter className="flex justify-between items-center">
                     <p className="text-lg font-bold text-primary">{room.price} грн / ночь</p>
-                    <Button asChild variant="link" className="text-primary">
+                    <Button asChild variant="ghost">
                       <Link href={`/booking#${room.id}`}>
                         Подробнее <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
@@ -97,7 +97,7 @@ export default function Home() {
               ))}
             </div>
              <div className="text-center mt-12">
-                <Button asChild size="lg" variant="outline">
+                <Button asChild size="lg">
                     <Link href="/booking">Посмотреть все номера</Link>
                 </Button>
             </div>
@@ -107,7 +107,7 @@ export default function Home() {
         <section className="py-16 lg:py-24 bg-background">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="font-headline text-3xl md:text-4xl font-semibold">Удобства отеля</h2>
+              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Удобства отеля</h2>
               <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Все, что нужно для идеального отдыха.</p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -126,13 +126,13 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-16 lg:py-24 bg-primary/10">
+        <section className="py-16 lg:py-24 bg-primary text-primary-foreground">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="font-headline text-3xl md:text-4xl font-semibold text-foreground">Готовы к вашему отдыху?</h2>
-            <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+            <h2 className="text-3xl md:text-4xl font-semibold">Готовы к вашему отдыху?</h2>
+            <p className="mt-4 max-w-2xl mx-auto text-lg">
               Берега Затоки зовут. Забронируйте отпуск своей мечты сегодня и создайте воспоминания, которые останутся на всю жизнь.
             </p>
-            <Button asChild size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Button asChild size="lg" className="mt-8" variant="secondary">
               <Link href="/booking">Забронировать номер сейчас</Link>
             </Button>
           </div>

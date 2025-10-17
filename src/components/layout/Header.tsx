@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Waves, LogOut, User } from "lucide-react";
+import { Menu, Waves, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -41,11 +41,11 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
           <Waves className="h-6 w-6 text-primary" />
-          <span className="font-headline text-xl font-bold">Отдых в Затоке</span>
+          <span className="text-xl font-bold">Отдых в Затоке</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
@@ -76,7 +76,7 @@ export default function Header() {
             {isAuthenticated ? (
               <>
                 <span className="text-sm font-medium text-muted-foreground hidden lg:inline">Добро пожаловать, Admin</span>
-                <Button variant="outline" size="icon" onClick={handleSignOut} aria-label="Выйти">
+                <Button variant="ghost" size="icon" onClick={handleSignOut} aria-label="Выйти">
                   <LogOut className="h-4 w-4" />
                 </Button>
               </>
@@ -85,7 +85,7 @@ export default function Header() {
                 <Button asChild>
                     <Link href="/booking">Забронировать</Link>
                 </Button>
-                <Button asChild variant="secondary">
+                <Button asChild variant="outline">
                     <Link href="/login">Войти</Link>
                 </Button>
               </>
@@ -103,7 +103,7 @@ export default function Header() {
               <div className="flex flex-col gap-6 pt-10">
                 <Link href="/" className="flex items-center gap-2 mb-4" onClick={() => setIsMobileMenuOpen(false)}>
                     <Waves className="h-6 w-6 text-primary" />
-                    <span className="font-headline text-xl font-bold">Отдых в Затоке</span>
+                    <span className="text-xl font-bold">Отдых в Затоке</span>
                 </Link>
                 {navLinks.map((link) => (
                   <Link

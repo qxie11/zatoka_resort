@@ -37,7 +37,7 @@ export default function AboutPage() {
     <div className="bg-background">
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4 text-center">
-            <h1 className="font-headline text-4xl md:text-5xl font-bold">Создавая незабываемый отдых</h1>
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Создавая незабываемый отдых</h1>
             <p className="mt-4 max-w-3xl mx-auto text-muted-foreground text-lg">
                 Откройте для себя историю, страсть и людей, которые делают "Отдых в Затоке" уникальным местом на побережье Черного моря.
             </p>
@@ -48,7 +48,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                 <div className="order-2 lg:order-1">
-                    <h2 className="font-headline text-3xl font-semibold mb-4">Наша история</h2>
+                    <h2 className="text-3xl font-semibold tracking-tight mb-4">Наша история</h2>
                     <p className="text-muted-foreground mb-4">
                         Основанный в 2010 году, "Отдых в Затоке" родился из мечты создать оазис спокойствия и роскоши в одном из самых красивых прибрежных городов Украины. Наши основатели, семья с глубокими корнями в Одесском регионе, представляли себе место, где современный комфорт сочетается с вечной красотой Черного моря.
                     </p>
@@ -72,17 +72,17 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-24 bg-card">
+      <section className="py-16 lg:py-24 bg-secondary/50">
         <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div>
-                    <h2 className="font-headline text-3xl font-semibold mb-4">Наша миссия</h2>
+                    <h2 className="text-3xl font-semibold tracking-tight mb-4">Наша миссия</h2>
                     <p className="text-muted-foreground">
                         Предоставлять исключительный опыт гостеприимства на берегу моря, сочетая роскошь, комфорт и индивидуальное обслуживание, создавая незабываемые воспоминания для каждого гостя.
                     </p>
                 </div>
                 <div>
-                    <h2 className="font-headline text-3xl font-semibold mb-4">Наши ценности</h2>
+                    <h2 className="text-3xl font-semibold tracking-tight mb-4">Наши ценности</h2>
                     <ul className="list-disc list-inside text-muted-foreground space-y-2">
                         <li><strong>Ориентация на гостя:</strong> Наши гости находятся в центре всего, что мы делаем.</li>
                         <li><strong>Превосходство:</strong> Мы стремимся к самым высоким стандартам качества и обслуживания.</li>
@@ -97,14 +97,14 @@ export default function AboutPage() {
        <section className="py-16 lg:py-24 bg-background">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="font-headline text-3xl md:text-4xl font-semibold">Наша преданная команда</h2>
+              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Наша преданная команда</h2>
               <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Улыбающиеся лица, стоящие за вашим идеальным отдыхом.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {teamMembers.map((member) => {
                 const memberImage = PlaceHolderImages.find(p => p.id === member.imageId);
                 return (
-                 <Card key={member.name} className="text-center">
+                 <Card key={member.name} className="text-center border-0 shadow-none">
                     <CardHeader>
                         {memberImage && (
                             <Image
@@ -118,7 +118,7 @@ export default function AboutPage() {
                         )}
                     </CardHeader>
                     <CardContent>
-                        <CardTitle className="text-xl font-headline">{member.name}</CardTitle>
+                        <CardTitle className="text-xl">{member.name}</CardTitle>
                         <p className="text-primary">{member.role}</p>
                     </CardContent>
                 </Card>
@@ -127,10 +127,10 @@ export default function AboutPage() {
           </div>
         </section>
 
-      <section className="py-16 lg:py-24 bg-card">
+      <section className="py-16 lg:py-24 bg-secondary/50">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="font-headline text-3xl md:text-4xl font-semibold">Удобства и услуги</h2>
+              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Удобства и услуги</h2>
               <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Мы предоставляем широкий спектр услуг, чтобы сделать ваше пребывание комфортным и незабываемым.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -138,8 +138,8 @@ export default function AboutPage() {
                 const Icon = iconMap[amenity.icon];
                 return (
                   <div key={amenity.name} className="flex items-start gap-4">
-                    <div className="bg-primary/10 p-3 rounded-full mt-1">
-                      {Icon && <Icon className="h-6 w-6 text-primary" />}
+                    <div className="bg-primary/10 text-primary p-3 rounded-full mt-1">
+                      {Icon && <Icon className="h-6 w-6" />}
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold">{amenity.name}</h3>
