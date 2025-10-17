@@ -1,14 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Waves, LogOut, User } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { signOut, useSession } from "next-auth/react";
-
 
 const navLinks = [
   { href: "/", label: "Главная" },
@@ -18,11 +16,28 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { data: session } = useSession();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleSignOut = async () => {
-    await signOut({ redirect: true, callbackUrl: '/' });
+  useEffect(() => {
+    const checkAuth = () => {
+        const authStatus = localStorage.getItem('isAuthenticated') === 'true';
+        setIsAuthenticated(authStatus);
+    }
+    // Check on initial load
+    checkAuth();
+
+    // Listen to storage changes
+    window.addEventListener('storage', checkAuth);
+
+    // Also check when path changes
+  }, [pathname]);
+
+  const handleSignOut = () => {
+    localStorage.removeItem('isAuthenticated');
+    setIsAuthenticated(false);
+    router.push('/');
   };
 
   return (
@@ -45,7 +60,7 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-          {session && (
+          {isAuthenticated && (
              <Link
               href="/admin"
               className={cn(
@@ -58,9 +73,9 @@ export default function Header() {
           )}
         </nav>
         <div className="hidden md:flex items-center gap-2">
-            {session ? (
+            {isAuthenticated ? (
               <>
-                <span className="text-sm font-medium text-muted-foreground hidden lg:inline">Добро пожаловать, {session.user?.name}</span>
+                <span className="text-sm font-medium text-muted-foreground hidden lg:inline">Добро пожаловать, Admin</span>
                 <Button variant="outline" size="icon" onClick={handleSignOut} aria-label="Выйти">
                   <LogOut className="h-4 w-4" />
                 </Button>
@@ -103,7 +118,7 @@ export default function Header() {
                     {link.label}
                   </Link>
                 ))}
-                {session && (
+                {isAuthenticated && (
                   <Link
                     href="/admin"
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -116,7 +131,7 @@ export default function Header() {
                   </Link>
                 )}
                 <div className="mt-4 flex flex-col gap-2">
-                  {session ? (
+                  {isAuthenticated ? (
                     <Button onClick={() => { handleSignOut(); setIsMobileMenuOpen(false);}}>
                       <LogOut className="mr-2 h-4 w-4" /> Выйти
                     </Button>
