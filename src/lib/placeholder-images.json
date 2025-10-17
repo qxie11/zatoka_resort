@@ -1,3 +1,76 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "description": "A beautiful view of the Zatoka beach at sunset.",
+      "imageUrl": "https://images.unsplash.com/photo-1683459285195-2bff6b201b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8emF0b2thJTIwYmVhY2h8ZW58MHx8fHwxNzYwNzM2NjIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "zatoka beach"
+    },
+    {
+      "id": "standard-room",
+      "description": "A cozy standard room with a sea view.",
+      "imageUrl": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxob3RlbCUyMHJvb218ZW58MHx8fHwxNzYwNzM0MTM4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hotel room"
+    },
+    {
+      "id": "deluxe-room",
+      "description": "A spacious deluxe room with a balcony.",
+      "imageUrl": "https://images.unsplash.com/photo-1680503146476-abb8c752e1f4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjByb29tfGVufDB8fHx8MTc2MDczNjYyMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury room"
+    },
+    {
+      "id": "suite-room",
+      "description": "A luxurious suite with a separate living area.",
+      "imageUrl": "https://images.unsplash.com/photo-1632598024410-3d8f24daab57?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxob3RlbCUyMHN1aXRlfGVufDB8fHx8MTc2MDczNTQ1N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hotel suite"
+    },
+    {
+      "id": "family-room",
+      "description": "A comfortable family room with multiple beds.",
+      "imageUrl": "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmYW1pbHklMjByb29tfGVufDB8fHx8MTc2MDczNTQ1N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "family room"
+    },
+    {
+      "id": "about-us",
+      "description": "The welcoming reception area of the Zatoka Getaway hotel.",
+      "imageUrl": "https://images.unsplash.com/photo-1558959357-685f9c7ace7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxob3RlbCUyMHJlY2VwdGlvbnxlbnwwfHx8fDE3NjA3MzExNzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hotel reception"
+    },
+    {
+      "id": "amenity-pool",
+      "description": "The hotel's beautiful outdoor swimming pool.",
+      "imageUrl": "https://images.unsplash.com/photo-1606819422797-74627f4dac0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxob3RlbCUyMHBvb2x8ZW58MHx8fHwxNzYwNzM0OTk0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hotel pool"
+    },
+    {
+      "id": "amenity-restaurant",
+      "description": "The hotel's restaurant with a view of the sea.",
+      "imageUrl": "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxob3RlbCUyMHJlc3RhdXJhbnR8ZW58MHx8fHwxNzYwNzM2NjIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hotel restaurant"
+    },
+    {
+      "id": "amenity-spa",
+      "description": "A relaxing spa and wellness center.",
+      "imageUrl": "https://images.unsplash.com/photo-1757689314932-bec6e9c39e51?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGElMjB3ZWxsbmVzc3xlbnwwfHx8fDE3NjA3MzY2MjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spa wellness"
+    },
+    {
+      "id": "staff-1",
+      "description": "Portrait of a smiling hotel manager.",
+      "imageUrl": "https://images.unsplash.com/photo-1670852767079-e4b234abdb4c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxob3RlbCUyMG1hbmFnZXJ8ZW58MHx8fHwxNzYwNzM2NjIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hotel manager"
+    },
+    {
+      "id": "staff-2",
+      "description": "Portrait of a friendly concierge.",
+      "imageUrl": "https://images.unsplash.com/photo-1677129666186-d29eba893fe3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxob3RlbCUyMGNvbmNpZXJnZXxlbnwwfHx8fDE3NjA3MzY2MjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hotel concierge"
+    },
+    {
+      "id": "staff-3",
+      "description": "Portrait of a professional head chef.",
+      "imageUrl": "https://images.unsplash.com/photo-1670819916552-67698b1c86ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxoZWFkJTIwY2hlZnxlbnwwfHx8fDE3NjA3MzY2MjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "head chef"
+    }
+  ]
 }
