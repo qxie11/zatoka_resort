@@ -40,25 +40,25 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/50" />
           <div className="relative container mx-auto h-full flex flex-col items-center justify-center text-center text-white px-4">
             <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-              Your Seaside Escape in Zatoka
+              Ваш морской побег в Затоке
             </h1>
             <p className="mt-4 max-w-2xl text-lg md:text-xl text-primary-foreground/90">
-              Experience unparalleled comfort and breathtaking Black Sea views at Zatoka Getaway.
+              Испытайте несравненный комфорт и захватывающие виды на Черное море в "Отдыхе в Затоке".
             </p>
             <Button asChild size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground">
-              <Link href="/booking">Book Your Stay <ArrowRight className="ml-2 h-5 w-5" /></Link>
+              <Link href="/booking">Забронировать <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
           </div>
         </section>
 
         <section className="py-16 lg:py-24 bg-background">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="font-headline text-3xl md:text-4xl font-semibold">Welcome to Zatoka Getaway</h2>
+            <h2 className="font-headline text-3xl md:text-4xl font-semibold">Добро пожаловать в "Отдых в Затоке"</h2>
             <div className="flex justify-center my-4">
               <div className="w-24 h-1 bg-primary rounded-full" />
             </div>
             <p className="mt-4 max-w-3xl mx-auto text-muted-foreground text-lg">
-              Nestled on the serene coast of the Black Sea, Zatoka Getaway offers a perfect blend of luxury, comfort, and natural beauty. Whether you're seeking a romantic retreat or a family adventure, our hotel is your ultimate destination for an unforgettable holiday.
+              Расположенный на безмятежном побережье Черного моря, "Отдых в Затоке" предлагает идеальное сочетание роскоши, комфорта и природной красоты. Ищете ли вы романтический уик-энд или семейное приключение, наш отель - ваше идеальное место для незабываемого отдыха.
             </p>
           </div>
         </section>
@@ -66,8 +66,8 @@ export default function Home() {
         <section className="py-16 lg:py-24 bg-card">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="font-headline text-3xl md:text-4xl font-semibold">Our Featured Rooms</h2>
-              <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Elegantly designed rooms for your utmost comfort.</p>
+              <h2 className="font-headline text-3xl md:text-4xl font-semibold">Наши избранные номера</h2>
+              <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Элегантно оформленные номера для вашего максимального комфорта.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredRooms.map((room) => (
@@ -81,15 +81,15 @@ export default function Home() {
                     <CardTitle className="font-headline text-xl">{room.name}</CardTitle>
                     <div className="flex items-center gap-2 mt-2 text-muted-foreground">
                         <BedDouble className="h-4 w-4" />
-                        <span>{room.capacity} Guests</span>
+                        <span>{room.capacity} Гостей</span>
                     </div>
                     <CardDescription className="mt-4">{room.description}</CardDescription>
                   </CardContent>
                   <CardFooter className="flex justify-between items-center">
-                    <p className="text-lg font-bold text-primary">{room.price} UAH / night</p>
+                    <p className="text-lg font-bold text-primary">{room.price} грн / ночь</p>
                     <Button asChild variant="link" className="text-primary">
                       <Link href={`/booking#${room.id}`}>
-                        Details <ArrowRight className="ml-2 h-4 w-4" />
+                        Подробнее <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
                   </CardFooter>
@@ -98,7 +98,7 @@ export default function Home() {
             </div>
              <div className="text-center mt-12">
                 <Button asChild size="lg" variant="outline">
-                    <Link href="/booking">View All Rooms</Link>
+                    <Link href="/booking">Посмотреть все номера</Link>
                 </Button>
             </div>
           </div>
@@ -107,8 +107,8 @@ export default function Home() {
         <section className="py-16 lg:py-24 bg-background">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="font-headline text-3xl md:text-4xl font-semibold">Hotel Amenities</h2>
-              <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Everything you need for a perfect stay.</p>
+              <h2 className="font-headline text-3xl md:text-4xl font-semibold">Удобства отеля</h2>
+              <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Все, что нужно для идеального отдыха.</p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {amenities.slice(0, 8).map((amenity) => {
@@ -128,12 +128,12 @@ export default function Home() {
 
         <section className="py-16 lg:py-24 bg-primary/10">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="font-headline text-3xl md:text-4xl font-semibold text-foreground">Ready for Your Getaway?</h2>
+            <h2 className="font-headline text-3xl md:text-4xl font-semibold text-foreground">Готовы к вашему отдыху?</h2>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-              The shores of Zatoka are calling. Book your dream vacation today and create memories that will last a lifetime.
+              Берега Затоки зовут. Забронируйте отпуск своей мечты сегодня и создайте воспоминания, которые останутся на всю жизнь.
             </p>
             <Button asChild size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground">
-              <Link href="/booking">Reserve Your Room Now</Link>
+              <Link href="/booking">Забронировать номер сейчас</Link>
             </Button>
           </div>
         </section>

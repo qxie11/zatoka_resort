@@ -5,10 +5,10 @@ import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
-const APP_NAME = "Zatoka Getaway";
-const APP_DEFAULT_TITLE = "Zatoka Getaway | Your Seaside Hotel in Odessa Region";
-const APP_TITLE_TEMPLATE = "%s | Zatoka Getaway";
-const APP_DESCRIPTION = "Book your perfect beach vacation at Zatoka Getaway, a premium hotel in Zatoka, Odessa. Enjoy stunning sea views, excellent service, and modern amenities.";
+const APP_NAME = "Отдых в Затоке";
+const APP_DEFAULT_TITLE = "Отдых в Затоке | Ваш морской отель в Одесской области";
+const APP_TITLE_TEMPLATE = "%s | Отдых в Затоке";
+const APP_DESCRIPTION = "Забронируйте свой идеальный пляжный отдых в 'Отдых в Затоке', премиум-отеле в Затоке, Одесса. Наслаждайтесь потрясающими видами на море, отличным сервисом и современными удобствами.";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     },
     description: APP_DESCRIPTION,
   },
-  keywords: ["hotel", "Zatoka", "Odessa", "beach resort", "Black Sea", "vacation", "booking"],
+  keywords: ["отель", "Затока", "Одесса", "пляжный курорт", "Черное море", "отдых", "бронирование"],
 };
 
 export const viewport: Viewport = {
@@ -57,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ru" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

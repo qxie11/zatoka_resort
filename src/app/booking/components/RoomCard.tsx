@@ -16,8 +16,8 @@ export default function RoomCard({ room }: RoomCardProps) {
 
   const handleBooking = () => {
     toast({
-        title: `Booking for ${room.name}`,
-        description: "This is a demo. In a real application, this would redirect to a payment gateway."
+        title: `Бронирование ${room.name}`,
+        description: "Это демонстрация. В реальном приложении это перенаправило бы на платежный шлюз."
     })
   }
 
@@ -26,7 +26,7 @@ export default function RoomCard({ room }: RoomCardProps) {
       <div className="relative w-full md:w-1/3 h-64 md:h-auto">
         <Image
           src={room.imageUrl}
-          alt={`Image of ${room.name}`}
+          alt={`Изображение ${room.name}`}
           fill
           className="object-cover"
           data-ai-hint={room.imageHint}
@@ -37,7 +37,7 @@ export default function RoomCard({ room }: RoomCardProps) {
           <CardTitle className="font-headline text-2xl">{room.name}</CardTitle>
           <div className="flex items-center gap-2 mt-2 text-muted-foreground text-sm">
             <BedDouble className="h-4 w-4" />
-            <span>Up to {room.capacity} guests</span>
+            <span>До {room.capacity} гостей</span>
           </div>
           <CardDescription className="pt-2">{room.description}</CardDescription>
         </CardHeader>
@@ -52,10 +52,10 @@ export default function RoomCard({ room }: RoomCardProps) {
         </CardContent>
         <CardFooter className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <p className="text-xl font-bold text-primary">{room.price} UAH</p>
-            <p className="text-sm text-muted-foreground">per night</p>
+            <p className="text-xl font-bold text-primary">{room.price} грн</p>
+            <p className="text-sm text-muted-foreground">за ночь</p>
           </div>
-          <Button onClick={handleBooking} className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90">Book Now</Button>
+          <Button onClick={handleBooking} className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90">Забронировать</Button>
         </CardFooter>
       </div>
     </Card>

@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { format } from "date-fns";
+import { ru } from "date-fns/locale";
 import { CalendarIcon, Users } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -29,13 +30,13 @@ import { Input } from "@/components/ui/input";
 const FormSchema = z.object({
   dateRange: z.object({
     from: z.date({
-      required_error: "Check-in date is required.",
+      required_error: "Дата заезда обязательна.",
     }),
     to: z.date({
-      required_error: "Check-out date is required.",
+      required_error: "Дата выезда обязательна.",
     }),
   }),
-  guests: z.coerce.number().min(1, { message: "At least one guest is required." }),
+  guests: z.coerce.number().min(1, { message: "Требуется как минимум один гость." }),
 });
 
 export default function BookingForm() {
@@ -48,7 +49,7 @@ export default function BookingForm() {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
-      title: "Checking Availability...",
+      title: "Проверяем наличие...",
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
@@ -67,7 +68,7 @@ export default function BookingForm() {
               name="dateRange"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Check-in / Check-out</FormLabel>
+                  <FormLabel>Заезд / Выезд</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -82,14 +83,14 @@ export default function BookingForm() {
                           {field.value?.from ? (
                             field.value.to ? (
                               <>
-                                {format(field.value.from, "LLL dd, y")} -{" "}
-                                {format(field.value.to, "LLL dd, y")}
+                                {format(field.value.from, "LLL dd, y", { locale: ru })} -{" "}
+                                {format(field.value.to, "LLL dd, y", { locale: ru })}
                               </>
                             ) : (
-                              format(field.value.from, "LLL dd, y")
+                              format(field.value.from, "LLL dd, y", { locale: ru })
                             )
                           ) : (
-                            <span>Pick a date range</span>
+                            <span>Выберите диапазон дат</span>
                           )}
                         </Button>
                       </FormControl>
@@ -103,6 +104,7 @@ export default function BookingForm() {
                         onSelect={field.onChange}
                         numberOfMonths={2}
                         disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))}
+                        locale={ru}
                       />
                     </PopoverContent>
                   </Popover>
@@ -115,18 +117,18 @@ export default function BookingForm() {
               name="guests"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Guests</FormLabel>
+                  <FormLabel>Гости</FormLabel>
                   <div className="relative">
                      <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <FormControl>
-                        <Input type="number" placeholder="Number of guests" className="pl-10" {...field} />
+                        <Input type="number" placeholder="Количество гостей" className="pl-10" {...field} />
                     </FormControl>
                   </div>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full md:w-auto">Check Availability</Button>
+            <Button type="submit" className="w-full md:w-auto">Проверить наличие</Button>
           </form>
         </Form>
       </CardContent>

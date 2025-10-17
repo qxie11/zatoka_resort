@@ -9,9 +9,9 @@ import { Menu, Waves } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About Us" },
-  { href: "/booking", label: "Booking" },
+  { href: "/", label: "Главная" },
+  { href: "/about", label: "О нас" },
+  { href: "/booking", label: "Бронирование" },
 ];
 
 export default function Header() {
@@ -23,7 +23,7 @@ export default function Header() {
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
           <Waves className="h-6 w-6 text-primary" />
-          <span className="font-headline text-xl font-bold">Zatoka Getaway</span>
+          <span className="font-headline text-xl font-bold">Отдых в Затоке</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
@@ -41,7 +41,7 @@ export default function Header() {
         </nav>
         <div className="hidden md:flex items-center gap-2">
             <Button asChild>
-                <Link href="/booking">Book Now</Link>
+                <Link href="/booking">Забронировать</Link>
             </Button>
         </div>
         <div className="md:hidden">
@@ -49,14 +49,14 @@ export default function Header() {
             <SheetTrigger asChild>
               <Button variant="outline" size="icon">
                 <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only">Открыть меню</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
               <div className="flex flex-col gap-6 pt-10">
                 <Link href="/" className="flex items-center gap-2 mb-4" onClick={() => setIsMobileMenuOpen(false)}>
                     <Waves className="h-6 w-6 text-primary" />
-                    <span className="font-headline text-xl font-bold">Zatoka Getaway</span>
+                    <span className="font-headline text-xl font-bold">Отдых в Затоке</span>
                 </Link>
                 {navLinks.map((link) => (
                   <Link
@@ -72,7 +72,7 @@ export default function Header() {
                   </Link>
                 ))}
                 <Button asChild className="mt-4" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Link href="/booking">Book Now</Link>
+                    <Link href="/booking">Забронировать</Link>
                 </Button>
               </div>
             </SheetContent>
