@@ -46,7 +46,7 @@ export default function Home() {
             <p className="mt-4 max-w-2xl text-lg md:text-xl text-primary-foreground/90">
               Испытайте несравненный комфорт и захватывающие виды на Черное море в "Отдыхе в Затоке".
             </p>
-            <Button asChild size="lg" className="mt-8">
+            <Button asChild size="lg" className="mt-8 bg-secondary hover:bg-secondary/90 text-secondary-foreground">
               <Link href="/booking">Забронировать <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
           </div>
@@ -55,14 +55,14 @@ export default function Home() {
         <section className="py-16 lg:py-24 bg-background">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Добро пожаловать в "Отдых в Затоке"</h2>
-            <WavyUnderline />
+            <WavyUnderline colorClassName='text-secondary' />
             <p className="mt-4 max-w-3xl mx-auto text-muted-foreground text-lg">
               Расположенный на безмятежном побережье Черного моря, "Отдых в Затоке" предлагает идеальное сочетание роскоши, комфорта и природной красоты. Ищете ли вы романтический уик-энд или семейное приключение, наш отель - ваше идеальное место для незабываемого отдыха.
             </p>
           </div>
         </section>
 
-        <section className="py-16 lg:py-24 bg-secondary/50">
+        <section className="py-16 lg:py-24 bg-accent/50">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Наши избранные номера</h2>
@@ -108,7 +108,7 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Удобства отеля</h2>
-               <WavyUnderline />
+               <WavyUnderline colorClassName='text-secondary'/>
               <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Все, что нужно для идеального отдыха.</p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
