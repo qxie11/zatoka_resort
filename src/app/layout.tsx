@@ -4,12 +4,17 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { Inter as FontSans } from "next/font/google"
+import { Comfortaa, Nunito } from "next/font/google"
 
-const fontSans = FontSans({
+const fontSans = Nunito({
   subsets: ["latin", "cyrillic"],
   variable: "--font-sans",
-})
+});
+
+const fontHeading = Comfortaa({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-heading",
+});
 
 
 const APP_NAME = "Отдых в Затоке";
@@ -66,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning>
       <head />
-      <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
+      <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable, fontHeading.variable)}>
           <div className="relative flex min-h-dvh flex-col bg-background">
             <Header />
             <main className="flex-1">{children}</main>
