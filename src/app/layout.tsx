@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import StoreProvider from '@/components/providers/StoreProvider';
 import { Comfortaa, Nunito } from "next/font/google"
 
 const fontSans = Nunito({
@@ -72,12 +73,14 @@ export default function RootLayout({
     <html lang="ru" suppressHydrationWarning>
       <head />
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable, fontHeading.variable)}>
+        <StoreProvider>
           <div className="relative flex min-h-dvh flex-col bg-background">
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
           <Toaster />
+        </StoreProvider>
       </body>
     </html>
   );

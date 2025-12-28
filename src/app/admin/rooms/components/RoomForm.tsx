@@ -26,17 +26,25 @@ const roomSchema = z.object({
   description: z.string().min(1, "Описание обязательно"),
   price: z.coerce.number().min(0, "Цена должна быть положительным числом"),
   capacity: z.coerce.number().int().min(1, "Вместимость должна быть не менее 1"),
-  amenities: z.string().transform(val => val.split(',').map(s => s.trim())),
+  amenities: z.string(),
   imageUrl: z.string().url("Неверный URL изображения"),
   imageHint: z.string().optional(),
 });
 
-type RoomFormValues = Omit<Room, 'id'>;
+type RoomFormValues = {
+  name: string;
+  description: string;
+  price: number;
+  capacity: number;
+  amenities: string;
+  imageUrl: string;
+  imageHint?: string;
+};
 
 interface RoomFormProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  onSubmit: (values: RoomFormValues, id?: string) => void;
+  onSubmit: (values: Omit<Room, 'id'>, id?: string) => void;
   room: Room | null;
 }
 
@@ -48,7 +56,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         description: '',
         price: 0,
         capacity: 1,
-        amenities: [],
+        amenities: '',
         imageUrl: '',
         imageHint: ''
     }
@@ -57,8 +65,13 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
   useEffect(() => {
     if (room) {
       form.reset({
-          ...room,
-          amenities: room.amenities.join(', ')
+          name: room.name,
+          description: room.description,
+          price: room.price,
+          capacity: room.capacity,
+          amenities: room.amenities.join(', '),
+          imageUrl: room.imageUrl,
+          imageHint: room.imageHint
       });
     } else {
       form.reset({
@@ -66,7 +79,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         description: '',
         price: 0,
         capacity: 1,
-        amenities: [],
+        amenities: '',
         imageUrl: '',
         imageHint: ''
       });
@@ -78,7 +91,15 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
       ? data.amenities 
       : String(data.amenities).split(',').map(s => s.trim()).filter(Boolean);
       
-    onSubmit({ ...data, amenities: amenitiesArray }, room?.id);
+      onSubmit({ 
+      name: data.name,
+      description: data.description,
+      price: data.price,
+      capacity: data.capacity,
+      amenities: amenitiesArray,
+      imageUrl: data.imageUrl,
+      imageHint: data.imageHint || ''
+    }, room?.id);
   });
 
   return (

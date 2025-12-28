@@ -40,6 +40,18 @@ export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<BookingWi
     },
   },
   {
+    accessorKey: "name",
+    header: "Имя гостя",
+  },
+  {
+    accessorKey: "phone",
+    header: "Телефон",
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+  },
+  {
     accessorKey: "startDate",
     header: "Дата заезда",
     cell: ({ row }) => {

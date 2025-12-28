@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { amenities, rooms } from '@/lib/data';
-import { ArrowRight, BedDouble, Star, Waves, Wifi, UtensilsCrossed, Sun, HeartPulse, Car, ConciergeBell, Dumbbell } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { amenities } from '@/lib/data';
+import { getRooms } from '@/lib/db';
+import FeaturedRooms from '@/components/rooms/FeaturedRooms';
+import { ArrowRight, Waves, Wifi, UtensilsCrossed, Sun, HeartPulse, Car, ConciergeBell, Dumbbell } from 'lucide-react';
 import type { LucideProps } from 'lucide-react';
 import { WavyUnderline } from '@/components/ui/wavy-underline';
 
@@ -20,9 +20,9 @@ const iconMap: { [key: string]: React.FC<LucideProps> } = {
   Dumbbell
 };
 
-export default function Home() {
+export default async function Home() {
+  const rooms = await getRooms();
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero');
-  const featuredRooms = rooms.slice(0, 3);
 
   return (
     <div className="flex flex-col min-h-dvh">
@@ -69,38 +69,7 @@ export default function Home() {
                <WavyUnderline />
               <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Элегантно оформленные номера для вашего максимального комфорта.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredRooms.map((room) => (
-                <Card key={room.id} className="overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-xl hover:scale-105">
-                  <CardHeader className="p-0">
-                     <div className="relative h-64 w-full">
-                        <Image src={room.imageUrl} alt={room.name} fill className="object-cover" data-ai-hint={room.imageHint} />
-                     </div>
-                  </CardHeader>
-                  <CardContent className="pt-6 flex-grow">
-                    <CardTitle className="text-xl">{room.name}</CardTitle>
-                    <div className="flex items-center gap-2 mt-2 text-muted-foreground">
-                        <BedDouble className="h-4 w-4" />
-                        <span>{room.capacity} Гостей</span>
-                    </div>
-                    <CardDescription className="mt-4">{room.description}</CardDescription>
-                  </CardContent>
-                  <CardFooter className="flex justify-between items-center">
-                    <p className="text-lg font-bold text-primary">{room.price} грн / ночь</p>
-                    <Button asChild variant="ghost">
-                      <Link href={`/booking#${room.id}`}>
-                        Подробнее <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-             <div className="text-center mt-12">
-                <Button asChild size="lg">
-                    <Link href="/booking">Посмотреть все номера</Link>
-                </Button>
-            </div>
+            <FeaturedRooms rooms={rooms} />
           </div>
         </section>
 

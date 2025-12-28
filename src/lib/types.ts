@@ -20,4 +20,7 @@ export type Booking = {
   roomId: string;
   startDate: Date;
   endDate: Date;
+  name: string;
+  phone: string;
+  email: string;
 };

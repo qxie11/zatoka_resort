@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect } from "react";
@@ -10,6 +9,7 @@ import { ru } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
 import {
@@ -45,6 +45,9 @@ const bookingSchema = z.object({
     message: "Дата выезда должна быть позже даты заезда.",
     path: ["to"],
   }),
+  name: z.string().min(1, "Имя обязательно"),
+  phone: z.string().min(1, "Номер телефона обязателен"),
+  email: z.string().email("Неверный формат email"),
 });
 
 type BookingFormValues = {
@@ -52,7 +55,10 @@ type BookingFormValues = {
     dateRange: {
         from: Date;
         to: Date;
-    }
+    };
+    name: string;
+    phone: string;
+    email: string;
 }
 
 interface BookingFormProps {
@@ -71,7 +77,10 @@ export default function BookingForm({ isOpen, onOpenChange, onSubmit, booking, r
         dateRange: {
             from: new Date(),
             to: new Date(new Date().setDate(new Date().getDate() + 1)),
-        }
+        },
+        name: '',
+        phone: '',
+        email: '',
     }
   });
 
@@ -82,7 +91,10 @@ export default function BookingForm({ isOpen, onOpenChange, onSubmit, booking, r
           dateRange: {
               from: new Date(booking.startDate),
               to: new Date(booking.endDate),
-          }
+          },
+          name: booking.name,
+          phone: booking.phone,
+          email: booking.email,
       });
     } else {
       form.reset({
@@ -90,7 +102,10 @@ export default function BookingForm({ isOpen, onOpenChange, onSubmit, booking, r
         dateRange: {
             from: new Date(),
             to: new Date(new Date().setDate(new Date().getDate() + 1)),
-        }
+        },
+        name: '',
+        phone: '',
+        email: '',
       });
     }
   }, [booking, form, isOpen]);
@@ -99,18 +114,21 @@ export default function BookingForm({ isOpen, onOpenChange, onSubmit, booking, r
     const submissionData = {
         roomId: data.roomId,
         startDate: data.dateRange.from,
-        endDate: data.dateRange.to
+        endDate: data.dateRange.to,
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
     };
     onSubmit(submissionData, booking?.id);
   });
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-[425px]">
+      <SheetContent className="sm:max-w-[525px] overflow-y-auto">
         <SheetHeader>
           <SheetTitle>{booking ? "Редактировать бронирование" : "Создать бронирование"}</SheetTitle>
           <SheetDescription>
-            {booking ? "Внесите изменения в информацию о бронировании." : "Выберите номер и даты для создания нового бронирования."}
+            {booking ? "Внесите изменения в информацию о бронировании." : "Заполните информацию для создания нового бронирования."}
           </SheetDescription>
         </SheetHeader>
         <form onSubmit={handleFormSubmit} className="grid gap-4 py-4">
@@ -165,7 +183,11 @@ export default function BookingForm({ isOpen, onOpenChange, onSubmit, booking, r
                         mode="range"
                         defaultMonth={form.watch("dateRange.from")}
                         selected={form.watch("dateRange")}
-                        onSelect={(range) => form.setValue("dateRange", range || { from: new Date(), to: new Date() })}
+                        onSelect={(range) => {
+                          if (range?.from && range?.to) {
+                            form.setValue("dateRange", { from: range.from, to: range.to });
+                          }
+                        }}
                         numberOfMonths={1}
                         locale={ru}
                       />
@@ -173,6 +195,35 @@ export default function BookingForm({ isOpen, onOpenChange, onSubmit, booking, r
                   </Popover>
                   {form.formState.errors.dateRange?.from && <p className="text-sm text-destructive">{form.formState.errors.dateRange.from.message}</p>}
                   {form.formState.errors.dateRange?.to && <p className="text-sm text-destructive">{form.formState.errors.dateRange.to.message}</p>}
+            </div>
+            <div className="grid gap-2">
+                <Label htmlFor="name">Имя гостя</Label>
+                <Input 
+                  id="name" 
+                  {...form.register("name")} 
+                  placeholder="Введите имя"
+                />
+                {form.formState.errors.name && <p className="text-sm text-destructive">{form.formState.errors.name.message}</p>}
+            </div>
+            <div className="grid gap-2">
+                <Label htmlFor="phone">Номер телефона</Label>
+                <Input 
+                  id="phone" 
+                  {...form.register("phone")} 
+                  placeholder="+380501234567"
+                  type="tel"
+                />
+                {form.formState.errors.phone && <p className="text-sm text-destructive">{form.formState.errors.phone.message}</p>}
+            </div>
+            <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input 
+                  id="email" 
+                  {...form.register("email")} 
+                  placeholder="example@email.com"
+                  type="email"
+                />
+                {form.formState.errors.email && <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>}
             </div>
              <SheetFooter className="mt-4">
                 <SheetClose asChild>

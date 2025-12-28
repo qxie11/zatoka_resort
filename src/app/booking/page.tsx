@@ -1,17 +1,13 @@
-import { Metadata } from "next";
-import { rooms } from "@/lib/data";
+import { Suspense } from "react";
+import { getRooms } from '@/lib/db';
 import BookingForm from "./components/BookingForm";
-import RoomCard from "./components/RoomCard";
+import RoomsList from '@/components/rooms/RoomsList';
+import SuccessMessage from "./components/SuccessMessage";
 import { WavyUnderline } from "@/components/ui/wavy-underline";
 
-export const metadata: Metadata = {
-  title: "Забронируйте проживание",
-  description: "Проверьте наличие мест и забронируйте номер в 'Отдых в Затоке'. Выберите из нашего ассортимента красивых номеров и люксов.",
-  keywords: ["бронирование", "отель в Затоке бронирование", "жилье в Одессе", "забронировать номер", "проверить наличие"],
-};
+export default async function BookingPage() {
+  const rooms = await getRooms();
 
-
-export default function BookingPage() {
   return (
     <div>
         <section className="py-16 lg:py-24 bg-accent/50">
@@ -23,6 +19,9 @@ export default function BookingPage() {
                         Выберите даты, чтобы найти идеальный номер для вашего отпуска на море.
                     </p>
                 </div>
+                <Suspense fallback={null}>
+                  <SuccessMessage />
+                </Suspense>
                 <BookingForm />
             </div>
         </section>
@@ -34,11 +33,7 @@ export default function BookingPage() {
                     <WavyUnderline />
                     <p className="mt-2 text-muted-foreground">Найдите идеальное пространство для вашего пребывания.</p>
                 </div>
-                <div className="grid grid-cols-1 gap-8">
-                    {rooms.map((room) => (
-                        <RoomCard key={room.id} room={room} />
-                    ))}
-                </div>
+                <RoomsList rooms={rooms} />
             </div>
         </section>
     </div>

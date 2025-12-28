@@ -99,8 +99,8 @@ export default function AdminLayout({
             </div>
           </div>
         </div>
-        <div className="flex flex-col">
-          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <div className="flex flex-col min-w-0">
+          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 min-w-0 overflow-x-hidden">
            {children}
           </main>
         </div>

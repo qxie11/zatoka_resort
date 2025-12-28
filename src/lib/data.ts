@@ -65,8 +65,8 @@ export const amenities: Amenity[] = [
 ];
 
 export const bookings: Booking[] = [
-    { id: 'booking1', roomId: 'standard', startDate: new Date(2024, 7, 10), endDate: new Date(2024, 7, 15) },
-    { id: 'booking2', roomId: 'standard', startDate: new Date(2024, 7, 20), endDate: new Date(2024, 7, 22) },
-    { id: 'booking3', roomId: 'deluxe', startDate: new Date(2024, 7, 5), endDate: new Date(2024, 7, 12) },
-    { id: 'booking4', roomId: 'family', startDate: new Date(2024, 8, 1), endDate: new Date(2024, 8, 10) },
+    { id: 'booking1', roomId: 'standard', startDate: new Date(2024, 7, 10), endDate: new Date(2024, 7, 15), name: 'Иван Иванов', phone: '+380501234567', email: 'ivan@example.com' },
+    { id: 'booking2', roomId: 'standard', startDate: new Date(2024, 7, 20), endDate: new Date(2024, 7, 22), name: 'Мария Петрова', phone: '+380502345678', email: 'maria@example.com' },
+    { id: 'booking3', roomId: 'deluxe', startDate: new Date(2024, 7, 5), endDate: new Date(2024, 7, 12), name: 'Олег Сидоров', phone: '+380503456789', email: 'oleg@example.com' },
+    { id: 'booking4', roomId: 'family', startDate: new Date(2024, 8, 1), endDate: new Date(2024, 8, 10), name: 'Анна Коваленко', phone: '+380504567890', email: 'anna@example.com' },
 ];

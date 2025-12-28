@@ -1,25 +1,18 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Room } from "@/lib/types";
 import { BedDouble } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
 
 interface RoomCardProps {
   room: Room;
 }
 
 export default function RoomCard({ room }: RoomCardProps) {
-
-  const handleBooking = () => {
-    toast({
-        title: `Бронирование ${room.name}`,
-        description: "Это демонстрация. В реальном приложении это перенаправило бы на платежный шлюз."
-    })
-  }
 
   return (
     <Card id={room.id} className="flex flex-col md:flex-row overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
@@ -55,7 +48,9 @@ export default function RoomCard({ room }: RoomCardProps) {
             <p className="text-xl font-bold text-primary">{room.price} грн</p>
             <p className="text-sm text-muted-foreground">за ночь</p>
           </div>
-          <Button onClick={handleBooking} className="w-full sm:w-auto">Забронировать</Button>
+          <Button asChild className="w-full sm:w-auto">
+            <Link href={`/booking/${room.id}`}>Забронировать</Link>
+          </Button>
         </CardFooter>
       </div>
     </Card>
