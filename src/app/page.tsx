@@ -71,7 +71,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredRooms.map((room) => (
-                <Card key={room.id} className="overflow-hidden flex flex-col group transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                <Card key={room.id} className="overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-xl hover:scale-105">
                   <CardHeader className="p-0">
                      <div className="relative h-64 w-full">
                         <Image src={room.imageUrl} alt={room.name} fill className="object-cover" data-ai-hint={room.imageHint} />

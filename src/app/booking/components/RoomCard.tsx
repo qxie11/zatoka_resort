@@ -22,7 +22,7 @@ export default function RoomCard({ room }: RoomCardProps) {
   }
 
   return (
-    <Card id={room.id} className="flex flex-col md:flex-row overflow-hidden transform transition-all duration-300 hover:shadow-xl">
+    <Card id={room.id} className="flex flex-col md:flex-row overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
       <div className="relative w-full md:w-1/3 h-64 md:h-auto">
         <Image
           src={room.imageUrl}

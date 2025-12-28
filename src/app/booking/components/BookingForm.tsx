@@ -59,7 +59,7 @@ export default function BookingForm() {
   }
 
   return (
-    <Card className="max-w-4xl mx-auto mt-12 shadow-lg">
+    <Card className="max-w-4xl mx-auto mt-12 shadow-lg border-none">
       <CardContent className="p-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
