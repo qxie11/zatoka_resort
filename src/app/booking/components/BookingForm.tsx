@@ -86,14 +86,11 @@ export default function BookingForm({
   }
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    // Фильтруем номера по доступности и вместимости
     const filteredRooms = rooms.filter((room) => {
-      // Проверяем вместимость
       if (room.capacity < data.guests) {
         return false;
       }
 
-      // Проверяем доступность по датам
       return isRoomAvailable(room, data.dateRange.from, data.dateRange.to);
     });
 
@@ -115,7 +112,7 @@ export default function BookingForm({
   }
 
   return (
-    <Card className="max-w-4xl mx-auto mt-12 shadow-lg border-none">
+    <Card className="max-w-4xl mx-auto my-12 shadow-lg border-none">
       <CardContent className="p-6">
         <Form {...form}>
           <form

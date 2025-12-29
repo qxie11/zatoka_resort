@@ -19,31 +19,39 @@ export default function Header() {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const checkAuth = () => {
-        const authStatus = localStorage.getItem('isAuthenticated') === 'true';
-        setIsAuthenticated(authStatus);
-    }
+      const authStatus = localStorage.getItem("isAuthenticated") === "true";
+      setIsAuthenticated(authStatus);
+    };
     // Check on initial load
     checkAuth();
 
     // Listen to storage changes
-    window.addEventListener('storage', checkAuth);
+    window.addEventListener("storage", checkAuth);
 
-    // Also check when path changes
-  }, [pathname]);
+    return () => {
+      window.removeEventListener("storage", checkAuth);
+    };
+  }, []);
 
   const handleSignOut = () => {
-    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem("isAuthenticated");
     setIsAuthenticated(false);
-    router.push('/');
+    router.push("/");
   };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
+        <Link
+          href="/"
+          className="flex items-center gap-2"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
           <Waves className="h-6 w-6 text-primary" />
           <span className="text-xl font-bold">Отдых в Затоке</span>
         </Link>
@@ -54,14 +62,16 @@ export default function Header() {
               href={link.href}
               className={cn(
                 "text-sm font-medium transition-colors hover:text-primary",
-                pathname === link.href ? "text-primary" : "text-muted-foreground"
+                pathname === link.href
+                  ? "text-primary"
+                  : "text-muted-foreground"
               )}
             >
               {link.label}
             </Link>
           ))}
-          {isAuthenticated && (
-             <Link
+          {mounted && isAuthenticated && (
+            <Link
               href="/admin"
               className={cn(
                 "text-sm font-medium transition-colors hover:text-primary",
@@ -73,23 +83,30 @@ export default function Header() {
           )}
         </nav>
         <div className="hidden md:flex items-center gap-2">
-            {isAuthenticated ? (
-              <>
-                <span className="text-sm font-medium text-muted-foreground hidden lg:inline">Добро пожаловать, Admin</span>
-                <Button variant="ghost" size="icon" onClick={handleSignOut} aria-label="Выйти">
-                  <LogOut className="h-4 w-4" />
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button asChild>
-                    <Link href="/booking">Забронировать</Link>
-                </Button>
-                <Button asChild variant="outline">
+          {mounted && isAuthenticated ? (
+            <>
+              <span className="text-sm font-medium text-muted-foreground hidden lg:inline">
+                Добро пожаловать, Admin
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleSignOut}
+                aria-label="Выйти"
+              >
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button asChild>
+                <Link href="/booking">Забронировать</Link>
+              </Button>
+              {/* <Button asChild variant="outline">
                     <Link href="/login">Войти</Link>
-                </Button>
-              </>
-            )}
+                </Button> */}
+            </>
+          )}
         </div>
         <div className="md:hidden">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -101,9 +118,13 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent side="right">
               <div className="flex flex-col gap-6 pt-10">
-                <Link href="/" className="flex items-center gap-2 mb-4" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Waves className="h-6 w-6 text-primary" />
-                    <span className="text-xl font-bold">Отдых в Затоке</span>
+                <Link
+                  href="/"
+                  className="flex items-center gap-2 mb-4"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Waves className="h-6 w-6 text-primary" />
+                  <span className="text-xl font-bold">Отдых в Затоке</span>
                 </Link>
                 {navLinks.map((link) => (
                   <Link
@@ -112,13 +133,15 @@ export default function Header() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
                       "text-lg font-medium",
-                      pathname === link.href ? "text-primary" : "text-foreground"
+                      pathname === link.href
+                        ? "text-primary"
+                        : "text-foreground"
                     )}
                   >
                     {link.label}
                   </Link>
                 ))}
-                {isAuthenticated && (
+                {mounted && isAuthenticated && (
                   <Link
                     href="/admin"
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -131,18 +154,26 @@ export default function Header() {
                   </Link>
                 )}
                 <div className="mt-4 flex flex-col gap-2">
-                  {isAuthenticated ? (
-                    <Button onClick={() => { handleSignOut(); setIsMobileMenuOpen(false);}}>
+                  {mounted && isAuthenticated ? (
+                    <Button
+                      onClick={() => {
+                        handleSignOut();
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
                       <LogOut className="mr-2 h-4 w-4" /> Выйти
                     </Button>
                   ) : (
                     <>
-                      <Button asChild onClick={() => setIsMobileMenuOpen(false)}>
-                          <Link href="/booking">Забронировать</Link>
+                      <Button
+                        asChild
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <Link href="/booking">Забронировать</Link>
                       </Button>
-                      <Button asChild variant="secondary" onClick={() => setIsMobileMenuOpen(false)}>
+                      {/* <Button asChild variant="secondary" onClick={() => setIsMobileMenuOpen(false)}>
                           <Link href="/login">Войти</Link>
-                      </Button>
+                      </Button> */}
                     </>
                   )}
                 </div>

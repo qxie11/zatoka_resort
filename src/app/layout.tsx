@@ -5,9 +5,9 @@ import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import StoreProvider from "@/components/providers/StoreProvider";
-import { Comfortaa, Golos_Text } from "next/font/google";
+import { Comfortaa, Nunito } from "next/font/google";
 
-const fontSans = Golos_Text({
+const fontSans = Nunito({
   subsets: ["latin", "cyrillic"],
   variable: "--font-sans",
 });
@@ -86,6 +86,7 @@ export default function RootLayout({
           fontSans.variable,
           fontHeading.variable
         )}
+        suppressHydrationWarning
       >
         <StoreProvider>
           <div className="relative flex min-h-dvh flex-col bg-background">
