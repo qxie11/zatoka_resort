@@ -6,6 +6,7 @@ export type Room = {
   capacity: number;
   amenities: string[];
   imageUrl: string;
+  imageUrls: string[];
   imageHint: string;
 };
 

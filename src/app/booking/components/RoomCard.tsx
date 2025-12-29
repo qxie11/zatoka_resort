@@ -1,21 +1,64 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import type { Room } from "@/lib/types";
-import { BedDouble } from "lucide-react";
+import { BedDouble, Eye } from "lucide-react";
+import ImageGallery from "@/components/rooms/ImageGallery";
 
 interface RoomCardProps {
   room: Room;
 }
 
-export default function RoomCard({ room }: RoomCardProps) {
+function ViewImagesButton({ room }: { room: Room }) {
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+
+  const allImages = room.imageUrl
+    ? [room.imageUrl, ...(room.imageUrls || [])]
+    : room.imageUrls || [];
+
+  if (allImages.length === 0) {
+    return null;
+  }
 
   return (
-    <Card id={room.id} className="flex flex-col md:flex-row overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
+    <>
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => setIsGalleryOpen(true)}
+        className="flex-1 sm:flex-none"
+      >
+        <Eye className="mr-2 h-4 w-4" />
+        Посмотреть
+      </Button>
+      <ImageGallery
+        images={allImages}
+        isOpen={isGalleryOpen}
+        onClose={() => setIsGalleryOpen(false)}
+        roomName={room.name}
+      />
+    </>
+  );
+}
+
+export default function RoomCard({ room }: RoomCardProps) {
+  return (
+    <Card
+      id={room.id}
+      className="flex flex-col md:flex-row overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
+    >
       <div className="relative w-full md:w-1/3 h-64 md:h-auto">
         <Image
           src={room.imageUrl}
@@ -48,9 +91,12 @@ export default function RoomCard({ room }: RoomCardProps) {
             <p className="text-xl font-bold text-primary">{room.price} грн</p>
             <p className="text-sm text-muted-foreground">за ночь</p>
           </div>
-          <Button asChild className="w-full sm:w-auto">
-            <Link href={`/booking/${room.id}`}>Забронировать</Link>
-          </Button>
+          <div className="flex gap-3 w-full sm:w-auto">
+            <ViewImagesButton room={room} />
+            <Button asChild className="flex-1 sm:flex-none">
+              <Link href={`/booking/${room.id}`}>Забронировать</Link>
+            </Button>
+          </div>
         </CardFooter>
       </div>
     </Card>

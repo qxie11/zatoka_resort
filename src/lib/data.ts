@@ -19,6 +19,7 @@ export const rooms: Room[] = [
     capacity: 2,
     amenities: ['Wi-Fi', 'Кондиционер', 'ТВ', 'Мини-бар'],
     imageUrl: getImage('standard-room').imageUrl,
+    imageUrls: [],
     imageHint: getImage('standard-room').imageHint,
   },
   {
@@ -29,6 +30,7 @@ export const rooms: Room[] = [
     capacity: 2,
     amenities: ['Wi-Fi', 'Кондиционер', 'ТВ', 'Мини-бар', 'Балкон', 'Джакузи'],
     imageUrl: getImage('deluxe-room').imageUrl,
+    imageUrls: [],
     imageHint: getImage('deluxe-room').imageHint,
   },
   {
@@ -39,6 +41,7 @@ export const rooms: Room[] = [
     capacity: 4,
     amenities: ['Wi-Fi', 'Кондиционер', 'ТВ', 'Мини-кухня'],
     imageUrl: getImage('family-room').imageUrl,
+    imageUrls: [],
     imageHint: getImage('family-room').imageHint,
   },
   {
@@ -49,6 +52,7 @@ export const rooms: Room[] = [
     capacity: 3,
     amenities: ['Wi-Fi', 'Кондиционер', 'Smart TV', 'Полностью оборудованная кухня', 'Частная терраса', 'Личный дворецкий'],
     imageUrl: getImage('suite-room').imageUrl,
+    imageUrls: [],
     imageHint: getImage('suite-room').imageHint,
   },
 ];

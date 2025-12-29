@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
       capacity,
       amenities,
       imageUrl,
+      imageUrls,
       imageHint,
     } = body;
 
@@ -48,6 +49,16 @@ export async function POST(request: NextRequest) {
         .filter(Boolean);
     }
 
+    let imageUrlsArray: string[] = [];
+    if (Array.isArray(imageUrls)) {
+      imageUrlsArray = imageUrls.filter(Boolean);
+    } else if (typeof imageUrls === "string") {
+      imageUrlsArray = imageUrls
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+
     const newRoom = await createRoom({
       name,
       description,
@@ -55,6 +66,7 @@ export async function POST(request: NextRequest) {
       capacity: Number(capacity),
       amenities: amenitiesArray,
       imageUrl: imageUrl || "",
+      imageUrls: imageUrlsArray,
       imageHint: imageHint || "",
     });
 

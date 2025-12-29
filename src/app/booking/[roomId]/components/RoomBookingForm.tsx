@@ -5,11 +5,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { Users, Mail, Phone, User } from "lucide-react";
+import { Users, Mail, Phone, User, Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import ImageGallery from "@/components/rooms/ImageGallery";
 import {
   Form,
   FormControl,
@@ -33,12 +34,19 @@ const FormSchema = z.object({
       required_error: "Дата выезда обязательна.",
     }),
   }),
-  guests: z.coerce.number().min(1, { message: "Требуется как минимум один гость." }),
-  name: z.string().min(2, { message: "Имя должно содержать минимум 2 символа." }),
+  guests: z.coerce
+    .number()
+    .min(1, { message: "Требуется как минимум один гость." }),
+  name: z
+    .string()
+    .min(2, { message: "Имя должно содержать минимум 2 символа." }),
   phone: z.string().min(10, { message: "Номер телефона обязателен." }),
-  email: z.string().optional().refine((val) => !val || z.string().email().safeParse(val).success, {
-    message: "Некорректный email адрес.",
-  }),
+  email: z
+    .string()
+    .optional()
+    .refine((val) => !val || z.string().email().safeParse(val).success, {
+      message: "Некорректный email адрес.",
+    }),
 });
 
 interface RoomBookingFormProps {
@@ -46,7 +54,43 @@ interface RoomBookingFormProps {
   existingBookings: Booking[];
 }
 
-export default function RoomBookingForm({ room, existingBookings }: RoomBookingFormProps) {
+function ViewImagesButton({ room }: { room: Room }) {
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+
+  const allImages = room.imageUrl
+    ? [room.imageUrl, ...(room.imageUrls || [])]
+    : room.imageUrls || [];
+
+  if (allImages.length === 0) {
+    return null;
+  }
+
+  return (
+    <>
+      <Button
+        type="button"
+        variant="outline"
+        size="lg"
+        onClick={() => setIsGalleryOpen(true)}
+        className="flex-1 sm:flex-none"
+      >
+        <Eye className="mr-2 h-4 w-4" />
+        Посмотреть
+      </Button>
+      <ImageGallery
+        images={allImages}
+        isOpen={isGalleryOpen}
+        onClose={() => setIsGalleryOpen(false)}
+        roomName={room.name}
+      />
+    </>
+  );
+}
+
+export default function RoomBookingForm({
+  room,
+  existingBookings,
+}: RoomBookingFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -57,17 +101,17 @@ export default function RoomBookingForm({ room, existingBookings }: RoomBookingF
       name: "",
       phone: "",
       email: "",
-    }
+    },
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/bookings', {
-        method: 'POST',
+      const response = await fetch("/api/bookings", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           roomId: room.id,
@@ -81,22 +125,31 @@ export default function RoomBookingForm({ room, existingBookings }: RoomBookingF
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || 'Ошибка при создании бронирования');
+        throw new Error(error.message || "Ошибка при создании бронирования");
       }
 
       const booking = await response.json();
 
       toast({
         title: "Бронирование успешно создано!",
-        description: `Ваше бронирование на ${format(data.dateRange.from, "dd.MM.yyyy", { locale: ru })} - ${format(data.dateRange.to, "dd.MM.yyyy", { locale: ru })} подтверждено.`,
+        description: `Ваше бронирование на ${format(
+          data.dateRange.from,
+          "dd.MM.yyyy",
+          { locale: ru }
+        )} - ${format(data.dateRange.to, "dd.MM.yyyy", {
+          locale: ru,
+        })} подтверждено.`,
       });
 
       // Перенаправляем на страницу успеха или обратно к списку номеров
-      router.push('/booking?success=true');
+      router.push("/booking?success=true");
     } catch (error) {
       toast({
         title: "Ошибка",
-        description: error instanceof Error ? error.message : 'Не удалось создать бронирование. Попробуйте еще раз.',
+        description:
+          error instanceof Error
+            ? error.message
+            : "Не удалось создать бронирование. Попробуйте еще раз.",
         variant: "destructive",
       });
     } finally {
@@ -161,7 +214,11 @@ export default function RoomBookingForm({ room, existingBookings }: RoomBookingF
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <FormControl>
-                        <Input placeholder="Ваше имя" className="pl-10" {...field} />
+                        <Input
+                          placeholder="Ваше имя"
+                          className="pl-10"
+                          {...field}
+                        />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -178,7 +235,11 @@ export default function RoomBookingForm({ room, existingBookings }: RoomBookingF
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <FormControl>
-                        <Input placeholder="+380501234567" className="pl-10" {...field} />
+                        <Input
+                          placeholder="+380501234567"
+                          className="pl-10"
+                          {...field}
+                        />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -195,7 +256,12 @@ export default function RoomBookingForm({ room, existingBookings }: RoomBookingF
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <FormControl>
-                        <Input type="email" placeholder="example@email.com" className="pl-10" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="example@email.com"
+                          className="pl-10"
+                          {...field}
+                        />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -206,29 +272,40 @@ export default function RoomBookingForm({ room, existingBookings }: RoomBookingF
 
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between pt-4 border-t">
               <div>
-                {form.watch("dateRange")?.from && form.watch("dateRange")?.to && (
-                  <div className="text-sm">
-                    <p className="text-muted-foreground">
-                      Количество ночей:{" "}
-                      {Math.ceil(
-                        (form.watch("dateRange").to!.getTime() - form.watch("dateRange").from!.getTime()) /
-                        (1000 * 60 * 60 * 24)
-                      )}
-                    </p>
-                    <p className="text-lg font-bold text-primary">
-                      Итого:{" "}
-                      {Math.ceil(
-                        (form.watch("dateRange").to!.getTime() - form.watch("dateRange").from!.getTime()) /
-                        (1000 * 60 * 60 * 24)
-                      ) * room.price}{" "}
-                      грн
-                    </p>
-                  </div>
-                )}
+                {form.watch("dateRange")?.from &&
+                  form.watch("dateRange")?.to && (
+                    <div className="text-sm">
+                      <p className="text-muted-foreground">
+                        Количество ночей:{" "}
+                        {Math.ceil(
+                          (form.watch("dateRange").to!.getTime() -
+                            form.watch("dateRange").from!.getTime()) /
+                            (1000 * 60 * 60 * 24)
+                        )}
+                      </p>
+                      <p className="text-lg font-bold text-primary">
+                        Итого:{" "}
+                        {Math.ceil(
+                          (form.watch("dateRange").to!.getTime() -
+                            form.watch("dateRange").from!.getTime()) /
+                            (1000 * 60 * 60 * 24)
+                        ) * room.price}{" "}
+                        грн
+                      </p>
+                    </div>
+                  )}
               </div>
-              <Button type="submit" size="lg" disabled={isSubmitting} className="w-full sm:w-auto">
-                {isSubmitting ? "Отправка..." : "Забронировать"}
-              </Button>
+              <div className="flex gap-3 w-full sm:w-auto">
+                <ViewImagesButton room={room} />
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled={isSubmitting}
+                  className="flex-1 sm:flex-none"
+                >
+                  {isSubmitting ? "Отправка..." : "Забронировать"}
+                </Button>
+              </div>
             </div>
           </form>
         </Form>
@@ -236,4 +313,3 @@ export default function RoomBookingForm({ room, existingBookings }: RoomBookingF
     </Card>
   );
 }
-

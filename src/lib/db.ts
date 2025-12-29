@@ -15,6 +15,7 @@ export const getRooms = async (): Promise<Room[]> => {
     capacity: room.capacity,
     amenities: room.amenities,
     imageUrl: room.imageUrl,
+    imageUrls: room.imageUrls || [],
     imageHint: room.imageHint,
   }));
 };
@@ -34,6 +35,7 @@ export const getRoomById = async (id: string): Promise<Room | null> => {
     capacity: room.capacity,
     amenities: room.amenities,
     imageUrl: room.imageUrl,
+    imageUrls: room.imageUrls || [],
     imageHint: room.imageHint,
   };
 };
@@ -47,6 +49,7 @@ export const createRoom = async (room: Omit<Room, 'id'>): Promise<Room> => {
       capacity: room.capacity,
       amenities: room.amenities,
       imageUrl: room.imageUrl,
+      imageUrls: room.imageUrls || [],
       imageHint: room.imageHint || '',
     },
   });
@@ -59,23 +62,46 @@ export const createRoom = async (room: Omit<Room, 'id'>): Promise<Room> => {
     capacity: newRoom.capacity,
     amenities: newRoom.amenities,
     imageUrl: newRoom.imageUrl,
+    imageUrls: newRoom.imageUrls || [],
     imageHint: newRoom.imageHint,
   };
 };
 
 export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id'>>): Promise<Room | null> => {
   try {
+    // Построим объект данных для обновления
+    const updateData: any = {};
+    
+    if (room.name !== undefined) updateData.name = room.name;
+    if (room.description !== undefined) updateData.description = room.description;
+    if (room.price !== undefined) updateData.price = room.price;
+    if (room.capacity !== undefined) updateData.capacity = room.capacity;
+    if (room.amenities !== undefined) updateData.amenities = room.amenities;
+    if (room.imageUrl !== undefined) updateData.imageUrl = room.imageUrl;
+    if (room.imageUrls !== undefined) updateData.imageUrls = room.imageUrls;
+    if (room.imageHint !== undefined) updateData.imageHint = room.imageHint;
+
+    // Если нет данных для обновления, просто возвращаем существующий номер
+    if (Object.keys(updateData).length === 0) {
+      const existingRoom = await prisma.room.findUnique({ where: { id } });
+      if (!existingRoom) return null;
+      
+      return {
+        id: existingRoom.id,
+        name: existingRoom.name,
+        description: existingRoom.description,
+        price: existingRoom.price,
+        capacity: existingRoom.capacity,
+        amenities: existingRoom.amenities,
+        imageUrl: existingRoom.imageUrl,
+        imageUrls: existingRoom.imageUrls || [],
+        imageHint: existingRoom.imageHint,
+      };
+    }
+
     const updatedRoom = await prisma.room.update({
       where: { id },
-      data: {
-        ...(room.name && { name: room.name }),
-        ...(room.description && { description: room.description }),
-        ...(room.price !== undefined && { price: room.price }),
-        ...(room.capacity !== undefined && { capacity: room.capacity }),
-        ...(room.amenities && { amenities: room.amenities }),
-        ...(room.imageUrl && { imageUrl: room.imageUrl }),
-        ...(room.imageHint !== undefined && { imageHint: room.imageHint }),
-      },
+      data: updateData,
     });
     
     return {
@@ -86,9 +112,17 @@ export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id'>>): P
       capacity: updatedRoom.capacity,
       amenities: updatedRoom.amenities,
       imageUrl: updatedRoom.imageUrl,
+      imageUrls: updatedRoom.imageUrls || [],
       imageHint: updatedRoom.imageHint,
     };
-  } catch (error) {
+  } catch (error: any) {
+    // Логируем ошибку для отладки
+    console.error('Error updating room:', error);
+    // Если запись не найдена (Prisma возвращает P2025), возвращаем null
+    if (error?.code === 'P2025') {
+      return null;
+    }
+    // Для других ошибок тоже возвращаем null (можно улучшить обработку)
     return null;
   }
 };
