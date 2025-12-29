@@ -18,22 +18,25 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { roomId, startDate, endDate, name, phone, email } = body;
 
-    if (!roomId || !startDate || !endDate || !name || !phone || !email) {
+    if (!roomId || !startDate || !endDate || !name || !phone) {
       return NextResponse.json(
         {
           error:
-            "Необходимые поля: roomId, startDate, endDate, name, phone, email",
+            "Необходимые поля: roomId, startDate, endDate, name, phone",
         },
         { status: 400 }
       );
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: "Неверный формат email" },
-        { status: 400 }
-      );
+    // Валидируем email только если он передан
+    if (email && email.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.trim())) {
+        return NextResponse.json(
+          { error: "Неверный формат email" },
+          { status: 400 }
+        );
+      }
     }
 
     const start = new Date(startDate);
@@ -59,7 +62,7 @@ export async function POST(request: NextRequest) {
       endDate: end,
       name: name.trim(),
       phone: phone.trim(),
-      email: email.trim(),
+      email: email?.trim() || undefined,
     });
 
     return NextResponse.json(newBooking, { status: 201 });

@@ -117,7 +117,7 @@ export const getBookings = async (): Promise<Booking[]> => {
     endDate: booking.endDate,
     name: booking.name,
     phone: booking.phone,
-    email: booking.email,
+    email: booking.email || undefined,
   }));
 };
 
@@ -134,7 +134,7 @@ export const getBookingsByRoomId = async (roomId: string): Promise<Booking[]> =>
     endDate: booking.endDate,
     name: booking.name,
     phone: booking.phone,
-    email: booking.email,
+    email: booking.email || undefined,
   }));
 };
 
@@ -152,7 +152,7 @@ export const getBookingById = async (id: string): Promise<Booking | null> => {
     endDate: booking.endDate,
     name: booking.name,
     phone: booking.phone,
-    email: booking.email,
+    email: booking.email || undefined,
   };
 };
 
@@ -164,8 +164,8 @@ export const createBooking = async (booking: Omit<Booking, 'id'>): Promise<Booki
       endDate: booking.endDate,
       name: booking.name,
       phone: booking.phone,
-      email: booking.email,
-    },
+      email: booking.email ?? null,
+    } as any,
   });
   
   return {
@@ -175,22 +175,24 @@ export const createBooking = async (booking: Omit<Booking, 'id'>): Promise<Booki
     endDate: newBooking.endDate,
     name: newBooking.name,
     phone: newBooking.phone,
-    email: newBooking.email,
+    email: newBooking.email ?? undefined,
   };
 };
 
 export const updateBooking = async (id: string, booking: Partial<Omit<Booking, 'id'>>): Promise<Booking | null> => {
   try {
+    const updateData: any = {};
+    
+    if (booking.roomId !== undefined) updateData.roomId = booking.roomId;
+    if (booking.startDate !== undefined) updateData.startDate = booking.startDate;
+    if (booking.endDate !== undefined) updateData.endDate = booking.endDate;
+    if (booking.name !== undefined) updateData.name = booking.name;
+    if (booking.phone !== undefined) updateData.phone = booking.phone;
+    if (booking.email !== undefined) updateData.email = booking.email || null;
+    
     const updatedBooking = await prisma.booking.update({
       where: { id },
-      data: {
-        ...(booking.roomId && { roomId: booking.roomId }),
-        ...(booking.startDate && { startDate: booking.startDate }),
-        ...(booking.endDate && { endDate: booking.endDate }),
-        ...(booking.name && { name: booking.name }),
-        ...(booking.phone && { phone: booking.phone }),
-        ...(booking.email && { email: booking.email }),
-      },
+      data: updateData,
     });
     
     return {
@@ -200,7 +202,7 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
       endDate: updatedBooking.endDate,
       name: updatedBooking.name,
       phone: updatedBooking.phone,
-      email: updatedBooking.email,
+      email: updatedBooking.email ?? undefined,
     };
   } catch (error) {
     return null;

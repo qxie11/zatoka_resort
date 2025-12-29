@@ -50,6 +50,10 @@ export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<BookingWi
   {
     accessorKey: "email",
     header: "Email",
+    cell: ({ row }) => {
+      const email = row.getValue("email") as string | undefined;
+      return email ? email : "—";
+    },
   },
   {
     accessorKey: "startDate",

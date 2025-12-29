@@ -61,14 +61,19 @@ export async function PUT(
     if (name !== undefined) updates.name = name.trim();
     if (phone !== undefined) updates.phone = phone.trim();
     if (email !== undefined) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return NextResponse.json(
-          { error: 'Неверный формат email' },
-          { status: 400 }
-        );
+      // Если email пустая строка или null, устанавливаем undefined
+      if (email === null || email === '' || (typeof email === 'string' && email.trim() === '')) {
+        updates.email = undefined;
+      } else {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email.trim())) {
+          return NextResponse.json(
+            { error: 'Неверный формат email' },
+            { status: 400 }
+          );
+        }
+        updates.email = email.trim();
       }
-      updates.email = email.trim();
     }
 
     // Проверка, что дата выезда позже даты заезда

@@ -47,7 +47,7 @@ const bookingSchema = z.object({
   }),
   name: z.string().min(1, "Имя обязательно"),
   phone: z.string().min(1, "Номер телефона обязателен"),
-  email: z.string().email("Неверный формат email"),
+  email: z.string().email("Неверный формат email").optional().or(z.literal("")),
 });
 
 type BookingFormValues = {
@@ -58,7 +58,7 @@ type BookingFormValues = {
     };
     name: string;
     phone: string;
-    email: string;
+    email?: string;
 }
 
 interface BookingFormProps {
@@ -117,7 +117,7 @@ export default function BookingForm({ isOpen, onOpenChange, onSubmit, booking, r
         endDate: data.dateRange.to,
         name: data.name,
         phone: data.phone,
-        email: data.email,
+        email: data.email || undefined,
     };
     onSubmit(submissionData, booking?.id);
   });
@@ -216,11 +216,11 @@ export default function BookingForm({ isOpen, onOpenChange, onSubmit, booking, r
                 {form.formState.errors.phone && <p className="text-sm text-destructive">{form.formState.errors.phone.message}</p>}
             </div>
             <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Email (необязательно)</Label>
                 <Input 
                   id="email" 
                   {...form.register("email")} 
-                  placeholder="example@email.com"
+                  placeholder="example@email.com (необязательно)"
                   type="email"
                 />
                 {form.formState.errors.email && <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>}

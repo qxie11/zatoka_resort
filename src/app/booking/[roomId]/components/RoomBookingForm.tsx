@@ -42,7 +42,7 @@ const FormSchema = z.object({
   guests: z.coerce.number().min(1, { message: "Требуется как минимум один гость." }),
   name: z.string().min(2, { message: "Имя должно содержать минимум 2 символа." }),
   phone: z.string().min(10, { message: "Номер телефона обязателен." }),
-  email: z.string().email({ message: "Некорректный email адрес." }),
+  email: z.string().email({ message: "Некорректный email адрес." }).optional().or(z.literal("")),
 });
 
 interface RoomBookingFormProps {
@@ -142,7 +142,7 @@ export default function RoomBookingForm({ room, existingBookings }: RoomBookingF
           endDate: data.dateRange.to.toISOString(),
           name: data.name,
           phone: data.phone,
-          email: data.email,
+          email: data.email || undefined,
         }),
       });
 

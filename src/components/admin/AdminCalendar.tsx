@@ -139,7 +139,7 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
                         </Badge>
                       </div>
                       <div className="text-sm text-muted-foreground space-y-1">
-                        <p>📧 {range.booking.email}</p>
+                        {range.booking.email && <p>📧 {range.booking.email}</p>}
                         <p>📞 {range.booking.phone}</p>
                       </div>
                     </div>
