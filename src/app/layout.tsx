@@ -1,13 +1,13 @@
-import type { Metadata, Viewport } from 'next';
-import './globals.css';
-import { cn } from '@/lib/utils';
-import { Toaster } from '@/components/ui/toaster';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import StoreProvider from '@/components/providers/StoreProvider';
-import { Comfortaa, Nunito } from "next/font/google"
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
+import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import StoreProvider from "@/components/providers/StoreProvider";
+import { Comfortaa, Golos_Text } from "next/font/google";
 
-const fontSans = Nunito({
+const fontSans = Golos_Text({
   subsets: ["latin", "cyrillic"],
   variable: "--font-sans",
 });
@@ -17,11 +17,12 @@ const fontHeading = Comfortaa({
   variable: "--font-heading",
 });
 
-
 const APP_NAME = "Отдых в Затоке";
-const APP_DEFAULT_TITLE = "Отдых в Затоке | Ваш морской отель в Одесской области";
+const APP_DEFAULT_TITLE =
+  "Отдых в Затоке | Ваш морской отель в Одесской области";
 const APP_TITLE_TEMPLATE = "%s | Отдых в Затоке";
-const APP_DESCRIPTION = "Забронируйте свой идеальный пляжный отдых в 'Отдых в Затоке', премиум-отеле в Затоке, Одесса. Наслаждайтесь потрясающими видами на море, отличным сервисом и современными удобствами.";
+const APP_DESCRIPTION =
+  "Забронируйте свой идеальный пляжный отдых в 'Отдых в Затоке', премиум-отеле в Затоке, Одесса. Наслаждайтесь потрясающими видами на море, отличным сервисом и современными удобствами.";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
@@ -56,13 +57,20 @@ export const metadata: Metadata = {
     },
     description: APP_DESCRIPTION,
   },
-  keywords: ["отель", "Затока", "Одесса", "пляжный курорт", "Черное море", "отдых", "бронирование"],
+  keywords: [
+    "отель",
+    "Затока",
+    "Одесса",
+    "пляжный курорт",
+    "Черное море",
+    "отдых",
+    "бронирование",
+  ],
 };
 
 export const viewport: Viewport = {
   themeColor: "#FFFFFF",
 };
-
 
 export default function RootLayout({
   children,
@@ -72,7 +80,13 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning>
       <head />
-      <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable, fontHeading.variable)}>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+          fontHeading.variable
+        )}
+      >
         <StoreProvider>
           <div className="relative flex min-h-dvh flex-col bg-background">
             <Header />

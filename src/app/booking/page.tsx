@@ -1,12 +1,12 @@
 import { Suspense } from "react";
-import { getRooms } from '@/lib/db';
-import BookingForm from "./components/BookingForm";
-import RoomsList from '@/components/rooms/RoomsList';
+import { getRooms, getBookings } from '@/lib/db';
+import BookingPageClient from "./components/BookingPageClient";
 import SuccessMessage from "./components/SuccessMessage";
 import { WavyUnderline } from "@/components/ui/wavy-underline";
 
 export default async function BookingPage() {
   const rooms = await getRooms();
+  const bookings = await getBookings();
 
   return (
     <div>
@@ -22,18 +22,7 @@ export default async function BookingPage() {
                 <Suspense fallback={null}>
                   <SuccessMessage />
                 </Suspense>
-                <BookingForm />
-            </div>
-        </section>
-
-        <section className="py-16 lg:py-24 bg-background">
-            <div className="container mx-auto px-4">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Наши номера и люксы</h2>
-                    <WavyUnderline />
-                    <p className="mt-2 text-muted-foreground">Найдите идеальное пространство для вашего пребывания.</p>
-                </div>
-                <RoomsList rooms={rooms} />
+                <BookingPageClient rooms={rooms} bookings={bookings} />
             </div>
         </section>
     </div>

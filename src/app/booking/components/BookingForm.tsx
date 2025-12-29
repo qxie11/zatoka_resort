@@ -26,6 +26,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import type { Room, Booking } from "@/lib/types";
 
 const FormSchema = z.object({
   dateRange: z.object({
@@ -36,33 +37,91 @@ const FormSchema = z.object({
       required_error: "Дата выезда обязательна.",
     }),
   }),
-  guests: z.coerce.number().min(1, { message: "Требуется как минимум один гость." }),
+  guests: z.coerce
+    .number()
+    .min(1, { message: "Требуется как минимум один гость." }),
 });
 
-export default function BookingForm() {
+interface BookingFormProps {
+  rooms: Room[];
+  bookings: Booking[];
+  onFilterChange: (filteredRooms: Room[]) => void;
+}
+
+export default function BookingForm({
+  rooms,
+  bookings,
+  onFilterChange,
+}: BookingFormProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       guests: 1,
-    }
+    },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "Проверяем наличие...",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+  function datesOverlap(
+    start1: Date,
+    end1: Date,
+    start2: Date,
+    end2: Date
+  ): boolean {
+    return start1 < end2 && start2 < end1;
+  }
+
+  function isRoomAvailable(
+    room: Room,
+    startDate: Date,
+    endDate: Date
+  ): boolean {
+    const roomBookings = bookings.filter((b) => b.roomId === room.id);
+
+    const hasOverlap = roomBookings.some((booking) => {
+      const bookingStart = new Date(booking.startDate);
+      const bookingEnd = new Date(booking.endDate);
+      return datesOverlap(startDate, endDate, bookingStart, bookingEnd);
     });
+
+    return !hasOverlap;
+  }
+
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    // Фильтруем номера по доступности и вместимости
+    const filteredRooms = rooms.filter((room) => {
+      // Проверяем вместимость
+      if (room.capacity < data.guests) {
+        return false;
+      }
+
+      // Проверяем доступность по датам
+      return isRoomAvailable(room, data.dateRange.from, data.dateRange.to);
+    });
+
+    onFilterChange(filteredRooms);
+
+    if (filteredRooms.length === 0) {
+      toast({
+        title: "Номера не найдены",
+        description:
+          "К сожалению, на выбранные даты нет доступных номеров с подходящей вместимостью.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Найдено номеров",
+        description: `Найдено ${filteredRooms.length} доступных номеров на выбранные даты.`,
+      });
+    }
   }
 
   return (
     <Card className="max-w-4xl mx-auto mt-12 shadow-lg border-none">
       <CardContent className="p-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end"
+          >
             <FormField
               control={form.control}
               name="dateRange"
@@ -83,11 +142,18 @@ export default function BookingForm() {
                           {field.value?.from ? (
                             field.value.to ? (
                               <>
-                                {format(field.value.from, "LLL dd, y", { locale: ru })} -{" "}
-                                {format(field.value.to, "LLL dd, y", { locale: ru })}
+                                {format(field.value.from, "LLL dd, y", {
+                                  locale: ru,
+                                })}{" "}
+                                -{" "}
+                                {format(field.value.to, "LLL dd, y", {
+                                  locale: ru,
+                                })}
                               </>
                             ) : (
-                              format(field.value.from, "LLL dd, y", { locale: ru })
+                              format(field.value.from, "LLL dd, y", {
+                                locale: ru,
+                              })
                             )
                           ) : (
                             <span>Выберите диапазон дат</span>
@@ -100,10 +166,15 @@ export default function BookingForm() {
                         initialFocus
                         mode="range"
                         defaultMonth={field.value?.from}
-                        selected={{from: field.value?.from, to: field.value?.to}}
+                        selected={{
+                          from: field.value?.from,
+                          to: field.value?.to,
+                        }}
                         onSelect={field.onChange}
                         numberOfMonths={2}
-                        disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))}
+                        disabled={(date) =>
+                          date < new Date(new Date().setHours(0, 0, 0, 0))
+                        }
                         locale={ru}
                       />
                     </PopoverContent>
@@ -112,23 +183,30 @@ export default function BookingForm() {
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name="guests"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Гости</FormLabel>
                   <div className="relative">
-                     <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <FormControl>
-                        <Input type="number" placeholder="Количество гостей" className="pl-10" {...field} />
+                      <Input
+                        type="number"
+                        placeholder="Количество гостей"
+                        className="pl-10"
+                        {...field}
+                      />
                     </FormControl>
                   </div>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full md:w-auto">Проверить наличие</Button>
+            <Button type="submit" className="w-full md:w-auto">
+              Проверить наличие
+            </Button>
           </form>
         </Form>
       </CardContent>

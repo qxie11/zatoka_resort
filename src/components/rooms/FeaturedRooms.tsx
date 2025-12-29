@@ -26,7 +26,7 @@ export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {featuredRooms.map((room) => (
-          <Card key={room.id} className="overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-xl hover:scale-105">
+          <Card key={room.id} className="overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-xl hover:scale-105 min-w-0">
             <CardHeader className="p-0">
                <div className="relative h-64 w-full">
                   <Image src={room.imageUrl} alt={room.name} fill className="object-cover" data-ai-hint={room.imageHint} />
@@ -40,15 +40,15 @@ export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
               </div>
               <CardDescription className="mt-4">{room.description}</CardDescription>
             </CardContent>
-            <CardFooter className="flex flex-col sm:flex-row gap-3 sm:justify-between items-stretch sm:items-center">
-              <p className="text-lg font-bold text-primary">{room.price} грн / ночь</p>
-              <div className="flex gap-2">
-                <Button asChild variant="ghost" className="flex-1 sm:flex-none">
+            <CardFooter className="flex flex-col gap-3 pt-6">
+              <p className="text-lg font-bold text-primary mr-auto">{room.price} грн / ночь</p>
+              <div className="flex gap-2 w-full">
+                <Button asChild variant="ghost" className="flex-1">
                   <Link href={`/booking#${room.id}`}>
                     Подробнее <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button asChild className="flex-1 sm:flex-none">
+                <Button asChild className="flex-1">
                   <Link href={`/booking/${room.id}`}>
                     Забронировать
                   </Link>
