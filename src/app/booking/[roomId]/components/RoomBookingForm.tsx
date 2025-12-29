@@ -3,15 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { format, startOfDay, isWithinInterval } from "date-fns";
+import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { CalendarIcon, Users, Mail, Phone, User } from "lucide-react";
+import { Users, Mail, Phone, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -20,15 +18,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { toast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { Room, Booking } from "@/lib/types";
+import { DateRangePicker } from "@/components/booking/DateRangePicker";
 
 const FormSchema = z.object({
   dateRange: z.object({
@@ -42,7 +36,9 @@ const FormSchema = z.object({
   guests: z.coerce.number().min(1, { message: "Требуется как минимум один гость." }),
   name: z.string().min(2, { message: "Имя должно содержать минимум 2 символа." }),
   phone: z.string().min(10, { message: "Номер телефона обязателен." }),
-  email: z.string().email({ message: "Некорректный email адрес." }).optional().or(z.literal("")),
+  email: z.string().optional().refine((val) => !val || z.string().email().safeParse(val).success, {
+    message: "Некорректный email адрес.",
+  }),
 });
 
 interface RoomBookingFormProps {
@@ -53,69 +49,6 @@ interface RoomBookingFormProps {
 export default function RoomBookingForm({ room, existingBookings }: RoomBookingFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Получаем все занятые даты из существующих бронирований
-  const getDisabledDates = () => {
-    const disabledDates: Date[] = [];
-    const today = startOfDay(new Date());
-
-    existingBookings.forEach((booking) => {
-      const start = startOfDay(new Date(booking.startDate));
-      const end = startOfDay(new Date(booking.endDate));
-      
-      // Игнорируем прошедшие бронирования
-      if (end < today) return;
-
-      let currentDate = new Date(start);
-      while (currentDate <= end) {
-        disabledDates.push(new Date(currentDate));
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-    });
-
-    return disabledDates;
-  };
-
-  const disabledDates = getDisabledDates();
-
-  // Функция для проверки, занята ли дата
-  const isDateDisabled = (date: Date) => {
-    const dateStart = startOfDay(date);
-    const today = startOfDay(new Date());
-    
-    // Блокируем прошедшие даты
-    if (dateStart < today) return true;
-
-    // Блокируем занятые даты
-    return disabledDates.some(disabledDate => {
-      const disabledStart = startOfDay(disabledDate);
-      return dateStart.getTime() === disabledStart.getTime();
-    });
-  };
-
-  // Функция для проверки диапазона дат при выборе в календаре
-  const isDateRangeDisabled = (date: Date) => {
-    return isDateDisabled(date);
-  };
-
-  // Проверка валидности выбранного диапазона
-  const validateDateRange = (range: { from?: Date; to?: Date } | undefined) => {
-    if (!range?.from || !range?.to) return true;
-
-    const start = startOfDay(range.from);
-    const end = startOfDay(range.to);
-
-    // Проверяем каждую дату в диапазоне
-    let currentDate = new Date(start);
-    while (currentDate <= end) {
-      if (isDateDisabled(currentDate)) {
-        return false;
-      }
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    return true;
-  };
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -183,69 +116,11 @@ export default function RoomBookingForm({ room, existingBookings }: RoomBookingF
               control={form.control}
               name="dateRange"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Даты заезда и выезда</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !field.value?.from && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {field.value?.from ? (
-                            field.value.to ? (
-                              <>
-                                {format(field.value.from, "LLL dd, y", { locale: ru })} -{" "}
-                                {format(field.value.to, "LLL dd, y", { locale: ru })}
-                              </>
-                            ) : (
-                              format(field.value.from, "LLL dd, y", { locale: ru })
-                            )
-                          ) : (
-                            <span>Выберите диапазон дат</span>
-                          )}
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        initialFocus
-                        mode="range"
-                        defaultMonth={field.value?.from}
-                        selected={{ from: field.value?.from, to: field.value?.to }}
-                        onSelect={(range) => {
-                          if (range?.from && range?.to) {
-                            // Проверяем, что диапазон не пересекается с занятыми датами
-                            if (validateDateRange(range)) {
-                              field.onChange(range);
-                            } else {
-                              toast({
-                                title: "Даты заняты",
-                                description: "Выбранный диапазон дат пересекается с существующими бронированиями. Пожалуйста, выберите другие даты.",
-                                variant: "destructive",
-                              });
-                            }
-                          } else {
-                            field.onChange(range);
-                          }
-                        }}
-                        numberOfMonths={2}
-                        disabled={isDateRangeDisabled}
-                        locale={ru}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                  {disabledDates.length > 0 && (
-                    <p className="text-sm text-muted-foreground">
-                      Занятые даты отмечены в календаре
-                    </p>
-                  )}
-                </FormItem>
+                <DateRangePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  existingBookings={existingBookings}
+                />
               )}
             />
 

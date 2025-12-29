@@ -1,26 +1,21 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { format } from "date-fns";
-import { ru } from "date-fns/locale";
-import { CalendarIcon } from "lucide-react";
+import { Users, Mail, Phone, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
-import { Label } from "@/components/ui/label";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-  SheetFooter,
-  SheetClose
-} from "@/components/ui/sheet";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -29,209 +24,244 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
+  SheetClose,
+} from "@/components/ui/sheet";
 import type { Booking, Room } from "@/lib/types";
+import { useGetBookingsQuery } from "@/lib/api";
+import { DateRangePicker } from "@/components/booking/DateRangePicker";
 
 const bookingSchema = z.object({
   roomId: z.string().min(1, "Необходимо выбрать номер"),
   dateRange: z.object({
-    from: z.date({ required_error: "Дата заезда обязательна." }),
-    to: z.date({ required_error: "Дата выезда обязательна." }),
-  }).refine((data) => data.from < data.to, {
-    message: "Дата выезда должна быть позже даты заезда.",
-    path: ["to"],
+    from: z.date({
+      required_error: "Дата заезда обязательна.",
+    }).optional(),
+    to: z.date({
+      required_error: "Дата выезда обязательна.",
+    }).optional(),
+  }).refine((data) => data.from && data.to, {
+    message: "Необходимо выбрать обе даты",
   }),
   name: z.string().min(1, "Имя обязательно"),
   phone: z.string().min(1, "Номер телефона обязателен"),
-  email: z.string().email("Неверный формат email").optional().or(z.literal("")),
+  email: z.string().optional().refine((val) => !val || z.string().email().safeParse(val).success, {
+    message: "Неверный формат email",
+  }),
 });
 
-type BookingFormValues = {
-    roomId: string;
-    dateRange: {
-        from: Date;
-        to: Date;
-    };
-    name: string;
-    phone: string;
-    email?: string;
-}
+type BookingFormValues = z.infer<typeof bookingSchema>;
 
 interface BookingFormProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  onSubmit: (values: Omit<Booking, 'id'>, id?: string) => void;
+  onSubmit: (values: Omit<Booking, "id">, id?: string) => void;
   booking: Booking | null;
   rooms: Room[];
 }
 
-export default function BookingForm({ isOpen, onOpenChange, onSubmit, booking, rooms }: BookingFormProps) {
+export default function BookingForm({
+  isOpen,
+  onOpenChange,
+  onSubmit,
+  booking,
+  rooms,
+}: BookingFormProps) {
+  const { data: allBookings = [] } = useGetBookingsQuery();
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
-        roomId: '',
-        dateRange: {
-            from: new Date(),
-            to: new Date(new Date().setDate(new Date().getDate() + 1)),
-        },
-        name: '',
-        phone: '',
-        email: '',
-    }
+      roomId: "",
+      dateRange: {
+        from: undefined as any,
+        to: undefined as any,
+      },
+      name: "",
+      phone: "",
+      email: "",
+    },
   });
 
   useEffect(() => {
     if (booking) {
       form.reset({
-          roomId: booking.roomId,
-          dateRange: {
-              from: new Date(booking.startDate),
-              to: new Date(booking.endDate),
-          },
-          name: booking.name,
-          phone: booking.phone,
-          email: booking.email,
+        roomId: booking.roomId,
+        dateRange: {
+          from: new Date(booking.startDate),
+          to: new Date(booking.endDate),
+        },
+        name: booking.name,
+        phone: booking.phone,
+        email: booking.email || "",
       });
     } else {
       form.reset({
-        roomId: '',
+        roomId: "",
         dateRange: {
-            from: new Date(),
-            to: new Date(new Date().setDate(new Date().getDate() + 1)),
+          from: undefined as any,
+          to: undefined as any,
         },
-        name: '',
-        phone: '',
-        email: '',
+        name: "",
+        phone: "",
+        email: "",
       });
     }
   }, [booking, form, isOpen]);
 
+  // Получаем выбранный номер
+  const selectedRoomId = form.watch("roomId");
+
+  // Получаем бронирования для выбранного номера
+  const roomBookings = useMemo(() => {
+    if (!selectedRoomId) return [];
+    return allBookings.filter((b: Booking) => b.roomId === selectedRoomId);
+  }, [selectedRoomId, allBookings]);
+
   const handleFormSubmit = form.handleSubmit((data) => {
+    if (!data.dateRange.from || !data.dateRange.to) {
+      return;
+    }
     const submissionData = {
-        roomId: data.roomId,
-        startDate: data.dateRange.from,
-        endDate: data.dateRange.to,
-        name: data.name,
-        phone: data.phone,
-        email: data.email || undefined,
+      roomId: data.roomId,
+      startDate: data.dateRange.from,
+      endDate: data.dateRange.to,
+      name: data.name,
+      phone: data.phone,
+      email: data.email || undefined,
     };
     onSubmit(submissionData, booking?.id);
   });
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-[525px] overflow-y-auto">
+      <SheetContent className="sm:max-w-[600px] overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>{booking ? "Редактировать бронирование" : "Создать бронирование"}</SheetTitle>
+          <SheetTitle>
+            {booking ? "Редактировать бронирование" : "Создать бронирование"}
+          </SheetTitle>
           <SheetDescription>
-            {booking ? "Внесите изменения в информацию о бронировании." : "Заполните информацию для создания нового бронирования."}
+            {booking
+              ? "Внесите изменения в информацию о бронировании."
+              : "Заполните информацию для создания нового бронирования."}
           </SheetDescription>
         </SheetHeader>
-        <form onSubmit={handleFormSubmit} className="grid gap-4 py-4">
-           <div className="grid gap-2">
-                <Label htmlFor="roomId">Номер</Label>
-                <Select
-                  value={form.watch("roomId")}
-                  onValueChange={(value) => form.setValue("roomId", value)}
-                >
-                    <SelectTrigger>
+        <Form {...form}>
+          <form onSubmit={handleFormSubmit} className="space-y-6 py-4">
+            <FormField
+              control={form.control}
+              name="roomId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Номер</FormLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
                         <SelectValue placeholder="Выберите номер" />
-                    </SelectTrigger>
+                      </SelectTrigger>
+                    </FormControl>
                     <SelectContent>
-                        {rooms.map((room) => (
-                            <SelectItem key={room.id} value={room.id}>
-                                {room.name}
-                            </SelectItem>
-                        ))}
+                      {rooms.map((room) => (
+                        <SelectItem key={room.id} value={room.id}>
+                          {room.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
-                </Select>
-                {form.formState.errors.roomId && <p className="text-sm text-destructive">{form.formState.errors.roomId.message}</p>}
-            </div>
-            <div className="grid gap-2">
-                <Label>Даты</Label>
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !form.watch("dateRange.from") && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {form.watch("dateRange.from") ? (
-                            form.watch("dateRange.to") ? (
-                              <>
-                                {format(form.watch("dateRange.from"), "LLL dd, y", { locale: ru })} -{" "}
-                                {format(form.watch("dateRange.to"), "LLL dd, y", { locale: ru })}
-                              </>
-                            ) : (
-                              format(form.watch("dateRange.from"), "LLL dd, y", { locale: ru })
-                            )
-                          ) : (
-                            <span>Выберите диапазон</span>
-                          )}
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        initialFocus
-                        mode="range"
-                        defaultMonth={form.watch("dateRange.from")}
-                        selected={form.watch("dateRange")}
-                        onSelect={(range) => {
-                          if (range?.from && range?.to) {
-                            form.setValue("dateRange", { from: range.from, to: range.to });
-                          }
-                        }}
-                        numberOfMonths={1}
-                        locale={ru}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  {form.formState.errors.dateRange?.from && <p className="text-sm text-destructive">{form.formState.errors.dateRange.from.message}</p>}
-                  {form.formState.errors.dateRange?.to && <p className="text-sm text-destructive">{form.formState.errors.dateRange.to.message}</p>}
-            </div>
-            <div className="grid gap-2">
-                <Label htmlFor="name">Имя гостя</Label>
-                <Input 
-                  id="name" 
-                  {...form.register("name")} 
-                  placeholder="Введите имя"
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="dateRange"
+              render={({ field }) => (
+                <DateRangePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  existingBookings={roomBookings}
+                  excludeBookingId={booking?.id}
                 />
-                {form.formState.errors.name && <p className="text-sm text-destructive">{form.formState.errors.name.message}</p>}
+              )}
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Имя</FormLabel>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <FormControl>
+                        <Input placeholder="Ваше имя" className="pl-10" {...field} />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Телефон</FormLabel>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <FormControl>
+                        <Input placeholder="+380501234567" className="pl-10" {...field} />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email (необязательно)</FormLabel>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="example@email.com"
+                          className="pl-10"
+                          {...field}
+                          value={field.value || ""}
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <div className="grid gap-2">
-                <Label htmlFor="phone">Номер телефона</Label>
-                <Input 
-                  id="phone" 
-                  {...form.register("phone")} 
-                  placeholder="+380501234567"
-                  type="tel"
-                />
-                {form.formState.errors.phone && <p className="text-sm text-destructive">{form.formState.errors.phone.message}</p>}
-            </div>
-            <div className="grid gap-2">
-                <Label htmlFor="email">Email (необязательно)</Label>
-                <Input 
-                  id="email" 
-                  {...form.register("email")} 
-                  placeholder="example@email.com (необязательно)"
-                  type="email"
-                />
-                {form.formState.errors.email && <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>}
-            </div>
-             <SheetFooter className="mt-4">
-                <SheetClose asChild>
-                    <Button type="button" variant="outline">Отмена</Button>
-                </SheetClose>
-                <Button type="submit">Сохранить</Button>
+
+            <SheetFooter className="mt-6">
+              <SheetClose asChild>
+                <Button type="button" variant="outline">
+                  Отмена
+                </Button>
+              </SheetClose>
+              <Button type="submit">Сохранить</Button>
             </SheetFooter>
-        </form>
+          </form>
+        </Form>
       </SheetContent>
     </Sheet>
   );

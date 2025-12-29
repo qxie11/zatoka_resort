@@ -8,7 +8,23 @@ export const makeStore = () => {
       [bookingsApi.reducerPath]: bookingsApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware()
+      getDefaultMiddleware({
+        serializableCheck: {
+          // Игнорируем Date объекты в данных бронирований
+          ignoredActions: [
+            'bookingsApi/executeQuery/fulfilled',
+            'bookingsApi/executeMutation/fulfilled',
+            'bookingsApi/subscriptions/internal_getRTKQSubscriptions',
+          ],
+          ignoredActionPaths: ['meta.arg.originalArgs', 'payload'],
+          ignoredPaths: [
+            'bookingsApi.queries',
+            'bookingsApi.mutations',
+            /^bookingsApi\.queries\./,
+            /^bookingsApi\.mutations\./,
+          ],
+        },
+      })
         .concat(roomsApi.middleware)
         .concat(bookingsApi.middleware),
   });
