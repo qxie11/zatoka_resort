@@ -1,0 +1,16 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="6" fill="url(#gradient)"/>
+  
+  <!-- Waves -->
+  <path d="M2 20C5 18 8 20 11 19C14 18 17 20 20 19C23 18 26 20 29 19C30 18.5 30.5 19 30 19.5" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.95"/>
+  <path d="M2 24C5 22 8 24 11 23C14 22 17 24 20 23C23 22 26 24 29 23C30 22.5 30.5 23 30 23.5" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.85"/>
+  <path d="M2 28C5 26 8 28 11 27C14 26 17 28 20 27C23 26 26 28 29 27C30 26.5 30.5 27 30 27.5" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.75"/>
+  
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e90ff"/>
+      <stop offset="50%" stop-color="#00bfff"/>
+      <stop offset="100%" stop-color="#0080ff"/>
+    </linearGradient>
+  </defs>
+</svg>
