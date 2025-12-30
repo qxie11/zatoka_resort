@@ -62,7 +62,6 @@ export async function PUT(
     if (name !== undefined) updates.name = name.trim();
     if (phone !== undefined) updates.phone = phone.trim();
     if (email !== undefined) {
-      // Если email пустая строка или null, устанавливаем undefined
       if (
         email === null ||
         email === "" ||

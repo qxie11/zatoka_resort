@@ -35,7 +35,6 @@ export async function PUT(
     console.log('PUT /api/rooms/[id] - Room ID:', id);
     console.log('PUT /api/rooms/[id] - Body:', JSON.stringify(body, null, 2));
 
-    // Проверяем существование номера перед обновлением
     const existingRoom = await getRoomById(id);
     console.log('PUT /api/rooms/[id] - Existing room:', existingRoom ? 'found' : 'not found');
     
@@ -47,7 +46,6 @@ export async function PUT(
       );
     }
 
-    // Обработка amenities: может быть массивом или строкой (через запятую)
     let amenitiesArray: string[] | undefined;
     if (amenities !== undefined) {
       if (Array.isArray(amenities)) {
@@ -59,7 +57,6 @@ export async function PUT(
       }
     }
 
-    // Обработка imageUrls: может быть массивом или строкой (через запятую)
     let imageUrlsArray: string[] | undefined;
     if (imageUrls !== undefined) {
       if (Array.isArray(imageUrls)) {

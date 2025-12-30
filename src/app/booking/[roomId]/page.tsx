@@ -24,7 +24,6 @@ export default async function RoomBookingPage({ params }: PageProps) {
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
-            {/* Информация о номере */}
             <Card className="mb-8 shadow-lg">
               <div className="flex flex-col md:flex-row">
                 <div className="relative w-full md:w-1/3 h-64 md:h-auto">
@@ -62,7 +61,6 @@ export default async function RoomBookingPage({ params }: PageProps) {
               </div>
             </Card>
 
-            {/* Форма бронирования */}
             <RoomBookingForm room={room} existingBookings={bookings} />
           </div>
         </div>

@@ -49,7 +49,6 @@ export default function ImageGallery({
     return null;
   }
 
-  // Для отладки
   React.useEffect(() => {
     if (isOpen) {
       console.log("ImageGallery opened with images:", validImages);

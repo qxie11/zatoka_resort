@@ -69,7 +69,6 @@ export const createRoom = async (room: Omit<Room, 'id'>): Promise<Room> => {
 
 export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id'>>): Promise<Room | null> => {
   try {
-    // Построим объект данных для обновления
     const updateData: any = {};
     
     if (room.name !== undefined) updateData.name = room.name;
@@ -81,7 +80,6 @@ export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id'>>): P
     if (room.imageUrls !== undefined) updateData.imageUrls = room.imageUrls;
     if (room.imageHint !== undefined) updateData.imageHint = room.imageHint;
 
-    // Если нет данных для обновления, просто возвращаем существующий номер
     if (Object.keys(updateData).length === 0) {
       const existingRoom = await prisma.room.findUnique({ where: { id } });
       if (!existingRoom) return null;
@@ -116,13 +114,10 @@ export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id'>>): P
       imageHint: updatedRoom.imageHint,
     };
   } catch (error: any) {
-    // Логируем ошибку для отладки
     console.error('Error updating room:', error);
-    // Если запись не найдена (Prisma возвращает P2025), возвращаем null
     if (error?.code === 'P2025') {
       return null;
     }
-    // Для других ошибок тоже возвращаем null (можно улучшить обработку)
     return null;
   }
 };

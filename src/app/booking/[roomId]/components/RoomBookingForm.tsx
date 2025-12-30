@@ -141,7 +141,6 @@ export default function RoomBookingForm({
         })} подтверждено.`,
       });
 
-      // Перенаправляем на страницу успеха или обратно к списку номеров
       router.push("/booking?success=true");
     } catch (error) {
       toast({

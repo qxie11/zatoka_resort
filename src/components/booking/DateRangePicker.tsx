@@ -41,19 +41,16 @@ export function DateRangePicker({
   label = "Даты заезда и выезда",
   className,
 }: DateRangePickerProps) {
-  // Получаем все занятые даты из существующих бронирований
   const disabledDates = useMemo(() => {
     const disabledDatesList: Date[] = [];
     const today = startOfDay(new Date());
 
     existingBookings.forEach((booking) => {
-      // Пропускаем исключенное бронирование
       if (excludeBookingId && booking.id === excludeBookingId) return;
 
       const start = startOfDay(new Date(booking.startDate));
       const end = startOfDay(new Date(booking.endDate));
 
-      // Игнорируем прошедшие бронирования
       if (end < today) return;
 
       let currentDate = new Date(start);
@@ -66,37 +63,30 @@ export function DateRangePicker({
     return disabledDatesList;
   }, [existingBookings, excludeBookingId]);
 
-  // Функция для проверки, занята ли дата
   const isDateDisabled = (date: Date) => {
-    // Применяем кастомную функцию блокировки если есть
     if (customDisabled && customDisabled(date)) return true;
 
     const dateStart = startOfDay(date);
     const today = startOfDay(new Date());
 
-    // Блокируем прошедшие даты
     if (dateStart < today) return true;
 
-    // Блокируем занятые даты
     return disabledDates.some((disabledDate) => {
       const disabledStart = startOfDay(disabledDate);
       return dateStart.getTime() === disabledStart.getTime();
     });
   };
 
-  // Функция для проверки диапазона дат при выборе в календаре
   const isDateRangeDisabled = (date: Date) => {
     return isDateDisabled(date);
   };
 
-  // Проверка валидности выбранного диапазона
   const validateDateRange = (range: { from?: Date; to?: Date } | undefined) => {
     if (!range?.from || !range?.to) return true;
 
     const start = startOfDay(range.from);
     const end = startOfDay(range.to);
 
-    // Проверяем каждую дату в диапазоне
     let currentDate = new Date(start);
     while (currentDate <= end) {
       if (isDateDisabled(currentDate)) {
@@ -145,7 +135,6 @@ export function DateRangePicker({
             selected={{ from: value?.from, to: value?.to }}
             onSelect={(range) => {
               if (range?.from && range?.to) {
-                // Проверяем, что диапазон не пересекается с занятыми датами
                 if (validateDateRange(range)) {
                   onChange(range);
                 } else {

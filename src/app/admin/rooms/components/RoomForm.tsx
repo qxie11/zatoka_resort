@@ -109,7 +109,6 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         ? String(data.imageUrls).split(',').map(s => s.trim()).filter(Boolean)
         : [];
 
-      // Загружаем основное изображение, если есть файл
       if (mainImageFile) {
         const formData = new FormData();
         formData.append('files', mainImageFile);
@@ -129,7 +128,6 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         }
       }
 
-      // Загружаем дополнительные изображения, если есть файлы
       if (additionalImageFiles.length > 0) {
         const formData = new FormData();
         additionalImageFiles.forEach((file) => {
@@ -155,25 +153,20 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         ? data.amenities 
         : String(data.amenities).split(',').map(s => s.trim()).filter(Boolean);
 
-      // Если нет основного изображения (ни файла, ни URL), используем первое дополнительное
       if (!mainImagePath && additionalImagePaths.length > 0) {
         mainImagePath = additionalImagePaths[0];
         additionalImagePaths.shift();
       }
 
-      // При редактировании, если не загружали новое изображение, используем существующее
       if (room && !mainImagePath && !mainImageFile) {
         mainImagePath = room.imageUrl;
       }
 
-      // При редактировании, если не загружали новые дополнительные изображения, объединяем существующие с новыми URL
       if (room && additionalImageFiles.length === 0 && data.imageUrls) {
-        // Если указали URL, используем их вместе с существующими
         const existingUrls = room.imageUrls || [];
         const urlArray = String(data.imageUrls).split(',').map(s => s.trim()).filter(Boolean);
         additionalImagePaths = [...existingUrls, ...urlArray];
       } else if (room && additionalImageFiles.length === 0 && !data.imageUrls) {
-        // Если ничего не указали, оставляем существующие
         additionalImagePaths = room.imageUrls || [];
       }
         
@@ -188,7 +181,6 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         imageHint: data.imageHint || ''
       }, room?.id);
 
-      // Сброс файлов после успешной отправки
       setMainImageFile(null);
       setAdditionalImageFiles([]);
     } catch (error) {
@@ -249,7 +241,6 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                     const file = e.target.files?.[0];
                     if (file) {
                       setMainImageFile(file);
-                      // Также можно указать URL для обратной совместимости
                       form.setValue("imageUrl", "");
                     }
                   }}

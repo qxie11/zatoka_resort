@@ -28,7 +28,6 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
     if (selectedRoom) {
       const today = startOfDay(new Date());
       
-      // Фильтруем только актуальные бронирования (endDate >= сегодня)
       const roomBookings = bookings.filter((b: Booking) => {
         const endDate = startOfDay(new Date(b.endDate));
         return b.roomId === selectedRoom.id && (isAfter(endDate, today) || isToday(endDate));
@@ -62,7 +61,6 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
     }
   }, [bookings, selectedRoom]);
 
-  // Статистика
   const stats = useMemo(() => {
     if (!selectedRoom || bookingRanges.length === 0) {
       return { totalDays: 0, totalBookings: 0 };
@@ -122,7 +120,6 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
               />
             </div>
             
-            {/* Детали бронирований */}
             {bookingRanges.length > 0 && (
               <div className="mt-6 space-y-3">
                 <h3 className="font-semibold text-lg mb-3">Детали бронирований:</h3>

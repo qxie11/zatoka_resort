@@ -113,10 +113,8 @@ export default function BookingForm({
     }
   }, [booking, form, isOpen]);
 
-  // Получаем выбранный номер
   const selectedRoomId = form.watch("roomId");
 
-  // Получаем бронирования для выбранного номера
   const roomBookings = useMemo(() => {
     if (!selectedRoomId) return [];
     return allBookings.filter((b: Booking) => b.roomId === selectedRoomId);

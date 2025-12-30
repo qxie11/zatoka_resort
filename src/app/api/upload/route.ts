@@ -17,7 +17,6 @@ export async function POST(request: NextRequest) {
 
     const uploadDir = join(process.cwd(), "public", "uploads");
     
-    // Создаем директорию, если её нет
     if (!existsSync(uploadDir)) {
       await mkdir(uploadDir, { recursive: true });
     }
@@ -25,25 +24,21 @@ export async function POST(request: NextRequest) {
     const uploadedPaths: string[] = [];
 
     for (const file of files) {
-      // Проверяем тип файла
       if (!file.type.startsWith("image/")) {
-        continue; // Пропускаем не-изображения
+        continue;
       }
 
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      // Генерируем уникальное имя файла
       const timestamp = Date.now();
       const randomStr = Math.random().toString(36).substring(2, 15);
       const extension = file.name.split(".").pop();
       const fileName = `${timestamp}-${randomStr}.${extension}`;
       const filePath = join(uploadDir, fileName);
 
-      // Сохраняем файл
       await writeFile(filePath, buffer);
 
-      // Сохраняем путь относительно public (будет доступен как /uploads/filename)
       uploadedPaths.push(`/uploads/${fileName}`);
     }
 

@@ -91,7 +91,6 @@ export default function BookingsAdminPage() {
     }
   };
 
-  // Фильтруем бронирования по выбранному номеру
   const filteredBookings = selectedRoomId 
     ? bookings.filter(booking => booking.roomId === selectedRoomId)
     : bookings;

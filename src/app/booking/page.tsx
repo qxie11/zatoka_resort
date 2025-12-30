@@ -10,7 +10,7 @@ export default async function BookingPage() {
 
   return (
     <div>
-        <section className="py-16 lg:py-24 bg-accent/50">
+        <section className="pt-16 lg:pt-24 bg-accent/50">
             <div className="container mx-auto px-4">
                 <div className="text-center">
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Забронируйте ваш номер</h1>

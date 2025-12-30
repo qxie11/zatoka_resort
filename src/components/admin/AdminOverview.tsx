@@ -15,7 +15,6 @@ export default function AdminOverview({
   initialRooms,
   initialBookings,
 }: AdminOverviewProps) {
-  // Используем RTK Query для получения актуальных данных
   const { data: rooms = initialRooms } = useGetRoomsQuery();
   const { data: bookings = initialBookings } = useGetBookingsQuery();
   
@@ -23,7 +22,6 @@ export default function AdminOverview({
     initialRooms[0] || null
   );
 
-  // Обновляем selectedRoom если текущий не найден в обновленном списке
   useEffect(() => {
     if (selectedRoom && !rooms.find(r => r.id === selectedRoom.id)) {
       setSelectedRoom(rooms[0] || null);

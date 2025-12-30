@@ -12,7 +12,6 @@ export default function SuccessMessage() {
 
   useEffect(() => {
     if (success === "true") {
-      // Удаляем параметр success из URL через 5 секунд
       const timer = setTimeout(() => {
         router.replace("/booking");
       }, 5000);
