@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { VisuallyHidden } from "@/components/ui/visually-hidden";
 import { Menu, Waves, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -117,6 +118,11 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
+              <SheetHeader>
+                <VisuallyHidden>
+                  <SheetTitle>Навигационное меню</SheetTitle>
+                </VisuallyHidden>
+              </SheetHeader>
               <div className="flex flex-col gap-6 pt-10">
                 <Link
                   href="/"
