@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBookings, createBooking } from "@/lib/db";
+import { startOfDay } from "date-fns";
 
 export async function GET() {
   try {
@@ -21,14 +22,12 @@ export async function POST(request: NextRequest) {
     if (!roomId || !startDate || !endDate || !name || !phone) {
       return NextResponse.json(
         {
-          error:
-            "Необходимые поля: roomId, startDate, endDate, name, phone",
+          error: "Необходимые поля: roomId, startDate, endDate, name, phone",
         },
         { status: 400 }
       );
     }
 
-    // Валидируем email только если он передан
     if (email && email.trim()) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email.trim())) {
@@ -49,9 +48,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (start >= end) {
+    const startDay = startOfDay(start);
+    const endDay = startOfDay(end);
+
+    if (endDay < startDay) {
       return NextResponse.json(
-        { error: "Дата выезда должна быть позже даты заезда" },
+        { error: "Дата выезда не может быть раньше даты заезда" },
         { status: 400 }
       );
     }
