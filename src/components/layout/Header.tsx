@@ -45,7 +45,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/70 shadow-soft transition-smooth">
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link
           href="/"

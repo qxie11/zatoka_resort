@@ -157,9 +157,10 @@ export default function RoomBookingForm({
   }
 
   return (
-    <Card className="shadow-lg border-2">
-      <CardHeader>
-        <CardTitle className="text-2xl">Оформление бронирования</CardTitle>
+    <Card className="shadow-gentle border-2 border-primary/10 bg-white/95 backdrop-blur-sm wave-border">
+      <CardHeader className="relative">
+        <CardTitle className="text-2xl font-heading gradient-ocean bg-clip-text text-transparent">Оформление бронирования</CardTitle>
+        <div className="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       </CardHeader>
       <CardContent>
         <Form {...form}>

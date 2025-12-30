@@ -137,12 +137,12 @@ export default function BookingForm({
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-[600px] overflow-y-auto">
-        <SheetHeader>
-          <SheetTitle>
+      <SheetContent className="sm:max-w-[600px] overflow-y-auto bg-gradient-to-br from-white via-accent/10 to-white border-l-2 border-primary/10">
+        <SheetHeader className="relative pb-4 border-b border-primary/10">
+          <SheetTitle className="text-2xl font-heading gradient-ocean bg-clip-text text-transparent">
             {booking ? "Редактировать бронирование" : "Создать бронирование"}
           </SheetTitle>
-          <SheetDescription>
+          <SheetDescription className="mt-2">
             {booking
               ? "Внесите изменения в информацию о бронировании."
               : "Заполните информацию для создания нового бронирования."}

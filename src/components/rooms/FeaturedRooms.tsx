@@ -26,10 +26,11 @@ export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {featuredRooms.map((room) => (
-          <Card key={room.id} className="overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-xl hover:scale-105 min-w-0">
+          <Card key={room.id} className="overflow-hidden flex flex-col group transition-smooth hover-lift min-w-0 shadow-soft border-0 bg-white/80 backdrop-blur-sm">
             <CardHeader className="p-0">
-               <div className="relative h-64 w-full">
-                  <Image src={room.imageUrl} alt={room.name} fill className="object-cover" data-ai-hint={room.imageHint} />
+               <div className="relative h-64 w-full overflow-hidden">
+                  <Image src={room.imageUrl} alt={room.name} fill className="object-cover transition-smooth group-hover:scale-110" data-ai-hint={room.imageHint} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                </div>
             </CardHeader>
             <CardContent className="pt-6 flex-grow">

@@ -112,7 +112,7 @@ export default function BookingForm({
   }
 
   return (
-    <Card className="max-w-4xl mx-auto my-12 shadow-lg border-none">
+    <Card className="max-w-4xl mx-auto my-12 shadow-gentle border-0 bg-white/90 backdrop-blur-sm">
       <CardContent className="p-6">
         <Form {...form}>
           <form
@@ -176,7 +176,6 @@ export default function BookingForm({
                       />
                     </PopoverContent>
                   </Popover>
-                  <FormMessage />
                 </FormItem>
               )}
             />

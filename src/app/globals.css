@@ -18,8 +18,8 @@
     --muted-foreground: 215.4 16.3% 46.9%;
     --accent: 190 70% 95%; /* Very light cyan */
     --accent-foreground: 215 25% 27%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 58%;
+    --destructive-foreground: 0 0% 100%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 195 83% 43%;
@@ -64,10 +64,155 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-family: var(--font-sans);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .gradient-ocean {
+    background: linear-gradient(135deg, hsl(195, 83%, 43%) 0%, hsl(195, 70%, 55%) 50%, hsl(195, 65%, 60%) 100%);
+  }
+  
+  .gradient-turquoise {
+    background: linear-gradient(135deg, hsl(180, 60%, 50%) 0%, hsl(195, 70%, 55%) 100%);
+  }
+  
+  .gradient-aquamarine {
+    background: linear-gradient(135deg, hsl(170, 55%, 55%) 0%, hsl(180, 60%, 50%) 100%);
+  }
+  
+  .gradient-azure {
+    background: linear-gradient(135deg, hsl(200, 75%, 60%) 0%, hsl(195, 70%, 55%) 100%);
+  }
+  
+  .gradient-sunset {
+    background: linear-gradient(135deg, hsl(35, 92%, 60%) 0%, hsl(25, 85%, 65%) 50%, hsl(15, 80%, 70%) 100%);
+  }
+  
+  .gradient-dawn {
+    background: linear-gradient(135deg, hsl(15, 80%, 70%) 0%, hsl(35, 92%, 60%) 50%, hsl(195, 70%, 55%) 100%);
+  }
+  
+  .gradient-sea-foam {
+    background: linear-gradient(180deg, hsl(190, 70%, 95%) 0%, hsl(190, 60%, 97%) 50%, hsl(45, 50%, 97%) 100%);
+  }
+  
+  .texture-sand {
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 20%, rgba(0, 0, 0, 0.02) 0%, transparent 50%);
+    background-size: 200% 200%;
+  }
+  
+  .sea-foam-layer {
+    background: linear-gradient(180deg, 
+      rgba(255, 255, 255, 0.1) 0%, 
+      rgba(255, 255, 255, 0.05) 50%, 
+      transparent 100%);
+    backdrop-filter: blur(2px);
+  }
+  
+  .shadow-soft {
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08), 0 2px 8px -2px rgba(0, 0, 0, 0.04);
+  }
+  
+  .shadow-gentle {
+    box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.1), 0 4px 12px -4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .shadow-ocean {
+    box-shadow: 0 12px 40px -8px rgba(30, 144, 255, 0.15), 0 4px 16px -4px rgba(30, 144, 255, 0.1);
+  }
+  
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hover-lift {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .water-drop {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .water-drop::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  .water-drop:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .wave-border {
+    position: relative;
+  }
+  
+  .wave-border::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      hsl(195, 83%, 43%) 20%, 
+      hsl(195, 83%, 43%) 80%, 
+      transparent 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 50%, 5% 40%, 10% 50%, 15% 40%, 20% 50%, 25% 40%, 30% 50%, 35% 40%, 40% 50%, 45% 40%, 50% 50%, 55% 40%, 60% 50%, 65% 40%, 70% 50%, 75% 40%, 80% 50%, 85% 40%, 90% 50%, 95% 40%, 100% 50%, 100% 100%, 0 100%);
+  }
+  
+  .ripple-effect {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .ripple-effect::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(30, 144, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s, opacity 0.5s;
+    opacity: 0;
+  }
+  
+  .ripple-effect:active::after {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
   }
 }

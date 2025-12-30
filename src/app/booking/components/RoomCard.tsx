@@ -57,16 +57,17 @@ export default function RoomCard({ room }: RoomCardProps) {
   return (
     <Card
       id={room.id}
-      className="flex flex-col md:flex-row overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
+      className="flex flex-col md:flex-row overflow-hidden transition-smooth hover-lift shadow-soft border-0 bg-white/80 backdrop-blur-sm"
     >
-      <div className="relative w-full md:w-1/3 h-64 md:h-auto">
+      <div className="relative w-full md:w-1/3 h-64 md:h-auto overflow-hidden group/image">
         <Image
           src={room.imageUrl}
           alt={`Изображение ${room.name}`}
           fill
-          className="object-cover"
+          className="object-cover transition-smooth group-hover/image:scale-110"
           data-ai-hint={room.imageHint}
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover/image:opacity-100 transition-opacity duration-300" />
       </div>
       <div className="flex flex-col justify-between w-full md:w-2/3">
         <CardHeader>
