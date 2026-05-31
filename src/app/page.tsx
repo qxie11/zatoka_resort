@@ -169,44 +169,73 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="py-16 lg:py-24 gradient-sea-foam">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight animate-fade-in-up">Добро пожаловать в "Отдых в Затоке"</h2>
+        {/* WELCOME SECTION */}
+        <section className="py-24 relative overflow-hidden bg-gradient-sea-foam">
+          <div className="absolute inset-0 opacity-5 pointer-events-none">
+            <div className="absolute top-1/2 left-5 animate-float">
+              <Waves className="h-32 w-32 text-primary" />
+            </div>
+          </div>
+          
+          <div className="container mx-auto px-4 text-center relative z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
+              <span>Эксклюзивный сервис</span>
+            </div>
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+              Добро пожаловать в "Отдых в Затоке"
+            </h2>
             <WavyUnderline colorClassName='text-secondary' />
-            <p className="mt-6 max-w-3xl mx-auto text-muted-foreground text-lg leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards]">
-              Расположенный на безмятежном побережье Черного моря, "Отдых в Затоке" предлагает идеальное сочетание роскоши, комфорта и природной красоты. Ищете ли вы романтический уик-энд или семейное приключение, наш отель - ваше идеальное место для незабываемого отдыха.
+            <p className="mt-6 max-w-3xl mx-auto text-slate-700 text-lg md:text-xl font-light leading-relaxed">
+              Расположенный на безмятежном побережье Черного моря, "Отдых в Затоке" предлагает идеальное сочетание роскоши, комфорта и природной красоты. Ищете ли вы романтический уик-энд или семейное приключение, наш отель — ваше идеальное место для незабываемого отдыха.
             </p>
           </div>
         </section>
 
-        <section className="py-16 lg:py-24 bg-background">
+        {/* FEATURED ROOMS SECTION */}
+        <section className="py-24 bg-slate-50/50">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight animate-fade-in-up">Наши избранные номера</h2>
-               <WavyUnderline />
-              <p className="mt-4 max-w-2xl mx-auto text-muted-foreground text-lg animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards]">Элегантно оформленные номера для вашего максимального комфорта.</p>
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-100 text-xs font-semibold text-amber-800 uppercase tracking-widest mb-4">
+                <span>Идеальный комфорт</span>
+              </div>
+              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+                Наши избранные номера
+              </h2>
+              <WavyUnderline />
+              <p className="mt-4 max-w-2xl mx-auto text-muted-foreground text-lg font-light">
+                Элегантно оформленные номера и роскошные люксы для вашего максимального расслабления.
+              </p>
             </div>
             <FeaturedRooms rooms={rooms} />
           </div>
         </section>
 
-        <section className="py-16 lg:py-24 bg-background">
+        {/* HOTEL AMENITIES */}
+        <section className="py-24 bg-white relative">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Удобства отеля</h2>
-               <WavyUnderline colorClassName='text-secondary'/>
-              <p className="mt-2 max-w-2xl mx-auto text-muted-foreground">Все, что нужно для идеального отдыха.</p>
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-100 text-xs font-semibold text-teal-800 uppercase tracking-widest mb-4">
+                <span>Всё включено</span>
+              </div>
+              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+                Удобства отеля
+              </h2>
+              <WavyUnderline colorClassName='text-secondary'/>
+              <p className="mt-4 max-w-2xl mx-auto text-muted-foreground text-lg font-light">
+                Всё, что вам может понадобиться для безупречного и беззаботного отпуска у моря.
+              </p>
             </div>
+            
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {amenities.slice(0, 8).map((amenity, index) => {
                 const Icon = iconMap[amenity.icon];
                 return (
-                  <div key={amenity.name} className="flex flex-col items-center animate-fade-in-up opacity-0 [animation-fill-mode:forwards]" style={{ animationDelay: `${index * 0.1}s` }}>
-                    <div className="bg-primary/10 p-5 rounded-full transition-smooth hover:bg-primary/20 hover-lift relative group/icon">
+                  <div key={amenity.name} className="flex flex-col items-center p-6 rounded-3xl bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-gentle hover:-translate-y-1 transition-all duration-300 group">
+                    <div className="bg-primary/10 p-5 rounded-2xl transition-smooth hover:bg-primary/20 relative group/icon">
                       {Icon && <Icon className="h-8 w-8 text-primary transition-smooth group-hover/icon:animate-float-slow" />}
-                      <div className="absolute inset-0 rounded-full bg-primary/5 opacity-0 group-hover/icon:opacity-100 group-hover/icon:animate-water-ripple transition-opacity" />
+                      <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-hover/icon:opacity-100 group-hover/icon:animate-water-ripple transition-opacity" />
                     </div>
-                    <h3 className="mt-5 text-lg font-semibold">{amenity.name}</h3>
+                    <h3 className="mt-5 text-lg font-bold text-slate-900">{amenity.name}</h3>
                   </div>
                 );
               })}
@@ -214,18 +243,33 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="py-20 lg:py-28 gradient-ocean text-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 0%, transparent 50%), radial-gradient(circle at 80% 80%, white 0%, transparent 50%)' }} />
+        {/* BOTTOM CTA: GRADIENT DAWN */}
+        <section className="py-24 lg:py-32 gradient-ocean text-white relative overflow-hidden">
+          <div className="absolute inset-0 opacity-20 z-0">
+            <Image
+              src="https://images.unsplash.com/photo-1683459285195-2bff6b201b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200"
+              alt="Sunset sea"
+              fill
+              className="object-cover scale-105 animate-float-slow"
+            />
+            <div className="absolute inset-0 bg-slate-950/80" />
           </div>
-          <div className="container mx-auto px-4 text-center relative z-10">
-            <h2 className="text-3xl md:text-5xl font-semibold animate-fade-in-up">Готовы к вашему отдыху?</h2>
-            <p className="mt-6 max-w-2xl mx-auto text-lg text-white/95 leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards]">
+          
+          <div className="container mx-auto px-4 text-center relative z-10 space-y-6">
+            <h2 className="text-3xl md:text-6xl font-extrabold tracking-tight leading-tight">
+              Готовы к вашему идеальному отдыху?
+            </h2>
+            <p className="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-slate-200 font-light leading-relaxed">
               Берега Затоки зовут. Забронируйте отпуск своей мечты сегодня и создайте воспоминания, которые останутся на всю жизнь.
             </p>
-            <Button asChild size="lg" className="mt-10 bg-white text-primary hover:bg-white/95 shadow-gentle hover-lift transition-smooth animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards]">
-              <Link href="/booking">Забронировать номер сейчас</Link>
-            </Button>
+            <div className="pt-6">
+              <Button asChild size="lg" className="gradient-sunset text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all duration-300 h-12 px-8 rounded-xl">
+                <Link href="/booking" className="flex items-center">
+                  Забронировать номер сейчас
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+            </div>
           </div>
         </section>
       </main>

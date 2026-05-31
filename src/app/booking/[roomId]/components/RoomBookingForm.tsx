@@ -182,21 +182,21 @@ export default function RoomBookingForm({
               name="guests"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Количество гостей</FormLabel>
+                  <FormLabel className="text-slate-900 font-bold mb-2">Количество гостей</FormLabel>
                   <div className="relative">
-                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="Количество гостей"
-                        className="pl-10"
+                        className="pl-10 bg-white border-slate-200 focus:border-primary/50 transition-smooth rounded-xl h-11"
                         min={1}
                         max={room.capacity}
                         {...field}
                       />
                     </FormControl>
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground mt-1">
                     Максимум {room.capacity} гостей
                   </p>
                   <FormMessage />
@@ -210,13 +210,13 @@ export default function RoomBookingForm({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Имя</FormLabel>
+                    <FormLabel className="text-slate-900 font-bold mb-2">Имя</FormLabel>
                     <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
                       <FormControl>
                         <Input
                           placeholder="Ваше имя"
-                          className="pl-10"
+                          className="pl-10 bg-white border-slate-200 focus:border-primary/50 transition-smooth rounded-xl h-11"
                           {...field}
                         />
                       </FormControl>
@@ -231,13 +231,13 @@ export default function RoomBookingForm({
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Телефон</FormLabel>
+                    <FormLabel className="text-slate-900 font-bold mb-2">Телефон</FormLabel>
                     <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
                       <FormControl>
                         <Input
                           placeholder="+380501234567"
-                          className="pl-10"
+                          className="pl-10 bg-white border-slate-200 focus:border-primary/50 transition-smooth rounded-xl h-11"
                           {...field}
                         />
                       </FormControl>
@@ -252,14 +252,14 @@ export default function RoomBookingForm({
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="text-slate-900 font-bold mb-2">Email</FormLabel>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
                       <FormControl>
                         <Input
                           type="email"
                           placeholder="example@email.com"
-                          className="pl-10"
+                          className="pl-10 bg-white border-slate-200 focus:border-primary/50 transition-smooth rounded-xl h-11"
                           {...field}
                         />
                       </FormControl>

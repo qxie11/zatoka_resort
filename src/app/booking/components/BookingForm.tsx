@@ -131,7 +131,7 @@ export default function BookingForm({
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-full justify-start text-left font-normal bg-white/50 border-white/60 hover:bg-white/80 transition-smooth rounded-xl h-11",
+                            "w-full justify-start text-left font-normal bg-white border-slate-200 hover:bg-slate-50 transition-smooth rounded-xl h-11",
                             !field.value?.from && "text-muted-foreground"
                           )}
                         >
@@ -158,7 +158,7 @@ export default function BookingForm({
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border-white/20 glass-card-premium" align="start">
+                    <PopoverContent className="w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border border-slate-100 bg-white" align="start">
                       <Calendar
                         initialFocus
                         mode="range"
@@ -191,7 +191,7 @@ export default function BookingForm({
                       <Input
                         type="number"
                         placeholder="Количество гостей"
-                        className="pl-10 bg-white/50 border-white/60 focus:bg-white transition-smooth rounded-xl h-11"
+                        className="pl-10 bg-white border-slate-200 focus:border-primary/50 transition-smooth rounded-xl h-11"
                         {...field}
                       />
                     </FormControl>
