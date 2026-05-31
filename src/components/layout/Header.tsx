@@ -46,15 +46,15 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/70 shadow-soft transition-smooth">
+    <header className="sticky top-0 z-50 w-full border-b border-white/20 glass-card-premium backdrop-blur-md shadow-soft transition-smooth">
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link
           href="/"
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 group"
           onClick={() => setIsMobileMenuOpen(false)}
         >
-          <Waves className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold">Отдых в Затоке</span>
+          <Waves className="h-6 w-6 text-primary group-hover:animate-float" />
+          <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-teal-500">Отдых в Затоке</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
@@ -62,9 +62,9 @@ export default function Header() {
               key={link.href}
               href={link.href}
               className={cn(
-                "text-sm font-medium transition-colors hover:text-primary",
+                "text-sm font-medium transition-smooth hover:text-primary relative py-1",
                 pathname === link.href
-                  ? "text-primary"
+                  ? "text-primary after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-primary after:rounded-full"
                   : "text-muted-foreground"
               )}
             >
@@ -100,12 +100,9 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Button asChild>
+              <Button asChild className="gradient-sunset text-slate-950 font-bold border-0 shadow-soft hover-lift">
                 <Link href="/booking">Забронировать</Link>
               </Button>
-              {/* <Button asChild variant="outline">
-                    <Link href="/login">Войти</Link>
-                </Button> */}
             </>
           )}
         </div>
@@ -173,13 +170,11 @@ export default function Header() {
                     <>
                       <Button
                         asChild
+                        className="gradient-sunset text-slate-950 font-bold border-0 shadow-soft"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <Link href="/booking">Забронировать</Link>
                       </Button>
-                      {/* <Button asChild variant="secondary" onClick={() => setIsMobileMenuOpen(false)}>
-                          <Link href="/login">Войти</Link>
-                      </Button> */}
                     </>
                   )}
                 </div>

@@ -57,9 +57,9 @@ export default function RoomCard({ room }: RoomCardProps) {
   return (
     <Card
       id={room.id}
-      className="flex flex-col md:flex-row overflow-hidden transition-smooth hover-lift shadow-soft border-0 bg-white/80 backdrop-blur-sm"
+      className="flex flex-col md:flex-row overflow-hidden transition-smooth hover-lift shadow-gentle border border-white/50 bg-white/70 backdrop-blur-md rounded-3xl"
     >
-      <div className="relative w-full md:w-1/3 h-64 md:h-auto overflow-hidden group/image">
+      <div className="relative w-full md:w-1/3 h-64 md:h-auto min-h-[250px] overflow-hidden group/image">
         <Image
           src={room.imageUrl}
           alt={`Изображение ${room.name}`}
@@ -67,34 +67,33 @@ export default function RoomCard({ room }: RoomCardProps) {
           className="object-cover transition-smooth group-hover/image:scale-110"
           data-ai-hint={room.imageHint}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover/image:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-opacity duration-300" />
       </div>
-      <div className="flex flex-col justify-between w-full md:w-2/3">
-        <CardHeader>
-          <CardTitle className="text-2xl">{room.name}</CardTitle>
-          <div className="flex items-center gap-2 mt-2 text-muted-foreground text-sm">
+      <div className="flex flex-col justify-between w-full md:w-2/3 p-2">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-2xl font-extrabold text-slate-900">{room.name}</CardTitle>
+          <div className="flex items-center gap-2 mt-2 text-primary font-medium text-sm">
             <BedDouble className="h-4 w-4" />
             <span>До {room.capacity} гостей</span>
           </div>
-          <CardDescription className="pt-2">{room.description}</CardDescription>
+          <CardDescription className="pt-2 text-muted-foreground font-light leading-relaxed">{room.description}</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pb-4">
           <div className="flex flex-wrap gap-2">
             {room.amenities.map((amenity) => (
-              <Badge key={amenity} variant="secondary">
+              <Badge key={amenity} variant="secondary" className="bg-primary/5 hover:bg-primary/10 text-primary border-primary/10 transition-colors font-medium rounded-lg">
                 {amenity}
               </Badge>
             ))}
           </div>
         </CardContent>
-        <CardFooter className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <CardFooter className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 border-t border-slate-100/50">
           <div>
-            <p className="text-xl font-bold text-primary">{room.price} грн</p>
-            <p className="text-sm text-muted-foreground">за ночь</p>
+            <p className="text-2xl font-extrabold text-primary tracking-tight">{room.price} грн <span className="text-sm text-muted-foreground font-normal">/ ночь</span></p>
           </div>
           <div className="flex gap-3 w-full sm:w-auto">
             <ViewImagesButton room={room} />
-            <Button asChild className="flex-1 sm:flex-none">
+            <Button asChild className="flex-1 sm:flex-none gradient-sunset hover:opacity-90 text-slate-950 font-bold border-0 shadow-md">
               <Link href={`/booking/${room.id}`}>Забронировать</Link>
             </Button>
           </div>

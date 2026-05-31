@@ -112,30 +112,30 @@ export default function BookingForm({
   }
 
   return (
-    <Card className="max-w-4xl mx-auto my-12 shadow-gentle border-0 bg-white/90 backdrop-blur-sm">
-      <CardContent className="p-6">
+    <Card className="max-w-4xl mx-auto my-12 shadow-gentle border border-white/40 glass-card-premium rounded-3xl">
+      <CardContent className="p-8">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end"
           >
             <FormField
               control={form.control}
               name="dateRange"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Заезд / Выезд</FormLabel>
+                  <FormLabel className="text-slate-900 font-bold mb-2">Заезд / Выезд</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-full justify-start text-left font-normal",
+                            "w-full justify-start text-left font-normal bg-white/50 border-white/60 hover:bg-white/80 transition-smooth rounded-xl h-11",
                             !field.value?.from && "text-muted-foreground"
                           )}
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
                           {field.value?.from ? (
                             field.value.to ? (
                               <>
@@ -149,7 +149,7 @@ export default function BookingForm({
                               </>
                             ) : (
                               format(field.value.from, "LLL dd, y", {
-                                locale: ru,
+                                  locale: ru,
                               })
                             )
                           ) : (
@@ -158,7 +158,7 @@ export default function BookingForm({
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent className="w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border-white/20 glass-card-premium" align="start">
                       <Calendar
                         initialFocus
                         mode="range"
@@ -183,15 +183,15 @@ export default function BookingForm({
               control={form.control}
               name="guests"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Гости</FormLabel>
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-slate-900 font-bold mb-2">Гости</FormLabel>
                   <div className="relative">
-                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="Количество гостей"
-                        className="pl-10"
+                        className="pl-10 bg-white/50 border-white/60 focus:bg-white transition-smooth rounded-xl h-11"
                         {...field}
                       />
                     </FormControl>
@@ -200,7 +200,7 @@ export default function BookingForm({
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full md:w-auto">
+            <Button type="submit" className="w-full h-11 gradient-sunset hover:opacity-90 active:scale-[0.98] text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/10 rounded-xl transition-all duration-300">
               Проверить наличие
             </Button>
           </form>
