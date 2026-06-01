@@ -26,30 +26,30 @@ export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {featuredRooms.map((room) => (
-          <Card key={room.id} className="overflow-hidden flex flex-col group transition-smooth hover-lift min-w-0 shadow-soft border-0 bg-white/80 backdrop-blur-sm">
+          <Card key={room.id} className="overflow-hidden flex flex-col group transition-all duration-300 hover-lift min-w-0 shadow-soft border border-white/50 bg-white/70 backdrop-blur-md rounded-3xl">
             <CardHeader className="p-0">
-               <div className="relative h-64 w-full overflow-hidden">
+               <div className="relative h-56 sm:h-64 w-full overflow-hidden">
                   <Image src={room.imageUrl} alt={room.name} fill className="object-cover transition-smooth group-hover:scale-110" data-ai-hint={room.imageHint} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                </div>
             </CardHeader>
-            <CardContent className="pt-6 flex-grow">
-              <CardTitle className="text-xl">{room.name}</CardTitle>
-              <div className="flex items-center gap-2 mt-2 text-muted-foreground">
+            <CardContent className="p-5 sm:p-6 flex-grow">
+              <CardTitle className="text-xl font-bold text-slate-900">{room.name}</CardTitle>
+              <div className="flex items-center gap-2 mt-2 text-primary font-medium text-sm">
                   <BedDouble className="h-4 w-4" />
                   <span>{room.capacity} Гостей</span>
               </div>
-              <CardDescription className="mt-4">{room.description}</CardDescription>
+              <CardDescription className="mt-4 text-muted-foreground text-sm font-light leading-relaxed">{room.description}</CardDescription>
             </CardContent>
-            <CardFooter className="flex flex-col gap-3 pt-6">
-              <p className="text-lg font-bold text-primary mr-auto">{room.price} грн / ночь</p>
-              <div className="flex gap-2 w-full">
-                <Button asChild variant="ghost" className="flex-1">
-                  <Link href={`/booking#${room.id}`}>
-                    Подробнее <ArrowRight className="ml-2 h-4 w-4" />
+            <CardFooter className="flex flex-col gap-4 p-5 sm:p-6 border-t border-slate-100/50">
+              <p className="text-xl font-extrabold text-primary mr-auto">{room.price} грн <span className="text-xs text-muted-foreground font-normal">/ ночь</span></p>
+              <div className="flex gap-3 w-full">
+                <Button asChild variant="ghost" className="flex-1 text-slate-700 hover:text-primary transition-colors">
+                  <Link href={`/booking#${room.id}`} className="flex items-center justify-center">
+                    Подробнее <ArrowRight className="ml-1.5 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button asChild className="flex-1">
+                <Button asChild className="flex-1 gradient-sunset text-slate-950 font-bold border-0 shadow-md">
                   <Link href={`/booking/${room.id}`}>
                     Забронировать
                   </Link>

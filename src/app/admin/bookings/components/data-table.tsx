@@ -55,25 +55,25 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div className="rounded-md border w-full">
-        <div className="flex items-center p-4">
+    <div className="glass-card-premium border border-white/50 bg-white/70 backdrop-blur-md rounded-3xl shadow-soft overflow-hidden w-full">
+        <div className="flex items-center p-5 border-b border-slate-100/50 bg-white/30">
             <Input
-            placeholder="Фильтр по номеру..."
-            value={(table.getColumn("roomName")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-                table.getColumn("roomName")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
+              placeholder="Фильтр по названию номера..."
+              value={(table.getColumn("roomName")?.getFilterValue() as string) ?? ""}
+              onChange={(event) =>
+                  table.getColumn("roomName")?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm bg-white border-slate-200 text-slate-900 focus:ring-primary shadow-sm rounded-xl h-11"
             />
         </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto w-full">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-slate-50/50">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="border-b border-slate-100 hover:bg-transparent">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="whitespace-nowrap">
+                    <TableHead key={header.id} className="whitespace-nowrap font-bold text-slate-700 py-4 px-6">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -92,9 +92,10 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="border-b border-slate-100 hover:bg-white/40 transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="whitespace-nowrap">
+                    <TableCell key={cell.id} className="whitespace-nowrap py-4 px-6 text-slate-800 text-sm font-light">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -102,7 +103,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell colSpan={columns.length} className="h-24 text-center text-slate-400 font-light">
                   Нет результатов.
                 </TableCell>
               </TableRow>
@@ -110,12 +111,13 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-       <div className="flex items-center justify-end space-x-2 py-4 px-4">
+       <div className="flex items-center justify-end space-x-2 py-4 px-6 border-t border-slate-100/50 bg-white/30">
         <Button
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
+          className="rounded-xl border-slate-200 text-slate-700 hover:bg-white/80"
         >
           Назад
         </Button>
@@ -124,6 +126,7 @@ export function DataTable<TData, TValue>({
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
+          className="rounded-xl border-slate-200 text-slate-700 hover:bg-white/80"
         >
           Вперед
         </Button>

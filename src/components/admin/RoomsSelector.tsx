@@ -24,22 +24,22 @@ export default function RoomsSelector({ rooms, selectedRoom, onRoomChange }: Roo
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Номера</CardTitle>
+    <Card className="glass-card-premium border border-white/50 bg-white/70 backdrop-blur-md rounded-3xl shadow-soft overflow-hidden">
+      <CardHeader className="border-b border-slate-100/50 bg-white/30 p-5 sm:p-6">
+        <CardTitle className="text-xl font-bold text-slate-900">Номера</CardTitle>
       </CardHeader>
-      <CardContent>
-        <p className="text-muted-foreground mb-4">Выберите номер, чтобы увидеть его бронирования.</p>
+      <CardContent className="p-5 sm:p-6">
+        <p className="text-slate-600 text-sm font-light leading-relaxed mb-4">Выберите номер, чтобы увидеть его текущие бронирования на календаре.</p>
         <Select 
           onValueChange={handleRoomChange} 
           value={selectedRoom?.id || undefined}
         >
-          <SelectTrigger>
+          <SelectTrigger className="w-full bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm h-11">
             <SelectValue placeholder="Выберите номер" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white border-slate-200 text-slate-900 rounded-xl shadow-md">
             {rooms.map((room) => (
-              <SelectItem key={room.id} value={room.id}>
+              <SelectItem key={room.id} value={room.id} className="focus:bg-sky-50 focus:text-primary rounded-lg py-2">
                 {room.name}
               </SelectItem>
             ))}
