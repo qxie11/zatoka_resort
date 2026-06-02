@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -14,6 +15,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 interface ImageGalleryProps {
   images: string[];
@@ -49,51 +51,53 @@ export default function ImageGallery({
     return null;
   }
 
-  React.useEffect(() => {
-    if (isOpen) {
-      console.log("ImageGallery opened with images:", validImages);
-    }
-  }, [isOpen, validImages]);
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] p-0">
-        <DialogHeader className="px-6 pt-6">
-          <DialogTitle>{roomName}</DialogTitle>
+      <DialogContent className="max-w-4xl w-[95vw] md:w-full bg-slate-950/95 border border-slate-800 text-white backdrop-blur-xl rounded-[2rem] shadow-2xl p-6 sm:p-8 overflow-hidden z-50">
+        <DialogHeader className="flex flex-row items-center justify-between pb-4 border-b border-white/10">
+          <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-white">{roomName}</DialogTitle>
         </DialogHeader>
-        <div className="relative w-full h-[70vh] px-12 pb-6 box-border overflow-hidden">
+        
+        <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] mt-6 rounded-2xl overflow-hidden bg-slate-900/50 border border-white/5 flex items-center justify-center">
           <Carousel setApi={setApi} className="w-full h-full">
-            <CarouselContent className="h-full -ml-4">
+            <CarouselContent className="h-full ml-0">
               {validImages.map((imageUrl, index) => (
-                <CarouselItem key={index} className="h-[400px] pl-4 basis-full">
-                  <img
-                    src={imageUrl}
-                    alt={`${roomName} - изображение ${index + 1}`}
-                    className="rounded-lg block h-auto w-auto mx-auto max-h-full max-w-full"
-                    onError={(e) => {
-                      console.error("Image load error:", imageUrl, e);
-                      const target = e.target as HTMLImageElement;
-                      if (target) { 
-                        target.style.display = "none";
-                      }
-                    }}
-                  />
+                <CarouselItem key={index} className="pl-0 relative w-full h-full aspect-[16/10] sm:aspect-[16/9]">
+                  <div className="relative w-full h-full flex items-center justify-center p-2">
+                    <img
+                      src={imageUrl}
+                      alt={`${roomName} - изображение ${index + 1}`}
+                      className="rounded-2xl max-w-full max-h-full object-contain shadow-lg selection:bg-transparent"
+                      onError={(e) => {
+                        console.error("Image load error:", imageUrl, e);
+                        const target = e.target as HTMLImageElement;
+                        if (target) { 
+                          target.style.display = "none";
+                        }
+                      }}
+                    />
+                  </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
+            
             {validImages.length > 1 && (
               <>
-                <CarouselPrevious className="left-2" />
-                <CarouselNext className="right-2" />
+                <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 bg-white/10 hover:bg-white/20 text-white border-0 backdrop-blur-md rounded-full shadow-lg hover:scale-105 active:scale-95 transition-smooth z-10" />
+                <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 bg-white/10 hover:bg-white/20 text-white border-0 backdrop-blur-md rounded-full shadow-lg hover:scale-105 active:scale-95 transition-smooth z-10" />
               </>
             )}
           </Carousel>
-          {validImages.length > 1 && (
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-muted-foreground bg-background/80 px-3 py-1 rounded-full">
+        </div>
+
+        {validImages.length > 1 && (
+          <div className="flex justify-between items-center mt-5 text-sm">
+            <span className="text-slate-400">Галерея номеров</span>
+            <div className="text-slate-200 bg-white/10 border border-white/10 px-3.5 py-1 rounded-full font-medium tracking-wider">
               {current + 1} / {validImages.length}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

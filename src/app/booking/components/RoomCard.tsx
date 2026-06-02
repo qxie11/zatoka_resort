@@ -38,7 +38,7 @@ function ViewImagesButton({ room }: { room: Room }) {
         type="button"
         variant="outline"
         onClick={() => setIsGalleryOpen(true)}
-        className="flex-1 sm:flex-none"
+        className="w-full sm:w-auto"
       >
         <Eye className="mr-2 h-4 w-4" />
         Посмотреть
@@ -91,9 +91,9 @@ export default function RoomCard({ room }: RoomCardProps) {
           <div>
             <p className="text-2xl font-extrabold text-primary tracking-tight">{room.price} грн <span className="text-sm text-muted-foreground font-normal">/ ночь</span></p>
           </div>
-          <div className="flex gap-3 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <ViewImagesButton room={room} />
-            <Button asChild className="flex-1 sm:flex-none gradient-sunset hover:opacity-90 text-slate-950 font-bold border-0 shadow-md">
+            <Button asChild className="w-full sm:w-auto gradient-sunset hover:opacity-90 text-slate-950 font-bold border-0 shadow-md">
               <Link href={`/booking/${room.id}`}>Забронировать</Link>
             </Button>
           </div>

@@ -72,7 +72,7 @@ function ViewImagesButton({ room }: { room: Room }) {
         variant="outline"
         size="lg"
         onClick={() => setIsGalleryOpen(true)}
-        className="flex-1 sm:flex-none"
+        className="w-full sm:w-auto"
       >
         <Eye className="mr-2 h-4 w-4" />
         Посмотреть
@@ -295,13 +295,13 @@ export default function RoomBookingForm({
                     </div>
                   )}
               </div>
-              <div className="flex gap-3 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                 <ViewImagesButton room={room} />
                 <Button
                   type="submit"
                   size="lg"
                   disabled={isSubmitting}
-                  className="flex-1 sm:flex-none"
+                  className="w-full sm:w-auto"
                 >
                   {isSubmitting ? "Отправка..." : "Забронировать"}
                 </Button>

@@ -3,7 +3,7 @@
 import { format, startOfDay } from "date-fns";
 import { ru } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 
 import { cn } from "@/lib/utils";
@@ -41,6 +41,17 @@ export function DateRangePicker({
   label = "Даты заезда и выезда",
   className,
 }: DateRangePickerProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const disabledDates = useMemo(() => {
     const disabledDatesList: Date[] = [];
     const today = startOfDay(new Date());
@@ -148,7 +159,7 @@ export function DateRangePicker({
                 onChange(range);
               }
             }}
-            numberOfMonths={2}
+            numberOfMonths={isMobile ? 1 : 2}
             disabled={isDateRangeDisabled}
             locale={ru}
             modifiers={{

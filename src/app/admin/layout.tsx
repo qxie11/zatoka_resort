@@ -62,7 +62,7 @@ export default function AdminLayout({
             <div className="flex h-14 items-center border-b border-slate-200/50 px-4 lg:h-[60px] lg:px-6">
               <Link href="/admin" className="flex items-center gap-2 font-bold">
                 <LayoutDashboard className="h-5 w-5 text-primary" />
-                <span className="gradient-ocean bg-clip-text text-transparent">Админ-панель</span>
+                <span>Админ-панель</span>
               </Link>
             </div>
             <div className="flex-1 px-2 py-4">

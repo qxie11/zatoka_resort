@@ -43,13 +43,13 @@ export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
             </CardContent>
             <CardFooter className="flex flex-col gap-4 p-5 sm:p-6 border-t border-slate-100/50">
               <p className="text-xl font-extrabold text-primary mr-auto">{room.price} грн <span className="text-xs text-muted-foreground font-normal">/ ночь</span></p>
-              <div className="flex gap-3 w-full">
-                <Button asChild variant="ghost" className="flex-1 text-slate-700 hover:text-primary transition-colors">
+              <div className="flex flex-col sm:flex-row gap-3 w-full">
+                <Button asChild variant="ghost" className="w-full sm:flex-1 text-slate-700 hover:text-primary transition-colors">
                   <Link href={`/booking#${room.id}`} className="flex items-center justify-center">
                     Подробнее <ArrowRight className="ml-1.5 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button asChild className="flex-1 gradient-sunset text-slate-950 font-bold border-0 shadow-md">
+                <Button asChild className="w-full sm:flex-1 gradient-sunset text-slate-950 font-bold border-0 shadow-md">
                   <Link href={`/booking/${room.id}`}>
                     Забронировать
                   </Link>

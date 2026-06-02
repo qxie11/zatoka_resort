@@ -102,14 +102,14 @@ export default async function Home() {
                     </div>
                   </div>
                   
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Button asChild size="lg" className="flex-1 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+                  <div className="flex flex-col sm:flex-row gap-3 w-full">
+                    <Button asChild size="lg" className="w-full sm:flex-1 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
                       <Link href="/booking" className="flex items-center justify-center">
                         Забронировать отдых
                         <ArrowRight className="ml-2 h-5 w-5" />
                       </Link>
                     </Button>
-                    <Button asChild variant="outline" size="lg" className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300">
+                    <Button asChild variant="outline" size="lg" className="w-full sm:flex-1 border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300">
                       <Link href="/about">Узнать больше</Link>
                     </Button>
                   </div>
