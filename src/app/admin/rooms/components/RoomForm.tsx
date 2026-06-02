@@ -162,13 +162,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         mainImagePath = room.imageUrl;
       }
 
-      if (room && additionalImageFiles.length === 0 && data.imageUrls) {
-        const existingUrls = room.imageUrls || [];
-        const urlArray = String(data.imageUrls).split(',').map(s => s.trim()).filter(Boolean);
-        additionalImagePaths = [...existingUrls, ...urlArray];
-      } else if (room && additionalImageFiles.length === 0 && !data.imageUrls) {
-        additionalImagePaths = room.imageUrls || [];
-      }
+
         
       onSubmit({ 
         name: data.name,
