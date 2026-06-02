@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+
+export const dynamic = 'force-dynamic';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { amenities } from '@/lib/data';
 import { getRooms } from '@/lib/db';

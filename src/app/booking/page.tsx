@@ -4,6 +4,8 @@ import BookingPageClient from "./components/BookingPageClient";
 import SuccessMessage from "./components/SuccessMessage";
 import { WavyUnderline } from "@/components/ui/wavy-underline";
 
+export const dynamic = 'force-dynamic';
+
 export default async function BookingPage() {
   const rooms = await getRooms();
   const bookings = await getBookings();
