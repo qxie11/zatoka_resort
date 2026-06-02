@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
-import { existsSync } from "fs";
+import { put } from "@vercel/blob";
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,12 +13,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const uploadDir = join(process.cwd(), "public", "uploads");
-    
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
-
     const uploadedPaths: string[] = [];
 
     for (const file of files) {
@@ -28,18 +20,12 @@ export async function POST(request: NextRequest) {
         continue;
       }
 
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
+      // Upload file directly to Vercel Blob storage
+      const blob = await put(file.name, file, {
+        access: "public",
+      });
 
-      const timestamp = Date.now();
-      const randomStr = Math.random().toString(36).substring(2, 15);
-      const extension = file.name.split(".").pop();
-      const fileName = `${timestamp}-${randomStr}.${extension}`;
-      const filePath = join(uploadDir, fileName);
-
-      await writeFile(filePath, buffer);
-
-      uploadedPaths.push(`/uploads/${fileName}`);
+      uploadedPaths.push(blob.url);
     }
 
     if (uploadedPaths.length === 0) {
@@ -58,4 +44,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
