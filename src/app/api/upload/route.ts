@@ -39,7 +39,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Ошибка при загрузке файла:", error);
     return NextResponse.json(
-      { error: "Ошибка при загрузке файла" },
+      { 
+        error: "Ошибка при загрузке файла", 
+        details: error instanceof Error ? error.message : String(error) 
+      },
       { status: 500 }
     );
   }
