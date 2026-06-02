@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
       // Upload file directly to Vercel Blob storage
       const blob = await put(file.name, file, {
         access: "public",
+        addRandomSuffix: true,
       });
 
       uploadedPaths.push(blob.url);
