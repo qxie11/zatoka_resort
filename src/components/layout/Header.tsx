@@ -56,27 +56,32 @@ export default function Header() {
             Отдых в Затоке
           </span>
         </Link>
-        <nav className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "text-sm font-medium transition-smooth hover:text-teal-300 relative py-1",
-                pathname === link.href
-                  ? "text-teal-300 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-teal-300 after:rounded-full"
-                  : "text-slate-300"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav className="hidden md:flex items-center gap-1 bg-slate-900/40 border border-white/5 px-2.5 py-1.5 rounded-full backdrop-blur-lg">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "text-xs uppercase tracking-wider font-bold transition-all duration-300 px-4 py-1.5 rounded-full",
+                  isActive
+                    ? "text-slate-950 bg-gradient-to-r from-teal-400 to-sky-400 shadow-md shadow-teal-500/10"
+                    : "text-slate-300 hover:text-white hover:bg-white/5"
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           {mounted && isAuthenticated && (
             <Link
               href="/admin"
               className={cn(
-                "text-sm font-medium transition-colors hover:text-teal-300",
-                pathname === "/admin" ? "text-teal-300" : "text-slate-300"
+                "text-xs uppercase tracking-wider font-bold transition-all duration-300 px-4 py-1.5 rounded-full",
+                pathname === "/admin"
+                  ? "text-slate-950 bg-gradient-to-r from-teal-400 to-sky-400 shadow-md shadow-teal-500/10"
+                  : "text-slate-300 hover:text-white hover:bg-white/5"
               )}
             >
               Админка
@@ -94,14 +99,14 @@ export default function Header() {
                 size="icon"
                 onClick={handleSignOut}
                 aria-label="Выйти"
-                className="text-slate-300 hover:text-white hover:bg-white/10"
+                className="text-slate-300 hover:text-white hover:bg-white/10 rounded-full"
               >
                 <LogOut className="h-4 w-4" />
               </Button>
             </>
           ) : (
             <>
-              <Button asChild className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 rounded-xl px-5 h-10">
+              <Button asChild className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 hover:scale-105 active:scale-95 transition-all duration-300 rounded-xl px-5 h-10">
                 <Link href="/booking">Забронировать</Link>
               </Button>
             </>

@@ -6,6 +6,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import StoreProvider from "@/components/providers/StoreProvider";
 import { Comfortaa, Nunito } from "next/font/google";
+import NextTopLoader from 'nextjs-toploader';
 
 const fontSans = Nunito({
   subsets: ["latin", "cyrillic"],
@@ -89,6 +90,17 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <StoreProvider>
+          <NextTopLoader 
+            color="#2dd4bf" 
+            initialPosition={0.08}
+            crawlSpeed={200}
+            height={3}
+            crawl={true}
+            showSpinner={false}
+            easing="ease"
+            speed={200}
+            shadow="0 0 10px #2dd4bf,0 0 5px #2dd4bf"
+          />
           <div className="relative flex min-h-dvh flex-col bg-slate-950 text-slate-100">
             <Header />
             <main className="flex-1">{children}</main>
