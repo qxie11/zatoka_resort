@@ -82,7 +82,7 @@ export default function RoomsAdminPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <p>Загрузка...</p>
+        <p className="text-slate-300">Загрузка...</p>
       </div>
     );
   }
@@ -99,9 +99,9 @@ export default function RoomsAdminPage() {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Управление номерами</h1>
-        <Button onClick={handleAddNew} disabled={isCreating || isUpdating}>
+      <div className="flex items-center justify-between text-white bg-slate-950 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Управление номерами</h1>
+        <Button onClick={handleAddNew} disabled={isCreating || isUpdating} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">
           <PlusCircle className="mr-2 h-4 w-4" />
           Добавить номер
         </Button>

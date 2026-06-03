@@ -69,7 +69,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FFFFFF",
+  themeColor: "#020617",
 };
 
 export default function RootLayout({
@@ -82,14 +82,14 @@ export default function RootLayout({
       <head />
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen bg-slate-950 font-sans antialiased text-slate-100",
           fontSans.variable,
           fontHeading.variable
         )}
         suppressHydrationWarning
       >
         <StoreProvider>
-          <div className="relative flex min-h-dvh flex-col bg-background">
+          <div className="relative flex min-h-dvh flex-col bg-slate-950 text-slate-100">
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />

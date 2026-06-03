@@ -20,41 +20,40 @@ export default async function RoomBookingPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
-            <Card className="mb-8 shadow-gentle border-0 bg-white/90 backdrop-blur-sm">
+            <Card className="mb-8 shadow-2xl border border-white/10 bg-slate-900/60 backdrop-blur-sm text-white rounded-3xl">
               <div className="flex flex-col md:flex-row">
-                <div className="relative w-full md:w-1/3 h-64 md:h-auto">
+                <div className="relative w-full md:w-1/3 h-64 md:h-auto min-h-[250px] overflow-hidden">
                   <Image
                     src={room.imageUrl}
                     alt={room.name}
                     fill
-                    className="object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
+                    className="object-cover rounded-t-3xl md:rounded-l-3xl md:rounded-tr-none"
                     data-ai-hint={room.imageHint}
                   />
                 </div>
                 <div className="flex flex-col justify-between w-full md:w-2/3">
                   <CardHeader>
-                    <CardTitle className="text-3xl">{room.name}</CardTitle>
-                    <div className="flex items-center gap-2 mt-2 text-muted-foreground">
-                      <BedDouble className="h-4 w-4" />
+                    <CardTitle className="text-3xl font-extrabold text-white">{room.name}</CardTitle>
+                    <div className="flex items-center gap-2 mt-2 text-teal-300 font-medium text-sm">
+                      <BedDouble className="h-4 w-4 text-teal-400" />
                       <span>До {room.capacity} гостей</span>
                     </div>
-                    <CardDescription className="pt-2 text-base">{room.description}</CardDescription>
+                    <CardDescription className="pt-2 text-slate-300 font-light leading-relaxed text-base">{room.description}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {room.amenities.map((amenity) => (
-                        <Badge key={amenity} variant="secondary">
+                        <Badge key={amenity} className="bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 border-teal-500/20 transition-colors font-medium rounded-lg px-2.5 py-1">
                           {amenity}
                         </Badge>
                       ))}
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-primary">{room.price} грн</p>
-                      <p className="text-sm text-muted-foreground">за ночь</p>
+                      <p className="text-2xl font-extrabold text-teal-300 tracking-tight">{room.price} грн <span className="text-sm text-slate-400 font-normal">/ ночь</span></p>
                     </div>
                   </CardContent>
                 </div>
@@ -68,4 +67,3 @@ export default async function RoomBookingPage({ params }: PageProps) {
     </div>
   );
 }
-

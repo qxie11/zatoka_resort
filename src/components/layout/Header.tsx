@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
-import { Menu, Waves, LogOut } from "lucide-react";
+import { Menu, Waves, LogOut, Compass } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -28,10 +28,8 @@ export default function Header() {
       const authStatus = localStorage.getItem("isAuthenticated") === "true";
       setIsAuthenticated(authStatus);
     };
-    // Check on initial load
     checkAuth();
 
-    // Listen to storage changes
     window.addEventListener("storage", checkAuth);
 
     return () => {
@@ -46,15 +44,17 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/20 glass-card-premium backdrop-blur-md shadow-soft transition-smooth">
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 glass-card-dark backdrop-blur-md shadow-2xl transition-smooth bg-slate-950/80">
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link
           href="/"
           className="flex items-center gap-2 group"
           onClick={() => setIsMobileMenuOpen(false)}
         >
-          <Waves className="h-6 w-6 text-primary group-hover:animate-float" />
-          <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-teal-500">Отдых в Затоке</span>
+          <Waves className="h-6 w-6 text-teal-400 group-hover:animate-float" />
+          <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300">
+            Отдых в Затоке
+          </span>
         </Link>
         <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
@@ -62,10 +62,10 @@ export default function Header() {
               key={link.href}
               href={link.href}
               className={cn(
-                "text-sm font-medium transition-smooth hover:text-primary relative py-1",
+                "text-sm font-medium transition-smooth hover:text-teal-300 relative py-1",
                 pathname === link.href
-                  ? "text-primary after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-primary after:rounded-full"
-                  : "text-muted-foreground"
+                  ? "text-teal-300 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-teal-300 after:rounded-full"
+                  : "text-slate-300"
               )}
             >
               {link.label}
@@ -75,8 +75,8 @@ export default function Header() {
             <Link
               href="/admin"
               className={cn(
-                "text-sm font-medium transition-colors hover:text-primary",
-                pathname === "/admin" ? "text-primary" : "text-muted-foreground"
+                "text-sm font-medium transition-colors hover:text-teal-300",
+                pathname === "/admin" ? "text-teal-300" : "text-slate-300"
               )}
             >
               Админка
@@ -86,21 +86,22 @@ export default function Header() {
         <div className="hidden md:flex items-center gap-2">
           {mounted && isAuthenticated ? (
             <>
-              <span className="text-sm font-medium text-muted-foreground hidden lg:inline">
-                Добро пожаловать, Admin
+              <span className="text-sm font-medium text-slate-300 hidden lg:inline mr-2">
+                Привет, Admin
               </span>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={handleSignOut}
                 aria-label="Выйти"
+                className="text-slate-300 hover:text-white hover:bg-white/10"
               >
                 <LogOut className="h-4 w-4" />
               </Button>
             </>
           ) : (
             <>
-              <Button asChild className="gradient-sunset text-slate-950 font-bold border-0 shadow-soft hover-lift">
+              <Button asChild className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 rounded-xl px-5 h-10">
                 <Link href="/booking">Забронировать</Link>
               </Button>
             </>
@@ -109,12 +110,12 @@ export default function Header() {
         <div className="md:hidden">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" className="border-white/10 bg-slate-900/60 text-white hover:bg-slate-800">
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Открыть меню</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
+            <SheetContent side="right" className="bg-slate-950 text-white border-l border-white/10">
               <SheetHeader>
                 <VisuallyHidden>
                   <SheetTitle>Навигационное меню</SheetTitle>
@@ -126,8 +127,10 @@ export default function Header() {
                   className="flex items-center gap-2 mb-4"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <Waves className="h-6 w-6 text-primary" />
-                  <span className="text-xl font-bold">Отдых в Затоке</span>
+                  <Waves className="h-6 w-6 text-teal-400" />
+                  <span className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300">
+                    Отдых в Затоке
+                  </span>
                 </Link>
                 {navLinks.map((link) => (
                   <Link
@@ -137,8 +140,8 @@ export default function Header() {
                     className={cn(
                       "text-lg font-medium",
                       pathname === link.href
-                        ? "text-primary"
-                        : "text-foreground"
+                        ? "text-teal-300"
+                        : "text-slate-300 hover:text-white"
                     )}
                   >
                     {link.label}
@@ -150,7 +153,7 @@ export default function Header() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
                       "text-lg font-medium",
-                      pathname === "/admin" ? "text-primary" : "text-foreground"
+                      pathname === "/admin" ? "text-teal-300" : "text-slate-300 hover:text-white"
                     )}
                   >
                     Админка
@@ -163,14 +166,15 @@ export default function Header() {
                         handleSignOut();
                         setIsMobileMenuOpen(false);
                       }}
+                      className="bg-slate-900 border border-white/10 text-white hover:bg-slate-800"
                     >
-                      <LogOut className="mr-2 h-4 w-4" /> Выйти
+                      <LogOut className="mr-2 h-4 w-4 text-rose-400" /> Выйти
                     </Button>
                   ) : (
                     <>
                       <Button
                         asChild
-                        className="gradient-sunset text-slate-950 font-bold border-0 shadow-soft"
+                        className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <Link href="/booking">Забронировать</Link>

@@ -38,9 +38,9 @@ function ViewImagesButton({ room }: { room: Room }) {
         type="button"
         variant="outline"
         onClick={() => setIsGalleryOpen(true)}
-        className="w-full sm:w-auto"
+        className="w-full sm:w-auto border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 rounded-xl"
       >
-        <Eye className="mr-2 h-4 w-4" />
+        <Eye className="mr-2 h-4 w-4 text-teal-400" />
         Посмотреть
       </Button>
       <ImageGallery
@@ -57,7 +57,7 @@ export default function RoomCard({ room }: RoomCardProps) {
   return (
     <Card
       id={room.id}
-      className="flex flex-col md:flex-row overflow-hidden transition-smooth hover-lift shadow-gentle border border-white/50 bg-white/70 backdrop-blur-md rounded-3xl"
+      className="flex flex-col md:flex-row overflow-hidden transition-smooth hover-lift shadow-2xl border border-white/10 bg-slate-900/60 backdrop-blur-md rounded-3xl text-white hover:border-teal-400/30"
     >
       <div className="relative w-full md:w-1/3 h-64 md:h-auto min-h-[250px] overflow-hidden group/image">
         <Image
@@ -67,33 +67,33 @@ export default function RoomCard({ room }: RoomCardProps) {
           className="object-cover transition-smooth group-hover/image:scale-110"
           data-ai-hint={room.imageHint}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-opacity duration-300" />
       </div>
       <div className="flex flex-col justify-between w-full md:w-2/3 p-2">
         <CardHeader className="pb-2">
-          <CardTitle className="text-2xl font-extrabold text-slate-900">{room.name}</CardTitle>
-          <div className="flex items-center gap-2 mt-2 text-primary font-medium text-sm">
-            <BedDouble className="h-4 w-4" />
+          <CardTitle className="text-2xl font-extrabold text-white">{room.name}</CardTitle>
+          <div className="flex items-center gap-2 mt-2 text-teal-300 font-medium text-sm">
+            <BedDouble className="h-4 w-4 text-teal-400" />
             <span>До {room.capacity} гостей</span>
           </div>
-          <CardDescription className="pt-2 text-muted-foreground font-light leading-relaxed">{room.description}</CardDescription>
+          <CardDescription className="pt-2 text-slate-300 font-light leading-relaxed">{room.description}</CardDescription>
         </CardHeader>
         <CardContent className="pb-4">
           <div className="flex flex-wrap gap-2">
             {room.amenities.map((amenity) => (
-              <Badge key={amenity} variant="secondary" className="bg-primary/5 hover:bg-primary/10 text-primary border-primary/10 transition-colors font-medium rounded-lg">
+              <Badge key={amenity} className="bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 border-teal-500/20 transition-colors font-medium rounded-lg px-2.5 py-1">
                 {amenity}
               </Badge>
             ))}
           </div>
         </CardContent>
-        <CardFooter className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 border-t border-slate-100/50">
+        <CardFooter className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 border-t border-white/5">
           <div>
-            <p className="text-2xl font-extrabold text-primary tracking-tight">{room.price} грн <span className="text-sm text-muted-foreground font-normal">/ ночь</span></p>
+            <p className="text-2xl font-extrabold text-teal-300 tracking-tight">{room.price} грн <span className="text-sm text-slate-400 font-normal">/ ночь</span></p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <ViewImagesButton room={room} />
-            <Button asChild className="w-full sm:w-auto gradient-sunset hover:opacity-90 text-slate-950 font-bold border-0 shadow-md">
+            <Button asChild className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl px-6">
               <Link href={`/booking/${room.id}`}>Забронировать</Link>
             </Button>
           </div>

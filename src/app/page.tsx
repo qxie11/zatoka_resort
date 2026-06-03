@@ -27,7 +27,7 @@ export default async function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero');
 
   return (
-    <div className="flex flex-col min-h-dvh">
+    <div className="flex flex-col min-h-dvh bg-slate-950 text-slate-100">
       <main className="flex-1">
         {/* HERO SECTION */}
         <section className="relative w-full min-h-[90vh] lg:min-h-screen flex items-center overflow-hidden bg-slate-900 py-16 lg:py-0">
@@ -164,7 +164,7 @@ export default async function Home() {
 
           {/* Dynamic Layered Wave SVG Divider */}
           <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-16 md:h-24 fill-background">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-16 md:h-24 fill-slate-950">
               <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-40 fill-sky-200/20" />
               <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
             </svg>
@@ -172,39 +172,39 @@ export default async function Home() {
         </section>
 
         {/* WELCOME SECTION */}
-        <section className="py-24 relative overflow-hidden bg-gradient-sea-foam">
-          <div className="absolute inset-0 opacity-5 pointer-events-none">
+        <section className="py-24 relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+          <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute top-1/2 left-5 animate-float">
-              <Waves className="h-32 w-32 text-primary" />
+              <Waves className="h-32 w-32 text-teal-400/20" />
             </div>
           </div>
           
           <div className="container mx-auto px-4 text-center relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 text-xs font-semibold text-teal-300 uppercase tracking-widest mb-4">
               <span>Эксклюзивный сервис</span>
             </div>
-            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
               Добро пожаловать в "Отдых в Затоке"
             </h2>
-            <WavyUnderline colorClassName='text-secondary' />
-            <p className="mt-6 max-w-3xl mx-auto text-slate-700 text-lg md:text-xl font-light leading-relaxed">
+            <WavyUnderline colorClassName='text-teal-300' />
+            <p className="mt-6 max-w-3xl mx-auto text-slate-300 text-lg md:text-xl font-light leading-relaxed">
               Расположенный на безмятежном побережье Черного моря, "Отдых в Затоке" предлагает идеальное сочетание роскоши, комфорта и природной красоты. Ищете ли вы романтический уик-энд или семейное приключение, наш отель — ваше идеальное место для незабываемого отдыха.
             </p>
           </div>
         </section>
 
         {/* FEATURED ROOMS SECTION */}
-        <section className="py-24 bg-slate-50/50">
+        <section className="py-24 bg-slate-950">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-100 text-xs font-semibold text-amber-800 uppercase tracking-widest mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 text-xs font-semibold text-amber-300 uppercase tracking-widest mb-4">
                 <span>Идеальный комфорт</span>
               </div>
-              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Наши избранные номера
               </h2>
               <WavyUnderline />
-              <p className="mt-4 max-w-2xl mx-auto text-muted-foreground text-lg font-light">
+              <p className="mt-4 max-w-2xl mx-auto text-slate-300 text-lg font-light">
                 Элегантно оформленные номера и роскошные люксы для вашего максимального расслабления.
               </p>
             </div>
@@ -213,17 +213,17 @@ export default async function Home() {
         </section>
 
         {/* HOTEL AMENITIES */}
-        <section className="py-24 bg-white relative">
+        <section className="py-24 bg-slate-900/30 border-t border-slate-900 relative">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-100 text-xs font-semibold text-teal-800 uppercase tracking-widest mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 text-xs font-semibold text-teal-300 uppercase tracking-widest mb-4">
                 <span>Всё включено</span>
               </div>
-              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Удобства отеля
               </h2>
-              <WavyUnderline colorClassName='text-secondary'/>
-              <p className="mt-4 max-w-2xl mx-auto text-muted-foreground text-lg font-light">
+              <WavyUnderline colorClassName='text-teal-300'/>
+              <p className="mt-4 max-w-2xl mx-auto text-slate-300 text-lg font-light">
                 Всё, что вам может понадобиться для безупречного и беззаботного отпуска у моря.
               </p>
             </div>
@@ -232,12 +232,12 @@ export default async function Home() {
               {amenities.slice(0, 8).map((amenity, index) => {
                 const Icon = iconMap[amenity.icon];
                 return (
-                  <div key={amenity.name} className="flex flex-col items-center p-6 rounded-3xl bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-gentle hover:-translate-y-1 transition-all duration-300 group">
-                    <div className="bg-primary/10 p-5 rounded-2xl transition-smooth hover:bg-primary/20 relative group/icon">
-                      {Icon && <Icon className="h-8 w-8 text-primary transition-smooth group-hover/icon:animate-float-slow" />}
-                      <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-hover/icon:opacity-100 group-hover/icon:animate-water-ripple transition-opacity" />
+                  <div key={amenity.name} className="flex flex-col items-center p-6 rounded-3xl glass-card-dark border border-white/10 hover:bg-slate-900/60 hover:border-teal-400/50 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div className="bg-teal-500/10 p-5 rounded-2xl transition-smooth hover:bg-teal-500/25 relative group/icon text-teal-300">
+                      {Icon && <Icon className="h-8 w-8 text-teal-400 transition-smooth group-hover/icon:animate-float-slow" />}
+                      <div className="absolute inset-0 rounded-2xl bg-teal-500/5 opacity-0 group-hover/icon:opacity-100 group-hover/icon:animate-water-ripple transition-opacity" />
                     </div>
-                    <h3 className="mt-5 text-lg font-bold text-slate-900">{amenity.name}</h3>
+                    <h3 className="mt-5 text-lg font-bold text-white">{amenity.name}</h3>
                   </div>
                 );
               })}
@@ -245,27 +245,27 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* BOTTOM CTA: GRADIENT DAWN */}
-        <section className="py-24 lg:py-32 gradient-ocean text-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-20 z-0">
+        {/* BOTTOM CTA: DARK OCEAN */}
+        <section className="py-24 lg:py-32 bg-slate-950 text-white relative overflow-hidden border-t border-slate-900">
+          <div className="absolute inset-0 opacity-40 z-0">
             <Image
               src="https://images.unsplash.com/photo-1683459285195-2bff6b201b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200"
               alt="Sunset sea"
               fill
-              className="object-cover scale-105 animate-float-slow"
+              className="object-cover scale-105 animate-float-slow brightness-[0.3] contrast-[1.2]"
             />
-            <div className="absolute inset-0 bg-slate-950/80" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950" />
           </div>
           
           <div className="container mx-auto px-4 text-center relative z-10 space-y-6">
             <h2 className="text-3xl md:text-6xl font-extrabold tracking-tight leading-tight">
               Готовы к вашему идеальному отдыху?
             </h2>
-            <p className="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-slate-200 font-light leading-relaxed">
+            <p className="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-slate-300 font-light leading-relaxed">
               Берега Затоки зовут. Забронируйте отпуск своей мечты сегодня и создайте воспоминания, которые останутся на всю жизнь.
             </p>
             <div className="pt-6">
-              <Button asChild size="lg" className="gradient-sunset text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all duration-300 h-12 px-8 rounded-xl">
+              <Button asChild size="lg" className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 hover:scale-105 active:scale-95 transition-all duration-300 h-12 px-8 rounded-xl">
                 <Link href="/booking" className="flex items-center">
                   Забронировать номер сейчас
                   <ArrowRight className="ml-2 h-5 w-5" />

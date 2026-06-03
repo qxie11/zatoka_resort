@@ -6,8 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Room, Booking } from "@/lib/types";
 import { ru } from "date-fns/locale";
-import { format, startOfDay, isAfter, isToday, isFuture } from "date-fns";
-import { cn } from "@/lib/utils";
+import { format, startOfDay, isAfter, isToday } from "date-fns";
 
 interface AdminCalendarProps {
   selectedRoom: Room | null;
@@ -71,16 +70,16 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
   }, [selectedRoom, bookedDates.length, bookingRanges.length]);
 
   return (
-    <Card className="glass-card-premium border border-white/50 bg-white/70 backdrop-blur-md rounded-3xl shadow-soft overflow-hidden">
-      <CardHeader className="border-b border-slate-100/50 bg-white/30 p-5 sm:p-6">
+    <Card className="glass-card-dark border border-white/10 bg-slate-900/60 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden text-white">
+      <CardHeader className="border-b border-white/5 bg-slate-950/20 p-5 sm:p-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <CardTitle className="text-xl sm:text-2xl font-extrabold text-slate-900">Календарь бронирований</CardTitle>
-            <div className="text-slate-600 text-sm font-light mt-2">
+            <CardTitle className="text-xl sm:text-2xl font-extrabold text-white">Календарь бронирований</CardTitle>
+            <div className="text-slate-300 text-sm font-light mt-2">
               {selectedRoom ? (
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-semibold text-slate-800 bg-sky-50 px-2.5 py-1 rounded-lg border border-sky-100/50">{selectedRoom.name}</span>
-                  <span className="text-xs text-slate-500">
+                  <span className="font-bold text-teal-300 bg-white/10 px-2.5 py-1 rounded-lg border border-white/5">{selectedRoom.name}</span>
+                  <span className="text-xs text-slate-400">
                     • {stats.totalBookings} {stats.totalBookings === 1 ? 'бронирование' : 'бронирований'} 
                     • {stats.totalDays} {stats.totalDays === 1 ? 'день' : 'дней'}
                   </span>
@@ -91,7 +90,7 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
             </div>
           </div>
           {selectedRoom && stats.totalBookings > 0 && (
-            <Badge className="gradient-sunset text-slate-950 font-bold border-0 shadow-sm text-sm px-3.5 py-1.5 rounded-full">
+            <Badge className="bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-bold border-0 shadow-sm text-sm px-3.5 py-1.5 rounded-full">
               Занято {stats.totalDays} {stats.totalDays === 1 ? 'день' : 'дней'}
             </Badge>
           )}
@@ -100,14 +99,14 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
       <CardContent className="p-5 sm:p-6">
         {selectedRoom ? (
           <div className="space-y-6">
-            <div className="flex justify-center bg-white/50 p-4 rounded-2xl border border-slate-100/50 shadow-sm max-w-full overflow-x-auto">
+            <div className="flex justify-center bg-slate-950/40 p-4 rounded-2xl border border-white/10 shadow-inner max-w-full overflow-x-auto text-white">
               <Calendar
                 mode="multiple"
                 selected={bookedDates}
                 defaultMonth={bookedDates.length > 0 ? bookedDates[0] : new Date()}
                 locale={ru}
                 numberOfMonths={2}
-                className="rounded-xl"
+                className="rounded-xl bg-slate-950 text-white border-0"
                 classNames={{
                   day_selected: "gradient-sunset text-slate-950 font-bold shadow-md rounded-lg",
                 }}
@@ -122,21 +121,21 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
             
             {bookingRanges.length > 0 && (
               <div className="mt-6 space-y-4">
-                <h3 className="font-bold text-slate-900 text-lg">Детали бронирований</h3>
+                <h3 className="font-extrabold text-white text-lg">Детали бронирований</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {bookingRanges.map((range) => (
                     <div
                       key={range.booking.id}
-                      className="p-4 border border-slate-100 bg-white/80 rounded-2xl shadow-soft hover-lift transition-smooth"
+                      className="p-4 border border-white/10 bg-slate-950/40 rounded-2xl shadow-lg hover:border-teal-400/30 transition-smooth"
                     >
                       <div className="flex items-center justify-between mb-3 gap-2">
-                        <span className="font-bold text-slate-900">{range.booking.name}</span>
-                        <Badge variant="outline" className="text-xs bg-slate-50 border-slate-200 text-slate-700 px-2 py-0.5 rounded-md font-medium">
+                        <span className="font-extrabold text-white">{range.booking.name}</span>
+                        <Badge variant="outline" className="text-xs bg-slate-900 border-white/10 text-teal-300 px-2 py-0.5 rounded-md font-semibold">
                           {format(range.startDate, "dd.MM")} - {format(range.endDate, "dd.MM.yyyy")}
                         </Badge>
                       </div>
-                      <div className="text-sm text-slate-600 space-y-1.5 font-light">
-                        {range.booking.email && <p className="flex items-center gap-1.5"><span>📧</span> <span className="hover:text-primary transition-colors">{range.booking.email}</span></p>}
+                      <div className="text-sm text-slate-300 space-y-1.5 font-light">
+                        {range.booking.email && <p className="flex items-center gap-1.5"><span>📧</span> <span className="hover:text-teal-300 transition-colors">{range.booking.email}</span></p>}
                         <p className="flex items-center gap-1.5"><span>📞</span> <span>{range.booking.phone}</span></p>
                       </div>
                     </div>
@@ -146,7 +145,7 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
             )}
           </div>
         ) : (
-          <div className="flex items-center justify-center h-64 text-slate-400 bg-white/30 rounded-2xl border border-dashed border-slate-200/50">
+          <div className="flex items-center justify-center h-64 text-slate-400 bg-slate-900/20 rounded-2xl border border-dashed border-white/10">
             <div className="text-center p-6">
               <p className="text-lg font-light mb-1">Ожидание выбора</p>
               <p className="text-xs font-light">Выберите номер в панели слева для просмотра календаря бронирований</p>

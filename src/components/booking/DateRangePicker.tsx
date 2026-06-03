@@ -111,18 +111,18 @@ export function DateRangePicker({
 
   return (
     <FormItem className={cn("flex flex-col", className)}>
-      <FormLabel>{label}</FormLabel>
+      <FormLabel className="text-teal-300 font-bold mb-2">{label}</FormLabel>
       <Popover>
         <PopoverTrigger asChild>
           <FormControl>
             <Button
               variant={"outline"}
               className={cn(
-                "w-full justify-start text-left font-normal bg-white border-slate-200 hover:bg-slate-50 transition-smooth rounded-xl h-11",
-                !value?.from && "text-muted-foreground"
+                "w-full justify-start text-left font-normal bg-slate-950/40 border-white/10 text-white hover:bg-white/10 hover:text-white transition-smooth rounded-xl h-11",
+                !value?.from && "text-slate-400"
               )}
             >
-              <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
+              <CalendarIcon className="mr-2 h-4 w-4 text-teal-400" />
               {value?.from ? (
                 value.to ? (
                   <>
@@ -138,7 +138,7 @@ export function DateRangePicker({
             </Button>
           </FormControl>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border border-slate-100 bg-white z-50" align="start">
+        <PopoverContent className="w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 text-white z-50" align="start">
           <Calendar
             initialFocus
             mode="range"
@@ -162,18 +162,22 @@ export function DateRangePicker({
             numberOfMonths={isMobile ? 1 : 2}
             disabled={isDateRangeDisabled}
             locale={ru}
+            className="bg-slate-950 text-white border-0"
+            classNames={{
+              day_selected: "gradient-sunset text-slate-950 font-bold shadow-md rounded-lg",
+            }}
             modifiers={{
               booked: disabledDates,
             }}
             modifiersClassNames={{
-              booked: "bg-destructive text-destructive-foreground font-bold",
+              booked: "gradient-sunset text-slate-950 font-bold rounded-lg",
             }}
           />
         </PopoverContent>
       </Popover>
       <FormMessage />
       {existingBookings.length > 0 && disabledDates.length > 0 && (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400 mt-1">
           Занятые даты отмечены в календаре
         </p>
       )}

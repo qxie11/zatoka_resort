@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -162,8 +161,6 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         mainImagePath = room.imageUrl;
       }
 
-
-        
       onSubmit({ 
         name: data.name,
         description: data.description,
@@ -190,45 +187,45 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-[525px] overflow-y-auto bg-gradient-to-br from-white via-sky-50/20 to-white border-l border-slate-200/50 shadow-gentle">
-        <SheetHeader className="pb-4 border-b border-slate-100/50">
-          <SheetTitle className="text-2xl font-bold text-slate-900">
+      <SheetContent className="sm:max-w-[525px] overflow-y-auto bg-slate-950 border-l border-white/10 shadow-2xl text-slate-100">
+        <SheetHeader className="pb-4 border-b border-white/10">
+          <SheetTitle className="text-2xl font-bold text-white">
             {room ? "Редактировать номер" : "Создать новый номер"}
           </SheetTitle>
-          <SheetDescription className="text-slate-500 font-light mt-1">
+          <SheetDescription className="text-slate-400 font-light mt-1">
             {room ? "Внесите изменения в подробную информацию о номере." : "Заполните необходимые детали нового номера для гостей."}
           </SheetDescription>
         </SheetHeader>
-        <form onSubmit={handleFormSubmit} className="grid gap-5 py-5 text-slate-800">
+        <form onSubmit={handleFormSubmit} className="grid gap-5 py-5 text-slate-200">
             <div className="grid gap-2">
-                 <Label htmlFor="name" className="font-bold text-slate-700">Название</Label>
-                 <Input id="name" {...form.register("name")} className="bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm h-11" />
+                 <Label htmlFor="name" className="font-semibold text-slate-300">Название</Label>
+                 <Input id="name" {...form.register("name")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" />
                  {form.formState.errors.name && <p className="text-xs text-rose-500">{form.formState.errors.name.message}</p>}
              </div>
             <div className="grid gap-2">
-                 <Label htmlFor="description" className="font-bold text-slate-700">Описание</Label>
-                 <Textarea id="description" {...form.register("description")} className="bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm min-h-[100px] font-light leading-relaxed" />
+                 <Label htmlFor="description" className="font-semibold text-slate-300">Описание</Label>
+                 <Textarea id="description" {...form.register("description")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm min-h-[100px] font-light leading-relaxed" />
                  {form.formState.errors.description && <p className="text-xs text-rose-500">{form.formState.errors.description.message}</p>}
              </div>
             <div className="grid grid-cols-2 gap-4">
                  <div className="grid gap-2">
-                     <Label htmlFor="price" className="font-bold text-slate-700">Цена (грн)</Label>
-                     <Input id="price" type="number" {...form.register("price")} className="bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm h-11" />
+                     <Label htmlFor="price" className="font-semibold text-slate-300">Цена (грн)</Label>
+                     <Input id="price" type="number" {...form.register("price")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" />
                      {form.formState.errors.price && <p className="text-xs text-rose-500">{form.formState.errors.price.message}</p>}
                  </div>
                  <div className="grid gap-2">
-                     <Label htmlFor="capacity" className="font-bold text-slate-700">Вместимость (гостей)</Label>
-                     <Input id="capacity" type="number" {...form.register("capacity")} className="bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm h-11" />
+                     <Label htmlFor="capacity" className="font-semibold text-slate-300">Вместимость (гостей)</Label>
+                     <Input id="capacity" type="number" {...form.register("capacity")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" />
                      {form.formState.errors.capacity && <p className="text-xs text-rose-500">{form.formState.errors.capacity.message}</p>}
                  </div>
              </div>
             <div className="grid gap-2">
-                 <Label htmlFor="amenities" className="font-bold text-slate-700">Удобства (через запятую)</Label>
-                 <Input id="amenities" {...form.register("amenities")} className="bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm h-11" />
+                 <Label htmlFor="amenities" className="font-semibold text-slate-300">Удобства (через запятую)</Label>
+                 <Input id="amenities" {...form.register("amenities")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" />
                  {form.formState.errors.amenities && <p className="text-xs text-rose-500">{form.formState.errors.amenities.message}</p>}
              </div>
-            <div className="grid gap-2 bg-slate-50/50 p-4 rounded-2xl border border-slate-100/50">
-                 <Label htmlFor="mainImage" className="font-bold text-slate-700">Основное изображение</Label>
+            <div className="grid gap-2 bg-slate-900/40 p-4 rounded-2xl border border-white/10">
+                 <Label htmlFor="mainImage" className="font-semibold text-slate-300">Основное изображение</Label>
                  <Input 
                    id="mainImage" 
                    type="file" 
@@ -240,31 +237,31 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                        form.setValue("imageUrl", "");
                      }
                    }}
-                   className="bg-white border-slate-200 text-slate-900 rounded-xl shadow-sm cursor-pointer file:bg-slate-50 file:border-r file:border-slate-200 file:text-slate-700 hover:file:bg-slate-100"
+                   className="bg-slate-900 border-white/10 text-white rounded-xl shadow-sm cursor-pointer file:bg-slate-800 file:border-r file:border-white/10 file:text-slate-300 hover:file:bg-slate-700"
                  />
                  {mainImageFile && (
-                   <p className="text-xs text-slate-500">
+                   <p className="text-xs text-slate-400">
                      Выбран: {mainImageFile.name}
                    </p>
                  )}
                  {room?.imageUrl && !mainImageFile && (
-                   <p className="text-xs text-slate-500 truncate">
+                   <p className="text-xs text-slate-400 truncate">
                      Текущее: {room.imageUrl}
                    </p>
                  )}
-                 <div className="text-xs text-slate-500 mt-2">
+                 <div className="text-xs text-slate-400 mt-2">
                    Или укажите прямую ссылку:
                    <Input 
                      type="text" 
                      placeholder="https://..."
-                     className="mt-1.5 bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm h-10"
+                     className="mt-1.5 bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-10"
                      {...form.register("imageUrl")} 
                    />
                  </div>
                  {form.formState.errors.imageUrl && <p className="text-xs text-rose-500">{form.formState.errors.imageUrl.message}</p>}
              </div>
-            <div className="grid gap-2 bg-slate-50/50 p-4 rounded-2xl border border-slate-100/50">
-                 <Label htmlFor="additionalImages" className="font-bold text-slate-700">Дополнительные изображения</Label>
+            <div className="grid gap-2 bg-slate-900/40 p-4 rounded-2xl border border-white/10">
+                 <Label htmlFor="additionalImages" className="font-semibold text-slate-300">Дополнительные изображения</Label>
                  <Input 
                    id="additionalImages" 
                    type="file" 
@@ -277,10 +274,10 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                        form.setValue("imageUrls", "");
                      }
                    }}
-                   className="bg-white border-slate-200 text-slate-900 rounded-xl shadow-sm cursor-pointer file:bg-slate-50 file:border-r file:border-slate-200 file:text-slate-700 hover:file:bg-slate-100"
+                   className="bg-slate-900 border-white/10 text-white rounded-xl shadow-sm cursor-pointer file:bg-slate-800 file:border-r file:border-white/10 file:text-slate-300 hover:file:bg-slate-700"
                  />
                  {additionalImageFiles.length > 0 && (
-                   <div className="text-xs text-slate-500 mt-1">
+                   <div className="text-xs text-slate-400 mt-1">
                      Выбрано файлов: {additionalImageFiles.length}
                      <ul className="list-disc list-inside mt-1">
                        {additionalImageFiles.map((file, idx) => (
@@ -290,15 +287,15 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                    </div>
                  )}
                  {room?.imageUrls && room.imageUrls.length > 0 && additionalImageFiles.length === 0 && (
-                   <div className="text-xs text-slate-500 mt-1">
+                   <div className="text-xs text-slate-400 mt-1">
                      Текущие дополнительные: {room.imageUrls.length} шт.
                    </div>
                  )}
-                 <div className="text-xs text-slate-500 mt-2">
+                 <div className="text-xs text-slate-400 mt-2">
                    Или укажите прямые ссылки (через запятую):
                    <Textarea 
                      placeholder="ссылка_1, ссылка_2, ..."
-                     className="mt-1.5 bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm min-h-[60px]"
+                     className="mt-1.5 bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm min-h-[60px]"
                      rows={2}
                      {...form.register("imageUrls")} 
                    />
@@ -306,19 +303,19 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                  {form.formState.errors.imageUrls && <p className="text-xs text-rose-500">{form.formState.errors.imageUrls.message}</p>}
              </div>
             <div className="grid gap-2">
-                 <Label htmlFor="imageHint" className="font-bold text-slate-700">Подсказка для AI (1-2 слова)</Label>
-                 <Input id="imageHint" {...form.register("imageHint")} className="bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm h-11" />
+                 <Label htmlFor="imageHint" className="font-semibold text-slate-300">Подсказка для AI (1-2 слова)</Label>
+                 <Input id="imageHint" {...form.register("imageHint")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" />
                  {form.formState.errors.imageHint && <p className="text-xs text-rose-500">{form.formState.errors.imageHint.message}</p>}
              </div>
  
-              <SheetFooter className="mt-6 border-t border-slate-100/50 pt-4 gap-2">
+              <SheetFooter className="mt-6 border-t border-white/10 pt-4 gap-2">
                  <SheetClose asChild>
-                     <Button type="button" variant="outline" disabled={isUploading} className="rounded-xl border-slate-200">Отмена</Button>
+                     <Button type="button" variant="outline" disabled={isUploading} className="rounded-xl border-white/10 text-slate-300 hover:bg-white/5 h-11">Отмена</Button>
                  </SheetClose>
-                 <Button type="submit" disabled={isUploading} className="gradient-ocean text-white font-bold border-0 shadow-md rounded-xl px-5 h-11">
+                 <Button type="submit" disabled={isUploading} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">
                    {isUploading ? "Сохранение..." : "Сохранить номер"}
                  </Button>
-             </SheetFooter>
+              </SheetFooter>
         </form>
       </SheetContent>
     </Sheet>

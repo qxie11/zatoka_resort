@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -24,22 +23,22 @@ export default function RoomsSelector({ rooms, selectedRoom, onRoomChange }: Roo
   };
 
   return (
-    <Card className="glass-card-premium border border-white/50 bg-white/70 backdrop-blur-md rounded-3xl shadow-soft overflow-hidden">
-      <CardHeader className="border-b border-slate-100/50 bg-white/30 p-5 sm:p-6">
-        <CardTitle className="text-xl font-bold text-slate-900">Номера</CardTitle>
+    <Card className="glass-card-dark border border-white/10 bg-slate-900/60 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden text-white">
+      <CardHeader className="border-b border-white/5 bg-slate-950/20 p-5 sm:p-6">
+        <CardTitle className="text-xl font-extrabold text-white">Номера</CardTitle>
       </CardHeader>
       <CardContent className="p-5 sm:p-6">
-        <p className="text-slate-600 text-sm font-light leading-relaxed mb-4">Выберите номер, чтобы увидеть его текущие бронирования на календаре.</p>
+        <p className="text-slate-300 text-sm font-light leading-relaxed mb-4">Выберите номер, чтобы увидеть его текущие бронирования на календаре.</p>
         <Select 
           onValueChange={handleRoomChange} 
           value={selectedRoom?.id || undefined}
         >
-          <SelectTrigger className="w-full bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm h-11">
+          <SelectTrigger className="w-full bg-slate-950/40 border-white/10 text-white rounded-xl focus:ring-teal-400/50 shadow-sm h-11">
             <SelectValue placeholder="Выберите номер" />
           </SelectTrigger>
-          <SelectContent className="bg-white border-slate-200 text-slate-900 rounded-xl shadow-md">
+          <SelectContent className="bg-slate-950 border-white/10 text-white rounded-xl shadow-2xl">
             {rooms.map((room) => (
-              <SelectItem key={room.id} value={room.id} className="focus:bg-sky-50 focus:text-primary rounded-lg py-2">
+              <SelectItem key={room.id} value={room.id} className="focus:bg-white/10 focus:text-teal-300 rounded-lg py-2 cursor-pointer">
                 {room.name}
               </SelectItem>
             ))}
@@ -49,4 +48,3 @@ export default function RoomsSelector({ rooms, selectedRoom, onRoomChange }: Roo
     </Card>
   );
 }
-

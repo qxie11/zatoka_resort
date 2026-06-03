@@ -137,37 +137,37 @@ export default function BookingForm({
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-[600px] overflow-y-auto bg-gradient-to-br from-white via-sky-50/20 to-white border-l border-slate-200/50 shadow-gentle">
-        <SheetHeader className="relative pb-4 border-b border-slate-100/50">
-          <SheetTitle className="text-2xl font-bold text-slate-900">
+      <SheetContent className="sm:max-w-[600px] overflow-y-auto bg-slate-950 border-l border-white/10 shadow-2xl text-slate-100">
+        <SheetHeader className="relative pb-4 border-b border-white/10">
+          <SheetTitle className="text-2xl font-bold text-white">
             {booking ? "Редактировать бронирование" : "Создать бронирование"}
           </SheetTitle>
-          <SheetDescription className="text-slate-500 font-light mt-1">
+          <SheetDescription className="text-slate-400 font-light mt-1">
             {booking
               ? "Внесите изменения в подробную информацию о бронировании гостя."
               : "Заполните необходимые данные гостя для резервирования номера."}
           </SheetDescription>
         </SheetHeader>
         <Form {...form}>
-          <form onSubmit={handleFormSubmit} className="space-y-6 py-5 text-slate-800">
+          <form onSubmit={handleFormSubmit} className="space-y-6 py-5 text-slate-200">
             <FormField
               control={form.control}
               name="roomId"
               render={({ field }) => (
                 <FormItem className="space-y-1.5">
-                  <FormLabel className="font-bold text-slate-700">Номер</FormLabel>
+                  <FormLabel className="font-semibold text-slate-300">Номер</FormLabel>
                   <Select
                     value={field.value}
                     onValueChange={field.onChange}
                   >
                     <FormControl>
-                      <SelectTrigger className="w-full bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm h-11">
+                      <SelectTrigger className="w-full bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11">
                         <SelectValue placeholder="Выберите номер" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-white border-slate-200 text-slate-900 rounded-xl shadow-md">
+                    <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-md">
                       {rooms.map((room) => (
-                        <SelectItem key={room.id} value={room.id} className="focus:bg-sky-50 focus:text-primary rounded-lg py-2">
+                        <SelectItem key={room.id} value={room.id} className="focus:bg-teal-500/20 focus:text-teal-300 rounded-lg py-2">
                           {room.name}
                         </SelectItem>
                       ))}
@@ -182,7 +182,7 @@ export default function BookingForm({
               control={form.control}
               name="dateRange"
               render={({ field }) => (
-                <div className="bg-white/50 p-4 rounded-2xl border border-slate-100/50 shadow-sm">
+                <div className="bg-slate-900/50 p-4 rounded-2xl border border-white/10 shadow-sm">
                   <DateRangePicker
                     value={field.value}
                     onChange={field.onChange}
@@ -199,11 +199,11 @@ export default function BookingForm({
                 name="name"
                 render={({ field }) => (
                   <FormItem className="space-y-1.5">
-                    <FormLabel className="font-bold text-slate-700">Имя</FormLabel>
+                    <FormLabel className="font-semibold text-slate-300">Имя</FormLabel>
                     <div className="relative">
                       <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                       <FormControl>
-                        <Input placeholder="Имя гостя" className="pl-10 bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm h-11" {...field} />
+                        <Input placeholder="Имя гостя" className="pl-10 bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" {...field} />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -216,11 +216,11 @@ export default function BookingForm({
                 name="phone"
                 render={({ field }) => (
                   <FormItem className="space-y-1.5">
-                    <FormLabel className="font-bold text-slate-700">Телефон</FormLabel>
+                    <FormLabel className="font-semibold text-slate-300">Телефон</FormLabel>
                     <div className="relative">
                       <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                       <FormControl>
-                        <Input placeholder="+380..." className="pl-10 bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm h-11" {...field} />
+                        <Input placeholder="+380..." className="pl-10 bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" {...field} />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -233,14 +233,14 @@ export default function BookingForm({
                 name="email"
                 render={({ field }) => (
                   <FormItem className="space-y-1.5">
-                    <FormLabel className="font-bold text-slate-700">Email</FormLabel>
+                    <FormLabel className="font-semibold text-slate-300">Email</FormLabel>
                     <div className="relative">
                       <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                       <FormControl>
                         <Input
                           type="email"
                           placeholder="example@mail.com"
-                          className="pl-10 bg-white border-slate-200 text-slate-900 rounded-xl focus:ring-primary shadow-sm h-11"
+                          className="pl-10 bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11"
                           {...field}
                           value={field.value || ""}
                         />
@@ -252,13 +252,13 @@ export default function BookingForm({
               />
             </div>
 
-            <SheetFooter className="mt-6 border-t border-slate-100/50 pt-4 gap-2">
+            <SheetFooter className="mt-6 border-t border-white/10 pt-4 gap-2">
               <SheetClose asChild>
-                <Button type="button" variant="outline" className="rounded-xl border-slate-200 h-11">
+                <Button type="button" variant="outline" className="rounded-xl border-white/10 text-slate-300 hover:bg-white/5 h-11">
                   Отмена
                 </Button>
               </SheetClose>
-              <Button type="submit" className="gradient-ocean text-white font-bold border-0 shadow-md rounded-xl px-5 h-11">Сохранить бронирование</Button>
+              <Button type="submit" className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">Сохранить бронирование</Button>
             </SheetFooter>
           </form>
         </Form>

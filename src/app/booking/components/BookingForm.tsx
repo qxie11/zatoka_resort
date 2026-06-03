@@ -112,7 +112,7 @@ export default function BookingForm({
   }
 
   return (
-    <Card className="max-w-4xl mx-auto my-12 shadow-gentle border border-white/40 glass-card-premium rounded-3xl">
+    <Card className="max-w-4xl mx-auto my-12 shadow-2xl border border-white/10 glass-card-dark rounded-3xl text-white">
       <CardContent className="p-8">
         <Form {...form}>
           <form
@@ -124,18 +124,18 @@ export default function BookingForm({
               name="dateRange"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="text-slate-900 font-bold mb-2">Заезд / Выезд</FormLabel>
+                  <FormLabel className="text-teal-300 font-bold mb-2">Заезд / Выезд</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-full justify-start text-left font-normal bg-white border-slate-200 hover:bg-slate-50 transition-smooth rounded-xl h-11",
-                            !field.value?.from && "text-muted-foreground"
+                            "w-full justify-start text-left font-normal bg-slate-950/40 border-white/10 text-white hover:bg-white/10 hover:text-white transition-smooth rounded-xl h-11",
+                            !field.value?.from && "text-slate-400"
                           )}
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
+                          <CalendarIcon className="mr-2 h-4 w-4 text-teal-400" />
                           {field.value?.from ? (
                             field.value.to ? (
                               <>
@@ -158,7 +158,7 @@ export default function BookingForm({
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border border-slate-100 bg-white" align="start">
+                    <PopoverContent className="w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 text-white" align="start">
                       <Calendar
                         initialFocus
                         mode="range"
@@ -173,6 +173,7 @@ export default function BookingForm({
                           date < new Date(new Date().setHours(0, 0, 0, 0))
                         }
                         locale={ru}
+                        className="bg-slate-950 text-white border-0"
                       />
                     </PopoverContent>
                   </Popover>
@@ -184,14 +185,14 @@ export default function BookingForm({
               name="guests"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="text-slate-900 font-bold mb-2">Гости</FormLabel>
+                  <FormLabel className="text-teal-300 font-bold mb-2">Гости</FormLabel>
                   <div className="relative">
-                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
+                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-teal-400" />
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="Количество гостей"
-                        className="pl-10 bg-white border-slate-200 focus:border-primary/50 transition-smooth rounded-xl h-11"
+                        className="pl-10 bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
                         {...field}
                       />
                     </FormControl>
@@ -200,7 +201,7 @@ export default function BookingForm({
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full h-11 gradient-sunset hover:opacity-90 active:scale-[0.98] text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/10 rounded-xl transition-all duration-300">
+            <Button type="submit" className="w-full h-11 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 hover:opacity-90 active:scale-[0.98] text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl transition-all duration-300">
               Проверить наличие
             </Button>
           </form>

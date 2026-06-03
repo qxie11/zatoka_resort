@@ -23,14 +23,14 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
         onFilterChange={setFilteredRooms}
       />
 
-      <section className="py-16 lg:py-24 bg-background">
+      <section className="py-16 lg:py-24 bg-slate-950">
         <div className="container mx-auto px-0">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white animate-fade-in">
               {filteredRooms !== null ? "Доступные номера" : "Наши номера и люксы"}
             </h2>
             <WavyUnderline />
-            <p className="mt-2 text-muted-foreground">
+            <p className="mt-2 text-slate-300 font-light">
               {filteredRooms !== null 
                 ? `Найдено ${filteredRooms.length} номеров по вашему запросу.`
                 : "Найдите идеальное пространство для вашего пребывания."}
@@ -42,4 +42,3 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
     </>
   );
 }
-

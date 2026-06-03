@@ -103,7 +103,7 @@ export default function BookingsAdminPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <p>Загрузка...</p>
+        <p className="text-slate-300">Загрузка...</p>
       </div>
     );
   }
@@ -119,31 +119,31 @@ export default function BookingsAdminPage() {
   }
 
   return (
-    <div className="w-full max-w-full overflow-hidden">
+    <div className="w-full max-w-full overflow-hidden text-white bg-slate-950">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold">Управление бронированиями</h1>
-        <Button onClick={handleAddNew} disabled={isCreating || isUpdating} className="w-full sm:w-auto">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Управление бронированиями</h1>
+        <Button onClick={handleAddNew} disabled={isCreating || isUpdating} className="w-full sm:w-auto bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">
           <PlusCircle className="mr-2 h-4 w-4" />
           Добавить бронирование
         </Button>
       </div>
       
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Фильтр по номеру</CardTitle>
+      <Card className="mb-6 glass-card-dark border border-white/10 bg-slate-900/60 text-white rounded-3xl overflow-hidden shadow-2xl">
+        <CardHeader className="border-b border-white/5 bg-slate-950/20 p-5">
+          <CardTitle className="text-lg font-extrabold text-white">Фильтр по номеру</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-5">
           <Select 
             onValueChange={(value) => setSelectedRoomId(value === "all" ? null : value)}
             value={selectedRoomId || "all"}
           >
-            <SelectTrigger className="w-full md:w-[300px]">
+            <SelectTrigger className="w-full md:w-[300px] bg-slate-950/40 border-white/10 text-white rounded-xl focus:ring-teal-400/50 shadow-sm h-11">
               <SelectValue placeholder="Выберите номер" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Все номера</SelectItem>
+            <SelectContent className="bg-slate-950 border-white/10 text-white rounded-xl shadow-2xl">
+              <SelectItem value="all" className="focus:bg-white/10 focus:text-teal-300 rounded-lg cursor-pointer">Все номера</SelectItem>
               {rooms.map((room) => (
-                <SelectItem key={room.id} value={room.id}>
+                <SelectItem key={room.id} value={room.id} className="focus:bg-white/10 focus:text-teal-300 rounded-lg cursor-pointer">
                   {room.name}
                 </SelectItem>
               ))}
