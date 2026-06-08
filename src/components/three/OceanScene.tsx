@@ -15,8 +15,17 @@ export default function OceanScene() {
     let animationId: number;
     const clock = new THREE.Clock();
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // ОПТИМИЗАЦИЯ 1: antialias: false (бесполезно для Raymarching), powerPreference для включения мощной GPU
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: false,
+      alpha: true,
+      powerPreference: "high-performance"
+    });
+
+    // ОПТИМИЗАЦИЯ 2: Жестко фиксируем Pixel Ratio на 1. 
+    // Raymarching на 2x съедает любой современный GPU на высоких разрешениях.
+    renderer.setPixelRatio(1);
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
     renderer.autoClear = false;
 
@@ -221,6 +230,7 @@ export default function OceanScene() {
         iTime: { value: 0 },
         iMouse: { value: new THREE.Vector4(0, 0, 0, 0) },
       },
+      depthWrite: false, // ОПТИМИЗАЦИЯ: Фон не должен писать в буфер глубины
     });
 
     const bgMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), oceanMaterial);
@@ -265,24 +275,28 @@ export default function OceanScene() {
       birdScene.add(mesh);
     }
 
+    // ОПТИМИЗАЦИЯ 3: Кэшируем размеры для мыши, чтобы избежать Layout Thrashing
+    let currentCanvasWidth = canvas.clientWidth;
+    let currentCanvasHeight = canvas.clientHeight;
+
     const handleMouseMove = (e: MouseEvent) => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
+      // Исключаем вызовы window.innerWidth / innerHeight в реал-тайм событии
       const mouseX = e.clientX * 0.5;
-      const mouseY = (h - e.clientY) * 0.5;
+      const mouseY = (currentCanvasHeight - e.clientY) * 0.5;
       oceanMaterial.uniforms.iMouse.value.set(mouseX, mouseY, 0, 0);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true }); // Добавлен passive flag
 
     let resizeObserver: ResizeObserver;
     const handleResize = () => {
       if (!canvas) return;
-      const w = canvas.clientWidth;
-      const h = canvas.clientHeight;
-      renderer.setSize(w, h, false);
-      oceanMaterial.uniforms.iResolution.value.set(w, h, 1);
-      birdCamera.aspect = w / h;
+      currentCanvasWidth = canvas.clientWidth;
+      currentCanvasHeight = canvas.clientHeight;
+
+      renderer.setSize(currentCanvasWidth, currentCanvasHeight, false);
+      oceanMaterial.uniforms.iResolution.value.set(currentCanvasWidth, currentCanvasHeight, 1);
+      birdCamera.aspect = currentCanvasWidth / currentCanvasHeight;
       birdCamera.updateProjectionMatrix();
     };
 
@@ -320,9 +334,11 @@ export default function OceanScene() {
       renderer.clearDepth();
       renderer.render(birdScene, birdCamera);
 
-      frameCount++;
-      if (frameCount === 3) {
-        setIsLoaded(true);
+      if (!isLoaded) {
+        frameCount++;
+        if (frameCount === 3) {
+          setIsLoaded(true);
+        }
       }
     };
 
