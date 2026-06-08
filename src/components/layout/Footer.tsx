@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-white/10 bg-slate-950 text-slate-100 overflow-hidden">
+    <footer className="relative bg-slate-950 text-slate-100 overflow-hidden">
       {/* Animated wave top border */}
       <div className="absolute top-0 left-0 right-0 pointer-events-none overflow-hidden h-3 opacity-40">
         <svg viewBox="0 0 2400 12" preserveAspectRatio="none" className="w-[200%] h-full animate-foam fill-teal-400/50">

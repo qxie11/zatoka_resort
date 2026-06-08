@@ -420,12 +420,7 @@ export default async function Home() {
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950" />
           </div>
 
-          {/* CTA foam line at top */}
-          <div className="absolute top-0 left-0 right-0 pointer-events-none overflow-hidden h-3 z-10 opacity-30">
-            <svg viewBox="0 0 2400 12" preserveAspectRatio="none" className="w-[200%] h-full animate-foam fill-teal-300/60">
-              <path d="M0,6 C60,2 120,10 180,6 C240,2 300,10 360,6 C420,2 480,10 540,6 C600,2 660,10 720,6 C780,2 840,10 900,6 C960,2 1020,10 1080,6 C1140,2 1200,10 1260,6 C1320,2 1380,10 1440,6 C1500,2 1560,10 1620,6 C1680,2 1740,10 1800,6 C1860,2 1920,10 1980,6 C2040,2 2100,10 2160,6 C2220,2 2280,10 2340,6 C2400,2 2400,10 2400,6 L2400,12 L0,12 Z" />
-            </svg>
-          </div>
+
 
           {/* CTA bubbles */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
