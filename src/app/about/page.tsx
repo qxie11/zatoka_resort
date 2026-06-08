@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { amenities } from "@/lib/data";
-import { Waves, Wifi, UtensilsCrossed, Sun, HeartPulse, Car, ConciergeBell, Dumbbell, Compass, Star } from "lucide-react";
+import { Waves, Wifi, UtensilsCrossed, Sun, HeartPulse, Car, ConciergeBell, Dumbbell, Compass, Star, Anchor } from "lucide-react";
 import type { LucideProps } from 'lucide-react';
 import { WavyUnderline } from '@/components/ui/wavy-underline';
 
@@ -48,7 +48,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40" />
         </div>
 
-        {/* Floating animated marine wave accents in background */}
+        {/* Floating animated marine wave & fish accents in background */}
         <div className="absolute inset-0 opacity-15 pointer-events-none z-0">
           <div className="absolute top-1/4 left-10 animate-float">
             <Waves className="h-24 w-24 text-teal-300" />
@@ -58,6 +58,16 @@ export default function AboutPage() {
           </div>
           <div className="absolute bottom-1/4 left-1/3 animate-float" style={{ animationDelay: "5s" }}>
             <Waves className="h-20 w-20 text-teal-200" />
+          </div>
+          {/* Drifting background fish */}
+          <div className="absolute bottom-1/3 right-12 animate-current" style={{ animationDelay: '2s' }}>
+            <svg viewBox="0 0 100 60" className="h-24 w-24 text-teal-300 fill-current">
+              <path d="M10 30 C 25 15, 55 15, 70 30 C 80 25, 88 20, 95 15 C 92 25, 92 35, 95 45 C 88 40, 80 35, 70 30 C 55 45, 25 45, 10 30 Z M30 25 A 3 3 0 1 0 30 25.1" />
+            </svg>
+          </div>
+          {/* Drifting background anchor */}
+          <div className="absolute top-1/2 left-[15%] animate-float-slow opacity-15" style={{ animationDelay: '4s' }}>
+            <Anchor className="h-16 w-16 text-sky-200" />
           </div>
         </div>
 
@@ -128,6 +138,10 @@ export default function AboutPage() {
           </div>
           <div className="absolute bottom-10 left-10 animate-float-slow" style={{ animationDelay: "2s" }}>
             <Waves className="h-32 w-32 text-sky-300/20" />
+          </div>
+          {/* Drifting background anchor */}
+          <div className="absolute top-1/3 left-1/3 animate-float opacity-10" style={{ animationDelay: '3s' }}>
+            <Anchor className="h-28 w-28 text-teal-400" />
           </div>
         </div>
 

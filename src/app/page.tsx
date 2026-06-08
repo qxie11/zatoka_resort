@@ -8,7 +8,7 @@ import { amenities } from '@/lib/data';
 import { getRooms } from '@/lib/db';
 import FeaturedRooms from '@/components/rooms/FeaturedRooms';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
-import { ArrowRight, Waves, Wifi, UtensilsCrossed, Sun, HeartPulse, Car, ConciergeBell, Dumbbell, Star, MapPin, Compass, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Waves, Wifi, UtensilsCrossed, Sun, HeartPulse, Car, ConciergeBell, Dumbbell, Star, MapPin, Compass, ShieldCheck, Anchor } from 'lucide-react';
 import type { LucideProps } from 'lucide-react';
 import { WavyUnderline } from '@/components/ui/wavy-underline';
 
@@ -263,6 +263,16 @@ export default async function Home() {
             <div className="absolute top-1/2 left-5 animate-current">
               <Waves className="h-32 w-32 text-teal-400/20" />
             </div>
+            {/* Added background fish icon */}
+            <div className="absolute bottom-1/4 right-8 animate-current" style={{ animationDelay: '2s' }}>
+              <svg viewBox="0 0 100 60" className="h-32 w-32 text-sky-400/20 fill-current">
+                <path d="M10 30 C 25 15, 55 15, 70 30 C 80 25, 88 20, 95 15 C 92 25, 92 35, 95 45 C 88 40, 80 35, 70 30 C 55 45, 25 45, 10 30 Z M30 25 A 3 3 0 1 0 30 25.1" />
+              </svg>
+            </div>
+            {/* Added background anchor icon */}
+            <div className="absolute top-1/4 left-1/3 animate-float-slow opacity-15" style={{ animationDelay: '1s' }}>
+              <Anchor className="h-20 w-20 text-teal-300/30" />
+            </div>
           </div>
           
           <div className="container mx-auto px-4 text-center relative z-10">
@@ -304,6 +314,12 @@ export default async function Home() {
             >
               <path d="M30,12 C30,12 40,6 40,12 C40,18 30,12 30,12 Z M5,12 C5,12 0,6 5,12 C5,18 10,22 20,20 C28,18 30,14 30,12 C30,10 28,6 20,4 C10,2 5,6 5,12 Z M8,11 C8,10 9,9 10,9 C11,9 12,10 12,11 C12,12 11,13 10,13 C9,13 8,12 8,11 Z" />
             </svg>
+            {/* Added large background fish silhouette */}
+            <div className="absolute top-1/4 left-10 animate-current" style={{ animationDelay: '4s' }}>
+              <svg viewBox="0 0 100 60" className="h-36 w-36 text-teal-400/10 fill-current scale-x-[-1]">
+                <path d="M10 30 C 25 15, 55 15, 70 30 C 80 25, 88 20, 95 15 C 92 25, 92 35, 95 45 C 88 40, 80 35, 70 30 C 55 45, 25 45, 10 30 Z M30 25 A 3 3 0 1 0 30 25.1" />
+              </svg>
+            </div>
           </div>
 
           <div className="container mx-auto px-4">
@@ -342,6 +358,16 @@ export default async function Home() {
           {/* Jellyfish decoration — big background blob */}
           <div className="absolute top-10 right-10 w-64 h-64 rounded-full bg-teal-500/5 animate-jellyfish pointer-events-none" />
           <div className="absolute bottom-20 left-5 w-40 h-40 rounded-full bg-sky-500/5 animate-jellyfish pointer-events-none" style={{ animationDelay: '3s' }} />
+          {/* Added large background fish silhouette */}
+          <div className="absolute top-1/3 right-12 animate-current opacity-10 pointer-events-none" style={{ animationDelay: '1s' }}>
+            <svg viewBox="0 0 100 60" className="h-40 w-40 text-teal-400/20 fill-current">
+              <path d="M10 30 C 25 15, 55 15, 70 30 C 80 25, 88 20, 95 15 C 92 25, 92 35, 95 45 C 88 40, 80 35, 70 30 C 55 45, 25 45, 10 30 Z M30 25 A 3 3 0 1 0 30 25.1" />
+            </svg>
+          </div>
+          {/* Added background anchor icon */}
+          <div className="absolute bottom-1/4 left-12 animate-float-slow opacity-10 pointer-events-none" style={{ animationDelay: '3s' }}>
+            <Anchor className="h-24 w-24 text-sky-300/30" />
+          </div>
 
           {/* Floating bubbles in amenity section */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -418,6 +444,12 @@ export default async function Home() {
               className="object-cover scale-105 animate-float-slow brightness-[0.3] contrast-[1.2]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950" />
+          </div>
+          {/* Added large background fish silhouette */}
+          <div className="absolute bottom-12 left-16 animate-current opacity-10 pointer-events-none" style={{ animationDelay: '3s' }}>
+            <svg viewBox="0 0 100 60" className="h-32 w-32 text-sky-400/20 fill-current scale-x-[-1]">
+              <path d="M10 30 C 25 15, 55 15, 70 30 C 80 25, 88 20, 95 15 C 92 25, 92 35, 95 45 C 88 40, 80 35, 70 30 C 55 45, 25 45, 10 30 Z M30 25 A 3 3 0 1 0 30 25.1" />
+            </svg>
           </div>
 
 

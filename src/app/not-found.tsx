@@ -17,6 +17,12 @@ export default function NotFound() {
         <div className="absolute bottom-32 left-1/4 animate-float-slow" style={{ animationDelay: "2s" }}>
           <Waves className="h-10 w-10 text-teal-400" />
         </div>
+        {/* Drifting background fish */}
+        <div className="absolute top-1/3 left-1/3 animate-current" style={{ animationDelay: '1.5s' }}>
+          <svg viewBox="0 0 100 60" className="h-20 w-20 text-teal-400 fill-current">
+            <path d="M10 30 C 25 15, 55 15, 70 30 C 80 25, 88 20, 95 15 C 92 25, 92 35, 95 45 C 88 40, 80 35, 70 30 C 55 45, 25 45, 10 30 Z M30 25 A 3 3 0 1 0 30 25.1" />
+          </svg>
+        </div>
       </div>
       
       <div className="container mx-auto px-4 text-center relative z-10">
