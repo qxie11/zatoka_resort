@@ -8,6 +8,7 @@ import StoreProvider from "@/components/providers/StoreProvider";
 import { Comfortaa, Nunito } from "next/font/google";
 import NextTopLoader from 'nextjs-toploader';
 import { GlobalMarineBackground } from "@/components/decorative/GlobalMarineBackground";
+import { StickyBookingBar } from "@/components/conversion/StickyBookingBar";
 
 const fontSans = Nunito({
   subsets: ["latin", "cyrillic"],
@@ -84,7 +85,7 @@ export default function RootLayout({
       <head />
       <body
         className={cn(
-          "min-h-screen bg-slate-950 font-sans antialiased text-slate-100",
+          "min-h-screen bg-slate-950 font-sans antialiased text-slate-100 overflow-x-hidden",
           fontSans.variable,
           fontHeading.variable
         )}
@@ -102,12 +103,13 @@ export default function RootLayout({
             speed={200}
             shadow="0 0 10px #2dd4bf,0 0 5px #2dd4bf"
           />
-          <div className="relative flex min-h-dvh flex-col bg-slate-950 text-slate-100 overflow-x-hidden">
+          <div className="relative flex min-h-dvh flex-col bg-slate-950 text-slate-100">
             <GlobalMarineBackground />
             <Header />
             <main className="relative flex-1 z-10">{children}</main>
             <Footer />
           </div>
+          <StickyBookingBar />
           <Toaster />
         </StoreProvider>
       </body>

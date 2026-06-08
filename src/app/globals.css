@@ -544,4 +544,45 @@
     animation: bubble-rise var(--bubble-duration, 15s) ease-in infinite;
     animation-delay: var(--bubble-delay, 0s);
   }
+
+  /* Slide up — for sticky bar entrance */
+  @keyframes slide-up {
+    0% { transform: translateY(100%); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  /* Fade in up (used in conversion badges) */
+  @keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Float slow (used in decorative elements) */
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .animate-float-slow {
+    animation: float-slow 7s ease-in-out infinite;
+  }
+
+  /* Float (used in decorative elements) */
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .animate-float {
+    animation: float 5s ease-in-out infinite;
+  }
 }
+

@@ -123,7 +123,7 @@ export default async function Home() {
                 <p className="max-w-xl text-base md:text-lg text-slate-100 font-medium leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards] drop-shadow-lg">
                   Испытайте несравненный пятизвездочный комфорт, ласковые волны и захватывающие дух панорамные виды на Черное море.
                 </p>
- 
+
                 {/* Quick Interactive Reservation Panel */}
                 <div className="w-full max-w-lg p-5 rounded-2xl glass-card-dark shadow-2xl border border-white/10 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards]">
                   <div className="grid grid-cols-2 gap-4 mb-4">
