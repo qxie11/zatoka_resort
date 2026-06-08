@@ -43,9 +43,18 @@ export default async function Home() {
               />
               <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/70 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40" />
+              {/* Underwater Caustics Effect */}
+              <div className="absolute inset-0 bg-caustics opacity-40 mix-blend-screen pointer-events-none" />
             </div>
           )}
 
+          {/* Animated Seagull */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
+            <svg className="absolute animate-seagull w-8 h-8 text-white/20 fill-current" viewBox="0 0 24 24">
+              <path d="M12,6.5C11,7.5 9.5,9 7,9C4.5,9 2.5,7.5 1.5,6.5C1,6 0.5,6.5 1,7C2,8 4,10.5 7,10.5C10,10.5 11.5,9 12,8C12.5,9 14,10.5 17,10.5C20,10.5 22,8 23,7C23.5,6.5 23,6 22.5,6.5C21.5,7.5 19.5,9 17,9C14.5,9 13,7.5 12,6.5Z" />
+            </svg>
+          </div>
+ 
           {/* Floating animated marine wave accents in background */}
           <div className="absolute inset-0 opacity-15 pointer-events-none z-0">
             <div className="absolute top-1/4 left-10 animate-float">
@@ -58,7 +67,7 @@ export default async function Home() {
               <Waves className="h-20 w-20 text-teal-200" />
             </div>
           </div>
-
+ 
           <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               
@@ -70,7 +79,7 @@ export default async function Home() {
                   <Compass className="h-4 w-4 animate-spin-slow" />
                   <span>Премиум курорт на Черном море</span>
                 </div>
-
+ 
                 {/* Heading with glowing highlights & elegant tracking */}
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight animate-fade-in-up">
                   Ваш идеальный <br />
@@ -79,12 +88,12 @@ export default async function Home() {
                   </span> <br />
                   в Затоке
                 </h1>
-
+ 
                 {/* Description */}
                 <p className="max-w-xl text-base md:text-lg text-slate-200 font-light leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards]">
                   Испытайте несравненный пятизвездочный комфорт, ласковые волны и захватывающие дух панорамные виды на Черное море.
                 </p>
-
+ 
                 {/* Quick Interactive Reservation Panel */}
                 <div className="w-full max-w-lg p-5 rounded-2xl glass-card-dark shadow-2xl border border-white/10 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards]">
                   <div className="grid grid-cols-2 gap-4 mb-4">
@@ -105,7 +114,7 @@ export default async function Home() {
                   </div>
                   
                   <div className="flex flex-col sm:flex-row gap-3 w-full">
-                    <Button asChild size="lg" className="w-full sm:flex-1 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+                    <Button asChild size="lg" className="w-full sm:flex-1 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 water-reflection">
                       <Link href="/booking" className="flex items-center justify-center">
                         Забронировать отдых
                         <ArrowRight className="ml-2 h-5 w-5" />
@@ -162,6 +171,16 @@ export default async function Home() {
             </div>
           </div>
 
+          {/* Animated flowing wave background */}
+          <div className="absolute inset-x-0 bottom-0 pointer-events-none overflow-hidden h-24 md:h-32 opacity-15 z-10">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="absolute bottom-0 w-[200%] h-full fill-teal-300 animate-wave-flow">
+              <path d="M0,60 C300,20 600,100 900,60 C1200,20 1500,100 1800,60 C2100,20 2400,100 2700,60 L2700,120 L0,120 Z" />
+            </svg>
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="absolute bottom-0 w-[200%] h-full fill-sky-300 animate-wave-flow-slow opacity-60">
+              <path d="M0,80 C300,40 600,120 900,80 C1200,40 1500,120 1800,80 C2100,40 2400,120 2700,80 L2700,120 L0,120 Z" />
+            </svg>
+          </div>
+
           {/* Dynamic Layered Wave SVG Divider */}
           <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
             <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-16 md:h-24 fill-slate-950">
@@ -173,6 +192,24 @@ export default async function Home() {
 
         {/* WELCOME SECTION */}
         <section className="py-24 relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900">
+          {/* Bubble Particles */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+            {[...Array(10)].map((_, i) => (
+              <span
+                key={i}
+                className="bubble-particle"
+                style={{
+                  left: `${i * 10 + Math.random() * 8}%`,
+                  width: `${Math.random() * 12 + 6}px`,
+                  height: `${Math.random() * 12 + 6}px`,
+                  '--bubble-duration': `${Math.random() * 8 + 8}s`,
+                  '--bubble-delay': `${Math.random() * 6}s`,
+                  '--bubble-drift': `${Math.random() * 50 - 25}px`,
+                } as React.CSSProperties}
+              />
+            ))}
+          </div>
+
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute top-1/2 left-5 animate-float">
               <Waves className="h-32 w-32 text-teal-400/20" />
@@ -248,12 +285,12 @@ export default async function Home() {
               {amenities.slice(0, 8).map((amenity, index) => {
                 const Icon = iconMap[amenity.icon];
                 return (
-                  <div key={amenity.name} className="flex flex-col items-center p-6 rounded-3xl glass-card-dark border border-white/10 hover:bg-slate-900/60 hover:border-teal-400/50 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
-                    <div className="bg-teal-500/10 p-5 rounded-2xl transition-smooth hover:bg-teal-500/25 relative group/icon text-teal-300">
+                  <div key={amenity.name} className="flex flex-col items-center p-6 rounded-3xl glass-card-dark border border-white/10 marine-3d-card hover:bg-slate-900/60 hover:border-teal-400/50 hover:shadow-2xl transition-all duration-500 group">
+                    <div className="bg-teal-500/10 p-5 rounded-2xl transition-smooth hover:bg-teal-500/25 relative group/icon text-teal-300 marine-3d-card-inner">
                       {Icon && <Icon className="h-8 w-8 text-teal-400 transition-smooth group-hover/icon:animate-float-slow" />}
                       <div className="absolute inset-0 rounded-2xl bg-teal-500/5 opacity-0 group-hover/icon:opacity-100 group-hover/icon:animate-water-ripple transition-opacity" />
                     </div>
-                    <h3 className="mt-5 text-lg font-bold text-white">{amenity.name}</h3>
+                    <h3 className="mt-5 text-lg font-bold text-white marine-3d-card-inner">{amenity.name}</h3>
                   </div>
                 );
               })}
@@ -289,7 +326,7 @@ export default async function Home() {
               Берега Затоки зовут. Забронируйте отпуск своей мечты сегодня и создайте воспоминания, которые останутся на всю жизнь.
             </p>
             <div className="pt-6">
-              <Button asChild size="lg" className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 hover:scale-105 active:scale-95 transition-all duration-300 h-12 px-8 rounded-xl">
+              <Button asChild size="lg" className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 hover:scale-105 active:scale-95 transition-all duration-300 h-12 px-8 rounded-xl water-reflection">
                 <Link href="/booking" className="flex items-center">
                   Забронировать номер сейчас
                   <ArrowRight className="ml-2 h-5 w-5" />
