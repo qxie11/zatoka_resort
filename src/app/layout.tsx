@@ -30,6 +30,10 @@ const APP_DESCRIPTION =
   "Забронируйте свой идеальный пляжный отдых в 'Отдых в Затоке', премиум-отеле в Затоке, Одесса. Наслаждайтесь потрясающими видами на море, отличным сервисом и современными удобствами.";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://zatokaresort.com"),
+  alternates: {
+    canonical: "/",
+  },
   applicationName: APP_NAME,
   title: {
     default: APP_DEFAULT_TITLE,
