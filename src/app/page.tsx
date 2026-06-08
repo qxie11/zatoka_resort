@@ -172,7 +172,7 @@ export default async function Home() {
         </section>
 
         {/* WELCOME SECTION */}
-        <section className="py-24 relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+        <section className="py-24 relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900">
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute top-1/2 left-5 animate-float">
               <Waves className="h-32 w-32 text-teal-400/20" />
@@ -191,10 +191,18 @@ export default async function Home() {
               Расположенный на безмятежном побережье Черного моря, "Отдых в Затоке" предлагает идеальное сочетание роскоши, комфорта и природной красоты. Ищете ли вы романтический уик-энд или семейное приключение, наш отель — ваше идеальное место для незабываемого отдыха.
             </p>
           </div>
+
+          {/* Wave Divider to Featured Rooms */}
+          <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-950 scale-x-[-1]">
+              <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-teal-200/10" />
+              <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
+            </svg>
+          </div>
         </section>
 
         {/* FEATURED ROOMS SECTION */}
-        <section className="py-24 bg-slate-950">
+        <section className="py-24 bg-slate-950 relative">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 text-xs font-semibold text-amber-300 uppercase tracking-widest mb-4">
@@ -210,10 +218,18 @@ export default async function Home() {
             </div>
             <FeaturedRooms rooms={rooms} />
           </div>
+
+          {/* Wave Divider to Hotel Amenities */}
+          <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-900">
+              <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-40 fill-sky-200/20" />
+              <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
+            </svg>
+          </div>
         </section>
 
         {/* HOTEL AMENITIES */}
-        <section className="py-24 bg-slate-900/30 border-t border-slate-900 relative">
+        <section className="py-24 bg-slate-900 relative">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 text-xs font-semibold text-teal-300 uppercase tracking-widest mb-4">
@@ -243,10 +259,18 @@ export default async function Home() {
               })}
             </div>
           </div>
+
+          {/* Wave Divider to Bottom CTA */}
+          <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-950 scale-x-[-1]">
+              <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-teal-200/10" />
+              <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
+            </svg>
+          </div>
         </section>
 
         {/* BOTTOM CTA: DARK OCEAN */}
-        <section className="py-24 lg:py-32 bg-slate-950 text-white relative overflow-hidden border-t border-slate-900">
+        <section className="py-24 lg:py-32 bg-slate-950 text-white relative overflow-hidden">
           <div className="absolute inset-0 opacity-40 z-0">
             <Image
               src="https://images.unsplash.com/photo-1683459285195-2bff6b201b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200"
