@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { CuteFishPreloader } from "../ui/CuteFishPreloader";
 
+const MAX_RIPPLES = 15;
+
 export default function OceanScene() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -15,7 +17,6 @@ export default function OceanScene() {
     let animationId: number;
     const clock = new THREE.Clock();
 
-    // ОПТИМИЗАЦИЯ 1: antialias: false (бесполезно для Raymarching), powerPreference для включения мощной GPU
     const renderer = new THREE.WebGLRenderer({
       canvas,
       antialias: false,
@@ -23,8 +24,6 @@ export default function OceanScene() {
       powerPreference: "high-performance"
     });
 
-    // ОПТИМИЗАЦИЯ 2: Жестко фиксируем Pixel Ratio на 1. 
-    // Raymarching на 2x съедает любой современный GPU на высоких разрешениях.
     renderer.setPixelRatio(1);
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
     renderer.autoClear = false;
@@ -46,6 +45,7 @@ export default function OceanScene() {
       uniform vec3 iResolution;
       uniform float iTime;
       uniform vec4 iMouse;
+      uniform vec3 uRipples[${MAX_RIPPLES}]; // Массив кругов на воде (x, z, time)
       
       const float PI = 3.141592;
       const float EPSILON = 1e-3;
@@ -104,6 +104,7 @@ export default function OceanScene() {
           return pow(1.0-pow(wv.x * wv.y,0.65),choppy);
       }
 
+      // Базовая геометрия моря (без волн от мыши для оптимизации)
       float map(vec3 p) {
           float freq = 0.16;
           float amp = 0.6;
@@ -122,6 +123,7 @@ export default function OceanScene() {
           return p.y - h;
       }
 
+      // Детализированная геометрия: сюда добавляем круги от кликов
       float map_detailed(vec3 p) {
           float freq = 0.16;
           float amp = 0.6;
@@ -137,6 +139,26 @@ export default function OceanScene() {
               uv *= octave_m; freq *= 1.9; amp *= 0.22;
               choppy = mix(choppy,1.0,0.2);
           }
+
+          // Добавляем интерактивные круги на воде (Bump Mapping)
+          float ripple = 0.0;
+          for(int j = 0; j < ${MAX_RIPPLES}; j++) {
+              float age = iTime - uRipples[j].z;
+              if(age > 0.0 && age < 4.0) {
+                  float dist = length(p.xz - uRipples[j].xy);
+                  float front = age * 6.0; // Скорость расширения круга
+                  float diff = dist - front;
+                  // Просчитываем волну только рядом с фронтом
+                  if(diff < 1.0 && diff > -2.5) {
+                      float env = smoothstep(1.0, 0.0, abs(diff + 0.75) - 0.75);
+                      float wave = sin(dist * 5.0 - age * 30.0);
+                      float decay = exp(-age * 1.5); // Затухание со временем
+                      ripple += wave * env * decay * 0.8;
+                  }
+              }
+          }
+          h += ripple;
+
           return p.y - h;
       }
 
@@ -222,6 +244,8 @@ export default function OceanScene() {
       }
     `;
 
+    const ripplesArray = Array(MAX_RIPPLES).fill(null).map(() => new THREE.Vector3(0, 0, -999));
+
     const oceanMaterial = new THREE.ShaderMaterial({
       vertexShader,
       fragmentShader,
@@ -229,8 +253,9 @@ export default function OceanScene() {
         iResolution: { value: new THREE.Vector3(canvas.clientWidth, canvas.clientHeight, 1) },
         iTime: { value: 0 },
         iMouse: { value: new THREE.Vector4(0, 0, 0, 0) },
+        uRipples: { value: ripplesArray }
       },
-      depthWrite: false, // ОПТИМИЗАЦИЯ: Фон не должен писать в буфер глубины
+      depthWrite: false,
     });
 
     const bgMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), oceanMaterial);
@@ -242,58 +267,91 @@ export default function OceanScene() {
 
     const birdGeo = new THREE.BufferGeometry();
     const vertices = new Float32Array([
-      0, 0, 0,
-      -1, 0.2, -0.5,
-      0, 0, -1.0,
-      0, 0, 0,
-      1, 0.2, -0.5,
-      0, 0, -1.0,
+      0, 0, 0, -1, 0.2, -0.5, 0, 0, -1.0,
+      0, 0, 0, 1, 0.2, -0.5, 0, 0, -1.0,
     ]);
     birdGeo.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
     birdGeo.computeVertexNormals();
 
     const birdMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-
     const NUM_BIRDS = 15;
     const birds: { mesh: THREE.Mesh; speed: number; offset: number; targetY: number }[] = [];
 
     for (let i = 0; i < NUM_BIRDS; i++) {
       const mesh = new THREE.Mesh(birdGeo, birdMat);
-      mesh.position.set(
-        (Math.random() - 0.5) * 40,
-        Math.random() * 5 + 2,
-        (Math.random() - 0.5) * -30 - 10
-      );
+      mesh.position.set((Math.random() - 0.5) * 40, Math.random() * 5 + 2, (Math.random() - 0.5) * -30 - 10);
       mesh.scale.set(0.15, 0.15, 0.15);
-
-      birds.push({
-        mesh,
-        speed: 0.05 + Math.random() * 0.03,
-        offset: Math.random() * Math.PI * 2,
-        targetY: mesh.position.y
-      });
+      birds.push({ mesh, speed: 0.05 + Math.random() * 0.03, offset: Math.random() * Math.PI * 2, targetY: mesh.position.y });
       birdScene.add(mesh);
     }
 
-    // ОПТИМИЗАЦИЯ 3: Кэшируем размеры для мыши, чтобы избежать Layout Thrashing
     let currentCanvasWidth = canvas.clientWidth;
     let currentCanvasHeight = canvas.clientHeight;
+    let rippleIndex = 0;
+    let lastRippleTime = 0;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      // Исключаем вызовы window.innerWidth / innerHeight в реал-тайм событии
-      const mouseX = e.clientX * 0.5;
-      const mouseY = (currentCanvasHeight - e.clientY) * 0.5;
-      oceanMaterial.uniforms.iMouse.value.set(mouseX, mouseY, 0, 0);
+    const spawnRipple = (clientX: number, clientY: number) => {
+      const baseTime = clock.getElapsedTime();
+      if (baseTime - lastRippleTime < 0.12) return; // Ограничитель спавна
+      lastRippleTime = baseTime;
+
+      const time = baseTime * 0.3 + oceanMaterial.uniforms.iMouse.value.x * 0.001;
+
+      let uvX = (clientX / currentCanvasWidth) * 2.0 - 1.0;
+      let uvY = -((clientY / currentCanvasHeight) * 2.0 - 1.0);
+      uvX *= currentCanvasWidth / currentCanvasHeight;
+
+      const angX = Math.sin(time * 3.0) * 0.1;
+      const angY = Math.sin(time) * 0.2 + 0.3;
+      const angZ = time;
+
+      const a1x = Math.sin(angX), a1y = Math.cos(angX);
+      const a2x = Math.sin(angY), a2y = Math.cos(angY);
+      const a3x = Math.sin(angZ), a3y = Math.cos(angZ);
+
+      const m0x = a1y * a3y + a1x * a2x * a3x, m0y = a1y * a2x * a3x + a3y * a1x, m0z = -a2y * a3x;
+      const m1x = -a2y * a1x, m1y = a1y * a2y, m1z = a2x;
+      const m2x = a3y * a1x * a2x + a1y * a3x, m2y = a1x * a3x - a1y * a3y * a2x, m2z = a2y * a3y;
+
+      let dx = uvX, dy = uvY, dz = -2.0;
+      let len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      dx /= len; dy /= len; dz /= len;
+
+      let uvLen = Math.sqrt(uvX * uvX + uvY * uvY);
+      dz += uvLen * 0.14;
+
+      len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      dx /= len; dy /= len; dz /= len;
+
+      const rx = dx * m0x + dy * m0y + dz * m0z;
+      const ry = dx * m1x + dy * m1y + dz * m1z;
+      const rz = dx * m2x + dy * m2y + dz * m2z;
+
+      const ox = 0.0, oy = 3.5, oz = time * 5.0;
+
+      if (ry >= 0) return;
+      const t = -oy / ry;
+      const hitX = ox + rx * t;
+      const hitZ = oz + rz * t;
+
+      ripplesArray[rippleIndex].set(hitX, hitZ, baseTime);
+      rippleIndex = (rippleIndex + 1) % MAX_RIPPLES;
     };
 
-    window.addEventListener("mousemove", handleMouseMove, { passive: true }); // Добавлен passive flag
+    const handlePointerDown = (e: PointerEvent) => spawnRipple(e.clientX, e.clientY);
+    const handlePointerMove = (e: PointerEvent) => {
+      oceanMaterial.uniforms.iMouse.value.set(e.clientX * 0.5, (currentCanvasHeight - e.clientY) * 0.5, 0, 0);
+      if (e.buttons > 0 || e.pointerType === "touch") spawnRipple(e.clientX, e.clientY);
+    };
+
+    window.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
 
     let resizeObserver: ResizeObserver;
     const handleResize = () => {
       if (!canvas) return;
       currentCanvasWidth = canvas.clientWidth;
       currentCanvasHeight = canvas.clientHeight;
-
       renderer.setSize(currentCanvasWidth, currentCanvasHeight, false);
       oceanMaterial.uniforms.iResolution.value.set(currentCanvasWidth, currentCanvasHeight, 1);
       birdCamera.aspect = currentCanvasWidth / currentCanvasHeight;
@@ -325,7 +383,6 @@ export default function OceanScene() {
         positions[1] = flap;
         positions[10] = flap;
         bird.mesh.geometry.attributes.position.needsUpdate = true;
-
         bird.mesh.rotation.z = Math.sin(elapsedTime * 2 + bird.offset) * 0.1;
       });
 
@@ -336,9 +393,7 @@ export default function OceanScene() {
 
       if (!isLoaded) {
         frameCount++;
-        if (frameCount === 3) {
-          setIsLoaded(true);
-        }
+        if (frameCount === 3) setIsLoaded(true);
       }
     };
 
@@ -347,7 +402,8 @@ export default function OceanScene() {
     return () => {
       cancelAnimationFrame(animationId);
       resizeObserver?.disconnect();
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointermove", handlePointerMove);
       renderer.dispose();
       oceanMaterial.dispose();
       birdGeo.dispose();
@@ -360,7 +416,7 @@ export default function OceanScene() {
       <CuteFishPreloader fadeOut={isLoaded} />
       <canvas
         ref={canvasRef}
-        className={`absolute inset-0 w-full h-full pointer-events-none transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute inset-0 w-full h-full pointer-events-auto cursor-pointer transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
         style={{ zIndex: 6 }}
       />
     </>
