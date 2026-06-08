@@ -39,7 +39,7 @@ export default function Footer() {
                 Отдых в Затоке
               </span>
             </Link>
-            <p className="text-slate-400 text-sm font-light">
+            <p className="text-slate-300 text-sm font-light">
               Ваш безмятежный морской отдых на побережье Черного моря.
             </p>
           </div>
@@ -47,14 +47,14 @@ export default function Footer() {
              <div>
                 <h3 className="font-bold text-white mb-4">Быстрые ссылки</h3>
                 <ul className="space-y-2">
-                    <li><Link href="/" className="text-sm text-slate-400 hover:text-teal-300 transition-colors">Главная</Link></li>
-                    <li><Link href="/about" className="text-sm text-slate-400 hover:text-teal-300 transition-colors">О нас</Link></li>
-                    <li><Link href="/booking" className="text-sm text-slate-400 hover:text-teal-300 transition-colors">Бронирование</Link></li>
+                    <li><Link href="/" className="text-sm text-slate-300 hover:text-teal-300 transition-colors">Главная</Link></li>
+                    <li><Link href="/about" className="text-sm text-slate-300 hover:text-teal-300 transition-colors">О нас</Link></li>
+                    <li><Link href="/booking" className="text-sm text-slate-300 hover:text-teal-300 transition-colors">Бронирование</Link></li>
                 </ul>
              </div>
              <div>
                 <h3 className="font-bold text-white mb-4">Контакты</h3>
-                <ul className="space-y-2 text-sm text-slate-400 font-light">
+                <ul className="space-y-2 text-sm text-slate-300 font-light">
                     <li>ул. Приморская, 1</li>
                     <li>Затока, Одесская область, 67772</li>
                     <li>contact@zatokagetaway.com</li>
@@ -64,20 +64,20 @@ export default function Footer() {
           <div className="md:ml-auto">
              <h3 className="font-bold text-white mb-4">Следите за нами</h3>
              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" asChild className="text-slate-400 hover:text-teal-300 hover:bg-white/5 rounded-full transition-all duration-300 hover:scale-110 hover:glow-teal">
+                <Button variant="ghost" size="icon" asChild className="text-slate-300 hover:text-teal-300 hover:bg-white/5 rounded-full transition-all duration-300 hover:scale-110 hover:glow-teal">
                     <a href="#" aria-label="Twitter"><Twitter className="h-5 w-5" /></a>
                 </Button>
-                <Button variant="ghost" size="icon" asChild className="text-slate-400 hover:text-teal-300 hover:bg-white/5 rounded-full transition-all duration-300 hover:scale-110">
+                <Button variant="ghost" size="icon" asChild className="text-slate-300 hover:text-teal-300 hover:bg-white/5 rounded-full transition-all duration-300 hover:scale-110">
                     <a href="#" aria-label="Facebook"><Facebook className="h-5 w-5" /></a>
                 </Button>
-                <Button variant="ghost" size="icon" asChild className="text-slate-400 hover:text-teal-300 hover:bg-white/5 rounded-full transition-all duration-300 hover:scale-110">
+                <Button variant="ghost" size="icon" asChild className="text-slate-300 hover:text-teal-300 hover:bg-white/5 rounded-full transition-all duration-300 hover:scale-110">
                     <a href="#" aria-label="Instagram"><Instagram className="h-5 w-5" /></a>
                 </Button>
              </div>
           </div>
         </div>
         <div className="mt-8 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-slate-500 font-light">&copy; {new Date().getFullYear()} Отдых в Затоке. Все права защищены.</p>
+            <p className="text-sm text-slate-400 font-light">&copy; {new Date().getFullYear()} Отдых в Затоке. Все права защищены.</p>
             {/* Decorative animated waves line */}
             <div className="flex items-center gap-1 mt-4 md:mt-0 opacity-30">
               {[...Array(5)].map((_, i) => (
