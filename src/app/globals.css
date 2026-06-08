@@ -365,4 +365,183 @@
   .animate-seagull {
     animation: fly-seagull 35s linear infinite;
   }
+
+  /* ============================================
+     NEW SEA ANIMATIONS
+  ============================================ */
+
+  /* Ocean shimmer — light reflection on water surface */
+  @keyframes ocean-shimmer {
+    0%, 100% {
+      background-position: 0% 50%;
+      filter: brightness(1);
+    }
+    33% {
+      background-position: 100% 50%;
+      filter: brightness(1.15);
+    }
+    66% {
+      background-position: 50% 100%;
+      filter: brightness(0.9);
+    }
+  }
+
+  .animate-ocean-shimmer {
+    background-size: 200% 200%;
+    animation: ocean-shimmer 6s ease-in-out infinite;
+  }
+
+  /* Deep pulse — deep ocean heartbeat */
+  @keyframes deep-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.06); opacity: 1; }
+  }
+
+  .animate-deep-pulse {
+    animation: deep-pulse 4s ease-in-out infinite;
+  }
+
+  /* Current drift — slow horizontal drift like ocean current */
+  @keyframes current {
+    0% { transform: translateX(-8px) rotate(-1deg); }
+    50% { transform: translateX(8px) rotate(1deg); }
+    100% { transform: translateX(-8px) rotate(-1deg); }
+  }
+
+  .animate-current {
+    animation: current 8s ease-in-out infinite;
+  }
+
+  /* Coral sway — swaying like coral in gentle current */
+  @keyframes coral-sway {
+    0%, 100% { transform: rotate(-4deg) translateY(0); }
+    25% { transform: rotate(3deg) translateY(-2px); }
+    75% { transform: rotate(-2deg) translateY(1px); }
+  }
+
+  .animate-coral-sway {
+    animation: coral-sway 5s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+
+  /* Jellyfish float — vertical pulsing float */
+  @keyframes jellyfish {
+    0%, 100% { transform: translateY(0) scaleX(1) scaleY(1); }
+    25% { transform: translateY(-12px) scaleX(1.05) scaleY(0.95); }
+    50% { transform: translateY(-18px) scaleX(0.95) scaleY(1.05); }
+    75% { transform: translateY(-8px) scaleX(1.02) scaleY(0.98); }
+  }
+
+  .animate-jellyfish {
+    animation: jellyfish 6s ease-in-out infinite;
+  }
+
+  /* Fish swim — small fish swimming across the screen */
+  @keyframes fish-swim {
+    0% {
+      transform: translateX(-15vw) translateY(0) scaleX(1);
+      opacity: 0;
+    }
+    5% { opacity: 0.6; }
+    48% { transform: translateX(50vw) translateY(-20px) scaleX(1); }
+    50% { transform: translateX(52vw) translateY(-22px) scaleX(-1); }
+    95% { opacity: 0.6; }
+    100% {
+      transform: translateX(115vw) translateY(5px) scaleX(-1);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fish-swim-2 {
+    0% {
+      transform: translateX(115vw) translateY(0) scaleX(-1);
+      opacity: 0;
+    }
+    5% { opacity: 0.5; }
+    100% {
+      transform: translateX(-15vw) translateY(15px) scaleX(-1);
+      opacity: 0;
+    }
+  }
+
+  .animate-fish {
+    animation: fish-swim var(--fish-duration, 28s) linear infinite;
+    animation-delay: var(--fish-delay, 0s);
+  }
+
+  .animate-fish-2 {
+    animation: fish-swim-2 var(--fish-duration, 36s) linear infinite;
+    animation-delay: var(--fish-delay, 0s);
+  }
+
+  /* Foam line — bubbling sea foam */
+  @keyframes foam-move {
+    0% { transform: translateX(0); opacity: 0.5; }
+    50% { opacity: 0.9; }
+    100% { transform: translateX(-50%); opacity: 0.5; }
+  }
+
+  .animate-foam {
+    animation: foam-move 16s linear infinite;
+  }
+
+  /* Tide in — scroll reveal: like a tide washing in */
+  @keyframes tide-in {
+    0% { opacity: 0; transform: translateY(40px) scale(0.97); }
+    60% { opacity: 1; }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .animate-tide-in {
+    animation: tide-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  /* Spin slow — for compass/anchor etc */
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 8s linear infinite;
+  }
+
+  /* Underwater light rays */
+  @keyframes light-ray {
+    0%, 100% { opacity: 0.04; transform: scaleX(1) skewX(0deg); }
+    50% { opacity: 0.12; transform: scaleX(1.1) skewX(2deg); }
+  }
+
+  .animate-light-ray {
+    animation: light-ray 6s ease-in-out infinite;
+  }
+
+  /* Stagger children helper */
+  .stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+  .stagger-children > *:nth-child(2) { animation-delay: 120ms; }
+  .stagger-children > *:nth-child(3) { animation-delay: 240ms; }
+  .stagger-children > *:nth-child(4) { animation-delay: 360ms; }
+  .stagger-children > *:nth-child(5) { animation-delay: 480ms; }
+  .stagger-children > *:nth-child(6) { animation-delay: 600ms; }
+  .stagger-children > *:nth-child(7) { animation-delay: 720ms; }
+  .stagger-children > *:nth-child(8) { animation-delay: 840ms; }
+
+  /* Glow teal — for teal elements */
+  .glow-teal {
+    filter: drop-shadow(0 0 8px rgba(20, 184, 166, 0.6));
+  }
+
+  .glow-sky {
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
+  }
+
+  /* Underwater particle dots */
+  .deep-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(125, 211, 252, 0.8), rgba(20, 184, 166, 0.2));
+    pointer-events: none;
+    animation: bubble-rise var(--bubble-duration, 15s) ease-in infinite;
+    animation-delay: var(--bubble-delay, 0s);
+  }
 }

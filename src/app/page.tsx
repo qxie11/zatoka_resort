@@ -7,9 +7,12 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { amenities } from '@/lib/data';
 import { getRooms } from '@/lib/db';
 import FeaturedRooms from '@/components/rooms/FeaturedRooms';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { ArrowRight, Waves, Wifi, UtensilsCrossed, Sun, HeartPulse, Car, ConciergeBell, Dumbbell, Star, MapPin, Compass, ShieldCheck } from 'lucide-react';
 import type { LucideProps } from 'lucide-react';
 import { WavyUnderline } from '@/components/ui/wavy-underline';
+
+import OceanSceneClient from '@/components/three/OceanSceneClient';
 
 const iconMap: { [key: string]: React.FC<LucideProps> } = {
   Waves,
@@ -31,22 +34,49 @@ export default async function Home() {
       <main className="flex-1">
         {/* HERO SECTION */}
         <section className="relative w-full min-h-[90vh] lg:min-h-screen flex items-center overflow-hidden bg-slate-900 py-16 lg:py-0">
-          {heroImage && (
-            <div className="absolute inset-0 z-0">
-              <Image
-                src={heroImage.imageUrl}
-                alt={heroImage.description}
-                fill
-                className="object-cover scale-105 animate-float-slow opacity-80 brightness-[0.7]"
-                priority
-                data-ai-hint={heroImage.imageHint}
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/70 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40" />
-              {/* Underwater Caustics Effect */}
-              <div className="absolute inset-0 bg-caustics opacity-40 mix-blend-screen pointer-events-none" />
-            </div>
-          )}
+          {/* Original static hero image removed in favor of 3D Ocean Scene */}
+
+          {/* THREE.JS OCEAN SCENE */}
+          <OceanSceneClient />
+
+          {/* Dark gradient overlays to ensure text readability over the bright 3D scene */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/60 to-transparent pointer-events-none z-[8]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40 pointer-events-none z-[8]" />
+
+          {/* Underwater light rays */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-[7]">
+            <div className="absolute top-0 left-[15%] w-24 h-full bg-gradient-to-b from-teal-300/5 via-sky-300/3 to-transparent skew-x-12 animate-light-ray" />
+            <div className="absolute top-0 left-[35%] w-16 h-full bg-gradient-to-b from-sky-200/4 via-teal-300/2 to-transparent skew-x-6 animate-light-ray" style={{ animationDelay: '2s' }} />
+            <div className="absolute top-0 right-[20%] w-20 h-full bg-gradient-to-b from-teal-400/4 via-transparent to-transparent -skew-x-8 animate-light-ray" style={{ animationDelay: '4s' }} />
+          </div>
+
+          {/* Swimming fish layer */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-[7]">
+            {/* Fish 1 — small, top area */}
+            <svg
+              className="absolute animate-fish w-6 h-4 text-teal-300/40 fill-current"
+              style={{ top: '28%', '--fish-duration': '32s', '--fish-delay': '3s' } as React.CSSProperties}
+              viewBox="0 0 40 24"
+            >
+              <path d="M30,12 C30,12 40,6 40,12 C40,18 30,12 30,12 Z M5,12 C5,12 0,6 5,12 C5,18 10,22 20,20 C28,18 30,14 30,12 C30,10 28,6 20,4 C10,2 5,6 5,12 Z M8,11 C8,10 9,9 10,9 C11,9 12,10 12,11 C12,12 11,13 10,13 C9,13 8,12 8,11 Z" />
+            </svg>
+            {/* Fish 2 — medium, middle-low */}
+            <svg
+              className="absolute animate-fish-2 w-8 h-5 text-sky-300/35 fill-current"
+              style={{ top: '62%', '--fish-duration': '45s', '--fish-delay': '8s' } as React.CSSProperties}
+              viewBox="0 0 40 24"
+            >
+              <path d="M30,12 C30,12 40,6 40,12 C40,18 30,12 30,12 Z M5,12 C5,12 0,6 5,12 C5,18 10,22 20,20 C28,18 30,14 30,12 C30,10 28,6 20,4 C10,2 5,6 5,12 Z M8,11 C8,10 9,9 10,9 C11,9 12,10 12,11 C12,12 11,13 10,13 C9,13 8,12 8,11 Z" />
+            </svg>
+            {/* Fish 3 — tiny, near bottom */}
+            <svg
+              className="absolute animate-fish w-4 h-3 text-teal-200/30 fill-current"
+              style={{ top: '78%', '--fish-duration': '25s', '--fish-delay': '15s' } as React.CSSProperties}
+              viewBox="0 0 40 24"
+            >
+              <path d="M30,12 C30,12 40,6 40,12 C40,18 30,12 30,12 Z M5,12 C5,12 0,6 5,12 C5,18 10,22 20,20 C28,18 30,14 30,12 C30,10 28,6 20,4 C10,2 5,6 5,12 Z M8,11 C8,10 9,9 10,9 C11,9 12,10 12,11 C12,12 11,13 10,13 C9,13 8,12 8,11 Z" />
+            </svg>
+          </div>
 
           {/* Animated Seagull */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
@@ -81,16 +111,16 @@ export default async function Home() {
                 </div>
  
                 {/* Heading with glowing highlights & elegant tracking */}
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight animate-fade-in-up">
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight animate-fade-in-up drop-shadow-2xl">
                   Ваш идеальный <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md animate-ocean-shimmer">
                     морской побег
                   </span> <br />
                   в Затоке
                 </h1>
  
                 {/* Description */}
-                <p className="max-w-xl text-base md:text-lg text-slate-200 font-light leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards]">
+                <p className="max-w-xl text-base md:text-lg text-slate-100 font-medium leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards] drop-shadow-lg">
                   Испытайте несравненный пятизвездочный комфорт, ласковые волны и захватывающие дух панорамные виды на Черное море.
                 </p>
  
@@ -155,10 +185,10 @@ export default async function Home() {
                 </div>
 
                 {/* Extra Floating Badge */}
-                <div className="absolute -top-4 -right-4 p-4 rounded-2xl glass-card-dark text-white border border-white/10 shadow-xl animate-float hidden sm:block">
+                <div className="absolute -top-4 -right-4 p-4 rounded-2xl glass-card-dark text-white border border-white/10 shadow-xl animate-jellyfish hidden sm:block">
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-full bg-teal-400/20 flex items-center justify-center">
-                      <Waves className="h-5 w-5 text-teal-300" />
+                      <Waves className="h-5 w-5 text-teal-300 animate-coral-sway" />
                     </div>
                     <div>
                       <p className="text-xs text-slate-300">Температура воды</p>
@@ -194,39 +224,64 @@ export default async function Home() {
         <section className="py-24 relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900">
           {/* Bubble Particles */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-            {[...Array(10)].map((_, i) => (
+            {[...Array(12)].map((_, i) => (
               <span
                 key={i}
                 className="bubble-particle"
                 style={{
-                  left: `${i * 10 + Math.random() * 8}%`,
-                  width: `${Math.random() * 12 + 6}px`,
-                  height: `${Math.random() * 12 + 6}px`,
-                  '--bubble-duration': `${Math.random() * 8 + 8}s`,
-                  '--bubble-delay': `${Math.random() * 6}s`,
-                  '--bubble-drift': `${Math.random() * 50 - 25}px`,
+                  left: `${i * 8.5 + 2}%`,
+                  width: `${(i % 3) * 6 + 6}px`,
+                  height: `${(i % 3) * 6 + 6}px`,
+                  '--bubble-duration': `${(i % 4) * 4 + 9}s`,
+                  '--bubble-delay': `${(i % 6) * 1.2}s`,
+                  '--bubble-drift': `${(i % 2 === 0 ? 1 : -1) * (i * 7 + 15)}px`,
                 } as React.CSSProperties}
               />
             ))}
           </div>
 
+          {/* Deep particles (smaller, faster) */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+            {[...Array(8)].map((_, i) => (
+              <span
+                key={i}
+                className="deep-particle"
+                style={{
+                  left: `${i * 13 + 5}%`,
+                  width: `${3 + (i % 3)}px`,
+                  height: `${3 + (i % 3)}px`,
+                  '--bubble-duration': `${6 + i * 1.5}s`,
+                  '--bubble-delay': `${i * 0.8}s`,
+                  '--bubble-drift': `${(i % 2 === 0 ? 1 : -1) * 20}px`,
+                } as React.CSSProperties}
+              />
+            ))}
+          </div>
+
+          {/* Background wave icon */}
           <div className="absolute inset-0 opacity-10 pointer-events-none">
-            <div className="absolute top-1/2 left-5 animate-float">
+            <div className="absolute top-1/2 left-5 animate-current">
               <Waves className="h-32 w-32 text-teal-400/20" />
             </div>
           </div>
           
           <div className="container mx-auto px-4 text-center relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 text-xs font-semibold text-teal-300 uppercase tracking-widest mb-4">
-              <span>Эксклюзивный сервис</span>
-            </div>
-            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              Добро пожаловать в "Отдых в Затоке"
-            </h2>
-            <WavyUnderline colorClassName='text-teal-300' />
-            <p className="mt-6 max-w-3xl mx-auto text-slate-300 text-lg md:text-xl font-light leading-relaxed">
-              Расположенный на безмятежном побережье Черного моря, "Отдых в Затоке" предлагает идеальное сочетание роскоши, комфорта и природной красоты. Ищете ли вы романтический уик-энд или семейное приключение, наш отель — ваше идеальное место для незабываемого отдыха.
-            </p>
+            <ScrollReveal variant="fade-up">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 text-xs font-semibold text-teal-300 uppercase tracking-widest mb-4">
+                <span>Эксклюзивный сервис</span>
+              </div>
+            </ScrollReveal>
+            <ScrollReveal variant="tide-in" delay={100}>
+              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                Добро пожаловать в &quot;Отдых в Затоке&quot;
+              </h2>
+              <WavyUnderline colorClassName='text-teal-300' />
+            </ScrollReveal>
+            <ScrollReveal variant="fade-up" delay={200}>
+              <p className="mt-6 max-w-3xl mx-auto text-slate-300 text-lg md:text-xl font-light leading-relaxed">
+                Расположенный на безмятежном побережье Черного моря, &quot;Отдых в Затоке&quot; предлагает идеальное сочетание роскоши, комфорта и природной красоты. Ищете ли вы романтический уик-энд или семейное приключение, наш отель — ваше идеальное место для незабываемого отдыха.
+              </p>
+            </ScrollReveal>
           </div>
 
           {/* Wave Divider to Featured Rooms */}
@@ -239,19 +294,36 @@ export default async function Home() {
         </section>
 
         {/* FEATURED ROOMS SECTION */}
-        <section className="py-24 bg-slate-950 relative">
+        <section className="py-24 bg-slate-950 relative overflow-hidden">
+          {/* Subtle fish in background */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-60">
+            <svg
+              className="absolute animate-fish w-10 h-6 text-teal-900/60 fill-current"
+              style={{ top: '45%', '--fish-duration': '55s', '--fish-delay': '5s' } as React.CSSProperties}
+              viewBox="0 0 40 24"
+            >
+              <path d="M30,12 C30,12 40,6 40,12 C40,18 30,12 30,12 Z M5,12 C5,12 0,6 5,12 C5,18 10,22 20,20 C28,18 30,14 30,12 C30,10 28,6 20,4 C10,2 5,6 5,12 Z M8,11 C8,10 9,9 10,9 C11,9 12,10 12,11 C12,12 11,13 10,13 C9,13 8,12 8,11 Z" />
+            </svg>
+          </div>
+
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 text-xs font-semibold text-amber-300 uppercase tracking-widest mb-4">
-                <span>Идеальный комфорт</span>
-              </div>
-              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                Наши избранные номера
-              </h2>
-              <WavyUnderline />
-              <p className="mt-4 max-w-2xl mx-auto text-slate-300 text-lg font-light">
-                Элегантно оформленные номера и роскошные люксы для вашего максимального расслабления.
-              </p>
+              <ScrollReveal variant="fade-up">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 text-xs font-semibold text-amber-300 uppercase tracking-widest mb-4">
+                  <span>Идеальный комфорт</span>
+                </div>
+              </ScrollReveal>
+              <ScrollReveal variant="tide-in" delay={100}>
+                <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                  Наши избранные номера
+                </h2>
+                <WavyUnderline />
+              </ScrollReveal>
+              <ScrollReveal variant="fade-up" delay={200}>
+                <p className="mt-4 max-w-2xl mx-auto text-slate-300 text-lg font-light">
+                  Элегантно оформленные номера и роскошные люксы для вашего максимального расслабления.
+                </p>
+              </ScrollReveal>
             </div>
             <FeaturedRooms rooms={rooms} />
           </div>
@@ -266,32 +338,62 @@ export default async function Home() {
         </section>
 
         {/* HOTEL AMENITIES */}
-        <section className="py-24 bg-slate-900 relative">
+        <section className="py-24 bg-slate-900 relative overflow-hidden">
+          {/* Jellyfish decoration — big background blob */}
+          <div className="absolute top-10 right-10 w-64 h-64 rounded-full bg-teal-500/5 animate-jellyfish pointer-events-none" />
+          <div className="absolute bottom-20 left-5 w-40 h-40 rounded-full bg-sky-500/5 animate-jellyfish pointer-events-none" style={{ animationDelay: '3s' }} />
+
+          {/* Floating bubbles in amenity section */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+            {[...Array(8)].map((_, i) => (
+              <span
+                key={i}
+                className="bubble-particle"
+                style={{
+                  left: `${i * 13 + 3}%`,
+                  width: `${5 + (i % 4) * 3}px`,
+                  height: `${5 + (i % 4) * 3}px`,
+                  '--bubble-duration': `${10 + i * 2}s`,
+                  '--bubble-delay': `${i * 1.5}s`,
+                  '--bubble-drift': `${(i % 2 === 0 ? 1 : -1) * 30}px`,
+                } as React.CSSProperties}
+              />
+            ))}
+          </div>
+
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 text-xs font-semibold text-teal-300 uppercase tracking-widest mb-4">
-                <span>Всё включено</span>
-              </div>
-              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                Удобства отеля
-              </h2>
-              <WavyUnderline colorClassName='text-teal-300'/>
-              <p className="mt-4 max-w-2xl mx-auto text-slate-300 text-lg font-light">
-                Всё, что вам может понадобиться для безупречного и беззаботного отпуска у моря.
-              </p>
+              <ScrollReveal variant="fade-up">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 text-xs font-semibold text-teal-300 uppercase tracking-widest mb-4">
+                  <span>Всё включено</span>
+                </div>
+              </ScrollReveal>
+              <ScrollReveal variant="tide-in" delay={100}>
+                <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                  Удобства отеля
+                </h2>
+                <WavyUnderline colorClassName='text-teal-300'/>
+              </ScrollReveal>
+              <ScrollReveal variant="fade-up" delay={200}>
+                <p className="mt-4 max-w-2xl mx-auto text-slate-300 text-lg font-light">
+                  Всё, что вам может понадобиться для безупречного и беззаботного отпуска у моря.
+                </p>
+              </ScrollReveal>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center stagger-children">
               {amenities.slice(0, 8).map((amenity, index) => {
                 const Icon = iconMap[amenity.icon];
                 return (
-                  <div key={amenity.name} className="flex flex-col items-center p-6 rounded-3xl glass-card-dark border border-white/10 marine-3d-card hover:bg-slate-900/60 hover:border-teal-400/50 hover:shadow-2xl transition-all duration-500 group">
-                    <div className="bg-teal-500/10 p-5 rounded-2xl transition-smooth hover:bg-teal-500/25 relative group/icon text-teal-300 marine-3d-card-inner">
-                      {Icon && <Icon className="h-8 w-8 text-teal-400 transition-smooth group-hover/icon:animate-float-slow" />}
-                      <div className="absolute inset-0 rounded-2xl bg-teal-500/5 opacity-0 group-hover/icon:opacity-100 group-hover/icon:animate-water-ripple transition-opacity" />
+                  <ScrollReveal key={amenity.name} variant="scale-in" delay={index * 80}>
+                    <div className="flex flex-col items-center p-6 rounded-3xl glass-card-dark border border-white/10 marine-3d-card hover:bg-slate-900/60 hover:border-teal-400/50 hover:shadow-2xl transition-all duration-500 group h-full">
+                      <div className="bg-teal-500/10 p-5 rounded-2xl transition-smooth hover:bg-teal-500/25 relative group/icon text-teal-300 marine-3d-card-inner">
+                        {Icon && <Icon className="h-8 w-8 text-teal-400 transition-smooth group-hover/icon:animate-coral-sway glow-teal" />}
+                        <div className="absolute inset-0 rounded-2xl bg-teal-500/5 opacity-0 group-hover/icon:opacity-100 group-hover/icon:animate-water-ripple transition-opacity" />
+                      </div>
+                      <h3 className="mt-5 text-lg font-bold text-white marine-3d-card-inner">{amenity.name}</h3>
                     </div>
-                    <h3 className="mt-5 text-lg font-bold text-white marine-3d-card-inner">{amenity.name}</h3>
-                  </div>
+                  </ScrollReveal>
                 );
               })}
             </div>
@@ -317,22 +419,53 @@ export default async function Home() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950" />
           </div>
+
+          {/* CTA foam line at top */}
+          <div className="absolute top-0 left-0 right-0 pointer-events-none overflow-hidden h-3 z-10 opacity-30">
+            <svg viewBox="0 0 2400 12" preserveAspectRatio="none" className="w-[200%] h-full animate-foam fill-teal-300/60">
+              <path d="M0,6 C60,2 120,10 180,6 C240,2 300,10 360,6 C420,2 480,10 540,6 C600,2 660,10 720,6 C780,2 840,10 900,6 C960,2 1020,10 1080,6 C1140,2 1200,10 1260,6 C1320,2 1380,10 1440,6 C1500,2 1560,10 1620,6 C1680,2 1740,10 1800,6 C1860,2 1920,10 1980,6 C2040,2 2100,10 2160,6 C2220,2 2280,10 2340,6 C2400,2 2400,10 2400,6 L2400,12 L0,12 Z" />
+            </svg>
+          </div>
+
+          {/* CTA bubbles */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+            {[...Array(10)].map((_, i) => (
+              <span
+                key={i}
+                className="bubble-particle"
+                style={{
+                  left: `${i * 10 + 3}%`,
+                  width: `${4 + (i % 5) * 4}px`,
+                  height: `${4 + (i % 5) * 4}px`,
+                  '--bubble-duration': `${8 + i * 2.5}s`,
+                  '--bubble-delay': `${i * 1.1}s`,
+                  '--bubble-drift': `${(i % 2 === 0 ? 1 : -1) * (i * 8 + 20)}px`,
+                } as React.CSSProperties}
+              />
+            ))}
+          </div>
           
           <div className="container mx-auto px-4 text-center relative z-10 space-y-6">
-            <h2 className="text-3xl md:text-6xl font-extrabold tracking-tight leading-tight">
-              Готовы к вашему идеальному отдыху?
-            </h2>
-            <p className="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-slate-300 font-light leading-relaxed">
-              Берега Затоки зовут. Забронируйте отпуск своей мечты сегодня и создайте воспоминания, которые останутся на всю жизнь.
-            </p>
-            <div className="pt-6">
-              <Button asChild size="lg" className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 hover:scale-105 active:scale-95 transition-all duration-300 h-12 px-8 rounded-xl water-reflection">
-                <Link href="/booking" className="flex items-center">
-                  Забронировать номер сейчас
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            </div>
+            <ScrollReveal variant="tide-in">
+              <h2 className="text-3xl md:text-6xl font-extrabold tracking-tight leading-tight">
+                Готовы к вашему идеальному отдыху?
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal variant="fade-up" delay={150}>
+              <p className="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-slate-300 font-light leading-relaxed">
+                Берега Затоки зовут. Забронируйте отпуск своей мечты сегодня и создайте воспоминания, которые останутся на всю жизнь.
+              </p>
+            </ScrollReveal>
+            <ScrollReveal variant="scale-in" delay={300}>
+              <div className="pt-6">
+                <Button asChild size="lg" className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 hover:scale-105 active:scale-95 transition-all duration-300 h-12 px-8 rounded-xl water-reflection animate-deep-pulse">
+                  <Link href="/booking" className="flex items-center">
+                    Забронировать номер сейчас
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

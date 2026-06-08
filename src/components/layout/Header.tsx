@@ -51,8 +51,8 @@ export default function Header() {
           className="flex items-center gap-2 group"
           onClick={() => setIsMobileMenuOpen(false)}
         >
-          <Waves className="h-6 w-6 text-teal-400 group-hover:animate-float" />
-          <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300">
+          <Waves className="h-6 w-6 text-teal-400 group-hover:animate-coral-sway glow-teal" />
+          <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 group-hover:animate-ocean-shimmer">
             Отдых в Затоке
           </span>
         </Link>
