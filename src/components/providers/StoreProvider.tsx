@@ -8,12 +8,19 @@ import { I18nextProvider } from 'react-i18next';
 
 export default function StoreProvider({
   children,
+  lang,
 }: {
   children: React.ReactNode;
+  lang: string;
 }) {
   const storeRef = useRef<AppStore>();
   if (!storeRef.current) {
     storeRef.current = makeStore();
+  }
+
+  // Sync i18n language on SSR and initial client load
+  if (i18n.language !== lang) {
+    i18n.changeLanguage(lang);
   }
 
   return (

@@ -362,8 +362,9 @@ if (!i18n.isInitialized) {
         escapeValue: false,
       },
       detection: {
-        order: ["querystring", "localStorage", "navigator", "htmlTag"],
-        caches: ["localStorage"],
+        order: ["querystring", "cookie", "localStorage", "navigator", "htmlTag"],
+        caches: ["cookie", "localStorage"],
+        lookupCookie: "lang",
       },
     });
 }

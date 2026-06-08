@@ -10,6 +10,8 @@ import NextTopLoader from 'nextjs-toploader';
 import { GlobalMarineBackground } from "@/components/decorative/GlobalMarineBackground";
 import { StickyBookingBar } from "@/components/conversion/StickyBookingBar";
 
+import { cookies } from "next/headers";
+
 const fontSans = Nunito({
   subsets: ["latin", "cyrillic"],
   variable: "--font-sans",
@@ -75,13 +77,16 @@ export const viewport: Viewport = {
   themeColor: "#020617",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("lang")?.value || "ru";
+
   return (
-    <html lang="ru" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <head />
       <body
         className={cn(
@@ -91,7 +96,7 @@ export default function RootLayout({
         )}
         suppressHydrationWarning
       >
-        <StoreProvider>
+        <StoreProvider lang={lang}>
           <NextTopLoader 
             color="#2dd4bf" 
             initialPosition={0.08}
