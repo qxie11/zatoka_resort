@@ -4,8 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { format } from "date-fns";
-import { ru } from "date-fns/locale";
+import { ru, uk, enUS } from "date-fns/locale";
 import { CalendarIcon, Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -27,20 +29,15 @@ import { toast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { Room, Booking } from "@/lib/types";
+import i18n from "@/lib/i18n";
 
-const FormSchema = z.object({
-  dateRange: z.object({
-    from: z.date({
-      required_error: "Дата заезда обязательна.",
-    }),
-    to: z.date({
-      required_error: "Дата выезда обязательна.",
-    }),
-  }),
-  guests: z.coerce
-    .number()
-    .min(1, { message: "Требуется как минимум один гость." }),
-});
+const dateFnsLocales = {
+  ru,
+  uk,
+  en: enUS,
+};
+
+type SupportedLanguage = "ru" | "uk" | "en";
 
 interface BookingFormProps {
   rooms: Room[];
@@ -53,6 +50,42 @@ export default function BookingForm({
   bookings,
   onFilterChange,
 }: BookingFormProps) {
+  const { t, i18n: i18nInstance } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+  const [currentLang, setCurrentLang] = useState<SupportedLanguage>("ru");
+
+  useEffect(() => {
+    setMounted(true);
+    const lang = (i18nInstance.language || "ru").slice(0, 2) as SupportedLanguage;
+    setCurrentLang(dateFnsLocales[lang] ? lang : "en");
+
+    const handleLangChange = (lng: string) => {
+      const detected = lng.slice(0, 2) as SupportedLanguage;
+      setCurrentLang(dateFnsLocales[detected] ? detected : "en");
+    };
+
+    i18n.on("languageChanged", handleLangChange);
+    return () => {
+      i18n.off("languageChanged", handleLangChange);
+    };
+  }, [i18nInstance]);
+
+  const activeLocale = dateFnsLocales[currentLang] || ru;
+
+  const FormSchema = z.object({
+    dateRange: z.object({
+      from: z.date({
+        required_error: t("dateRequired"),
+      }),
+      to: z.date({
+        required_error: t("dateOutRequired"),
+      }),
+    }),
+    guests: z.coerce
+      .number()
+      .min(1, { message: t("minGuests") }),
+  });
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -98,18 +131,22 @@ export default function BookingForm({
 
     if (filteredRooms.length === 0) {
       toast({
-        title: "Номера не найдены",
-        description:
-          "К сожалению, на выбранные даты нет доступных номеров с подходящей вместимостью.",
+        title: t("roomsNotFoundToastTitle"),
+        description: t("roomsNotFoundToastDesc"),
         variant: "destructive",
       });
     } else {
       toast({
-        title: "Найдено номеров",
-        description: `Найдено ${filteredRooms.length} доступных номеров на выбранные даты.`,
+        title: t("roomsFoundToastTitle"),
+        description: t("roomsFoundToastDesc", { count: filteredRooms.length }),
       });
     }
   }
+
+  const translate = (key: string, fallback: string) => {
+    if (!mounted) return fallback;
+    return t(key);
+  };
 
   return (
     <Card className="max-w-4xl mx-auto my-12 shadow-2xl border border-white/10 glass-card-dark rounded-3xl text-white">
@@ -124,7 +161,9 @@ export default function BookingForm({
               name="dateRange"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="text-teal-300 font-bold mb-2">Заезд / Выезд</FormLabel>
+                  <FormLabel className="text-teal-300 font-bold mb-2">
+                    {translate("checkInOut", "Заезд / Выезд")}
+                  </FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -140,20 +179,20 @@ export default function BookingForm({
                             field.value.to ? (
                               <>
                                 {format(field.value.from, "LLL dd, y", {
-                                  locale: ru,
+                                  locale: activeLocale,
                                 })}{" "}
                                 -{" "}
                                 {format(field.value.to, "LLL dd, y", {
-                                  locale: ru,
+                                  locale: activeLocale,
                                 })}
                               </>
                             ) : (
                               format(field.value.from, "LLL dd, y", {
-                                  locale: ru,
+                                locale: activeLocale,
                               })
                             )
                           ) : (
-                            <span>Выберите диапазон дат</span>
+                            <span>{translate("selectDateRange", "Выберите диапазон дат")}</span>
                           )}
                         </Button>
                       </FormControl>
@@ -172,7 +211,7 @@ export default function BookingForm({
                         disabled={(date) =>
                           date < new Date(new Date().setHours(0, 0, 0, 0))
                         }
-                        locale={ru}
+                        locale={activeLocale}
                         className="bg-slate-950 text-white border-0"
                       />
                     </PopoverContent>
@@ -185,13 +224,15 @@ export default function BookingForm({
               name="guests"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="text-teal-300 font-bold mb-2">Гости</FormLabel>
+                  <FormLabel className="text-teal-300 font-bold mb-2">
+                    {translate("guests", "Гости")}
+                  </FormLabel>
                   <div className="relative">
                     <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-teal-400" />
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="Количество гостей"
+                        placeholder={translate("guestsPlaceholder", "Количество гостей")}
                         className="pl-10 bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
                         {...field}
                       />
@@ -202,7 +243,7 @@ export default function BookingForm({
               )}
             />
             <Button type="submit" className="w-full h-11 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 hover:opacity-90 active:scale-[0.98] text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl transition-all duration-300">
-              Проверить наличие
+              {translate("checkAvailability", "Проверить наличие")}
             </Button>
           </form>
         </Form>

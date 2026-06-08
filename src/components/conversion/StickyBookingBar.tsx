@@ -3,17 +3,30 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Star, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 
 export function StickyBookingBar() {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const { t } = useTranslation();
+  const [, setLangUpdate] = useState(i18n.language || "ru");
 
   useEffect(() => {
     const onScroll = () => {
       setVisible(window.scrollY > 500);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    const handleLangChange = (lng: string) => {
+      setLangUpdate(lng);
+    };
+    i18n.on("languageChanged", handleLangChange);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      i18n.off("languageChanged", handleLangChange);
+    };
   }, []);
 
   if (dismissed || !visible) return null;
@@ -36,7 +49,7 @@ export function StickyBookingBar() {
                 ))}
               </div>
               <span className="text-sm text-slate-300 font-medium">
-                <span className="text-white font-bold">4.9</span> · 200+ отзывов
+                <span className="text-white font-bold">4.9</span> · 200+ {t("reviews")}
               </span>
             </div>
 
@@ -44,8 +57,8 @@ export function StickyBookingBar() {
             <div className="flex items-center gap-2 text-sm">
               <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
               <span className="text-slate-300">
-                <span className="text-white font-semibold">Лето {new Date().getFullYear()} —</span>
-                {" "}осталось мало свободных дат. Бронируйте сейчас.
+                <span className="text-white font-semibold">{t("scarcityTitle")} {new Date().getFullYear()} —</span>
+                {" "}{t("scarcityText")}
               </span>
             </div>
 
@@ -56,7 +69,7 @@ export function StickyBookingBar() {
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold text-sm transition-all duration-300 hover:scale-[1.03] shadow-lg shadow-teal-500/25"
               >
                 <CalendarDays className="h-4 w-4" />
-                Выбрать даты
+                {t("selectDates")}
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <button

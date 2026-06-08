@@ -6,14 +6,10 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
-import { Menu, Waves, LogOut, Compass } from "lucide-react";
+import { Menu, Waves, LogOut, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const navLinks = [
-  { href: "/", label: "Главная" },
-  { href: "/about", label: "О нас" },
-  { href: "/booking", label: "Бронирование" },
-];
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 
 export default function Header() {
   const pathname = usePathname();
@@ -21,9 +17,19 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { t } = useTranslation();
+  const [currentLang, setCurrentLang] = useState("ru");
 
   useEffect(() => {
     setMounted(true);
+    setCurrentLang(i18n.language || "ru");
+
+    const handleLangChange = (lng: string) => {
+      setCurrentLang(lng);
+    };
+
+    i18n.on("languageChanged", handleLangChange);
+
     const checkAuth = () => {
       const authStatus = localStorage.getItem("isAuthenticated") === "true";
       setIsAuthenticated(authStatus);
@@ -34,6 +40,7 @@ export default function Header() {
 
     return () => {
       window.removeEventListener("storage", checkAuth);
+      i18n.off("languageChanged", handleLangChange);
     };
   }, []);
 
@@ -42,6 +49,31 @@ export default function Header() {
     setIsAuthenticated(false);
     router.push("/");
   };
+
+  const navLinks = [
+    { href: "/", label: t("home") },
+    { href: "/about", label: t("about") },
+    { href: "/booking", label: t("booking") },
+  ];
+
+  const LanguageSelector = () => (
+    <div className="flex items-center gap-1.5 bg-slate-900/50 border border-white/10 p-0.5 rounded-xl text-xs font-semibold backdrop-blur-md">
+      {(["uk", "ru", "en"] as const).map((lang) => (
+        <button
+          key={lang}
+          onClick={() => i18n.changeLanguage(lang)}
+          className={cn(
+            "px-2 py-1 rounded-lg transition-all uppercase duration-200",
+            currentLang.startsWith(lang)
+              ? "bg-white/10 text-teal-300 shadow-sm"
+              : "text-slate-400 hover:text-white"
+          )}
+        >
+          {lang === "uk" ? "UA" : lang}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 glass-card-dark backdrop-blur-md shadow-2xl transition-smooth bg-slate-950/80">
@@ -53,7 +85,7 @@ export default function Header() {
         >
           <Waves className="h-6 w-6 text-teal-400 group-hover:animate-coral-sway glow-teal" />
           <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 group-hover:animate-ocean-shimmer">
-            Отдых в Затоке
+            {t("brandName")}
           </span>
         </Link>
         <nav className="hidden md:flex items-center gap-1 bg-slate-900/40 border border-white/5 px-2.5 py-1.5 rounded-full backdrop-blur-lg">
@@ -84,21 +116,23 @@ export default function Header() {
                   : "text-slate-300 hover:text-white hover:bg-white/5"
               )}
             >
-              Админка
+              {t("admin")}
             </Link>
           )}
         </nav>
-        <div className="hidden md:flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-3">
+          {mounted && <LanguageSelector />}
+          
           {mounted && isAuthenticated ? (
             <>
               <span className="text-sm font-medium text-slate-300 hidden lg:inline mr-2">
-                Привет, Admin
+                {t("welcomeAdmin")}
               </span>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={handleSignOut}
-                aria-label="Выйти"
+                aria-label={t("logout")}
                 className="text-slate-300 hover:text-white hover:bg-white/10 rounded-full"
               >
                 <LogOut className="h-4 w-4" />
@@ -107,12 +141,13 @@ export default function Header() {
           ) : (
             <>
               <Button asChild className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 hover:scale-105 active:scale-95 transition-all duration-300 rounded-xl px-5 h-10">
-                <Link href="/booking">Забронировать</Link>
+                <Link href="/booking">{t("booking")}</Link>
               </Button>
             </>
           )}
         </div>
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center gap-2">
+          {mounted && <LanguageSelector />}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="border-white/10 bg-slate-900/60 text-white hover:bg-slate-800">
@@ -134,7 +169,7 @@ export default function Header() {
                 >
                   <Waves className="h-6 w-6 text-teal-400" />
                   <span className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300">
-                    Отдых в Затоке
+                    {t("brandName")}
                   </span>
                 </Link>
                 {navLinks.map((link) => (
@@ -161,7 +196,7 @@ export default function Header() {
                       pathname === "/admin" ? "text-teal-300" : "text-slate-300 hover:text-white"
                     )}
                   >
-                    Админка
+                    {t("admin")}
                   </Link>
                 )}
                 <div className="mt-4 flex flex-col gap-2">
@@ -173,7 +208,7 @@ export default function Header() {
                       }}
                       className="bg-slate-900 border border-white/10 text-white hover:bg-slate-800"
                     >
-                      <LogOut className="mr-2 h-4 w-4 text-rose-400" /> Выйти
+                      <LogOut className="mr-2 h-4 w-4 text-rose-400" /> {t("logout")}
                     </Button>
                   ) : (
                     <>
@@ -182,7 +217,7 @@ export default function Header() {
                         className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        <Link href="/booking">Забронировать</Link>
+                        <Link href="/booking">{t("booking")}</Link>
                       </Button>
                     </>
                   )}
