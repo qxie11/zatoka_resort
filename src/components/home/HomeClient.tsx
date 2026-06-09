@@ -196,6 +196,22 @@ export default function HomeClient({ rooms }: HomeClientProps) {
                       <Link href="/about">{translate("learnMore", "Узнать больше")}</Link>
                     </Button>
                   </div>
+
+                  {/* Trust badges */}
+                  <div className="mt-4 pt-4 border-t border-white/5 flex flex-wrap items-center justify-between gap-2 text-[10px] text-slate-400 font-semibold tracking-wider uppercase">
+                    <div className="flex items-center gap-1">
+                      <ShieldCheck className="h-3.5 w-3.5 text-teal-400" />
+                      <span>{translate("trustBadge1", "Отмена за 7 дней")}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Car className="h-3.5 w-3.5 text-amber-400" />
+                      <span>{translate("trustBadge2", "Оплата на месте")}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Star className="h-3.5 w-3.5 text-orange-400 animate-pulse" />
+                      <span>{translate("trustBadge3", "Лучшая цена")}</span>
+                    </div>
+                  </div>
                 </div>
 
               </div>

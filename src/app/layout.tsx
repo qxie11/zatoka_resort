@@ -9,6 +9,7 @@ import { Comfortaa, Nunito } from "next/font/google";
 import NextTopLoader from 'nextjs-toploader';
 import { GlobalMarineBackground } from "@/components/decorative/GlobalMarineBackground";
 import { StickyBookingBar } from "@/components/conversion/StickyBookingBar";
+import { CallbackForm } from "@/components/conversion/CallbackForm";
 
 import { cookies } from "next/headers";
 
@@ -119,6 +120,7 @@ export default async function RootLayout({
             <Footer />
           </div>
           <StickyBookingBar />
+          <CallbackForm />
           <Toaster />
         </StoreProvider>
       </body>

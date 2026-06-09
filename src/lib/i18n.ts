@@ -22,6 +22,20 @@ const resources = {
       scarcityText: "осталось мало свободных дат. Бронируйте сейчас.",
       selectDates: "Выбрать даты",
 
+      // Callback / Contact
+      callbackButton: "Связаться с нами",
+      callbackTitle: "Обратный звонок",
+      callbackDesc: "Оставьте контакты, и наш консьерж перезвонит вам в течение 15 минут.",
+      callbackName: "Ваше имя",
+      callbackPhone: "Номер телефона",
+      callbackMessage: "Вопрос или пожелание (необязательно)",
+      callbackSubmit: "Перезвоните мне",
+      callbackSuccess: "Заявка отправлена! Мы свяжемся с вами в ближайшее время.",
+      callbackError: "Произошла ошибка. Пожалуйста, попробуйте еще раз.",
+      trustBadge1: "Отмена за 7 дней",
+      trustBadge2: "Оплата на месте",
+      trustBadge3: "Лучшая цена",
+
       // Hero
       premiumBadge: "Премиум курорт на Черном море",
       heroTitle1: "Ваш идеальный",
@@ -136,6 +150,20 @@ const resources = {
       scarcityText: "залишилося мало вільних дат. Бронюйте зараз.",
       selectDates: "Обрати дати",
 
+      // Callback / Contact
+      callbackButton: "Зв'язатися з нами",
+      callbackTitle: "Зворотний дзвінок",
+      callbackDesc: "Залиште контакти, і наш консьєрж передзвонить вам протягом 15 хвилин.",
+      callbackName: "Ваше ім'я",
+      callbackPhone: "Номер телефону",
+      callbackMessage: "Питання або побажання (необов'язково)",
+      callbackSubmit: "Передзвоніть мені",
+      callbackSuccess: "Заявку відправлено! Ми зв'яжемося з вами найближчим часом.",
+      callbackError: "Сталася помилка. Будь ласка, спробуйте ще раз.",
+      trustBadge1: "Скасування за 7 днів",
+      trustBadge2: "Оплата на місці",
+      trustBadge3: "Найкраща ціна",
+
       // Hero
       premiumBadge: "Преміум курорт на Чорному морі",
       heroTitle1: "Ваша ідеальна",
@@ -249,6 +277,20 @@ const resources = {
       scarcityTitle: "Summer",
       scarcityText: "few dates available. Book now.",
       selectDates: "Choose dates",
+
+      // Callback / Contact
+      callbackButton: "Contact Us",
+      callbackTitle: "Request a Callback",
+      callbackDesc: "Leave your details and our concierge will call you back within 15 minutes.",
+      callbackName: "Your Name",
+      callbackPhone: "Phone Number",
+      callbackMessage: "Question or message (optional)",
+      callbackSubmit: "Call Me Back",
+      callbackSuccess: "Request sent! We will contact you shortly.",
+      callbackError: "An error occurred. Please try again.",
+      trustBadge1: "7-day cancellation",
+      trustBadge2: "Pay on arrival",
+      trustBadge3: "Best rate",
 
       // Hero
       premiumBadge: "Premium Black Sea Resort",
