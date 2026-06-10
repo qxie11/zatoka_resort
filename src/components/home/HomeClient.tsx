@@ -9,6 +9,7 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { WavyUnderline } from "@/components/ui/wavy-underline";
 import OceanSceneClient from "@/components/three/OceanSceneClient";
 import FeaturedRooms from "@/components/rooms/FeaturedRooms";
+import GuestImpressions from "@/components/home/GuestImpressions";
 import {
   ArrowRight,
   Waves,
@@ -24,6 +25,10 @@ import {
   ShieldCheck,
   Anchor,
   Compass,
+  Umbrella,
+  XCircle,
+  CreditCard,
+  Baby,
 } from "lucide-react";
 import type { LucideProps } from "lucide-react";
 import type { Room } from "@/lib/types";
@@ -354,6 +359,92 @@ export default function HomeClient({ rooms }: HomeClientProps) {
           </div>
         </section>
 
+        {/* WHY CHOOSE US SECTION */}
+        <section className="py-24 bg-slate-950 relative overflow-hidden">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <ScrollReveal variant="fade-up">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 text-xs font-semibold text-teal-300 uppercase tracking-widest mb-4">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  <span>{translate("whyChooseBadge", "Ваши гарантии")}</span>
+                </div>
+              </ScrollReveal>
+              <ScrollReveal variant="tide-in" delay={100}>
+                <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                  {translate("whyChooseTitle", "Почему выбирают нас")}
+                </h2>
+                <WavyUnderline colorClassName="text-teal-300" />
+              </ScrollReveal>
+              <ScrollReveal variant="fade-up" delay={200}>
+                <p className="mt-4 max-w-2xl mx-auto text-slate-300 text-lg font-light">
+                  {translate("whyChooseDesc", "Бронируйте без рисков — мы делаем всё, чтобы ваш отдых был идеальным.")}
+                </p>
+              </ScrollReveal>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                {
+                  icon: Umbrella,
+                  titleKey: "whyBeach",
+                  titleFallback: "10 метров до пляжа",
+                  descKey: "whyBeachDesc",
+                  descFallback: "Первая береговая линия — выходите из номера и через минуту вы на песчаном пляже.",
+                  gradient: "from-sky-400/20 to-teal-400/20",
+                  iconColor: "text-sky-400",
+                },
+                {
+                  icon: CreditCard,
+                  titleKey: "whyPayment",
+                  titleFallback: "Оплата на месте",
+                  descKey: "whyPaymentDesc",
+                  descFallback: "Никакой предоплаты. Оплачивайте при заселении — наличными или картой.",
+                  gradient: "from-amber-400/20 to-orange-400/20",
+                  iconColor: "text-amber-400",
+                },
+                {
+                  icon: XCircle,
+                  titleKey: "whyCancel",
+                  titleFallback: "Бесплатная отмена",
+                  descKey: "whyCancelDesc",
+                  descFallback: "Планы изменились? Отмените бронирование за 7 дней без каких-либо штрафов.",
+                  gradient: "from-teal-400/20 to-emerald-400/20",
+                  iconColor: "text-teal-400",
+                },
+                {
+                  icon: Baby,
+                  titleKey: "whyFamily",
+                  titleFallback: "Идеально для семей",
+                  descKey: "whyFamilyDesc",
+                  descFallback: "Детская площадка, мелководье, семейные номера — всё для комфортного отдыха с детьми.",
+                  gradient: "from-rose-400/20 to-pink-400/20",
+                  iconColor: "text-rose-400",
+                },
+              ].map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <ScrollReveal key={item.titleKey} variant="scale-in" delay={index * 100}>
+                    <div className="relative p-6 rounded-3xl glass-card-dark border border-white/10 hover:border-teal-400/30 transition-all duration-500 group h-full">
+                      <div className={`inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-br ${item.gradient} mb-5 group-hover:scale-110 transition-transform duration-300`}>
+                        <Icon className={`h-7 w-7 ${item.iconColor}`} />
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-2">{translate(item.titleKey, item.titleFallback)}</h3>
+                      <p className="text-sm text-slate-400 leading-relaxed">{translate(item.descKey, item.descFallback)}</p>
+                    </div>
+                  </ScrollReveal>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-950 scale-x-[-1]">
+              <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-teal-200/10" />
+              <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
+            </svg>
+          </div>
+        </section>
+
         {/* FEATURED ROOMS SECTION */}
         <section className="py-24 bg-slate-950 relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-60">
@@ -479,6 +570,9 @@ export default function HomeClient({ rooms }: HomeClientProps) {
             </svg>
           </div>
         </section>
+
+        {/* GUEST IMPRESSIONS */}
+        <GuestImpressions />
 
         {/* BOTTOM CTA */}
         <section className="py-24 lg:py-32 bg-slate-950 text-white relative overflow-hidden">

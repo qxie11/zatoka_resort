@@ -90,6 +90,44 @@ const resources = {
       bottomCtaDesc: "Берега Затоки зовут. Забронируйте отпуск своей мечты сегодня и создайте воспоминания, которые останутся на всю жизнь.",
       bookNowBtn: "Забронировать номер сейчас",
 
+      // Season Banner
+      seasonBefore: "До начала сезона",
+      seasonBookEarly: "бронируйте заранее по лучшей цене!",
+      seasonDuring: "Сезон в разгаре! Осталось",
+      seasonHurry: "лучшие номера уходят!",
+
+      // Why Choose Us
+      whyChooseBadge: "Ваши гарантии",
+      whyChooseTitle: "Почему выбирают нас",
+      whyChooseDesc: "Бронируйте без рисков — мы делаем всё, чтобы ваш отдых был идеальным.",
+      whyBeach: "10 метров до пляжа",
+      whyBeachDesc: "Первая береговая линия — выходите из номера и через минуту вы на песчаном пляже.",
+      whyPayment: "Оплата на месте",
+      whyPaymentDesc: "Никакой предоплаты. Оплачивайте при заселении — наличными или картой.",
+      whyCancel: "Бесплатная отмена",
+      whyCancelDesc: "Планы изменились? Отмените бронирование за 7 дней без каких-либо штрафов.",
+      whyFamily: "Идеально для семей",
+      whyFamilyDesc: "Детская площадка, мелководье, семейные номера — всё для комфортного отдыха с детьми.",
+
+      // Exit Intent Popup
+      exitTitle: "Не нашли подходящий номер?",
+      exitDesc: "Оставьте номер — мы подберём лучший вариант и перезвоним за 10 минут. Бесплатно.",
+      exitCta: "Перезвоните мне",
+      exitSuccessTitle: "Отлично!",
+      exitSuccessDesc: "Наш менеджер перезвонит вам в течение 10 минут и поможет подобрать идеальный номер.",
+      exitPrivacy: "Нажимая кнопку, вы соглашаетесь на обработку персональных данных",
+
+      // Guest Impressions
+      reviewsBadge: "Отзывы наших гостей",
+      reviewsTitle: "Впечатления гостей",
+      reviewsDesc: "Более 200 гостей оценили нас на 4.9 из 5. Вот что они говорят.",
+      reviewsCount: "отзывов гостей",
+      reviewsRecommend: "рекомендуют",
+
+      // Mobile Sticky
+      stickyMobileFrom: "от",
+      stickyMobileNight: "ночь",
+
       // About Page
       aboutService: "Премиум сервис у моря",
       aboutTitle: "Создавая незабываемый отдых",
@@ -218,6 +256,44 @@ const resources = {
       bottomCtaDesc: "Береги Затоки кличуть. Забронюйте відпустку своєї мрії сьогодні та створіть спогади, які залишаться на все життя.",
       bookNowBtn: "Забронювати номер зараз",
 
+      // Season Banner
+      seasonBefore: "До початку сезону",
+      seasonBookEarly: "бронюйте заздалегідь за найкращою ціною!",
+      seasonDuring: "Сезон у розпалі! Залишилось",
+      seasonHurry: "найкращі номери розбирають!",
+
+      // Why Choose Us
+      whyChooseBadge: "Ваші гарантії",
+      whyChooseTitle: "Чому обирають нас",
+      whyChooseDesc: "Бронюйте без ризиків — ми робимо все, щоб ваш відпочинок був ідеальним.",
+      whyBeach: "10 метрів до пляжу",
+      whyBeachDesc: "Перша берегова лінія — виходите з номера і за хвилину ви на піщаному пляжі.",
+      whyPayment: "Оплата на місці",
+      whyPaymentDesc: "Жодної передоплати. Оплачуйте при заселенні — готівкою або карткою.",
+      whyCancel: "Безкоштовне скасування",
+      whyCancelDesc: "Плани змінилися? Скасуйте бронювання за 7 днів без будь-яких штрафів.",
+      whyFamily: "Ідеально для сімей",
+      whyFamilyDesc: "Дитячий майданчик, мілководдя, сімейні номери — все для комфортного відпочинку з дітьми.",
+
+      // Exit Intent Popup
+      exitTitle: "Не знайшли підходящий номер?",
+      exitDesc: "Залиште номер — ми підберемо найкращий варіант і передзвонимо за 10 хвилин. Безкоштовно.",
+      exitCta: "Передзвоніть мені",
+      exitSuccessTitle: "Чудово!",
+      exitSuccessDesc: "Наш менеджер передзвонить вам протягом 10 хвилин і допоможе підібрати ідеальний номер.",
+      exitPrivacy: "Натискаючи кнопку, ви погоджуєтесь на обробку персональних даних",
+
+      // Guest Impressions
+      reviewsBadge: "Відгуки наших гостей",
+      reviewsTitle: "Враження гостей",
+      reviewsDesc: "Понад 200 гостей оцінили нас на 4.9 з 5. Ось що вони кажуть.",
+      reviewsCount: "відгуків гостей",
+      reviewsRecommend: "рекомендують",
+
+      // Mobile Sticky
+      stickyMobileFrom: "від",
+      stickyMobileNight: "ніч",
+
       // About Page
       aboutService: "Преміум сервіс біля моря",
       aboutTitle: "Створюючи незабутній відпочинок",
@@ -345,6 +421,44 @@ const resources = {
       readyForHoliday: "Ready for your perfect getaway?",
       bottomCtaDesc: "The shores of Zatoka are calling. Book your dream vacation today and make memories that will last a lifetime.",
       bookNowBtn: "Book a Room Now",
+
+      // Season Banner
+      seasonBefore: "Until the season starts",
+      seasonBookEarly: "book early for the best rates!",
+      seasonDuring: "Season is in full swing!",
+      seasonHurry: "best rooms are going fast!",
+
+      // Why Choose Us
+      whyChooseBadge: "Your Guarantees",
+      whyChooseTitle: "Why Choose Us",
+      whyChooseDesc: "Book risk-free — we do everything to make your vacation perfect.",
+      whyBeach: "10 Meters to the Beach",
+      whyBeachDesc: "First beachline — step out and you're on a sandy beach in under a minute.",
+      whyPayment: "Pay on Arrival",
+      whyPaymentDesc: "No prepayment required. Pay at check-in — cash or card.",
+      whyCancel: "Free Cancellation",
+      whyCancelDesc: "Plans changed? Cancel up to 7 days before with no penalties.",
+      whyFamily: "Perfect for Families",
+      whyFamilyDesc: "Playground, shallow waters, family rooms — everything for a comfortable vacation with kids.",
+
+      // Exit Intent Popup
+      exitTitle: "Haven't found the right room?",
+      exitDesc: "Leave your number — we'll find the best option and call you back in 10 minutes. Free.",
+      exitCta: "Call Me Back",
+      exitSuccessTitle: "Great!",
+      exitSuccessDesc: "Our manager will call you back within 10 minutes and help you find the perfect room.",
+      exitPrivacy: "By clicking, you agree to the processing of personal data",
+
+      // Guest Impressions
+      reviewsBadge: "Guest Reviews",
+      reviewsTitle: "Guest Impressions",
+      reviewsDesc: "Over 200 guests rated us 4.9 out of 5. Here's what they say.",
+      reviewsCount: "guest reviews",
+      reviewsRecommend: "recommend",
+
+      // Mobile Sticky
+      stickyMobileFrom: "from",
+      stickyMobileNight: "night",
 
       // About Page
       aboutService: "Premium Seaside Service",

@@ -10,6 +10,8 @@ import NextTopLoader from 'nextjs-toploader';
 import { GlobalMarineBackground } from "@/components/decorative/GlobalMarineBackground";
 import { StickyBookingBar } from "@/components/conversion/StickyBookingBar";
 import { CallbackForm } from "@/components/conversion/CallbackForm";
+import { SeasonBanner } from "@/components/conversion/SeasonBanner";
+import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
 
 import { cookies } from "next/headers";
 
@@ -116,11 +118,13 @@ export default async function RootLayout({
           <div className="relative flex min-h-dvh flex-col bg-slate-950 text-slate-100">
             <GlobalMarineBackground />
             <Header />
+            <SeasonBanner />
             <main className="relative flex-1 z-10">{children}</main>
             <Footer />
           </div>
           <StickyBookingBar />
           <CallbackForm />
+          <ExitIntentPopup />
           <Toaster />
         </StoreProvider>
       </body>
