@@ -80,7 +80,7 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
             <span>{translate("bookingService", "Бронирование номеров")}</span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md animate-fade-in-up">
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md animate-fade-in-up py-2 px-1">
             {translate("bookingTitle", "Забронируйте ваш номер")}
           </h1>
           <WavyUnderline colorClassName="text-teal-300" />
