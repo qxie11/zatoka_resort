@@ -1,5 +1,5 @@
 import { prisma } from './prisma';
-import type { Room, Booking } from './types';
+import type { Room, Booking, BlogPost } from './types';
 
 // Rooms CRUD
 export const getRooms = async (): Promise<Room[]> => {
@@ -241,6 +241,58 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
 export const deleteBooking = async (id: string): Promise<boolean> => {
   try {
     await prisma.booking.delete({
+      where: { id },
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+// Blog Posts CRUD
+export const getBlogPosts = async (): Promise<BlogPost[]> => {
+  const posts = await prisma.blogPost.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+  return posts;
+};
+
+export const getBlogPostById = async (id: string): Promise<BlogPost | null> => {
+  const post = await prisma.blogPost.findUnique({
+    where: { id },
+  });
+  return post;
+};
+
+export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
+  const post = await prisma.blogPost.findUnique({
+    where: { slug },
+  });
+  return post;
+};
+
+export const createBlogPost = async (post: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'>): Promise<BlogPost> => {
+  const newPost = await prisma.blogPost.create({
+    data: post,
+  });
+  return newPost;
+};
+
+export const updateBlogPost = async (id: string, post: Partial<Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'>>): Promise<BlogPost | null> => {
+  try {
+    const updatedPost = await prisma.blogPost.update({
+      where: { id },
+      data: post,
+    });
+    return updatedPost;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const deleteBlogPost = async (id: string): Promise<boolean> => {
+  try {
+    await prisma.blogPost.delete({
       where: { id },
     });
     return true;

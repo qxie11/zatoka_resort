@@ -50,6 +50,7 @@ export default function Footer() {
                     <li><Link href="/" className="text-sm text-slate-300 hover:text-teal-300 transition-colors">Главная</Link></li>
                     <li><Link href="/about" className="text-sm text-slate-300 hover:text-teal-300 transition-colors">О нас</Link></li>
                     <li><Link href="/booking" className="text-sm text-slate-300 hover:text-teal-300 transition-colors">Бронирование</Link></li>
+                    <li><Link href="/blog" className="text-sm text-slate-300 hover:text-teal-300 transition-colors">Блог</Link></li>
                 </ul>
              </div>
              <div>

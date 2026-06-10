@@ -54,6 +54,7 @@ export default function Header() {
     { href: "/", label: t("home") },
     { href: "/about", label: t("about") },
     { href: "/booking", label: t("booking") },
+    { href: "/blog", label: t("blog") },
   ];
 
   const LanguageSelector = () => (
@@ -102,7 +103,7 @@ export default function Header() {
         </Link>
 
         {/* Desktop Navigation Capsule */}
-        <nav className="hidden md:flex items-center gap-1.5 bg-slate-900/60 border border-white/10 px-2 py-1.5 rounded-full backdrop-blur-xl shadow-lg">
+        <nav className="hidden lg:flex items-center gap-1.5 bg-slate-900/60 border border-white/10 px-2 py-1.5 rounded-full backdrop-blur-xl shadow-lg">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -136,7 +137,7 @@ export default function Header() {
         </nav>
 
         {/* Desktop Right Actions */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-4">
           {mounted && <LanguageSelector />}
 
           {mounted && isAuthenticated ? (
@@ -165,7 +166,7 @@ export default function Header() {
         </div>
 
         {/* Mobile Actions and Hamburger */}
-        <div className="md:hidden flex items-center gap-3">
+        <div className="lg:hidden flex items-center gap-3">
           {mounted && <LanguageSelector />}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>

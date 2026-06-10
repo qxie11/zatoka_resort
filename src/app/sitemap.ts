@@ -75,6 +75,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       } catch (error) {
         console.error("Error fetching rooms for dynamic sitemap paths:", error);
       }
+    } else if (route.includes("[slug]")) {
+      // Dynamic blog page
+      try {
+        const posts = await prisma.blogPost.findMany({
+          select: { slug: true, updatedAt: true },
+        });
+        for (const post of posts) {
+          sitemapEntries.push({
+            url: `${baseUrl}/blog/${post.slug}`,
+            lastModified: post.updatedAt || new Date(),
+            changeFrequency: "weekly",
+            priority: 0.6,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching blog posts for dynamic sitemap paths:", error);
+      }
     } else {
       // Static routes (like "", "about", "booking")
       const isHome = route === "";

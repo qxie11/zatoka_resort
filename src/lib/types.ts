@@ -25,3 +25,26 @@ export type Booking = {
   phone: string;
   email?: string;
 };
+
+export type BlogPost = {
+  id: string;
+  slug: string;
+  date: string;
+  imageUrl: string;
+  readTime: number;
+  categoryRu: string;
+  categoryUk: string;
+  categoryEn: string;
+  titleRu: string;
+  titleUk: string;
+  titleEn: string;
+  excerptRu: string;
+  excerptUk: string;
+  excerptEn: string;
+  contentRu: string[];
+  contentUk: string[];
+  contentEn: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+

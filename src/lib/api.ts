@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { Room, Booking } from "./types";
+import type { Room, Booking, BlogPost } from "./types";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "/api",
@@ -129,6 +129,51 @@ export const bookingsApi = createApi({
   }),
 });
 
+export const blogApi = createApi({
+  reducerPath: "blogApi",
+  baseQuery,
+  tagTypes: ["BlogPost"],
+  endpoints: (builder) => ({
+    getBlogPosts: builder.query<BlogPost[], void>({
+      query: () => "/blog",
+      providesTags: ["BlogPost"],
+    }),
+    getBlogPostById: builder.query<BlogPost, string>({
+      query: (id) => `/blog/${id}`,
+      providesTags: (result, error, id) => [{ type: "BlogPost", id }],
+    }),
+    createBlogPost: builder.mutation<BlogPost, Omit<BlogPost, "id" | "createdAt" | "updatedAt">>({
+      query: (post) => ({
+        url: "/blog",
+        method: "POST",
+        body: post,
+      }),
+      invalidatesTags: ["BlogPost"],
+    }),
+    updateBlogPost: builder.mutation<
+      BlogPost,
+      { id: string; data: Partial<Omit<BlogPost, "id" | "createdAt" | "updatedAt">> }
+    >({
+      query: ({ id, data }) => ({
+        url: `/blog/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "BlogPost", id },
+        "BlogPost",
+      ],
+    }),
+    deleteBlogPost: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/blog/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["BlogPost"],
+    }),
+  }),
+});
+
 export const {
   useGetRoomsQuery,
   useGetRoomByIdQuery,
@@ -144,3 +189,11 @@ export const {
   useUpdateBookingMutation,
   useDeleteBookingMutation,
 } = bookingsApi;
+
+export const {
+  useGetBlogPostsQuery,
+  useGetBlogPostByIdQuery,
+  useCreateBlogPostMutation,
+  useUpdateBlogPostMutation,
+  useDeleteBlogPostMutation,
+} = blogApi;

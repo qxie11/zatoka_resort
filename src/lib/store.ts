@@ -1,11 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { roomsApi, bookingsApi } from "./api";
+import { roomsApi, bookingsApi, blogApi } from "./api";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       [roomsApi.reducerPath]: roomsApi.reducer,
       [bookingsApi.reducerPath]: bookingsApi.reducer,
+      [blogApi.reducerPath]: blogApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
@@ -16,6 +17,8 @@ export const makeStore = () => {
             "bookingsApi/subscriptions/internal_getRTKQSubscriptions",
             "roomsApi/executeQuery/fulfilled",
             "roomsApi/executeMutation/fulfilled",
+            "blogApi/executeQuery/fulfilled",
+            "blogApi/executeMutation/fulfilled",
           ],
           ignoredActionPaths: [
             "meta.arg.originalArgs",
@@ -33,11 +36,16 @@ export const makeStore = () => {
             "roomsApi.mutations",
             /^roomsApi\.queries\./,
             /^roomsApi\.mutations\./,
+            "blogApi.queries",
+            "blogApi.mutations",
+            /^blogApi\.queries\./,
+            /^blogApi\.mutations\./,
           ],
         },
       })
         .concat(roomsApi.middleware)
-        .concat(bookingsApi.middleware),
+        .concat(bookingsApi.middleware)
+        .concat(blogApi.middleware),
   });
 };
 

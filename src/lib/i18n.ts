@@ -15,6 +15,14 @@ const resources = {
       logout: "Выйти",
       welcomeAdmin: "Привет, Admin",
       brandName: "Отдых в Затоке",
+      blog: "Блог",
+      blogTitle: "Блог и полезные советы",
+      searchArticles: "Поиск статей...",
+      readMore: "Читать далее",
+      noArticles: "Статьи не найдены.",
+      relatedPosts: "Похожие статьи",
+      publishedOn: "Опубликовано",
+      allCategories: "Все категории",
 
       // Sticky Booking Bar
       reviews: "отзывов",
@@ -181,6 +189,14 @@ const resources = {
       logout: "Вийти",
       welcomeAdmin: "Привіт, Admin",
       brandName: "Відпочинок у Затоці",
+      blog: "Блог",
+      blogTitle: "Блог та корисні поради",
+      searchArticles: "Пошук статей...",
+      readMore: "Читати далі",
+      noArticles: "Статті не знайдено.",
+      relatedPosts: "Схожі статті",
+      publishedOn: "Опубліковано",
+      allCategories: "Всі категорії",
 
       // Sticky Booking Bar
       reviews: "відгуків",
@@ -347,6 +363,14 @@ const resources = {
       logout: "Logout",
       welcomeAdmin: "Hello, Admin",
       brandName: "Zatoka Resort",
+      blog: "Blog",
+      blogTitle: "Blog & Helpful Tips",
+      searchArticles: "Search articles...",
+      readMore: "Read More",
+      noArticles: "No articles found.",
+      relatedPosts: "Related Articles",
+      publishedOn: "Published on",
+      allCategories: "All Categories",
 
       // Sticky Booking Bar
       reviews: "reviews",

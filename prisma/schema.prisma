@@ -53,3 +53,27 @@ model ContactRequest {
   @@map("contact_requests")
 }
 
+model BlogPost {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  date        String
+  imageUrl    String
+  readTime    Int
+  categoryRu  String
+  categoryUk  String
+  categoryEn  String
+  titleRu     String
+  titleUk     String
+  titleEn     String
+  excerptRu   String
+  excerptUk   String
+  excerptEn   String
+  contentRu   String[] // Array of paragraphs
+  contentUk   String[] // Array of paragraphs
+  contentEn   String[] // Array of paragraphs
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("blog_posts")
+}
+

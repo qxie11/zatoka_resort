@@ -77,7 +77,7 @@ export function SeasonBanner() {
   const daysWord = pluralDays(seasonData.daysLeft, lang);
 
   return (
-    <div className="sticky top-16 z-[49] bg-gradient-to-r from-amber-500/90 via-orange-500/90 to-rose-500/90 text-white overflow-hidden backdrop-blur-sm">
+    <div className="sticky top-16 z-[49] bg-gradient-to-r from-amber-500/90 via-orange-500/90 to-rose-500/90 text-white overflow-hidden backdrop-blur-sm shadow-md">
       {/* Animated shimmer */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -89,67 +89,60 @@ export function SeasonBanner() {
         }}
       />
 
-      <div className="container mx-auto max-w-7xl px-4 py-2.5 relative">
-        <div className="flex items-center justify-center gap-3 text-sm font-medium">
-          {/* Icon */}
-          <div className="shrink-0 hidden sm:flex items-center gap-1.5">
-            {seasonData.phase === "before" ? (
-              <Sun className="h-4 w-4 animate-spin-slow" />
-            ) : (
-              <Waves className="h-4 w-4 animate-coral-sway" />
-            )}
+      <div className="container mx-auto max-w-7xl px-8 py-2 sm:py-2.5 relative">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
+          {/* Text & Icon wrapper */}
+          <div className="flex items-center justify-center gap-1 text-xs sm:text-sm font-medium flex-wrap">
+            <div className="inline-flex flex-wrap items-center justify-center gap-1">
+              {seasonData.phase === "before" ? (
+                <>
+                  <span>
+                    ☀️ {t("seasonBefore", "До начала сезона")}{" "}
+                    <span className="font-extrabold text-white bg-white/20 px-1.5 py-0.5 rounded-md mx-0.5 tabular-nums">
+                      {seasonData.daysLeft}
+                    </span>{" "}
+                    {daysWord}
+                  </span>
+                  <span className="font-bold opacity-90">
+                    — {t("seasonBookEarly", "бронируйте заранее по лучшей цене!")}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span>
+                    🌊 {t("seasonDuring", "Сезон в разгаре! Осталось")}{" "}
+                    <span className="font-extrabold text-white bg-white/20 px-1.5 py-0.5 rounded-md mx-0.5 tabular-nums">
+                      {seasonData.daysLeft}
+                    </span>{" "}
+                    {daysWord}
+                  </span>
+                  <span className="font-bold opacity-90">
+                    — {t("seasonHurry", "лучшие номера уходят!")}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
 
-          {/* Text */}
-          <div className="flex items-center gap-2 flex-wrap justify-center">
-            {seasonData.phase === "before" ? (
-              <>
-                <span>
-                  {t("seasonBefore", "До начала сезона")}{" "}
-                  <span className="font-extrabold text-white bg-white/20 px-1.5 py-0.5 rounded-md mx-0.5 tabular-nums">
-                    {seasonData.daysLeft}
-                  </span>{" "}
-                  {daysWord} —
-                </span>
-                <span className="font-bold">
-                  {t("seasonBookEarly", "бронируйте заранее по лучшей цене!")}
-                </span>
-              </>
-            ) : (
-              <>
-                <span>
-                  🌊{" "}
-                  {t("seasonDuring", "Сезон в разгаре! Осталось")}{" "}
-                  <span className="font-extrabold text-white bg-white/20 px-1.5 py-0.5 rounded-md mx-0.5 tabular-nums">
-                    {seasonData.daysLeft}
-                  </span>{" "}
-                  {daysWord}
-                </span>
-                <span className="font-bold">
-                  — {t("seasonHurry", "лучшие номера уходят!")}
-                </span>
-              </>
-            )}
-
-            <Link
-              href="/booking"
-              className="inline-flex items-center gap-1 ml-1 px-3 py-1 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 backdrop-blur-sm"
-            >
-              <CalendarDays className="h-3 w-3" />
-              {t("selectDates", "Выбрать даты")}
-              <ArrowRight className="h-3 w-3" />
-            </Link>
-          </div>
-
-          {/* Close */}
-          <button
-            onClick={handleDismiss}
-            className="shrink-0 p-1 rounded-md text-white/70 hover:text-white hover:bg-white/10 transition-colors ml-2"
-            aria-label="Close"
+          {/* CTA Button */}
+          <Link
+            href="/booking"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-orange-600 hover:bg-orange-50 hover:text-orange-700 shadow-sm text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 shrink-0"
           >
-            <X className="h-4 w-4" />
-          </button>
+            <CalendarDays className="h-3 w-3" />
+            {t("selectDates", "Выбрать даты")}
+            <ArrowRight className="h-3 w-3" />
+          </Link>
         </div>
+
+        {/* Close Button - Absolutely Positioned */}
+        <button
+          onClick={handleDismiss}
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+          aria-label="Close"
+        >
+          <X className="h-4 w-4" />
+        </button>
       </div>
 
       {/* Season shimmer keyframe injected via style tag */}
