@@ -53,13 +53,16 @@ export async function generateMetadata(): Promise<Metadata> {
     en: "Book your perfect beach holiday at 'Zatoka Resort', a premium hotel in Zatoka, Odesa. Enjoy stunning sea views, excellent service, and modern amenities.",
   };
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
   const appName = appNames[lang as keyof typeof appNames] || appNames.ru;
   const defaultTitle = titles[lang as keyof typeof titles] || titles.ru;
   const titleTemplate = titleTemplates[lang as keyof typeof titleTemplates] || titleTemplates.ru;
   const description = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
 
+  const ogImageUrl = `${baseUrl}/og-image.png`;
+
   return {
-    metadataBase: new URL("https://zatokaresort.com"),
+    metadataBase: new URL(baseUrl),
     alternates: {
       canonical: "/",
     },
@@ -88,9 +91,10 @@ export async function generateMetadata(): Promise<Metadata> {
       description: description,
       images: [
         {
-          url: "/og-image.png",
+          url: ogImageUrl,
           width: 1200,
           height: 630,
+          type: "image/png",
           alt: defaultTitle,
         },
       ],
@@ -102,7 +106,7 @@ export async function generateMetadata(): Promise<Metadata> {
         template: titleTemplate,
       },
       description: description,
-      images: ["/og-image.png"],
+      images: [ogImageUrl],
     },
     keywords: [
       "отель",

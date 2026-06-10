@@ -42,8 +42,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     en: `${room.description.substring(0, 150)}... Book room ${room.name} in Zatoka at the best rate starting from ${room.price} UAH per night.`,
   };
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
   const title = titleTemplates[lang as keyof typeof titleTemplates] || titleTemplates.ru;
   const description = descTemplates[lang as keyof typeof descTemplates] || descTemplates.ru;
+
+  const imageUrl = room.imageUrl.startsWith("http")
+    ? room.imageUrl
+    : `${baseUrl}${room.imageUrl.startsWith("/") ? "" : "/"}${room.imageUrl}`;
 
   return {
     title,
@@ -53,7 +58,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       images: [
         {
-          url: room.imageUrl,
+          url: imageUrl,
           alt: room.name,
         }
       ]
@@ -62,7 +67,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: "summary_large_image",
       title,
       description,
-      images: [room.imageUrl],
+      images: [imageUrl],
     }
   };
 }
