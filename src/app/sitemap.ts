@@ -43,14 +43,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Get all routes dynamically from filesystem
   const allRoutes = getAppRoutes(appDirectory);
 
-  // Filter out internal routes, admin panel, and api routes
+  // Filter out internal routes, admin panel, api, and login routes
   const publicRoutes = allRoutes.filter((route) => {
     const lowerRoute = route.toLowerCase();
     return (
       !lowerRoute.startsWith("admin") &&
       !lowerRoute.startsWith("_") &&
       !lowerRoute.startsWith("api") &&
-      lowerRoute !== "not-found"
+      lowerRoute !== "not-found" &&
+      lowerRoute !== "login"
     );
   });
 
