@@ -89,34 +89,34 @@ export function SeasonBanner() {
         }}
       />
 
-      <div className="container mx-auto max-w-7xl px-8 py-2 sm:py-2.5 relative">
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
+      <div className="container mx-auto max-w-7xl px-8 py-2 relative">
+        <div className="flex flex-row items-center justify-center gap-2 sm:gap-4 text-center">
           {/* Text & Icon wrapper */}
-          <div className="flex items-center justify-center gap-1 text-xs sm:text-sm font-medium flex-wrap">
-            <div className="inline-flex flex-wrap items-center justify-center gap-1">
+          <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs md:text-sm font-medium flex-nowrap">
+            <div className="inline-flex items-center justify-center gap-1 flex-nowrap">
               {seasonData.phase === "before" ? (
                 <>
-                  <span>
+                  <span className="whitespace-nowrap">
                     ☀️ {t("seasonBefore", "До начала сезона")}{" "}
-                    <span className="font-extrabold text-white bg-white/20 px-1.5 py-0.5 rounded-md mx-0.5 tabular-nums">
+                    <span className="font-extrabold text-white bg-white/20 px-1 py-0.5 rounded mx-0.5 tabular-nums">
                       {seasonData.daysLeft}
                     </span>{" "}
                     {daysWord}
                   </span>
-                  <span className="font-bold opacity-90">
+                  <span className="font-bold opacity-90 hidden sm:inline">
                     — {t("seasonBookEarly", "бронируйте заранее по лучшей цене!")}
                   </span>
                 </>
               ) : (
                 <>
-                  <span>
+                  <span className="whitespace-nowrap">
                     🌊 {t("seasonDuring", "Сезон в разгаре! Осталось")}{" "}
                     <span className="font-extrabold text-white bg-white/20 px-1.5 py-0.5 rounded-md mx-0.5 tabular-nums">
                       {seasonData.daysLeft}
                     </span>{" "}
                     {daysWord}
                   </span>
-                  <span className="font-bold opacity-90">
+                  <span className="font-bold opacity-90 hidden sm:inline">
                     — {t("seasonHurry", "лучшие номера уходят!")}
                   </span>
                 </>
@@ -127,9 +127,9 @@ export function SeasonBanner() {
           {/* CTA Button */}
           <Link
             href="/booking"
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-orange-600 hover:bg-orange-50 hover:text-orange-700 shadow-sm text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 shrink-0"
+            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white text-orange-600 hover:bg-orange-50 hover:text-orange-700 shadow-sm text-[9px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 shrink-0"
           >
-            <CalendarDays className="h-3 w-3" />
+            <CalendarDays className="h-3 w-3 hidden xs:inline" />
             {t("selectDates", "Выбрать даты")}
             <ArrowRight className="h-3 w-3" />
           </Link>
