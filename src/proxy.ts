@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // 1. Check if "lang" cookie exists
   const hasLangCookie = request.cookies.has("lang");
 
