@@ -8,6 +8,7 @@ export default async function Home() {
   const rooms = await getRooms();
   const cookieStore = await cookies();
   const lang = cookieStore.get("lang")?.value || "ru";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
 
   const prices = rooms.map((r) => r.price);
   const minPrice = prices.length ? Math.min(...prices) : 1500;
@@ -34,9 +35,9 @@ export default async function Home() {
     "@type": "Resort",
     "name": resortName,
     "description": resortDesc,
-    "image": "https://zatokaresort.com/og-image.png",
-    "logo": "https://zatokaresort.com/og-image.png",
-    "url": "https://zatokaresort.com",
+    "image": `${baseUrl}/og-image.png`,
+    "logo": `${baseUrl}/og-image.png`,
+    "url": baseUrl,
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "ул. Приморская, 1",
