@@ -37,9 +37,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 
   const descTemplates = {
-    ru: `${room.description.substring(0, 150)}... Забронируйте номер ${room.name} в Затоке по лучшей цене от ${room.price} грн за ночь.`,
-    uk: `${room.description.substring(0, 150)}... Забронюйте номер ${room.name} в Затоці за найкращою ціною від ${room.price} грн за ніч.`,
-    en: `${room.description.substring(0, 150)}... Book room ${room.name} in Zatoka at the best rate starting from ${room.price} UAH per night.`,
+    ru: `${room.name} в Затоке: до ${room.capacity} гостей, от ${room.price} грн/ночь. ${room.description.substring(0, 80)}...`,
+    uk: `${room.name} в Затоці: до ${room.capacity} гостей, від ${room.price} грн/ніч. ${room.description.substring(0, 80)}...`,
+    en: `${room.name} in Zatoka: up to ${room.capacity} guests, from ${room.price} UAH/night. ${room.description.substring(0, 80)}...`,
   };
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";

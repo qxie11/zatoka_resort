@@ -48,9 +48,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 
   const descriptions = {
-    ru: "Забронируйте свой идеальный пляжный отдых в 'Отдых в Затоке', премиум-отеле в Затоке, Одесса. Наслаждайтесь потрясающими видами на море, отличным сервисом и современными удобствами.",
-    uk: "Забронюйте свій ідеальний пляжний відпочинок у 'Відпочинок в Затоці', преміум-готелі в Затоці, Одеса. Насолоджуйтесь приголомшливими видами на море, чудовим сервісом та сучасними зручностями.",
-    en: "Book your perfect beach holiday at 'Zatoka Resort', a premium hotel in Zatoka, Odesa. Enjoy stunning sea views, excellent service, and modern amenities.",
+    ru: "Отдых в Затоке: премиум-отель у Черного моря. Панорамные виды на море, песчаный пляж, отличный сервис и современные номера. Забронируйте отпуск!",
+    uk: "Відпочинок в Затоці: преміум-готель біля Чорного моря. Панорамні види, піщаний пляж, чудовий сервіс та сучасні номери. Забронюйте відпочинок!",
+    en: "Zatoka Resort: premium Black Sea hotel. Enjoy stunning sea views, private beach, modern rooms, and top-tier service. Book your summer getaway!",
   };
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
