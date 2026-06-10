@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
-// @ts-ignore
-import sharp from "sharp";
+import { Jimp } from "jimp";
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,25 +28,21 @@ export async function POST(request: NextRequest) {
       // Skip animated GIFs to avoid losing frames
       if (file.type !== "image/gif") {
         try {
-          const sharpImg = sharp(fileBuffer);
-          const metadata = await sharpImg.metadata();
+          const image = await Jimp.read(fileBuffer);
+          const width = image.width;
+          const height = image.height;
 
-          if (metadata.width && metadata.height) {
-            const maxWidth = 1600;
-            const maxHeight = 1600;
-            if (metadata.width > maxWidth || metadata.height > maxHeight) {
-              sharpImg.resize({
-                width: maxWidth,
-                height: maxHeight,
-                fit: "inside",
-                withoutEnlargement: true,
-              });
-            }
+          const maxWidth = 1600;
+          const maxHeight = 1600;
+
+          if (width > maxWidth || height > maxHeight) {
+            const ratio = Math.min(maxWidth / width, maxHeight / height);
+            const w = Math.round(width * ratio);
+            const h = Math.round(height * ratio);
+            image.resize({ w, h });
           }
 
-          const optimizedBuffer = await sharpImg
-            .jpeg({ quality: 80, mozjpeg: true })
-            .toBuffer();
+          const optimizedBuffer = await image.getBuffer("image/jpeg", { quality: 80 });
 
           if (optimizedBuffer.length < fileBuffer.length) {
             fileBuffer = optimizedBuffer;
@@ -55,7 +50,7 @@ export async function POST(request: NextRequest) {
             fileName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
           }
         } catch (err) {
-          console.error("Ошибка при оптимизации изображения sharp:", err);
+          console.error("Ошибка при оптимизации изображения jimp:", err);
         }
       }
 
