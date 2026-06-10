@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
+// @ts-ignore
+import sharp from "sharp";
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,10 +22,48 @@ export async function POST(request: NextRequest) {
         continue;
       }
 
+      let fileBuffer = Buffer.from(await file.arrayBuffer());
+      let contentType = file.type;
+      let fileName = file.name;
+
+      // Skip animated GIFs to avoid losing frames
+      if (file.type !== "image/gif") {
+        try {
+          const sharpImg = sharp(fileBuffer);
+          const metadata = await sharpImg.metadata();
+
+          if (metadata.width && metadata.height) {
+            const maxWidth = 1600;
+            const maxHeight = 1600;
+            if (metadata.width > maxWidth || metadata.height > maxHeight) {
+              sharpImg.resize({
+                width: maxWidth,
+                height: maxHeight,
+                fit: "inside",
+                withoutEnlargement: true,
+              });
+            }
+          }
+
+          const optimizedBuffer = await sharpImg
+            .jpeg({ quality: 80, mozjpeg: true })
+            .toBuffer();
+
+          if (optimizedBuffer.length < fileBuffer.length) {
+            fileBuffer = optimizedBuffer;
+            contentType = "image/jpeg";
+            fileName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+          }
+        } catch (err) {
+          console.error("Ошибка при оптимизации изображения sharp:", err);
+        }
+      }
+
       // Upload file directly to Vercel Blob storage
-      const blob = await put(file.name, file, {
+      const blob = await put(fileName, fileBuffer, {
         access: "public",
         addRandomSuffix: true,
+        contentType: contentType,
       });
 
       uploadedPaths.push(blob.url);
