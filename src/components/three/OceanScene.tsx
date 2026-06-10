@@ -15,7 +15,7 @@ export default function OceanScene() {
     if (!canvas) return;
 
     let animationId: number;
-    const clock = new THREE.Clock();
+    const clock = new THREE.Timer();
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -291,7 +291,7 @@ export default function OceanScene() {
     let lastRippleTime = 0;
 
     const spawnRipple = (clientX: number, clientY: number) => {
-      const baseTime = clock.getElapsedTime();
+      const baseTime = clock.getElapsed();
       if (baseTime - lastRippleTime < 0.12) return; // Ограничитель спавна
       lastRippleTime = baseTime;
 
@@ -363,9 +363,10 @@ export default function OceanScene() {
     handleResize();
 
     let frameCount = 0;
-    const animate = () => {
+    const animate = (timestamp?: number) => {
       animationId = requestAnimationFrame(animate);
-      const elapsedTime = clock.getElapsedTime();
+      clock.update(timestamp);
+      const elapsedTime = clock.getElapsed();
 
       oceanMaterial.uniforms.iTime.value = elapsedTime;
 
