@@ -113,7 +113,7 @@ export function DateRangePicker({
   return (
     <FormItem className={cn("flex flex-col", className)}>
       <FormLabel className="text-teal-300 font-bold mb-2">{label}</FormLabel>
-      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+      <Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal={true}>
         <PopoverTrigger asChild>
           <FormControl>
             <Button
@@ -140,9 +140,9 @@ export function DateRangePicker({
           </FormControl>
         </PopoverTrigger>
         <PopoverContent 
-          onPointerDownOutside={(e) => {
+          onInteractOutside={(e) => {
             const target = e.target as HTMLElement;
-            if (target && !document.body.contains(target)) {
+            if (target && (!document.body.contains(target) || target.closest('.rdp') || target.closest('[data-radix-popper-content-wrapper]'))) {
               e.preventDefault();
             }
           }}
