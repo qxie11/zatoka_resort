@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { PhoneCall, Trash2, Calendar, User, MessageSquare, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
 
 interface CallbackRequest {
   id: string;
@@ -17,6 +18,9 @@ export default function CallbacksAdminPage() {
   const [requests, setRequests] = useState<CallbackRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [requestIdToDelete, setRequestIdToDelete] = useState<string | null>(null);
 
   const fetchRequests = async () => {
     try {
@@ -39,28 +43,44 @@ export default function CallbacksAdminPage() {
     fetchRequests();
   }, []); // eslint-disable-line
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Вы уверены, что хотите удалить эту заявку?")) return;
+  const handleDelete = (id: string) => {
+    setRequestIdToDelete(id);
+    setDeleteConfirmOpen(true);
+  };
 
-    try {
-      const res = await fetch(`/api/callbacks/${id}`, {
-        method: "DELETE",
-      });
+  const handleDeleteConfirm = async () => {
+    if (!requestIdToDelete) return;
+    const id = requestIdToDelete;
+    const rowEl = document.getElementById(`row-${id}`);
 
-      if (!res.ok) throw new Error("Failed to delete");
-
-      toast({
-        title: "Успешно",
-        description: "Заявка успешно удалена",
-      });
-
+    const performDelete = async () => {
       setRequests((prev) => prev.filter((r) => r.id !== id));
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Ошибка",
-        description: "Не удалось удалить заявку",
-      });
+      try {
+        const res = await fetch(`/api/callbacks/${id}`, {
+          method: "DELETE",
+        });
+
+        if (!res.ok) throw new Error("Failed to delete");
+
+        toast({
+          title: "Успешно",
+          description: "Заявка успешно удалена",
+        });
+      } catch (error) {
+        fetchRequests();
+        toast({
+          variant: "destructive",
+          title: "Ошибка",
+          description: "Не удалось удалить заявку",
+        });
+      }
+    };
+
+    if (rowEl) {
+      const { thanosSnap } = await import("@/lib/thanos");
+      thanosSnap(rowEl, performDelete);
+    } else {
+      performDelete();
     }
   };
 
@@ -116,6 +136,7 @@ export default function CallbacksAdminPage() {
                 {requests.map((request) => (
                   <tr
                     key={request.id}
+                    id={`row-${request.id}`}
                     className="hover:bg-white/5 transition-colors"
                   >
                     <td className="p-4 pl-6 text-slate-400">
@@ -167,6 +188,13 @@ export default function CallbacksAdminPage() {
           </div>
         </div>
       )}
+      <DeleteConfirmDialog
+        isOpen={deleteConfirmOpen}
+        onOpenChange={setDeleteConfirmOpen}
+        onConfirm={handleDeleteConfirm}
+        title="Удалить заявку?"
+        description="Вы уверены, что хотите удалить эту заявку на обратный звонок? Это действие необратимо."
+      />
     </div>
   );
 }

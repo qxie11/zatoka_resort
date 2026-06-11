@@ -90,6 +90,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
+                  id={`row-${(row.original as any).id}`}
                   data-state={row.getIsSelected() && "selected"}
                   className="border-b border-white/5 hover:bg-white/5 transition-colors"
                 >

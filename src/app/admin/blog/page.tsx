@@ -14,10 +14,14 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import BlogForm from "./components/BlogForm";
 import { useToast } from "@/hooks/use-toast";
+import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
 
 export default function BlogAdminPage() {
   const [sheetOpen, setSheetOpen] = React.useState(false);
   const [selectedPost, setSelectedPost] = React.useState<BlogPost | null>(null);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
+  const [postIdToDelete, setPostIdToDelete] = React.useState<string | null>(null);
+  const [deletingIds, setDeletingIds] = React.useState<string[]>([]);
   const { toast } = useToast();
 
   // RTK Query hooks
@@ -36,19 +40,39 @@ export default function BlogAdminPage() {
     setSheetOpen(true);
   };
 
-  const handleDelete = async (postId: string) => {
-    try {
-      await deletePost(postId).unwrap();
-      toast({
-        title: "Успешно",
-        description: "Статья удалена",
-      });
-    } catch (error) {
-      toast({
-        title: "Ошибка",
-        description: error instanceof Error ? error.message : "Не удалось удалить статью",
-        variant: "destructive",
-      });
+  const handleDelete = (postId: string) => {
+    setPostIdToDelete(postId);
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!postIdToDelete) return;
+    const postId = postIdToDelete;
+    const rowEl = document.getElementById(`row-${postId}`);
+    
+    const performDelete = async () => {
+      setDeletingIds((prev) => [...prev, postId]);
+      try {
+        await deletePost(postId).unwrap();
+        toast({
+          title: "Успешно",
+          description: "Статья удалена",
+        });
+      } catch (error) {
+        setDeletingIds((prev) => prev.filter((id) => id !== postId));
+        toast({
+          title: "Ошибка",
+          description: error instanceof Error ? error.message : "Не удалось удалить статью",
+          variant: "destructive",
+        });
+      }
+    };
+
+    if (rowEl) {
+      const { thanosSnap } = await import("@/lib/thanos");
+      thanosSnap(rowEl, performDelete);
+    } else {
+      performDelete();
     }
   };
 
@@ -97,6 +121,10 @@ export default function BlogAdminPage() {
     );
   }
 
+  const visiblePosts = React.useMemo(() => {
+    return posts.filter((post) => !deletingIds.includes(post.id));
+  }, [posts, deletingIds]);
+
   return (
     <>
       <div className="flex items-center justify-between text-white bg-slate-950 mb-6">
@@ -108,13 +136,20 @@ export default function BlogAdminPage() {
       </div>
       <DataTable 
         columns={columns({ onEdit: handleEdit, onDelete: handleDelete })} 
-        data={posts} 
+        data={visiblePosts} 
       />
       <BlogForm
         isOpen={sheetOpen}
         onOpenChange={setSheetOpen}
         onSubmit={handleFormSubmit}
         post={selectedPost}
+      />
+      <DeleteConfirmDialog
+        isOpen={deleteConfirmOpen}
+        onOpenChange={setDeleteConfirmOpen}
+        onConfirm={handleDeleteConfirm}
+        title="Удалить статью?"
+        description="Вы уверены, что хотите удалить эту статью? Она будет удалена безвозвратно."
       />
     </>
   );

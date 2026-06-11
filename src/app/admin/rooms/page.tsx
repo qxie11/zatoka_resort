@@ -14,10 +14,14 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import RoomForm from "./components/RoomForm";
 import { useToast } from "@/hooks/use-toast";
+import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
 
 export default function RoomsAdminPage() {
   const [sheetOpen, setSheetOpen] = React.useState(false);
   const [selectedRoom, setSelectedRoom] = React.useState<Room | null>(null);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
+  const [roomIdToDelete, setRoomIdToDelete] = React.useState<string | null>(null);
+  const [deletingIds, setDeletingIds] = React.useState<string[]>([]);
   const { toast } = useToast();
 
   // RTK Query hooks
@@ -36,19 +40,39 @@ export default function RoomsAdminPage() {
     setSheetOpen(true);
   };
 
-  const handleDelete = async (roomId: string) => {
-    try {
-      await deleteRoom(roomId).unwrap();
-      toast({
-        title: "Успешно",
-        description: "Номер удален",
-      });
-    } catch (error) {
-      toast({
-        title: "Ошибка",
-        description: error instanceof Error ? error.message : "Не удалось удалить номер",
-        variant: "destructive",
-      });
+  const handleDelete = (roomId: string) => {
+    setRoomIdToDelete(roomId);
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!roomIdToDelete) return;
+    const roomId = roomIdToDelete;
+    const rowEl = document.getElementById(`row-${roomId}`);
+    
+    const performDelete = async () => {
+      setDeletingIds((prev) => [...prev, roomId]);
+      try {
+        await deleteRoom(roomId).unwrap();
+        toast({
+          title: "Успешно",
+          description: "Номер удален",
+        });
+      } catch (error) {
+        setDeletingIds((prev) => prev.filter((id) => id !== roomId));
+        toast({
+          title: "Ошибка",
+          description: error instanceof Error ? error.message : "Не удалось удалить номер",
+          variant: "destructive",
+        });
+      }
+    };
+
+    if (rowEl) {
+      const { thanosSnap } = await import("@/lib/thanos");
+      thanosSnap(rowEl, performDelete);
+    } else {
+      performDelete();
     }
   };
 
@@ -97,6 +121,10 @@ export default function RoomsAdminPage() {
     );
   }
 
+  const visibleRooms = React.useMemo(() => {
+    return rooms.filter((room) => !deletingIds.includes(room.id));
+  }, [rooms, deletingIds]);
+
   return (
     <>
       <div className="flex items-center justify-between text-white bg-slate-950 mb-6">
@@ -108,13 +136,20 @@ export default function RoomsAdminPage() {
       </div>
       <DataTable 
         columns={columns({ onEdit: handleEdit, onDelete: handleDelete })} 
-        data={rooms} 
+        data={visibleRooms} 
       />
       <RoomForm
         isOpen={sheetOpen}
         onOpenChange={setSheetOpen}
         onSubmit={handleFormSubmit}
         room={selectedRoom}
+      />
+      <DeleteConfirmDialog
+        isOpen={deleteConfirmOpen}
+        onOpenChange={setDeleteConfirmOpen}
+        onConfirm={handleDeleteConfirm}
+        title="Удалить номер?"
+        description="Вы уверены, что хотите удалить этот номер? Все связанные данные будут потеряны."
       />
     </>
   );

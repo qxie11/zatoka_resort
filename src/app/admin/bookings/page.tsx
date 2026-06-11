@@ -15,6 +15,7 @@ import { PlusCircle } from "lucide-react";
 import BookingForm from "./components/BookingForm";
 import { useToast } from "@/hooks/use-toast";
 import type { Booking } from "@/lib/types";
+import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
 import {
   Select,
   SelectContent,
@@ -28,6 +29,9 @@ export default function BookingsAdminPage() {
   const [sheetOpen, setSheetOpen] = React.useState(false);
   const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(null);
   const [selectedRoomId, setSelectedRoomId] = React.useState<string | null>(null);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
+  const [bookingIdToDelete, setBookingIdToDelete] = React.useState<string | null>(null);
+  const [deletingIds, setDeletingIds] = React.useState<string[]>([]);
   const { toast } = useToast();
 
   // RTK Query hooks
@@ -50,19 +54,39 @@ export default function BookingsAdminPage() {
     setSheetOpen(true);
   };
 
-  const handleDelete = async (bookingId: string) => {
-    try {
-      await deleteBooking(bookingId).unwrap();
-      toast({
-        title: "Успешно",
-        description: "Бронирование удалено",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Ошибка",
-        description: error?.data?.error || error?.message || "Не удалось удалить бронирование",
-        variant: "destructive",
-      });
+  const handleDelete = (bookingId: string) => {
+    setBookingIdToDelete(bookingId);
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!bookingIdToDelete) return;
+    const bookingId = bookingIdToDelete;
+    const rowEl = document.getElementById(`row-${bookingId}`);
+    
+    const performDelete = async () => {
+      setDeletingIds((prev) => [...prev, bookingId]);
+      try {
+        await deleteBooking(bookingId).unwrap();
+        toast({
+          title: "Успешно",
+          description: "Бронирование удалено",
+        });
+      } catch (error: any) {
+        setDeletingIds((prev) => prev.filter((id) => id !== bookingId));
+        toast({
+          title: "Ошибка",
+          description: error?.data?.error || error?.message || "Не удалось удалить бронирование",
+          variant: "destructive",
+        });
+      }
+    };
+
+    if (rowEl) {
+      const { thanosSnap } = await import("@/lib/thanos");
+      thanosSnap(rowEl, performDelete);
+    } else {
+      performDelete();
     }
   };
 
@@ -91,9 +115,12 @@ export default function BookingsAdminPage() {
     }
   };
 
-  const filteredBookings = selectedRoomId 
-    ? bookings.filter(booking => booking.roomId === selectedRoomId)
-    : bookings;
+  const filteredBookings = React.useMemo(() => {
+    const active = bookings.filter((b) => !deletingIds.includes(b.id));
+    return selectedRoomId 
+      ? active.filter(booking => booking.roomId === selectedRoomId)
+      : active;
+  }, [bookings, deletingIds, selectedRoomId]);
 
   const bookingsWithRoomNames = filteredBookings.map(booking => {
     const room = rooms.find(r => r.id === booking.roomId);
@@ -165,6 +192,13 @@ export default function BookingsAdminPage() {
         onSubmit={handleFormSubmit}
         booking={selectedBooking}
         rooms={rooms}
+      />
+      <DeleteConfirmDialog
+        isOpen={deleteConfirmOpen}
+        onOpenChange={setDeleteConfirmOpen}
+        onConfirm={handleDeleteConfirm}
+        title="Удалить бронирование?"
+        description="Вы уверены, что хотите удалить это бронирование? Это действие нельзя отменить."
       />
     </div>
   );

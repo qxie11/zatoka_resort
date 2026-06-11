@@ -42,6 +42,7 @@ export function DateRangePicker({
   className,
 }: DateRangePickerProps) {
   const [isMobile, setIsMobile] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -112,7 +113,7 @@ export function DateRangePicker({
   return (
     <FormItem className={cn("flex flex-col", className)}>
       <FormLabel className="text-teal-300 font-bold mb-2">{label}</FormLabel>
-      <Popover>
+      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger asChild>
           <FormControl>
             <Button
@@ -138,16 +139,26 @@ export function DateRangePicker({
             </Button>
           </FormControl>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 text-white z-50" align="start">
+        <PopoverContent 
+          onPointerDownOutside={(e) => {
+            const target = e.target as HTMLElement;
+            if (target && !document.body.contains(target)) {
+              e.preventDefault();
+            }
+          }}
+          className="w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 text-white z-50" 
+          align="start"
+        >
           <Calendar
             initialFocus
             mode="range"
             defaultMonth={value?.from}
-            selected={{ from: value?.from, to: value?.to }}
+            selected={value?.from ? { from: value.from, to: value.to } : undefined}
             onSelect={(range) => {
               if (range?.from && range?.to) {
                 if (validateDateRange(range)) {
                   onChange(range);
+                  setPopoverOpen(false);
                 } else {
                   toast({
                     title: "Даты заняты",
