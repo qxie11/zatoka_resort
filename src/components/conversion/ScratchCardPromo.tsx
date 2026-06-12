@@ -10,6 +10,18 @@ interface ScratchCardPromoProps {
 
 export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Disable background scrolling when the modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
   const [scratchedPercent, setScratchedPercent] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -179,7 +191,7 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
       {/* Floating Gift Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-36 right-6 z-40 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 h-14 w-14 hover:w-[220px] rounded-full shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 animate-deep-pulse flex items-center justify-center hover:justify-start hover:px-4 group border border-white/20"
+        className="fixed bottom-32 right-3 md:bottom-36 md:right-6 z-40 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 h-14 w-14 hover:w-[220px] rounded-full shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 animate-deep-pulse flex items-center justify-center hover:justify-start hover:px-4 group border border-white/20"
       >
         <Gift className="h-6 w-6 shrink-0" />
         <span className="max-w-0 overflow-hidden group-hover:max-w-[160px] group-hover:ml-2 transition-all duration-500 ease-in-out font-bold text-xs uppercase tracking-wider whitespace-nowrap">
@@ -214,8 +226,8 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
               </p>
             </div>
 
-            {/* Scratch Arena Container */}
-            <div className="relative w-full aspect-[2/1] rounded-2xl overflow-hidden bg-gradient-to-br from-teal-500/10 to-sky-500/10 border border-teal-500/20 flex flex-col items-center justify-center p-4">
+            {/* Scratch Arena Container (taller aspect ratio on mobile to prevent text overflow) */}
+            <div className="relative w-full aspect-[16/10] sm:aspect-[2/1] rounded-2xl overflow-hidden bg-gradient-to-br from-teal-500/10 to-sky-500/10 border border-teal-500/20 flex flex-col items-center justify-center p-4">
               
               {/* Revealed Promo Code view */}
               {isRevealed ? (

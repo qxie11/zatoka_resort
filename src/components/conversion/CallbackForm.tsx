@@ -66,7 +66,7 @@ export function CallbackForm() {
   };
 
   return (
-    <div className="fixed bottom-20 right-6 z-[95] flex flex-col items-end">
+    <div className="fixed bottom-16 right-3 md:bottom-20 md:right-6 z-[95] flex flex-col items-end">
       {/* Expanded Form Card */}
       {isOpen && (
         <div className="mb-4 w-[320px] sm:w-[360px] glass-card-dark border border-white/10 rounded-3xl p-5 shadow-2xl animate-fade-in-up backdrop-blur-xl relative overflow-hidden">
