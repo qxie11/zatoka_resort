@@ -367,7 +367,7 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
 
               <div className="space-y-3 pt-4 border-t border-white/5">
                 <Button asChild className="w-full bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold rounded-xl py-5">
-                  <Link href={`/${lang}/booking/${recommendation.id}`}>
+                  <Link href={`/${lang}/booking/${recommendation.slug}`}>
                     {current.bookBtn}
                   </Link>
                 </Button>

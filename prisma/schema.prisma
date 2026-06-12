@@ -12,6 +12,7 @@ datasource db {
 
 model Room {
   id          String    @id @default(uuid())
+  slug        String    @unique @default("")
   name        String
   description String
   price       Int

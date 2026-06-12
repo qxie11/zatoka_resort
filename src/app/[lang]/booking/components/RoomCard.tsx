@@ -105,7 +105,7 @@ export default function RoomCard({ room }: RoomCardProps) {
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <ViewImagesButton room={room} />
             <Button asChild className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl px-6">
-              <Link href={`/${lang}/booking/${room.id}`}>Забронировать</Link>
+              <Link href={`/${lang}/booking/${room.slug}`}>Забронировать</Link>
             </Button>
           </div>
         </CardFooter>

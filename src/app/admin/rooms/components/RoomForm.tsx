@@ -23,6 +23,7 @@ import type { Room } from "@/lib/types";
 
 const roomSchema = z.object({
   name: z.string().min(1, "Название обязательно"),
+  slug: z.string().min(1, "Слаг обязателен").regex(/^[a-z0-9-]+$/, "Слаг должен состоять из латинских букв в нижнем регистре, цифр и дефисов"),
   description: z.string().min(1, "Описание обязательно"),
   price: z.coerce.number().min(0, "Цена должна быть положительным числом"),
   capacity: z.coerce.number().int().min(1, "Вместимость должна быть не менее 1"),
@@ -34,6 +35,7 @@ const roomSchema = z.object({
 
 type RoomFormValues = {
   name: string;
+  slug: string;
   description: string;
   price: number;
   capacity: number;
@@ -60,6 +62,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
     resolver: zodResolver(roomSchema),
     defaultValues: {
         name: '',
+        slug: '',
         description: '',
         price: 0,
         capacity: 1,
@@ -74,6 +77,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
     if (room) {
       form.reset({
           name: room.name,
+          slug: room.slug || '',
           description: room.description,
           price: room.price,
           capacity: room.capacity,
@@ -87,6 +91,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
     } else {
       form.reset({
         name: '',
+        slug: '',
         description: '',
         price: 0,
         capacity: 1,
@@ -163,6 +168,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
 
       onSubmit({ 
         name: data.name,
+        slug: data.slug,
         description: data.description,
         price: data.price,
         capacity: data.capacity,
@@ -201,6 +207,11 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                  <Label htmlFor="name" className="font-semibold text-slate-300">Название</Label>
                  <Input id="name" {...form.register("name")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" />
                  {form.formState.errors.name && <p className="text-xs text-rose-500">{form.formState.errors.name.message}</p>}
+             </div>
+            <div className="grid gap-2">
+                 <Label htmlFor="slug" className="font-semibold text-slate-300">Слаг (URL)</Label>
+                 <Input id="slug" {...form.register("slug")} placeholder="deluxe-suite" className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11 font-mono text-sm" />
+                 {form.formState.errors.slug && <p className="text-xs text-rose-500">{form.formState.errors.slug.message}</p>}
              </div>
             <div className="grid gap-2">
                  <Label htmlFor="description" className="font-semibold text-slate-300">Описание</Label>

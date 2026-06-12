@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       name,
+      slug,
       description,
       price,
       capacity,
@@ -61,6 +62,7 @@ export async function POST(request: NextRequest) {
 
     const newRoom = await createRoom({
       name,
+      slug: slug || undefined,
       description,
       price: Number(price),
       capacity: Number(capacity),

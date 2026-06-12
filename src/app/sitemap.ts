@@ -16,12 +16,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // 2. Fetch rooms and posts from database with try-catch to prevent build-time crashes
-  let rooms: Array<{ id: string; updatedAt: Date }> = [];
+  let rooms: Array<{ id: string; slug: string; updatedAt: Date }> = [];
   let posts: Array<{ slug: string; updatedAt: Date }> = [];
 
   try {
     rooms = await prisma.room.findMany({
-      select: { id: true, updatedAt: true }
+      select: { id: true, slug: true, updatedAt: true }
     });
     posts = await prisma.blogPost.findMany({
       select: { slug: true, updatedAt: true }
@@ -59,12 +59,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Generate sitemap items for dynamic rooms
   for (const room of rooms) {
     for (const locale of locales) {
-      const pathWithLocale = `/${locale}/booking/${room.id}`;
+      const pathWithLocale = `/${locale}/booking/${room.slug}`;
       const url = `${baseUrl}${pathWithLocale}`;
 
       const languages: Record<string, string> = {};
       locales.forEach(loc => {
-        languages[loc] = `${baseUrl}/${loc}/booking/${room.id}`;
+        languages[loc] = `${baseUrl}/${loc}/booking/${room.slug}`;
       });
 
       sitemapEntries.push({

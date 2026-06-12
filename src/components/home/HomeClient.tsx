@@ -29,6 +29,7 @@ import {
   XCircle,
   CreditCard,
   Baby,
+  Eye,
 } from "lucide-react";
 import type { LucideProps } from "lucide-react";
 import type { Room } from "@/lib/types";
@@ -36,6 +37,15 @@ import { amenities } from "@/lib/data";
 import i18n from "@/lib/i18n";
 import SeasideStatusWidget from "@/components/conversion/SeasideStatusWidget";
 import RoomFinderQuiz from "@/components/conversion/RoomFinderQuiz";
+import ImageGallery from "@/components/rooms/ImageGallery";
+
+const resortImages = [
+  "/hero-beach.png",
+  "https://images.unsplash.com/photo-1683459285195-2bff6b201b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8emF0b2thJTIwYmVhY2h8ZW58MHx8fHwxNzYwNzM2NjIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+  "https://images.unsplash.com/photo-1606819422797-74627f4dac0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxob3RlbCUyMHBvb2x8ZW58MHx8fHwxNzYwNzM0OTk0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+  "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxob3RlbCUyMHJlc3RhdXJhbnR8ZW58MHx8fHwxNzYwNzM2NjIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+  "https://images.unsplash.com/photo-1757689314932-bec6e9c39e51?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGElMjB3ZWxsbmVzc3xlbnwwfHx8fDE3NjA3MzY2MjN8MA&ixlib=rb-4.1.0&q=80&w=1080"
+];
 
 const iconMap: { [key: string]: React.FC<LucideProps> } = {
   Waves,
@@ -68,6 +78,7 @@ interface HomeClientProps {
 export default function HomeClient({ rooms, lang }: HomeClientProps) {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [, setLangUpdate] = useState(i18n.language);
 
   useEffect(() => {
@@ -235,6 +246,16 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                     className="object-cover transition-all duration-[10s] group-hover:scale-110 brightness-95"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                  
+                  {/* View Slides Button */}
+                  <Button
+                    type="button"
+                    onClick={() => setIsGalleryOpen(true)}
+                    className="absolute top-4 right-4 bg-slate-950/80 hover:bg-slate-900 border border-white/10 text-white rounded-xl px-3.5 py-1.5 text-xs flex items-center gap-1.5 shadow-lg backdrop-blur-md transition-all duration-300 z-20 cursor-pointer"
+                  >
+                    <Eye className="h-4 w-4 text-teal-400" />
+                    {translate("viewSlides", "Смотреть слайды")}
+                  </Button>
                   
                   {/* Floating Premium Rating Badge */}
                   <div className="absolute bottom-6 left-6 right-6 p-4 rounded-xl glass-card-premium text-slate-900 border border-white/40 shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
@@ -653,6 +674,12 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
           </div>
         </section>
       </main>
+      <ImageGallery
+        images={resortImages}
+        isOpen={isGalleryOpen}
+        onClose={() => setIsGalleryOpen(false)}
+        roomName="Zatoka Resort"
+      />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getRoomById, getBookingsByRoomId } from '@/lib/db';
+import { getRoomBySlugOrId, getBookingsByRoomId } from '@/lib/db';
 import RoomBookingForm from './components/RoomBookingForm';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
@@ -11,38 +11,39 @@ import GoogleMapComponent from '../components/GoogleMapComponent';
 import Link from 'next/link';
 
 interface PageProps {
-  params: Promise<{ lang: string; roomId: string }>;
+  params: Promise<{ lang: string; slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { roomId, lang } = await params;
-  const room = await getRoomById(roomId);
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+  const { slug, lang } = await params;
+  const room = await getRoomBySlugOrId(slug);
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://zatoka-hotel.com';
 
   if (!room) return { title: "Not Found" };
 
   const title = `${room.name} | Zatoka Resort`;
-  const canonicalUrl = `${baseUrl}/${lang}/booking/${roomId}`;
+  const canonicalUrl = `${baseUrl}/${lang}/booking/${room.slug}`;
 
   return {
     title,
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        ru: `${baseUrl}/ru/booking/${roomId}`,
-        uk: `${baseUrl}/uk/booking/${roomId}`,
-        en: `${baseUrl}/en/booking/${roomId}`,
+        ru: `${baseUrl}/ru/booking/${room.slug}`,
+        uk: `${baseUrl}/uk/booking/${room.slug}`,
+        en: `${baseUrl}/en/booking/${room.slug}`,
       },
     },
   };
 }
 
 export default async function RoomBookingPage({ params }: PageProps) {
-  const { roomId, lang } = await params;
-  const room = await getRoomById(roomId);
-  const bookings = await getBookingsByRoomId(roomId);
+  const { slug, lang } = await params;
+  const room = await getRoomBySlugOrId(slug);
 
   if (!room) notFound();
+
+  const bookings = await getBookingsByRoomId(room.id);
 
   // Возвращаем ваши labels для перевода
   const t = {

@@ -9,6 +9,7 @@ export const getRooms = async (): Promise<Room[]> => {
   
   return rooms.map(room => ({
     id: room.id,
+    slug: room.slug,
     name: room.name,
     description: room.description,
     price: room.price,
@@ -29,6 +30,7 @@ export const getRoomById = async (id: string): Promise<Room | null> => {
   
   return {
     id: room.id,
+    slug: room.slug,
     name: room.name,
     description: room.description,
     price: room.price,
@@ -40,10 +42,38 @@ export const getRoomById = async (id: string): Promise<Room | null> => {
   };
 };
 
-export const createRoom = async (room: Omit<Room, 'id'>): Promise<Room> => {
+export const getRoomBySlugOrId = async (slugOrId: string): Promise<Room | null> => {
+  let room = await prisma.room.findUnique({
+    where: { slug: slugOrId },
+  });
+  
+  if (!room) {
+    room = await prisma.room.findUnique({
+      where: { id: slugOrId },
+    });
+  }
+  
+  if (!room) return null;
+  
+  return {
+    id: room.id,
+    slug: room.slug,
+    name: room.name,
+    description: room.description,
+    price: room.price,
+    capacity: room.capacity,
+    amenities: room.amenities,
+    imageUrl: room.imageUrl,
+    imageUrls: room.imageUrls || [],
+    imageHint: room.imageHint,
+  };
+};
+
+export const createRoom = async (room: Omit<Room, 'id' | 'slug'> & { slug?: string }): Promise<Room> => {
   const newRoom = await prisma.room.create({
     data: {
       name: room.name,
+      slug: room.slug || room.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""),
       description: room.description,
       price: room.price,
       capacity: room.capacity,
@@ -56,6 +86,7 @@ export const createRoom = async (room: Omit<Room, 'id'>): Promise<Room> => {
   
   return {
     id: newRoom.id,
+    slug: newRoom.slug,
     name: newRoom.name,
     description: newRoom.description,
     price: newRoom.price,
@@ -67,10 +98,11 @@ export const createRoom = async (room: Omit<Room, 'id'>): Promise<Room> => {
   };
 };
 
-export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id'>>): Promise<Room | null> => {
+export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id' | 'slug'> & { slug?: string }>): Promise<Room | null> => {
   try {
     const updateData: any = {};
     
+    if (room.slug !== undefined) updateData.slug = room.slug;
     if (room.name !== undefined) updateData.name = room.name;
     if (room.description !== undefined) updateData.description = room.description;
     if (room.price !== undefined) updateData.price = room.price;
@@ -86,6 +118,7 @@ export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id'>>): P
       
       return {
         id: existingRoom.id,
+        slug: existingRoom.slug,
         name: existingRoom.name,
         description: existingRoom.description,
         price: existingRoom.price,
@@ -104,6 +137,7 @@ export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id'>>): P
     
     return {
       id: updatedRoom.id,
+      slug: updatedRoom.slug,
       name: updatedRoom.name,
       description: updatedRoom.description,
       price: updatedRoom.price,
