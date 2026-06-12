@@ -8,12 +8,13 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, rating, comment } = body;
+    const { name, rating, comment, roomId } = body;
 
     const updateData: any = {};
     if (name !== undefined) updateData.name = name;
     if (rating !== undefined) updateData.rating = Number(rating);
     if (comment !== undefined) updateData.comment = comment;
+    if (roomId !== undefined) updateData.roomId = roomId;
 
     const updated = await updateReview(id, updateData);
 

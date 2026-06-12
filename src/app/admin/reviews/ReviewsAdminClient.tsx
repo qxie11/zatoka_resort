@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { MessageSquare, Trash2, Calendar, User, Star, Loader2, Bed } from "lucide-react";
+import { MessageSquare, Trash2, Calendar, User, Star, Loader2, Bed, Edit2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
 
@@ -13,6 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 interface Room {
   id: string;
@@ -40,16 +50,23 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
   const [selectedRoomId, setSelectedRoomId] = useState<string>("all");
   const { toast } = useToast();
 
+  // Deletion States
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [reviewIdToDelete, setReviewIdToDelete] = useState<string | null>(null);
+
+  // Edition States
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingReview, setEditingReview] = useState<Review | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editRoomId, setEditRoomId] = useState("");
+  const [editRating, setEditRating] = useState(5);
+  const [editComment, setEditComment] = useState("");
 
   const fetchReviews = async () => {
     try {
       const res = await fetch("/api/reviews");
       if (!res.ok) throw new Error("Failed to fetch");
       const data = await res.json();
-      // Need to re-populate full room objects locally if not returned, 
-      // but since we are synchronizing in-memory for deleted items, we can fallback to mapping.
       const mapped = data.map((d: any) => ({
         ...d,
         room: rooms.find(r => r.id === d.roomId) || { id: d.roomId, name: "Неизвестный номер" }
@@ -105,6 +122,69 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
       performDelete();
     }
     setReviewIdToDelete(null);
+  };
+
+  const handleEdit = (review: Review) => {
+    setEditingReview(review);
+    setEditName(review.name);
+    setEditRoomId(review.roomId);
+    setEditRating(review.rating);
+    setEditComment(review.comment);
+    setEditDialogOpen(true);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingReview) return;
+    if (!editName.trim() || !editComment.trim()) {
+      toast({
+        title: "Ошибка",
+        description: "Поля не могут быть пустыми",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/reviews/${editingReview.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: editName,
+          roomId: editRoomId,
+          rating: editRating,
+          comment: editComment,
+        })
+      });
+
+      if (!res.ok) throw new Error("Failed to update");
+
+      const updated = await res.json();
+      setReviews((prev) =>
+        prev.map((r) =>
+          r.id === editingReview.id
+            ? {
+                ...updated,
+                room: rooms.find((rm) => rm.id === editRoomId) || r.room,
+              }
+            : r
+        )
+      );
+
+      setEditDialogOpen(false);
+      setEditingReview(null);
+
+      toast({
+        title: "Успешно",
+        description: "Отзыв успешно обновлен",
+        className: "glass-card-dark border-l-4 border-l-teal-500 text-white"
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: "Не удалось обновить отзыв",
+      });
+    }
   };
 
   // Filter reviews based on selection
@@ -210,15 +290,26 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
                       {review.comment}
                     </td>
                     <td className="p-4 pr-6 text-right">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDelete(review.id)}
-                        className="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all"
-                        title="Удалить отзыв"
-                      >
-                        <Trash2 className="h-4.5 w-4.5" />
-                      </Button>
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleEdit(review)}
+                          className="text-slate-400 hover:text-teal-400 hover:bg-teal-500/10 rounded-xl transition-all"
+                          title="Редактировать отзыв"
+                        >
+                          <Edit2 className="h-4.5 w-4.5" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDelete(review.id)}
+                          className="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all"
+                          title="Удалить отзыв"
+                        >
+                          <Trash2 className="h-4.5 w-4.5" />
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -227,6 +318,96 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
           </div>
         </div>
       )}
+
+      {/* Edit Review Dialog */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="glass-card-dark border-white/10 text-white max-w-md rounded-3xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-white flex items-center gap-2">
+              <Edit2 className="h-5 w-5 text-teal-400 animate-pulse" />
+              Редактировать отзыв
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-1.5">
+              <label className="text-slate-300 text-xs font-medium">Имя гостя</label>
+              <Input
+                type="text"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                className="bg-slate-950/80 border-white/10 text-white rounded-xl focus:border-teal-400/50"
+              />
+            </div>
+            
+            <div className="space-y-1.5">
+              <label className="text-slate-300 text-xs font-medium">Номер комнаты</label>
+              <Select value={editRoomId} onValueChange={setEditRoomId}>
+                <SelectTrigger className="w-full bg-slate-950/80 border border-white/10 text-white rounded-xl focus:ring-0 focus:ring-offset-0 focus:border-teal-400/50">
+                  <SelectValue placeholder="Выберите номер" />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-950 border border-white/10 text-white rounded-xl">
+                  {rooms.map((room) => (
+                    <SelectItem key={room.id} value={room.id} className="focus:bg-teal-500/20 focus:text-white cursor-pointer hover:bg-white/5 transition-colors">
+                      {room.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-slate-300 text-xs font-medium block">Оценка</label>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: 5 }).map((_, i) => {
+                  const starValue = i + 1;
+                  return (
+                    <button
+                      type="button"
+                      key={i}
+                      onClick={() => setEditRating(starValue)}
+                      className="text-amber-400 focus:outline-none hover:scale-110 transition-transform"
+                    >
+                      <Star
+                        className={`h-6 w-6 ${
+                          starValue <= editRating
+                            ? "fill-amber-400 text-amber-400"
+                            : "text-slate-600"
+                        }`}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-slate-300 text-xs font-medium">Комментарий</label>
+              <Textarea
+                value={editComment}
+                onChange={(e) => setEditComment(e.target.value)}
+                rows={4}
+                className="bg-slate-950/80 border-white/10 text-white rounded-xl resize-none focus:border-teal-400/50"
+              />
+            </div>
+          </div>
+          <DialogFooter className="flex gap-2 justify-end">
+            <Button
+              variant="ghost"
+              onClick={() => setEditDialogOpen(false)}
+              className="text-slate-300 hover:bg-white/10 rounded-xl"
+            >
+              Отмена
+            </Button>
+            <Button
+              onClick={handleSaveEdit}
+              className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold rounded-xl border-0"
+            >
+              Сохранить
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <DeleteConfirmDialog
         isOpen={deleteConfirmOpen}
         onOpenChange={setDeleteConfirmOpen}
@@ -237,3 +418,4 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
     </div>
   );
 }
+
