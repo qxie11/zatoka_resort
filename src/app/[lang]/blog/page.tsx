@@ -9,14 +9,13 @@ import { getBlogPosts } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 interface BlogPageProps {
-  searchParams: Promise<{ search?: string; category?: string; page?: string; lang?: string }>;
+  params: Promise<{ lang: string }>;
+  searchParams: Promise<{ search?: string; category?: string; page?: string }>;
 }
 
-export async function generateMetadata({ searchParams }: BlogPageProps): Promise<Metadata> {
-  const { lang: queryLang, category } = await searchParams;
-  const headerList = await headers();
-  const cookieStore = await cookies();
-  const lang = queryLang || headerList.get("x-lang") || cookieStore.get("lang")?.value || "ru";
+export async function generateMetadata({ params, searchParams }: { params: Promise<{ lang: string }>; searchParams: Promise<{ category?: string }> }): Promise<Metadata> {
+  const { lang } = await params;
+  const { category } = await searchParams;
 
   const titles = {
     ru: "Блог и полезные советы | Отдых в Затоке",
@@ -31,10 +30,8 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
   };
 
   const categorySuffix = category ? `?category=${category}` : "";
-  const categoryAndLangUk = category ? `?category=${category}&lang=uk` : "?lang=uk";
-  const categoryAndLangEn = category ? `?category=${category}&lang=en` : "?lang=en";
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
-  const canonicalPath = `${baseUrl}/blog${categorySuffix}${lang !== "ru" ? (categorySuffix ? `&lang=${lang}` : `?lang=${lang}`) : ""}`;
+  const canonicalPath = `${baseUrl}/${lang}/blog${categorySuffix}`;
   const title = titles[lang as keyof typeof titles] || titles.ru;
   const description = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
 
@@ -44,10 +41,10 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
     alternates: {
       canonical: canonicalPath,
       languages: {
-        "x-default": `${baseUrl}/blog${categorySuffix}`,
-        ru: `${baseUrl}/blog${categorySuffix}`,
-        uk: `${baseUrl}/blog${categoryAndLangUk}`,
-        en: `${baseUrl}/blog${categoryAndLangEn}`,
+        "x-default": `${baseUrl}/ru/blog${categorySuffix}`,
+        ru: `${baseUrl}/ru/blog${categorySuffix}`,
+        uk: `${baseUrl}/uk/blog${categorySuffix}`,
+        en: `${baseUrl}/en/blog${categorySuffix}`,
       },
     },
     openGraph: {
@@ -66,11 +63,9 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
   };
 }
 
-export default async function BlogPage({ searchParams }: BlogPageProps) {
+export default async function BlogPage({ params, searchParams }: BlogPageProps) {
+  const { lang } = await params;
   const blogPosts = await getBlogPosts();
-  const headerList = await headers();
-  const cookieStore = await cookies();
-  const lang = ((headerList.get("x-lang") || cookieStore.get("lang")?.value) as "ru" | "uk" | "en") || "ru";
 
   const { search = "", category = "all", page = "1" } = await searchParams;
   const currentPage = Math.max(1, parseInt(page, 10) || 1);
@@ -108,7 +103,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       prev: "Previous",
       next: "Next",
     },
-  }[lang];
+  }[lang as "ru" | "uk" | "en"] || translations.ru;
 
   // Get unique categories (in current language)
   const categoriesMap = blogPosts.map((post) => {
@@ -159,7 +154,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     if (search) params.set("search", search);
     if (category !== "all") params.set("category", category);
     params.set("page", pageNumber.toString());
-    return `/blog?${params.toString()}`;
+    return `/${lang}/blog?${params.toString()}`;
   };
 
   return (
@@ -207,7 +202,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           {/* Category Selector Links */}
           <div className="flex flex-wrap gap-2 w-full md:w-auto">
             <Link
-              href={`/blog?category=all${search ? `&search=${search}` : ""}`}
+              href={`/${lang}/blog?category=all${search ? `&search=${search}` : ""}`}
               className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
                 category === "all"
                   ? "bg-gradient-to-r from-teal-400 to-sky-500 text-slate-950 shadow-lg shadow-teal-500/20 font-bold"
@@ -219,7 +214,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             {uniqueCategories.map((cat) => (
               <Link
                 key={cat.slug}
-                href={`/blog?category=${cat.slug}${search ? `&search=${search}` : ""}`}
+                href={`/${lang}/blog?category=${cat.slug}${search ? `&search=${search}` : ""}`}
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
                   category === cat.slug
                     ? "bg-gradient-to-r from-teal-400 to-sky-500 text-slate-950 shadow-lg shadow-teal-500/20 font-bold"
@@ -232,7 +227,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           </div>
 
           {/* Search bar (native form submitting to GET /blog) */}
-          <form method="GET" action="/blog" className="relative w-full md:w-80">
+          <form method="GET" action={`/${lang}/blog`} className="relative w-full md:w-80">
             {category !== "all" && (
               <input type="hidden" name="category" value={category} />
             )}
@@ -298,7 +293,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
                       <div>
                         <Link
-                          href={`/blog/${post.slug}`}
+                          href={`/${lang}/blog/${post.slug}`}
                           className="inline-flex items-center gap-2 text-teal-300 hover:text-teal-200 font-medium text-sm group/btn"
                         >
                           <span>{translations.readMore}</span>

@@ -1,8 +1,24 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { Waves, Twitter, Facebook, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Footer() {
+  const { t } = useTranslation();
+  const pathname = usePathname();
+
+  // Extract lang prefix from pathname
+  const segments = pathname?.split("/") || [];
+  const currentLang = ["ru", "uk", "en"].includes(segments[1]) ? segments[1] : "ru";
+
+  const getLocalizedHref = (href: string) => {
+    if (href === "/") return `/${currentLang}`;
+    return `/${currentLang}${href}`;
+  };
+
   return (
     <footer className="relative bg-slate-950 text-slate-100 overflow-hidden">
       {/* Animated wave top border */}
@@ -33,37 +49,55 @@ export default function Footer() {
       <div className="container mx-auto max-w-7xl px-4 py-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="flex flex-col items-start">
-            <Link href="/" className="flex items-center gap-2 mb-4 group">
+            <Link href={getLocalizedHref("/")} className="flex items-center gap-2 mb-4 group">
               <Waves className="h-6 w-6 text-teal-400 group-hover:animate-coral-sway glow-teal" />
               <span className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 group-hover:animate-ocean-shimmer">
-                Отдых в Затоке
+                {t("brandName")}
               </span>
             </Link>
             <p className="text-slate-300 text-sm font-light">
-              Ваш безмятежный морской отдых на побережье Черного моря.
+              {currentLang === "ru" 
+                ? "Ваш безмятежный морской отдых на побережье Черного моря."
+                : currentLang === "uk"
+                ? "Ваш безтурботний морський відпочинок на узбережжі Чорного моря."
+                : "Your serene seaside getaway on the Black Sea coast."}
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-2 gap-8">
              <div>
-                <h3 className="font-bold text-white mb-4">Быстрые ссылки</h3>
+                <h3 className="font-bold text-white mb-4">
+                  {currentLang === "ru" ? "Быстрые ссылки" : currentLang === "uk" ? "Швидкі посилання" : "Quick Links"}
+                </h3>
                 <ul className="space-y-2">
-                    <li><Link href="/" className="text-sm text-slate-300 hover:text-teal-300 transition-colors">Главная</Link></li>
-                    <li><Link href="/about" className="text-sm text-slate-300 hover:text-teal-300 transition-colors">О нас</Link></li>
-                    <li><Link href="/booking" className="text-sm text-slate-300 hover:text-teal-300 transition-colors">Бронирование</Link></li>
-                    <li><Link href="/blog" className="text-sm text-slate-300 hover:text-teal-300 transition-colors">Блог</Link></li>
+                    <li><Link href={getLocalizedHref("/")} className="text-sm text-slate-300 hover:text-teal-300 transition-colors">{t("home")}</Link></li>
+                    <li><Link href={getLocalizedHref("/about")} className="text-sm text-slate-300 hover:text-teal-300 transition-colors">{t("about")}</Link></li>
+                    <li><Link href={getLocalizedHref("/booking")} className="text-sm text-slate-300 hover:text-teal-300 transition-colors">{t("booking")}</Link></li>
+                    <li><Link href={getLocalizedHref("/blog")} className="text-sm text-slate-300 hover:text-teal-300 transition-colors">{t("blog")}</Link></li>
                 </ul>
              </div>
              <div>
-                <h3 className="font-bold text-white mb-4">Контакты</h3>
+                <h3 className="font-bold text-white mb-4">
+                  {currentLang === "ru" ? "Контакты" : currentLang === "uk" ? "Контакти" : "Contacts"}
+                </h3>
                 <ul className="space-y-2 text-sm text-slate-300 font-light">
-                    <li>ул. Приморская, 1</li>
-                    <li>Затока, Одесская область, 67772</li>
+                    <li>
+                      {currentLang === "en" ? "42, Zolotoy Bereg blvd" : "бульвар Золотой Берег, 42"}
+                    </li>
+                    <li>
+                      {currentLang === "ru" 
+                        ? "Затока, Одесская область, 67772"
+                        : currentLang === "uk"
+                        ? "Затока, Одеська область, 67772"
+                        : "Zatoka, Odesa region, 67772"}
+                    </li>
                     <li>contact@zatokagetaway.com</li>
                 </ul>
              </div>
           </div>
           <div className="md:ml-auto">
-             <h3 className="font-bold text-white mb-4">Следите за нами</h3>
+             <h3 className="font-bold text-white mb-4">
+               {currentLang === "ru" ? "Следите за нами" : currentLang === "uk" ? "Стежте за нами" : "Follow Us"}
+             </h3>
              <div className="flex items-center gap-2">
                 <Button variant="ghost" size="icon" asChild className="text-slate-300 hover:text-teal-300 hover:bg-white/5 rounded-full transition-all duration-300 hover:scale-110 hover:glow-teal">
                     <a href="#" aria-label="Twitter"><Twitter className="h-5 w-5" /></a>
@@ -78,7 +112,9 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-slate-400 font-light">&copy; {new Date().getFullYear()} Отдых в Затоке. Все права защищены.</p>
+            <p className="text-sm text-slate-400 font-light">
+              &copy; {new Date().getFullYear()} {t("brandName")}. {currentLang === "ru" ? "Все права защищены." : currentLang === "uk" ? "Всі права захищені." : "All rights reserved."}
+            </p>
             {/* Decorative animated waves line */}
             <div className="flex items-center gap-1 mt-4 md:mt-0 opacity-30">
               {[...Array(5)].map((_, i) => (

@@ -16,6 +16,7 @@ import {
 import type { Room } from "@/lib/types";
 import { BedDouble, Eye, Waves } from "lucide-react";
 import ImageGallery from "@/components/rooms/ImageGallery";
+import { usePathname } from "next/navigation";
 
 interface RoomCardProps {
   room: Room;
@@ -54,6 +55,10 @@ function ViewImagesButton({ room }: { room: Room }) {
 }
 
 export default function RoomCard({ room }: RoomCardProps) {
+  const pathname = usePathname();
+  const segments = pathname?.split("/") || [];
+  const lang = ["ru", "uk", "en"].includes(segments[1]) ? segments[1] : "ru";
+
   return (
     <Card
       id={room.id}
@@ -100,7 +105,7 @@ export default function RoomCard({ room }: RoomCardProps) {
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <ViewImagesButton room={room} />
             <Button asChild className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl px-6">
-              <Link href={`/booking/${room.id}`}>Забронировать</Link>
+              <Link href={`/${lang}/booking/${room.id}`}>Забронировать</Link>
             </Button>
           </div>
         </CardFooter>

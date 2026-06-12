@@ -11,8 +11,7 @@ import remarkGfm from "remark-gfm";
 export const dynamic = "force-dynamic";
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<{ lang?: string }>;
+  params: Promise<{ slug: string; lang: string }>;
 }
 
 export async function generateStaticParams() {
@@ -22,13 +21,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const { lang: queryLang } = await searchParams;
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug, lang } = await params;
   const post = await getBlogPostBySlug(slug);
-  const headerList = await headers();
-  const cookieStore = await cookies();
-  const lang = queryLang || headerList.get("x-lang") || cookieStore.get("lang")?.value || "ru";
 
   if (!post) {
     return {
@@ -49,7 +44,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   }[lang as "ru" | "uk" | "en"] || post.excerptRu;
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
-  const canonicalUrl = `${baseUrl}/blog/${slug}${lang !== "ru" ? `?lang=${lang}` : ""}`;
+  const canonicalUrl = `${baseUrl}/${lang}/blog/${slug}`;
 
   return {
     title,
@@ -57,10 +52,10 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        "x-default": `${baseUrl}/blog/${slug}`,
-        ru: `${baseUrl}/blog/${slug}`,
-        uk: `${baseUrl}/blog/${slug}?lang=uk`,
-        en: `${baseUrl}/blog/${slug}?lang=en`,
+        "x-default": `${baseUrl}/ru/blog/${slug}`,
+        ru: `${baseUrl}/ru/blog/${slug}`,
+        uk: `${baseUrl}/uk/blog/${slug}`,
+        en: `${baseUrl}/en/blog/${slug}`,
       },
     },
     openGraph: {
@@ -85,11 +80,8 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-  const { slug } = await params;
+  const { slug, lang } = await params;
   const post = await getBlogPostBySlug(slug);
-  const headerList = await headers();
-  const cookieStore = await cookies();
-  const lang = ((headerList.get("x-lang") || cookieStore.get("lang")?.value) as "ru" | "uk" | "en") || "ru";
 
   if (!post) {
     notFound();
@@ -152,7 +144,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   }[lang];
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
-  const canonicalUrl = `${baseUrl}/blog/${slug}${lang !== "ru" ? `?lang=${lang}` : ""}`;
+  const canonicalUrl = `${baseUrl}/${lang}/blog/${slug}`;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -193,7 +185,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             src={post.imageUrl}
             alt={title}
             fill
-            className="object-cover scale-100 opacity-60 brightness-[0.5]"
+            className="object-cover scale-105 opacity-60 brightness-[0.5]"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
@@ -202,7 +194,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className="relative container mx-auto px-4 pb-12 z-10 max-w-4xl">
           <div className="mb-6">
             <Link
-              href="/blog"
+              href={`/${lang}/blog`}
               className="inline-flex items-center gap-2 text-teal-300 hover:text-teal-200 transition-colors text-sm font-medium"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -283,7 +275,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     {relTitle}
                   </h3>
                   <Link
-                    href={`/blog/${rel.slug}`}
+                    href={`/${lang}/blog/${rel.slug}`}
                     className="inline-flex items-center gap-1.5 text-teal-300 text-xs font-semibold group/btn"
                   >
                     <span>{readMoreText}</span>

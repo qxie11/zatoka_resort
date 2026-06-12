@@ -57,22 +57,24 @@ export default function Header() {
     { href: "/blog", label: t("blog") },
   ];
 
+  const getLanguageHref = (lang: string) => {
+    const segments = pathname.split("/");
+    if (segments.length > 1 && ["ru", "uk", "en"].includes(segments[1])) {
+      const newSegments = [...segments];
+      newSegments[1] = lang;
+      return newSegments.join("/");
+    }
+    return `/${lang}`;
+  };
+
   const LanguageSelector = () => (
     <div className="flex items-center gap-1 bg-slate-950/60 border border-white/10 p-1 rounded-xl text-xs font-semibold backdrop-blur-xl shadow-inner">
       {(["uk", "ru", "en"] as const).map((lang) => (
-        <button
+        <Link
           key={lang}
-          onClick={async () => {
-            await i18n.changeLanguage(lang);
+          href={getLanguageHref(lang)}
+          onClick={() => {
             document.cookie = `lang=${lang}; path=/; max-age=31536000; SameSite=Lax`;
-            
-            const segments = pathname.split("/");
-            if (segments.length > 1 && ["ru", "uk", "en"].includes(segments[1])) {
-              segments[1] = lang;
-              router.push(segments.join("/"));
-            } else {
-              router.push(`/${lang}`);
-            }
           }}
           className={cn(
             "px-2.5 py-1 rounded-lg transition-all uppercase duration-300 relative text-xs",
@@ -82,10 +84,16 @@ export default function Header() {
           )}
         >
           {lang === "uk" ? "UA" : lang}
-        </button>
+        </Link>
       ))}
     </div>
   );
+
+  const getLocalizedHref = (href: string) => {
+    const langPrefix = `/${currentLang}`;
+    if (href === "/") return langPrefix;
+    return `${langPrefix}${href}`;
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full transition-all duration-500">
@@ -101,7 +109,7 @@ export default function Header() {
       <div className="container relative mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         {/* Brand / Logo */}
         <Link
-          href="/"
+          href={getLocalizedHref("/")}
           className="flex items-center gap-2.5 group"
           onClick={() => setIsMobileMenuOpen(false)}
         >
@@ -116,11 +124,12 @@ export default function Header() {
         {/* Desktop Navigation Capsule */}
         <nav className="hidden lg:flex items-center gap-1.5 bg-slate-900/60 border border-white/10 px-2 py-1.5 rounded-full backdrop-blur-xl shadow-lg">
           {navLinks.map((link) => {
-            const isActive = pathname === link.href;
+            const localizedHref = getLocalizedHref(link.href);
+            const isActive = pathname === localizedHref;
             return (
               <Link
                 key={link.href}
-                href={link.href}
+                href={localizedHref}
                 className={cn(
                   "text-xs uppercase tracking-widest font-bold transition-all duration-300 px-4 py-2 rounded-full",
                   isActive
@@ -171,7 +180,7 @@ export default function Header() {
               asChild
               className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-[0_0_20px_rgba(45,212,191,0.25)] hover:shadow-[0_0_25px_rgba(45,212,191,0.4)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl px-5 h-9 text-xs uppercase tracking-wider"
             >
-              <Link href="/booking">{t("booking")}</Link>
+              <Link href={getLocalizedHref("/booking")}>{t("booking")}</Link>
             </Button>
           )}
         </div>
@@ -202,7 +211,7 @@ export default function Header() {
               
               <div className="flex flex-col gap-6 h-full pt-6">
                 <Link
-                  href="/"
+                  href={getLocalizedHref("/")}
                   className="flex items-center gap-2.5 mb-2 pb-4 border-b border-white/5"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -215,21 +224,24 @@ export default function Header() {
                 </Link>
 
                 <div className="flex flex-col gap-4">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={cn(
-                        "text-sm uppercase tracking-widest font-bold py-2 px-3 rounded-xl transition-all duration-300 border border-transparent",
-                        pathname === link.href
-                          ? "text-teal-300 bg-teal-500/5 border-teal-500/10"
-                          : "text-slate-400 hover:text-white hover:bg-white/5"
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+                  {navLinks.map((link) => {
+                    const localizedHref = getLocalizedHref(link.href);
+                    return (
+                      <Link
+                        key={link.href}
+                        href={localizedHref}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={cn(
+                          "text-sm uppercase tracking-widest font-bold py-2 px-3 rounded-xl transition-all duration-300 border border-transparent",
+                          pathname === localizedHref
+                            ? "text-teal-300 bg-teal-500/5 border-teal-500/10"
+                            : "text-slate-400 hover:text-white hover:bg-white/5"
+                        )}
+                      >
+                        {link.label}
+                      </Link>
+                    );
+                  })}
                   {mounted && isAuthenticated && (
                     <Link
                       href="/admin"
@@ -263,7 +275,7 @@ export default function Header() {
                       className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl py-5 text-xs uppercase tracking-widest"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <Link href="/booking">{t("booking")}</Link>
+                      <Link href={getLocalizedHref("/booking")}>{t("booking")}</Link>
                     </Button>
                   )}
                 </div>
