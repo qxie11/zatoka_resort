@@ -6,6 +6,7 @@ import { SeasonBanner } from "@/components/conversion/SeasonBanner";
 import { CallbackForm } from "@/components/conversion/CallbackForm";
 import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
 import ScratchCardPromo from "@/components/conversion/ScratchCardPromo";
+import LanguageSync from "@/components/providers/LanguageSync";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -70,6 +71,7 @@ export default async function RootLayout({
 
   return (
     <div>
+      <LanguageSync lang={lang} />
       <Header />
 
       <main className="min-h-screen">
