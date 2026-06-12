@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Star, User, Calendar, MessageSquare, Send } from "lucide-react";
+import { Star, Calendar, MessageSquare, Send, Edit2, Trash2, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
+import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
 
 interface Review {
   id: string;
@@ -21,56 +22,50 @@ interface RoomReviewsProps {
   roomName: string;
 }
 
-const defaultReviews: Record<string, Review[]> = {
-  default: [
-    {
-      id: "1",
-      name: "Александр М.",
-      rating: 5,
-      date: "04.06.2026",
-      comment: "Потрясающий номер! Первая линия — действительно первая линия, до моря буквально минута пешком. Номер чистый, современный, кондиционер работает отлично. Обязательно вернемся снова!"
-    },
-    {
-      id: "2",
-      name: "Ольга Д.",
-      rating: 5,
-      date: "28.05.2026",
-      comment: "Отдыхали всей семьей. Дети в восторге от бассейна и близости к пляжу. Персонал очень отзывчивый, помогли со всеми вопросами. Отличное соотношение цены и качества."
-    },
-    {
-      id: "3",
-      name: "Дмитрий К.",
-      rating: 4,
-      date: "15.05.2026",
-      comment: "Хороший просторный номер с шикарным видом. Wi-Fi на территории работал стабильно, что было важно для работы. Из минусов — в выходные на побережье бывает шумновато, но при закрытых окнах ничего не слышно."
-    }
-  ]
-};
-
 export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Form states for new review
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [comment, setComment] = useState("");
 
-  useEffect(() => {
-    // Load reviews from localStorage or initialize with defaults
-    const stored = localStorage.getItem(`reviews_${roomId}`);
-    if (stored) {
-      try {
-        setReviews(JSON.parse(stored));
-      } catch (e) {
-        setReviews(defaultReviews.default);
+  // Edit states
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editRating, setEditRating] = useState(5);
+  const [editComment, setEditComment] = useState("");
+
+  // Delete states
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  // Fetch reviews on mount
+  const fetchReviews = async () => {
+    try {
+      const res = await fetch(`/api/reviews?roomId=${roomId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setReviews(data);
       }
-    } else {
-      setReviews(defaultReviews.default);
+    } catch (e) {
+      console.error("Failed to fetch reviews:", e);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchReviews();
+    // Check if current user is admin
+    setIsAdmin(localStorage.getItem("isAuthenticated") === "true");
   }, [roomId]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!name.trim()) {
@@ -91,28 +86,132 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
       return;
     }
 
-    const newReview: Review = {
-      id: Date.now().toString(),
-      name,
-      rating,
-      date: new Date().toLocaleDateString("ru-RU"),
-      comment
+    try {
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          roomId,
+          name,
+          rating,
+          comment,
+          date: new Date().toLocaleDateString("ru-RU")
+        })
+      });
+
+      if (res.ok) {
+        const newReview = await res.json();
+        setReviews([newReview, ...reviews]);
+        setName("");
+        setRating(5);
+        setComment("");
+        toast({
+          title: "Отзыв добавлен",
+          description: "Спасибо! Ваш отзыв сохранен в базе данных.",
+          className: "glass-card-dark border-l-4 border-l-teal-500 text-white"
+        });
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      toast({
+        title: "Ошибка",
+        description: "Не удалось отправить отзыв. Попробуйте еще раз.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleStartEdit = (review: Review) => {
+    setEditingId(review.id);
+    setEditName(review.name);
+    setEditRating(review.rating);
+    setEditComment(review.comment);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+  };
+
+  const handleSaveEdit = async (id: string) => {
+    if (!editName.trim() || !editComment.trim()) {
+      toast({
+        title: "Ошибка",
+        description: "Поля не могут быть пустыми",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/reviews/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: editName,
+          rating: editRating,
+          comment: editComment
+        })
+      });
+
+      if (res.ok) {
+        const updatedReview = await res.json();
+        setReviews(reviews.map((r) => (r.id === id ? updatedReview : r)));
+        setEditingId(null);
+        toast({
+          title: "Отзыв обновлен",
+          description: "Изменения успешно сохранены.",
+          className: "glass-card-dark border-l-4 border-l-teal-500 text-white"
+        });
+      } else {
+        throw new Error();
+      }
+    } catch (e) {
+      toast({
+        title: "Ошибка",
+        description: "Не удалось сохранить изменения.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deletingId) return;
+    const id = deletingId;
+    const rowEl = document.getElementById(`review-row-${id}`);
+
+    const performDelete = async () => {
+      try {
+        const res = await fetch(`/api/reviews/${id}`, {
+          method: "DELETE"
+        });
+
+        if (res.ok) {
+          setReviews((prev) => prev.filter((r) => r.id !== id));
+          toast({
+            title: "Отзыв удален",
+            description: "Отзыв успешно удален из базы данных.",
+            className: "glass-card-dark border-l-4 border-l-rose-500 text-white"
+          });
+        } else {
+          throw new Error();
+        }
+      } catch (e) {
+        toast({
+          title: "Ошибка",
+          description: "Не удалось удалить отзыв.",
+          variant: "destructive"
+        });
+      }
     };
 
-    const updatedReviews = [newReview, ...reviews];
-    setReviews(updatedReviews);
-    localStorage.setItem(`reviews_${roomId}`, JSON.stringify(updatedReviews));
-
-    // Clear form
-    setName("");
-    setRating(5);
-    setComment("");
-
-    toast({
-      title: "Отзыв добавлен",
-      description: "Спасибо за ваш отзыв! Он опубликован в реальном времени.",
-      className: "glass-card-dark border-l-4 border-l-teal-500 text-white"
-    });
+    if (rowEl) {
+      const { thanosSnap } = await import("@/lib/thanos");
+      thanosSnap(rowEl, performDelete);
+    } else {
+      performDelete();
+    }
+    setDeletingId(null);
   };
 
   const avgRating = reviews.length
@@ -154,35 +253,120 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Reviews List */}
         <div className="lg:col-span-2 space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
-          {reviews.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-12 text-slate-400 text-sm">Загрузка отзывов...</div>
+          ) : reviews.length > 0 ? (
             reviews.map((review) => (
               <div
                 key={review.id}
-                className="p-5 rounded-2xl bg-slate-900/40 border border-white/5 space-y-3 hover:border-white/10 transition-colors"
+                id={`review-row-${review.id}`}
+                className="p-5 rounded-2xl bg-slate-900/40 border border-white/5 space-y-3 hover:border-white/10 transition-colors relative"
               >
-                <div className="flex justify-between items-start">
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-9 w-9 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-300 font-semibold text-sm">
-                      {review.name.charAt(0).toUpperCase()}
+                {editingId === review.id ? (
+                  // Edit mode inline
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <Input
+                        type="text"
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                        className="bg-slate-950/80 border-white/10 text-white rounded-xl text-sm max-w-xs focus:border-teal-400/50"
+                        placeholder="Имя"
+                      />
+                      <div className="flex items-center gap-0.5">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <button
+                            type="button"
+                            key={i}
+                            onClick={() => setEditRating(i + 1)}
+                            className="text-amber-400 focus:outline-none"
+                          >
+                            <Star
+                              className={`h-4.5 w-4.5 ${
+                                i + 1 <= editRating
+                                  ? "fill-amber-400 text-amber-400"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-white text-sm">{review.name}</h4>
-                      <span className="text-slate-400 text-xs flex items-center gap-1 mt-0.5">
-                        <Calendar className="h-3 w-3" />
-                        {review.date}
-                      </span>
+                    <Textarea
+                      value={editComment}
+                      onChange={(e) => setEditComment(e.target.value)}
+                      className="bg-slate-950/80 border-white/10 text-white rounded-xl text-sm resize-none focus:border-teal-400/50"
+                      rows={3}
+                      placeholder="Комментарий"
+                    />
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => handleSaveEdit(review.id)}
+                        className="bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs"
+                      >
+                        <Check className="h-3 w-3 mr-1" />
+                        Сохранить
+                      </Button>
+                      <Button
+                        onClick={handleCancelEdit}
+                        variant="ghost"
+                        className="text-slate-300 hover:bg-white/10 px-3 py-1.5 rounded-lg text-xs"
+                      >
+                        <X className="h-3 w-3 mr-1" />
+                        Отмена
+                      </Button>
                     </div>
                   </div>
+                ) : (
+                  // Normal view mode
+                  <>
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-9 w-9 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-300 font-semibold text-sm">
+                          {review.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-white text-sm">{review.name}</h4>
+                          <span className="text-slate-400 text-xs flex items-center gap-1 mt-0.5">
+                            <Calendar className="h-3 w-3" />
+                            {review.date}
+                          </span>
+                        </div>
+                      </div>
 
-                  <div className="flex items-center text-amber-400 bg-amber-500/5 px-2 py-1 rounded-lg border border-amber-500/10">
-                    <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 mr-1" />
-                    <span className="text-xs font-bold">{review.rating}</span>
-                  </div>
-                </div>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center text-amber-400 bg-amber-500/5 px-2 py-1 rounded-lg border border-amber-500/10">
+                          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 mr-1" />
+                          <span className="text-xs font-bold">{review.rating}</span>
+                        </div>
 
-                <p className="text-slate-300 text-sm font-light leading-relaxed pl-1">
-                  {review.comment}
-                </p>
+                        {/* Admin Inline actions */}
+                        {isAdmin && (
+                          <div className="flex items-center gap-1.5 border-l border-white/10 pl-3">
+                            <button
+                              onClick={() => handleStartEdit(review)}
+                              className="text-slate-400 hover:text-teal-400 p-1 transition-colors"
+                              title="Редактировать"
+                            >
+                              <Edit2 className="h-3.5 w-3.5" />
+                            </button>
+                            <button
+                              onClick={() => setDeletingId(review.id)}
+                              className="text-slate-400 hover:text-rose-400 p-1 transition-colors"
+                              title="Удалить"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <p className="text-slate-300 text-sm font-light leading-relaxed pl-1">
+                      {review.comment}
+                    </p>
+                  </>
+                )}
               </div>
             ))
           ) : (
@@ -256,6 +440,15 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
           </form>
         </div>
       </div>
+
+      {/* Thanos snap deletion dialog */}
+      <DeleteConfirmDialog
+        isOpen={deletingId !== null}
+        onOpenChange={(open) => !open && setDeletingId(null)}
+        onConfirm={handleDelete}
+        title="Удалить отзыв?"
+        description="Вы уверены, что хотите удалить этот отзыв гостя? Это действие безвозвратно удалит отзыв из базы данных."
+      />
     </div>
   );
 }

@@ -48,3 +48,14 @@ export type BlogPost = {
   updatedAt?: Date;
 };
 
+export type Review = {
+  id: string;
+  roomId: string;
+  name: string;
+  rating: number;
+  date: string;
+  comment: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+

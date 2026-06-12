@@ -23,6 +23,7 @@ model Room {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   bookings    Booking[]
+  reviews     Review[]
 
   @@map("rooms")
 }
@@ -75,5 +76,19 @@ model BlogPost {
   updatedAt   DateTime @updatedAt
 
   @@map("blog_posts")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  roomId    String
+  name      String
+  rating    Int
+  date      String
+  comment   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
 }
 

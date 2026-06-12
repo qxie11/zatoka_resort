@@ -1,5 +1,5 @@
 import { prisma } from './prisma';
-import type { Room, Booking, BlogPost } from './types';
+import type { Room, Booking, BlogPost, Review } from './types';
 
 // Rooms CRUD
 export const getRooms = async (): Promise<Room[]> => {
@@ -293,6 +293,52 @@ export const updateBlogPost = async (id: string, post: Partial<Omit<BlogPost, 'i
 export const deleteBlogPost = async (id: string): Promise<boolean> => {
   try {
     await prisma.blogPost.delete({
+      where: { id },
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+// Reviews CRUD
+export const getReviews = async (): Promise<Review[]> => {
+  const reviews = await prisma.review.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+  return reviews;
+};
+
+export const getReviewsByRoomId = async (roomId: string): Promise<Review[]> => {
+  const reviews = await prisma.review.findMany({
+    where: { roomId },
+    orderBy: { createdAt: 'desc' },
+  });
+  return reviews;
+};
+
+export const createReview = async (review: Omit<Review, 'id' | 'createdAt' | 'updatedAt'>): Promise<Review> => {
+  const newReview = await prisma.review.create({
+    data: review,
+  });
+  return newReview;
+};
+
+export const updateReview = async (id: string, review: Partial<Omit<Review, 'id' | 'createdAt' | 'updatedAt'>>): Promise<Review | null> => {
+  try {
+    const updatedReview = await prisma.review.update({
+      where: { id },
+      data: review,
+    });
+    return updatedReview;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const deleteReview = async (id: string): Promise<boolean> => {
+  try {
+    await prisma.review.delete({
       where: { id },
     });
     return true;
