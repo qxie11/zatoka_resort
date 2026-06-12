@@ -65,11 +65,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           select: { id: true, updatedAt: true },
         });
         for (const room of rooms) {
+          const roomUrl = `${baseUrl}/booking/${room.id}`;
           sitemapEntries.push({
-            url: `${baseUrl}/booking/${room.id}`,
+            url: roomUrl,
             lastModified: room.updatedAt || new Date(),
             changeFrequency: "weekly",
             priority: 0.7,
+            alternates: {
+              languages: {
+                ru: roomUrl,
+                uk: `${roomUrl}?lang=uk`,
+                en: `${roomUrl}?lang=en`,
+              },
+            },
           });
         }
       } catch (error) {
@@ -82,11 +90,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           select: { slug: true, updatedAt: true },
         });
         for (const post of posts) {
+          const postUrl = `${baseUrl}/blog/${post.slug}`;
           sitemapEntries.push({
-            url: `${baseUrl}/blog/${post.slug}`,
+            url: postUrl,
             lastModified: post.updatedAt || new Date(),
             changeFrequency: "weekly",
             priority: 0.6,
+            alternates: {
+              languages: {
+                ru: postUrl,
+                uk: `${postUrl}?lang=uk`,
+                en: `${postUrl}?lang=en`,
+              },
+            },
           });
         }
       } catch (error) {
@@ -95,11 +111,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     } else {
       // Static routes (like "", "about", "booking")
       const isHome = route === "";
+      const routeUrl = isHome ? baseUrl : `${baseUrl}/${route}`;
       sitemapEntries.push({
-        url: `${baseUrl}/${route}`,
+        url: routeUrl,
         lastModified: new Date(),
         changeFrequency: isHome ? "daily" : "weekly",
         priority: isHome ? 1.0 : 0.8,
+        alternates: {
+          languages: {
+            ru: routeUrl,
+            uk: `${routeUrl}?lang=uk`,
+            en: `${routeUrl}?lang=en`,
+          },
+        },
       });
     }
   }

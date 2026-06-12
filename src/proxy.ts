@@ -2,16 +2,26 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function proxy(request: NextRequest) {
-  // 1. Check if "lang" cookie exists
-  const hasLangCookie = request.cookies.has("lang");
+  // 1. Check query parameters first (e.g. ?lang=en or ?lng=en)
+  const url = new URL(request.url);
+  let detectedLang = url.searchParams.get("lang") || url.searchParams.get("lng") || "";
+  
+  // Validate language parameter
+  if (detectedLang && !["ru", "uk", "en"].includes(detectedLang)) {
+    detectedLang = "";
+  }
 
-  if (!hasLangCookie) {
-    // 2. Detect language from Accept-Language header
+  // 2. If not in query params, check "lang" cookie
+  if (!detectedLang) {
+    detectedLang = request.cookies.get("lang")?.value || "";
+  }
+
+  // 3. If still not detected, parse Accept-Language header
+  if (!detectedLang) {
     const acceptLanguage = request.headers.get("accept-language");
-    let detectedLang = "ru"; // default
+    detectedLang = "ru"; // default fallback
 
     if (acceptLanguage) {
-      // Find the first supported language (ru, uk, en)
       const langs = acceptLanguage
         .split(",")
         .map((lang) => lang.split(";")[0].trim().toLowerCase());
@@ -31,17 +41,28 @@ export function proxy(request: NextRequest) {
         }
       }
     }
+  }
 
-    // Create response and set cookie
-    const response = NextResponse.next();
+  // 4. Inject detected language into request headers for Server Components to read
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-lang", detectedLang);
+
+  // 5. Create response and set cookie if needed
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
+
+  const currentCookie = request.cookies.get("lang")?.value;
+  if (currentCookie !== detectedLang) {
     response.cookies.set("lang", detectedLang, {
       path: "/",
       maxAge: 60 * 60 * 24 * 365, // 1 year
     });
-    return response;
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

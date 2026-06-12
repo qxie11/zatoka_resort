@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { Search, Clock, Calendar, ArrowRight, Compass, Waves } from "lucide-react";
@@ -9,12 +9,14 @@ import { getBlogPosts } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 interface BlogPageProps {
-  searchParams: Promise<{ search?: string; category?: string; page?: string }>;
+  searchParams: Promise<{ search?: string; category?: string; page?: string; lang?: string }>;
 }
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({ searchParams }: BlogPageProps): Promise<Metadata> {
+  const { lang: queryLang, category } = await searchParams;
+  const headerList = await headers();
   const cookieStore = await cookies();
-  const lang = cookieStore.get("lang")?.value || "ru";
+  const lang = queryLang || headerList.get("x-lang") || cookieStore.get("lang")?.value || "ru";
 
   const titles = {
     ru: "Блог и полезные советы | Отдых в Затоке",
@@ -28,16 +30,30 @@ export async function generateMetadata(): Promise<Metadata> {
     en: "Read the latest news, travel guides, seafood recommendations, and helpful tips for a perfect holiday in Zatoka.",
   };
 
+  const categorySuffix = category ? `?category=${category}` : "";
+  const categoryAndLangUk = category ? `?category=${category}&lang=uk` : "?lang=uk";
+  const categoryAndLangEn = category ? `?category=${category}&lang=en` : "?lang=en";
+  const canonicalPath = `/blog${categorySuffix}${lang !== "ru" ? (categorySuffix ? `&lang=${lang}` : `?lang=${lang}`) : ""}`;
+
   return {
     title: titles[lang as keyof typeof titles] || titles.ru,
     description: descriptions[lang as keyof typeof descriptions] || descriptions.ru,
+    alternates: {
+      canonical: canonicalPath,
+      languages: {
+        ru: `/blog${categorySuffix}`,
+        uk: `/blog${categoryAndLangUk}`,
+        en: `/blog${categoryAndLangEn}`,
+      },
+    },
   };
 }
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const blogPosts = await getBlogPosts();
+  const headerList = await headers();
   const cookieStore = await cookies();
-  const lang = (cookieStore.get("lang")?.value as "ru" | "uk" | "en") || "ru";
+  const lang = ((headerList.get("x-lang") || cookieStore.get("lang")?.value) as "ru" | "uk" | "en") || "ru";
 
   const { search = "", category = "all", page = "1" } = await searchParams;
   const currentPage = Math.max(1, parseInt(page, 10) || 1);

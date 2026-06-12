@@ -13,7 +13,7 @@ import { CallbackForm } from "@/components/conversion/CallbackForm";
 import { SeasonBanner } from "@/components/conversion/SeasonBanner";
 import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 const fontSans = Nunito({
   subsets: ["latin", "cyrillic"],
@@ -26,8 +26,9 @@ const fontHeading = Comfortaa({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
+  const headerList = await headers();
   const cookieStore = await cookies();
-  const lang = cookieStore.get("lang")?.value || "ru";
+  const lang = headerList.get("x-lang") || cookieStore.get("lang")?.value || "ru";
 
   const appNames = {
     ru: "Отдых в Затоке",
@@ -60,11 +61,17 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
 
   const ogImageUrl = `${baseUrl}/og-image.png`;
+  const canonicalPath = lang === "ru" ? "/" : `/?lang=${lang}`;
 
   return {
     metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: "/",
+      canonical: canonicalPath,
+      languages: {
+        ru: "/",
+        uk: "/?lang=uk",
+        en: "/?lang=en",
+      },
     },
     applicationName: appName,
     title: {
@@ -133,8 +140,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerList = await headers();
   const cookieStore = await cookies();
-  const lang = cookieStore.get("lang")?.value || "ru";
+  const lang = headerList.get("x-lang") || cookieStore.get("lang")?.value || "ru";
 
   return (
     <html lang={lang} suppressHydrationWarning>

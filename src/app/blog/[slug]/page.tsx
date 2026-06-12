@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Clock, Calendar, ArrowRight } from "lucide-react";
@@ -12,6 +12,7 @@ export const dynamic = "force-dynamic";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ lang?: string }>;
 }
 
 export async function generateStaticParams() {
@@ -21,11 +22,13 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const { lang: queryLang } = await searchParams;
   const post = await getBlogPostBySlug(slug);
+  const headerList = await headers();
   const cookieStore = await cookies();
-  const lang = cookieStore.get("lang")?.value || "ru";
+  const lang = queryLang || headerList.get("x-lang") || cookieStore.get("lang")?.value || "ru";
 
   if (!post) {
     return {
@@ -46,15 +49,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }[lang as "ru" | "uk" | "en"] || post.excerptRu;
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
+  const canonicalUrl = `${baseUrl}/blog/${slug}${lang !== "ru" ? `?lang=${lang}` : ""}`;
 
   return {
     title,
     description: excerpt.substring(0, 150),
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        ru: `${baseUrl}/blog/${slug}`,
+        uk: `${baseUrl}/blog/${slug}?lang=uk`,
+        en: `${baseUrl}/blog/${slug}?lang=en`,
+      },
+    },
     openGraph: {
       title,
       description: excerpt.substring(0, 150),
       type: "article",
-      url: `${baseUrl}/blog/${slug}`,
+      url: canonicalUrl,
       images: [
         {
           url: post.imageUrl,
@@ -74,8 +86,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
+  const headerList = await headers();
   const cookieStore = await cookies();
-  const lang = (cookieStore.get("lang")?.value as "ru" | "uk" | "en") || "ru";
+  const lang = ((headerList.get("x-lang") || cookieStore.get("lang")?.value) as "ru" | "uk" | "en") || "ru";
 
   if (!post) {
     notFound();
