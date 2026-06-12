@@ -43,6 +43,26 @@ export function proxy(request: NextRequest) {
     }
   }
 
+  const { pathname } = request.nextUrl;
+  const pathnameHasLocale = ["/ru", "/uk", "/en"].some(
+    (locale) => pathname === locale || pathname.startsWith(`${locale}/`)
+  );
+
+  // If path doesn't have a locale prefix, redirect to the localized URL
+  if (!pathnameHasLocale) {
+    const redirectUrl = new URL(`/${detectedLang}${pathname}${url.search}`, request.url);
+    const response = NextResponse.redirect(redirectUrl);
+    
+    const currentCookie = request.cookies.get("lang")?.value;
+    if (currentCookie !== detectedLang) {
+      response.cookies.set("lang", detectedLang, {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365, // 1 year
+      });
+    }
+    return response;
+  }
+
   // 4. Inject detected language into request headers for Server Components to read
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-lang", detectedLang);
