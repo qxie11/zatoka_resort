@@ -152,126 +152,105 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
           <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               
-              {/* LEFT COLUMN: Premium Copy & Interactive Quick CTA */}
-              <div className="lg:col-span-7 flex flex-col items-start text-left text-white space-y-6">
+              {/* LEFT COLUMN: Premium Copy & Streamlined CTAs */}
+              <div className="lg:col-span-7 flex flex-col items-start text-left text-white space-y-8">
                 
                 {/* Premium Micro-Badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card-dark text-xs font-semibold text-teal-300 uppercase tracking-widest animate-fade-in">
-                  <Compass className="h-4 w-4 animate-spin-slow" />
-                  <span>{translate("premiumBadge", "Премиум курорт на Черном море")}</span>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/20 text-[10px] font-bold text-teal-300 uppercase tracking-widest animate-fade-in shadow-[0_0_15px_rgba(20,184,166,0.1)]">
+                  <Compass className="h-3.5 w-3.5 text-teal-400 animate-spin-slow" />
+                  <span>{translate("premiumBadge", "Премиум-отель на первой линии моря")}</span>
                 </div>
-
+ 
                 {/* Heading */}
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight animate-fade-in-up drop-shadow-2xl">
-                  {translate("heroTitle1", "Ваш идеальный")} <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md animate-ocean-shimmer">
-                    {translate("heroTitle2", "морской побег")}
-                  </span> <br />
-                  {translate("heroTitle3", "в Затоке")}
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] animate-fade-in-up drop-shadow-2xl font-heading">
+                  {translate("heroTitle1", "Погрузитесь в роскошь")} <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-300 to-amber-200 drop-shadow-md animate-ocean-shimmer font-black">
+                    {translate("heroTitle2", "черноморского побережья")}
+                  </span>
                 </h1>
-
+ 
                 {/* Description */}
-                <p className="max-w-xl text-base md:text-lg text-slate-100 font-medium leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards] drop-shadow-lg">
-                  {translate("heroDescription", "Испытайте несравненный пятизвездочный комфорт, ласковые волны и захватывающие дух панорамные виды на Черное море.")}
+                <p className="max-w-xl text-base md:text-lg text-slate-300 font-light leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards] drop-shadow-lg">
+                  {translate("heroDescription", "Отель премиум-класса. Кристально чистый бассейн, песчаный пляж в 10 метарах и безупречный пятизвездочный сервис для вашего абсолютного расслабления.")}
                 </p>
-
-                {/* Quick Interactive Reservation Panel */}
-                <div className="w-full max-w-lg p-5 rounded-2xl glass-card-dark shadow-2xl border border-white/10 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards]">
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="flex items-center gap-3 text-xs text-slate-300">
-                      <MapPin className="h-4 w-4 text-amber-400 shrink-0" />
-                      <div>
-                        <div className="font-semibold text-white">{translate("firstLine", "Первая линия")}</div>
-                        <div>{translate("beachDistance", "10м до пляжа")}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3 text-xs text-slate-300">
-                      <ShieldCheck className="h-4 w-4 text-teal-400 shrink-0" />
-                      <div>
-                        <div className="font-semibold text-white">{translate("security", "Безопасность")}</div>
-                        <div>{translate("securedArea", "Охраняемая зона")}</div>
-                      </div>
-                    </div>
+ 
+                {/* Clean Horizontal Action Capsule */}
+                <div className="flex flex-col sm:flex-row gap-4 w-full pt-2 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards]">
+                  <Button asChild size="lg" className="h-14 px-8 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-[0_0_30px_rgba(45,212,191,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl uppercase tracking-wider text-xs">
+                    <Link href="/booking" className="flex items-center justify-center">
+                      {translate("bookStay", "Забронировать отдых")}
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg" className="h-14 px-8 border-white/10 bg-white/5 text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 rounded-xl uppercase tracking-wider text-xs font-semibold">
+                    <Link href="/booking">{translate("learnMore", "Исследовать номера")}</Link>
+                  </Button>
+                </div>
+ 
+                {/* Minimalist Trust Features */}
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-4 animate-fade-in-up [animation-delay:0.5s] opacity-0 [animation-fill-mode:forwards] text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  <div className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-teal-400 shadow-[0_0_8px_#2dd4bf]" />
+                    <span>{translate("trustBadge1", "Отмена за 7 дней")}</span>
                   </div>
-                  
-                  <div className="flex flex-col sm:flex-row gap-3 w-full">
-                    <Button asChild size="lg" className="w-full sm:flex-1 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 water-reflection">
-                      <Link href="/booking" className="flex items-center justify-center">
-                        {translate("bookStay", "Забронировать отдых")}
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                      </Link>
-                    </Button>
-                    <Button asChild variant="outline" size="lg" className="w-full sm:flex-1 border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300">
-                      <Link href="/about">{translate("learnMore", "Узнать больше")}</Link>
-                    </Button>
+                  <div className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]" />
+                    <span>{translate("trustBadge2", "Оплата на месте")}</span>
                   </div>
-
-                  {/* Trust badges */}
-                  <div className="mt-4 pt-4 border-t border-white/5 flex flex-wrap items-center justify-between gap-2 text-[10px] text-slate-400 font-semibold tracking-wider uppercase">
-                    <div className="flex items-center gap-1">
-                      <ShieldCheck className="h-3.5 w-3.5 text-teal-400" />
-                      <span>{translate("trustBadge1", "Отмена за 7 дней")}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Car className="h-3.5 w-3.5 text-amber-400" />
-                      <span>{translate("trustBadge2", "Оплата на месте")}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-3.5 w-3.5 text-orange-400 animate-pulse" />
-                      <span>{translate("trustBadge3", "Лучшая цена")}</span>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]" />
+                    <span>{translate("trustBadge3", "Лучшая цена")}</span>
                   </div>
                 </div>
-
+ 
               </div>
-
-              {/* RIGHT COLUMN */}
-              <div className="lg:col-span-5 relative flex items-center justify-center animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards]">
-                <div className="relative w-full max-w-[400px] aspect-[4/5] rounded-[2rem] overflow-hidden border-2 border-white/20 shadow-2xl group hover:border-teal-400/50 transition-all duration-500">
+ 
+              {/* RIGHT COLUMN: Premium Float Image */}
+              <div className="lg:col-span-5 relative flex items-center justify-center animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards] select-none">
+                <div className="relative w-full max-w-[380px] aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(20,184,166,0.15)] group hover:border-teal-400/40 transition-all duration-700 hover:shadow-[0_0_60px_rgba(20,184,166,0.25)] bg-slate-950">
                   <Image
                     src="/hero-beach.png"
                     alt="Beautiful Black Sea Beach"
                     fill
-                    sizes="(max-width: 768px) 100vw, 400px"
+                    priority
+                    sizes="(max-width: 768px) 100vw, 380px"
                     className="object-cover transition-all duration-[10s] group-hover:scale-110 brightness-95"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                   
-
-                  
                   {/* Floating Premium Rating Badge */}
-                  <div className="absolute bottom-6 left-6 right-6 p-4 rounded-xl glass-card-premium text-slate-900 border border-white/40 shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
+                  <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-slate-950/80 backdrop-blur-md text-white border border-white/10 shadow-2xl transition-all duration-500 group-hover:translate-y-[-4px] group-hover:bg-slate-950/90">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">{translate("guestRating", "Рейтинг гостей")}</p>
-                        <p className="text-sm font-extrabold text-slate-950">{translate("excellent", "Превосходно")}</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{translate("guestRating", "Рейтинг гостей")}</p>
+                        <p className="text-sm font-extrabold text-white mt-0.5">{translate("excellent", "Превосходно")}</p>
                       </div>
-                      <div className="flex items-center gap-1 bg-amber-400 px-2.5 py-1 rounded-lg text-slate-950 font-bold text-sm">
-                        <Star className="h-4 w-4 fill-slate-950" />
+                      <div className="flex items-center gap-1 bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1.5 rounded-xl text-slate-950 font-extrabold text-xs shadow-lg shadow-amber-500/20">
+                        <Star className="h-3.5 w-3.5 fill-slate-950 text-slate-950" />
                         <span>4.9</span>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                {/* Extra Floating Badge */}
-                <div className="absolute -top-4 -right-4 p-4 rounded-2xl glass-card-dark text-white border border-white/10 shadow-xl animate-jellyfish hidden sm:block">
+ 
+                {/* Floating Temperature Badge */}
+                <div className="absolute -top-4 -right-4 p-4 rounded-2xl bg-slate-950/85 backdrop-blur-md text-white border border-white/10 shadow-2xl animate-float hidden sm:block">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-teal-400/20 flex items-center justify-center">
+                    <div className="h-10 w-10 rounded-xl bg-teal-400/10 border border-teal-500/25 flex items-center justify-center">
                       <Waves className="h-5 w-5 text-teal-300" />
                     </div>
                     <div>
-                      <p className="text-xs text-slate-300">{translate("waterTemp", "Температура воды")}</p>
-                      <p className="text-sm font-extrabold text-white">+24°C</p>
+                      <p className="text-[10px] text-slate-400 uppercase tracking-widest">{translate("waterTemp", "Температура воды")}</p>
+                      <p className="text-sm font-extrabold text-teal-300 mt-0.5">+24°C</p>
                     </div>
                   </div>
                 </div>
               </div>
-
+ 
             </div>
           </div>
 
-          <div className="absolute inset-x-0 bottom-0 pointer-events-none overflow-hidden h-24 md:h-32 opacity-15 z-10">
+          <div className="absolute inset-x-0 bottom-0 pointer-events-none overflow-hidden h-24 md:h-32 opacity-15 z-[9]">
             <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="absolute bottom-0 w-[200%] h-full fill-teal-300 animate-wave-flow">
               <path d="M0,60 C300,20 600,100 900,60 C1200,20 1500,100 1800,60 C2100,20 2400,100 2700,60 L2700,120 L0,120 Z" />
             </svg>
@@ -280,7 +259,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
             </svg>
           </div>
 
-          <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+          <div className="absolute bottom-0 left-0 right-0 z-[9] pointer-events-none">
             <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-16 md:h-24 fill-slate-950">
               <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-40 fill-sky-200/20" />
               <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
