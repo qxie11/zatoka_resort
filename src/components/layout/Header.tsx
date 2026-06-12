@@ -103,8 +103,8 @@ export default function Header() {
       {/* Premium Glassmorphism and Backdrop Blur Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/80 to-slate-950/75 backdrop-blur-xl -z-10 border-b border-white/10" />
       
-      {/* Elegant Sea-Glow Top Border */}
-      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-teal-500/50 to-transparent -z-10" />
+      {/* Elegant Sea-Glow Bottom Border with Pulse Effect */}
+      <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-teal-400/60 to-transparent -z-10 animate-pulse" />
       
       {/* Light shimmer line effect */}
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-sky-400/30 to-transparent -z-10" />
@@ -113,19 +113,24 @@ export default function Header() {
         {/* Brand / Logo */}
         <Link
           href={getLocalizedHref("/")}
-          className="flex items-center gap-2.5 group"
+          className="flex items-center gap-3 group"
           onClick={() => setIsMobileMenuOpen(false)}
         >
-          <div className="relative flex items-center justify-center p-1.5 rounded-xl bg-teal-500/10 border border-teal-500/20 group-hover:bg-teal-500/20 group-hover:border-teal-500/30 transition-all duration-300">
+          <div className="relative flex items-center justify-center p-1.5 rounded-xl bg-teal-500/10 border border-teal-500/20 group-hover:bg-teal-500/20 group-hover:border-teal-500/30 transition-all duration-300 shadow-[0_0_15px_rgba(20,184,166,0.1)]">
             <Waves className="h-5 w-5 text-teal-400 group-hover:animate-coral-sway glow-teal" />
           </div>
-          <span className="text-lg font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-200 group-hover:animate-ocean-shimmer">
-            {t("brandName")}
-          </span>
+          <div className="flex flex-col text-left">
+            <span className="text-sm font-black tracking-[0.15em] uppercase bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-200 group-hover:animate-ocean-shimmer">
+              {t("brandName")}
+            </span>
+            <span className="text-[7px] font-bold tracking-[0.35em] text-teal-400/80 uppercase -mt-0.5">
+              Seaside Family Hotel
+            </span>
+          </div>
         </Link>
  
         {/* Desktop Navigation Capsule */}
-        <nav className="hidden lg:flex items-center gap-1.5 bg-slate-900/60 border border-white/10 px-2 py-1.5 rounded-full backdrop-blur-xl shadow-lg">
+        <nav className="hidden lg:flex items-center gap-2 bg-slate-900/60 border border-white/10 px-2.5 py-1.5 rounded-full backdrop-blur-xl shadow-lg">
           {navLinks.map((link) => {
             const localizedHref = getLocalizedHref(link.href);
             const isActive = pathname === localizedHref;
@@ -134,10 +139,10 @@ export default function Header() {
                 key={link.href}
                 href={localizedHref}
                 className={cn(
-                  "text-[10px] uppercase tracking-wide font-bold transition-all duration-300 px-3 py-1 rounded-full",
+                  "text-[10px] uppercase tracking-wider font-bold transition-all duration-300 px-3.5 py-1.5 rounded-full border",
                   isActive
-                    ? "text-slate-950 bg-gradient-to-r from-teal-300 to-sky-300 shadow-[0_0_16px_rgba(45,212,191,0.3)] font-extrabold"
-                    : "text-slate-300 hover:text-white hover:bg-white/5"
+                    ? "text-teal-300 bg-teal-500/10 border-teal-500/30 shadow-[0_0_12px_rgba(20,184,166,0.2)] font-extrabold"
+                    : "text-slate-300 hover:text-white hover:bg-white/5 border-transparent"
                 )}
               >
                 {link.label}
@@ -148,21 +153,21 @@ export default function Header() {
             <Link
               href="/admin"
               className={cn(
-                "text-[10px] uppercase tracking-wide font-bold transition-all duration-300 px-3 py-1 rounded-full",
+                "text-[10px] uppercase tracking-wider font-bold transition-all duration-300 px-3.5 py-1.5 rounded-full border",
                 pathname === "/admin"
-                  ? "text-slate-950 bg-gradient-to-r from-teal-300 to-sky-300 shadow-[0_0_16px_rgba(45,212,191,0.3)] font-extrabold"
-                  : "text-slate-300 hover:text-white hover:bg-white/5"
+                  ? "text-teal-300 bg-teal-500/10 border-teal-500/30 shadow-[0_0_12px_rgba(20,184,166,0.2)] font-extrabold"
+                  : "text-slate-300 hover:text-white hover:bg-white/5 border-transparent"
               )}
             >
               {t("admin")}
             </Link>
           )}
         </nav>
-
+ 
         {/* Desktop Right Actions */}
         <div className="hidden lg:flex items-center gap-4">
           {mounted && <LanguageSelector />}
-
+ 
           {mounted && isAuthenticated ? (
             <div className="flex items-center gap-3">
               <span className="text-xs font-semibold tracking-wider text-slate-300 hidden lg:inline bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
@@ -181,9 +186,15 @@ export default function Header() {
           ) : (
             <Button
               asChild
-              className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-[0_0_20px_rgba(45,212,191,0.25)] hover:shadow-[0_0_25px_rgba(45,212,191,0.4)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl px-5 h-9 text-xs uppercase tracking-wider"
+              className="relative overflow-hidden bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-[0_0_20px_rgba(45,212,191,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl px-5 h-9 text-[10px] uppercase tracking-wider flex items-center gap-1.5"
             >
-              <Link href={getLocalizedHref("/booking")}>{t("booking")}</Link>
+              <Link href={getLocalizedHref("/booking")}>
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-950 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-slate-950"></span>
+                </span>
+                {t("booking")}
+              </Link>
             </Button>
           )}
         </div>
