@@ -164,6 +164,12 @@ export function DateRangePicker({
               }
 
               if (range?.from && range?.to) {
+                const start = startOfDay(range.from);
+                const end = startOfDay(range.to);
+                if (start.getTime() === end.getTime()) {
+                  onChange({ from: range.from, to: undefined });
+                  return;
+                }
                 if (validateDateRange(range)) {
                   onChange(range);
                   setPopoverOpen(false);

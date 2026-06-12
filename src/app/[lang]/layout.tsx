@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { StickyBookingBar } from "@/components/conversion/StickyBookingBar";
@@ -7,8 +6,6 @@ import { SeasonBanner } from "@/components/conversion/SeasonBanner";
 import { CallbackForm } from "@/components/conversion/CallbackForm";
 import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
 import ScratchCardPromo from "@/components/conversion/ScratchCardPromo";
-
-const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -72,7 +69,7 @@ export default async function RootLayout({
   const { lang } = await params;
 
   return (
-    <div className={inter.className}>
+    <div>
       <Header />
 
       <main className="min-h-screen">

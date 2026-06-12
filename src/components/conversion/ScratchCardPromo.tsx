@@ -168,10 +168,10 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
       {/* Floating Gift Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-36 right-6 z-40 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 animate-deep-pulse flex items-center gap-2 group border border-white/20"
+        className="fixed bottom-36 right-6 z-40 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 h-14 w-14 hover:w-[220px] rounded-full shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 animate-deep-pulse flex items-center justify-center hover:justify-start hover:px-4 group border border-white/20"
       >
-        <Gift className="h-6 w-6 animate-jellyfish" />
-        <span className="max-w-0 overflow-hidden group-hover:max-w-[150px] transition-all duration-500 ease-in-out font-bold text-xs uppercase tracking-wider whitespace-nowrap">
+        <Gift className="h-6 w-6 shrink-0" />
+        <span className="max-w-0 overflow-hidden group-hover:max-w-[160px] group-hover:ml-2 transition-all duration-500 ease-in-out font-bold text-xs uppercase tracking-wider whitespace-nowrap">
           {current.btnTitle}
         </span>
       </button>
