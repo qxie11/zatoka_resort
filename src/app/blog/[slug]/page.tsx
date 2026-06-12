@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Clock, Calendar, ArrowRight } from "lucide-react";
 import { getBlogPosts, getBlogPostBySlug } from "@/lib/db";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export const dynamic = "force-dynamic";
 
@@ -97,6 +99,9 @@ export default async function BlogPostPage({ params }: PageProps) {
     en: post.contentEn,
   }[lang] || post.contentRu;
 
+  // Join paragraphs for markdown rendering
+  const fullContent = Array.isArray(contentParagraphs) ? contentParagraphs.join('\n\n') : contentParagraphs;
+
   // Fetch all posts to determine related ones
   const blogPosts = await getBlogPosts();
 
@@ -176,10 +181,10 @@ export default async function BlogPostPage({ params }: PageProps) {
       {/* Article Content */}
       <section className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="glass-card-dark border border-white/10 rounded-3xl p-6 md:p-12 shadow-2xl relative">
-          <div className="prose prose-invert max-w-none space-y-6 text-slate-200 font-light text-lg md:text-xl leading-relaxed">
-            {contentParagraphs.map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
+          <div className="prose prose-invert prose-teal max-w-none text-slate-200 font-light text-lg md:text-xl leading-relaxed prose-headings:font-bold prose-headings:text-white prose-headings:mt-12 prose-headings:mb-6 prose-p:mb-8 prose-a:text-teal-400 hover:prose-a:text-teal-300 prose-img:rounded-xl">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {fullContent}
+            </ReactMarkdown>
           </div>
         </div>
       </section>

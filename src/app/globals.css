@@ -586,3 +586,34 @@
   }
 }
 
+/* Custom styles for ReactMarkdown prose container to guarantee paragraph spacing */
+.prose p {
+  margin-bottom: 1.75rem !important;
+  margin-top: 0 !important;
+  line-height: 1.8;
+}
+
+.prose h2 {
+  margin-top: 3rem !important;
+  margin-bottom: 1.25rem !important;
+  font-weight: 800;
+}
+
+.prose h3 {
+  margin-top: 2rem !important;
+  margin-bottom: 1rem !important;
+  font-weight: 700;
+}
+
+.prose ul, .prose ol {
+  margin-bottom: 1.75rem !important;
+  padding-left: 1.5rem !important;
+}
+
+.prose li {
+  margin-bottom: 0.5rem !important;
+}
+
+.prose strong {
+  color: #fff !important;
+}
