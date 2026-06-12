@@ -17,7 +17,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { roomId, startDate, endDate, name, phone, email } = body;
+    const { roomId, startDate, endDate, name, phone, email, pricePaid, promoCode, discountApplied } = body;
 
     if (!roomId || !startDate || !endDate || !name || !phone) {
       return NextResponse.json(
@@ -65,6 +65,9 @@ export async function POST(request: NextRequest) {
       name: name.trim(),
       phone: phone.trim(),
       email: email?.trim() || undefined,
+      pricePaid: pricePaid ? parseInt(pricePaid) : undefined,
+      promoCode: promoCode || undefined,
+      discountApplied: discountApplied ? parseInt(discountApplied) : undefined,
     });
 
     return NextResponse.json(newBooking, { status: 201 });

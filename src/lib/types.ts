@@ -24,6 +24,9 @@ export type Booking = {
   name: string;
   phone: string;
   email?: string;
+  pricePaid?: number;
+  promoCode?: string;
+  discountApplied?: number;
 };
 
 export type BlogPost = {

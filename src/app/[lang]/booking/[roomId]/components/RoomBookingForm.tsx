@@ -93,6 +93,42 @@ export default function RoomBookingForm({
 }: RoomBookingFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [promoInput, setPromoInput] = useState("");
+  const [discount, setDiscount] = useState(0); // discount in percentage
+  const [promoError, setPromoError] = useState("");
+  const [isValidatingPromo, setIsValidatingPromo] = useState(false);
+  const [appliedPromo, setAppliedPromo] = useState("");
+
+  const handleValidatePromo = async () => {
+    if (!promoInput.trim()) return;
+    setIsValidatingPromo(true);
+    setPromoError("");
+    try {
+      const res = await fetch("/api/promo/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: promoInput }),
+      });
+      const data = await res.json();
+      if (data.valid) {
+        setDiscount(data.discount);
+        setAppliedPromo(data.code);
+        toast({
+          title: "Промокод применен!",
+          description: `Скидка ${data.discount}% успешно применена.`,
+        });
+      } else {
+        setPromoError("Неверный или неактивный промокод");
+        setDiscount(0);
+        setAppliedPromo("");
+      }
+    } catch (err) {
+      console.error(err);
+      setPromoError("Ошибка проверки промокода");
+    } finally {
+      setIsValidatingPromo(false);
+    }
+  };
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -108,6 +144,13 @@ export default function RoomBookingForm({
     setIsSubmitting(true);
 
     try {
+      const nights = Math.ceil(
+        (data.dateRange.to.getTime() - data.dateRange.from.getTime()) /
+        (1000 * 60 * 60 * 24)
+      );
+      const originalPrice = nights * room.price;
+      const pricePaid = Math.round(originalPrice * (1 - discount / 100));
+
       const response = await fetch("/api/bookings", {
         method: "POST",
         headers: {
@@ -120,6 +163,9 @@ export default function RoomBookingForm({
           name: data.name,
           phone: data.phone,
           email: data.email || undefined,
+          pricePaid,
+          promoCode: appliedPromo || undefined,
+          discountApplied: discount || undefined,
         }),
       });
 
@@ -270,6 +316,29 @@ export default function RoomBookingForm({
               />
             </div>
 
+            {/* Promo Code Entry */}
+            <div className="pt-4 border-t border-white/5 space-y-2">
+              <label className="text-sm font-bold text-teal-300">Промокод на скидку</label>
+              <div className="flex gap-2 max-w-sm">
+                <Input
+                  placeholder="Введите промокод (например: ZATOKAWAVE)"
+                  value={promoInput}
+                  onChange={(e) => setPromoInput(e.target.value)}
+                  className="bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
+                />
+                <Button
+                  type="button"
+                  onClick={handleValidatePromo}
+                  disabled={isValidatingPromo || !promoInput.trim()}
+                  className="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-xl px-4 h-11"
+                >
+                  {isValidatingPromo ? "..." : "Применить"}
+                </Button>
+              </div>
+              {promoError && <p className="text-xs text-rose-400">{promoError}</p>}
+              {appliedPromo && <p className="text-xs text-teal-400">Применен промокод: {appliedPromo} ({discount}% скидка)</p>}
+            </div>
+
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between pt-4 border-t border-white/5">
               <div>
                 {form.watch("dateRange")?.from &&
@@ -283,15 +352,40 @@ export default function RoomBookingForm({
                           (1000 * 60 * 60 * 24)
                         )}
                       </p>
-                      <p className="text-lg font-bold text-teal-300">
-                        Итого:{" "}
-                        {Math.ceil(
-                          (form.watch("dateRange").to!.getTime() -
-                            form.watch("dateRange").from!.getTime()) /
-                          (1000 * 60 * 60 * 24)
-                        ) * room.price}{" "}
-                        грн
-                      </p>
+                      {discount > 0 ? (
+                        <div>
+                          <p className="text-xs text-slate-400 line-through">
+                            Итого без скидки:{" "}
+                            {Math.ceil(
+                              (form.watch("dateRange").to!.getTime() -
+                                form.watch("dateRange").from!.getTime()) /
+                              (1000 * 60 * 60 * 24)
+                            ) * room.price}{" "}
+                            грн
+                          </p>
+                          <p className="text-lg font-bold text-teal-300">
+                            Итого со скидкой ({discount}%):{" "}
+                            {Math.round(
+                              Math.ceil(
+                                (form.watch("dateRange").to!.getTime() -
+                                  form.watch("dateRange").from!.getTime()) /
+                                (1000 * 60 * 60 * 24)
+                              ) * room.price * (1 - discount / 100)
+                            )}{" "}
+                            грн
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-lg font-bold text-teal-300">
+                          Итого:{" "}
+                          {Math.ceil(
+                            (form.watch("dateRange").to!.getTime() -
+                              form.watch("dateRange").from!.getTime()) /
+                            (1000 * 60 * 60 * 24)
+                          ) * room.price}{" "}
+                          грн
+                        </p>
+                      )}
                     </div>
                   )}
               </div>

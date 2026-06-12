@@ -147,6 +147,9 @@ export const getBookings = async (): Promise<Booking[]> => {
     name: booking.name,
     phone: booking.phone,
     email: booking.email || undefined,
+    pricePaid: booking.pricePaid || undefined,
+    promoCode: booking.promoCode || undefined,
+    discountApplied: booking.discountApplied || undefined,
   }));
 };
 
@@ -164,6 +167,9 @@ export const getBookingsByRoomId = async (roomId: string): Promise<Booking[]> =>
     name: booking.name,
     phone: booking.phone,
     email: booking.email || undefined,
+    pricePaid: booking.pricePaid || undefined,
+    promoCode: booking.promoCode || undefined,
+    discountApplied: booking.discountApplied || undefined,
   }));
 };
 
@@ -182,6 +188,9 @@ export const getBookingById = async (id: string): Promise<Booking | null> => {
     name: booking.name,
     phone: booking.phone,
     email: booking.email || undefined,
+    pricePaid: booking.pricePaid || undefined,
+    promoCode: booking.promoCode || undefined,
+    discountApplied: booking.discountApplied || undefined,
   };
 };
 
@@ -194,7 +203,10 @@ export const createBooking = async (booking: Omit<Booking, 'id'>): Promise<Booki
       name: booking.name,
       phone: booking.phone,
       email: booking.email ?? null,
-    } as any,
+      pricePaid: booking.pricePaid ?? null,
+      promoCode: booking.promoCode ?? null,
+      discountApplied: booking.discountApplied ?? null,
+    },
   });
   
   return {
@@ -205,6 +217,9 @@ export const createBooking = async (booking: Omit<Booking, 'id'>): Promise<Booki
     name: newBooking.name,
     phone: newBooking.phone,
     email: newBooking.email ?? undefined,
+    pricePaid: newBooking.pricePaid ?? undefined,
+    promoCode: newBooking.promoCode ?? undefined,
+    discountApplied: newBooking.discountApplied ?? undefined,
   };
 };
 
@@ -218,6 +233,9 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
     if (booking.name !== undefined) updateData.name = booking.name;
     if (booking.phone !== undefined) updateData.phone = booking.phone;
     if (booking.email !== undefined) updateData.email = booking.email || null;
+    if (booking.pricePaid !== undefined) updateData.pricePaid = booking.pricePaid;
+    if (booking.promoCode !== undefined) updateData.promoCode = booking.promoCode;
+    if (booking.discountApplied !== undefined) updateData.discountApplied = booking.discountApplied;
     
     const updatedBooking = await prisma.booking.update({
       where: { id },
@@ -232,6 +250,9 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
       name: updatedBooking.name,
       phone: updatedBooking.phone,
       email: updatedBooking.email ?? undefined,
+      pricePaid: updatedBooking.pricePaid ?? undefined,
+      promoCode: updatedBooking.promoCode ?? undefined,
+      discountApplied: updatedBooking.discountApplied ?? undefined,
     };
   } catch (error) {
     return null;

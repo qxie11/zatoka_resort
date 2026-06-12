@@ -10,8 +10,8 @@ declare global {
   var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
 }
 
-// Self-healing: clear the global cached instance if it doesn't have the newly generated 'review' model
-if (globalThis.prismaGlobal && !('review' in globalThis.prismaGlobal)) {
+// Self-healing: clear the global cached instance if it doesn't have the newly generated models
+if (globalThis.prismaGlobal && (!('review' in globalThis.prismaGlobal) || !('promoCode' in globalThis.prismaGlobal) || !('systemCache' in globalThis.prismaGlobal))) {
   globalThis.prismaGlobal = undefined;
 }
 

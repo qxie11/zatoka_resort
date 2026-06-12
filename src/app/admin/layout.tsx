@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { LogOut, Home, Bed, LayoutDashboard, CalendarDays, PhoneCall, BookOpen, MessageSquare, Menu } from 'lucide-react';
+import { LogOut, Home, Bed, LayoutDashboard, CalendarDays, PhoneCall, BookOpen, MessageSquare, Menu, Tag } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 const navLinks = [
@@ -16,6 +16,7 @@ const navLinks = [
   { href: "/admin/callbacks", label: "Заявки", icon: PhoneCall },
   { href: "/admin/blog", label: "Блог", icon: BookOpen },
   { href: "/admin/reviews", label: "Отзывы", icon: MessageSquare },
+  { href: "/admin/promo", label: "Промокоды", icon: Tag },
 ];
 
 export default function AdminLayout({

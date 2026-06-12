@@ -29,16 +29,19 @@ model Room {
 }
 
 model Booking {
-  id        String   @id @default(uuid())
-  roomId    String
-  startDate DateTime
-  endDate   DateTime
-  name      String
-  phone     String
-  email     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  id              String   @id @default(uuid())
+  roomId          String
+  startDate       DateTime
+  endDate         DateTime
+  name            String
+  phone           String
+  email           String?
+  pricePaid       Int?     // Price paid stored in DB
+  promoCode       String?  // Promo code applied
+  discountApplied Int?     // Discount percentage applied
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  room            Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
 
   @@map("bookings")
 }
@@ -92,5 +95,24 @@ model Review {
   room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
 
   @@map("reviews")
+}
+
+model PromoCode {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  discount  Int      // Percentage discount
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("promo_codes")
+}
+
+model SystemCache {
+  key       String   @id
+  value     String   // JSON string
+  expiresAt DateTime
+
+  @@map("system_caches")
 }
 

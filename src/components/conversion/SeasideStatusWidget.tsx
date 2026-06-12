@@ -10,6 +10,12 @@ interface SeasideStatusWidgetProps {
 export default function SeasideStatusWidget({ lang }: SeasideStatusWidgetProps) {
   const [mounted, setMounted] = useState(false);
   const [time, setTime] = useState("");
+  const [weather, setWeather] = useState({
+    temp: 28,
+    seaTemp: 24,
+    waveHeight: "0.2м",
+    windSpeed: 8,
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -22,6 +28,17 @@ export default function SeasideStatusWidget({ lang }: SeasideStatusWidgetProps) 
     };
     updateTime();
     const interval = setInterval(updateTime, 60000);
+
+    // Fetch live weather
+    fetch("/api/weather")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && typeof data.temp === "number") {
+          setWeather(data);
+        }
+      })
+      .catch((err) => console.error("Error fetching weather in client:", err));
+
     return () => clearInterval(interval);
   }, [lang]);
 
@@ -89,7 +106,7 @@ export default function SeasideStatusWidget({ lang }: SeasideStatusWidgetProps) 
           </div>
           <div>
             <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">{current.air}</p>
-            <p className="text-lg font-black text-white">+28°C</p>
+            <p className="text-lg font-black text-white">+{weather.temp}°C</p>
           </div>
         </div>
 
@@ -100,7 +117,7 @@ export default function SeasideStatusWidget({ lang }: SeasideStatusWidgetProps) 
           </div>
           <div>
             <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">{current.water}</p>
-            <p className="text-lg font-black text-teal-300">+24°C</p>
+            <p className="text-lg font-black text-teal-300">+{weather.seaTemp}°C</p>
           </div>
         </div>
 
@@ -111,7 +128,7 @@ export default function SeasideStatusWidget({ lang }: SeasideStatusWidgetProps) 
           </div>
           <div>
             <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">{current.waves}</p>
-            <p className="text-lg font-black text-white">0.2м</p>
+            <p className="text-lg font-black text-white">{weather.waveHeight}</p>
           </div>
         </div>
 

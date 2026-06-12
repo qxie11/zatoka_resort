@@ -70,6 +70,29 @@ export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<BookingWi
     }
   },
   {
+    accessorKey: "pricePaid",
+    header: "Стоимость",
+    cell: ({ row }) => {
+      const pricePaid = row.original.pricePaid;
+      const promoCode = row.original.promoCode;
+      const discountApplied = row.original.discountApplied;
+      
+      if (pricePaid !== undefined && pricePaid !== null) {
+        return (
+          <div className="flex flex-col">
+            <span className="font-bold text-teal-300 whitespace-nowrap">{pricePaid} грн</span>
+            {promoCode && (
+              <span className="text-[10px] text-slate-400 whitespace-nowrap">
+                Код: {promoCode} (-{discountApplied}%)
+              </span>
+            )}
+          </div>
+        );
+      }
+      return <span className="text-slate-500">—</span>;
+    }
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       const booking = row.original
