@@ -103,6 +103,10 @@ export default function BlogAdminPage() {
     }
   };
 
+  const visiblePosts = React.useMemo(() => {
+    return posts.filter((post) => !deletingIds.includes(post.id));
+  }, [posts, deletingIds]);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -120,10 +124,6 @@ export default function BlogAdminPage() {
       </div>
     );
   }
-
-  const visiblePosts = React.useMemo(() => {
-    return posts.filter((post) => !deletingIds.includes(post.id));
-  }, [posts, deletingIds]);
 
   return (
     <>

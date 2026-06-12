@@ -103,6 +103,10 @@ export default function RoomsAdminPage() {
     }
   };
 
+  const visibleRooms = React.useMemo(() => {
+    return rooms.filter((room) => !deletingIds.includes(room.id));
+  }, [rooms, deletingIds]);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -120,10 +124,6 @@ export default function RoomsAdminPage() {
       </div>
     );
   }
-
-  const visibleRooms = React.useMemo(() => {
-    return rooms.filter((room) => !deletingIds.includes(room.id));
-  }, [rooms, deletingIds]);
 
   return (
     <>
