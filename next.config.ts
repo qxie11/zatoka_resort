@@ -33,6 +33,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/:lang(ru|uk|en)/admin',
+        destination: '/admin',
+        permanent: true,
+      },
+      {
+        source: '/:lang(ru|uk|en)/admin/:path*',
+        destination: '/admin/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

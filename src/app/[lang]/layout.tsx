@@ -1,27 +1,10 @@
-import type { Metadata, Viewport } from "next";
-import "../globals.css";
-import { cn } from "@/lib/utils";
-import { Toaster } from "@/components/ui/toaster";
+import type { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import StoreProvider from "@/components/providers/StoreProvider";
-import { Comfortaa, Nunito } from "next/font/google";
-import NextTopLoader from 'nextjs-toploader';
-import { GlobalMarineBackground } from "@/components/decorative/GlobalMarineBackground";
 import { StickyBookingBar } from "@/components/conversion/StickyBookingBar";
 import { CallbackForm } from "@/components/conversion/CallbackForm";
 import { SeasonBanner } from "@/components/conversion/SeasonBanner";
 import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
-
-const fontSans = Nunito({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-sans",
-});
-
-const fontHeading = Comfortaa({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-heading",
-});
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -120,56 +103,18 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   };
 }
 
-export const viewport: Viewport = {
-  themeColor: "#020617",
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-};
-
 export default async function RootLayout({
   children,
-  params,
-}: Readonly<LayoutProps>) {
-  const { lang } = await params;
-
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang={lang} suppressHydrationWarning>
-      <head />
-      <body
-        className={cn(
-          "min-h-screen bg-slate-950 font-sans antialiased text-slate-100 overflow-x-hidden",
-          fontSans.variable,
-          fontHeading.variable
-        )}
-        suppressHydrationWarning
-      >
-        <StoreProvider lang={lang}>
-          <NextTopLoader 
-            color="#2dd4bf" 
-            initialPosition={0.08}
-            crawlSpeed={200}
-            height={3}
-            crawl={true}
-            showSpinner={false}
-            easing="ease"
-            speed={200}
-            shadow="0 0 10px #2dd4bf,0 0 5px #2dd4bf"
-          />
-          <div className="relative flex min-h-dvh flex-col bg-slate-950 text-slate-100">
-            <GlobalMarineBackground />
-            <Header />
-            <SeasonBanner />
-            <main className="relative flex-1 z-10">{children}</main>
-            <Footer />
-          </div>
-          <StickyBookingBar />
-          <CallbackForm />
-          <ExitIntentPopup />
-          <Toaster />
-        </StoreProvider>
-      </body>
-    </html>
+    <>
+      <Header />
+      <SeasonBanner />
+      {children}
+      <Footer />
+      <StickyBookingBar />
+      <CallbackForm />
+      <ExitIntentPopup />
+    </>
   );
 }

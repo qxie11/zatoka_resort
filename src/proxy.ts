@@ -44,6 +44,12 @@ export function proxy(request: NextRequest) {
   }
 
   const { pathname } = request.nextUrl;
+
+  // Bypass locale redirection for admin routes
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+    return NextResponse.next();
+  }
+
   const pathnameHasLocale = ["/ru", "/uk", "/en"].some(
     (locale) => pathname === locale || pathname.startsWith(`${locale}/`)
   );
