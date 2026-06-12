@@ -39,8 +39,8 @@ export async function GET() {
       windSpeed,
     };
 
-    // 3. Save to database cache (8 hours duration)
-    const expiresAt = new Date(Date.now() + 8 * 60 * 60 * 1000);
+    // 3. Save to database cache (2 hours duration)
+    const expiresAt = new Date(Date.now() + 2 * 60 * 60 * 1000);
     await prisma.systemCache.upsert({
       where: { key: cacheKey },
       update: {
