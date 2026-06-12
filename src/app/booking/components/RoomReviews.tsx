@@ -237,11 +237,10 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
             {Array.from({ length: 5 }).map((_, i) => (
               <Star
                 key={i}
-                className={`h-5 w-5 ${
-                  i < Math.round(parseFloat(avgRating))
+                className={`h-5 w-5 ${i < Math.round(parseFloat(avgRating))
                     ? "fill-amber-400 text-amber-400"
                     : "text-slate-600"
-                }`}
+                  }`}
               />
             ))}
           </div>
@@ -282,11 +281,10 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
                             className="text-amber-400 focus:outline-none"
                           >
                             <Star
-                              className={`h-4.5 w-4.5 ${
-                                i + 1 <= editRating
+                              className={`h-4.5 w-4.5 ${i + 1 <= editRating
                                   ? "fill-amber-400 text-amber-400"
                                   : "text-slate-600"
-                              }`}
+                                }`}
                             />
                           </button>
                         ))}
@@ -407,11 +405,10 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
                       className="text-amber-400 hover:scale-110 transition-transform focus:outline-none"
                     >
                       <Star
-                        className={`h-7 w-7 ${
-                          starValue <= (hoverRating ?? rating)
+                        className={`h-7 w-7 ${starValue <= (hoverRating ?? rating)
                             ? "fill-amber-400 text-amber-400"
                             : "text-slate-600"
-                        }`}
+                          }`}
                       />
                     </button>
                   );
