@@ -14,6 +14,16 @@ interface PageProps {
   params: Promise<{ slug: string; lang: string }>;
 }
 
+function cleanTruncate(text: string, maxLength: number = 155): string {
+  if (text.length <= maxLength) return text;
+  const sub = text.substring(0, maxLength);
+  const lastSpace = sub.lastIndexOf(" ");
+  if (lastSpace > 100) {
+    return sub.substring(0, lastSpace).replace(/[.,:;!?]+$/, "") + "...";
+  }
+  return sub + "...";
+}
+
 export async function generateStaticParams() {
   const blogPosts = await getBlogPosts();
   return blogPosts.map((post) => ({
@@ -45,10 +55,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
   const canonicalUrl = `${baseUrl}/${lang}/blog/${slug}`;
+  const absoluteImageUrl = post.imageUrl.startsWith("http") ? post.imageUrl : `${baseUrl}${post.imageUrl}`;
 
   return {
     title,
-    description: excerpt.substring(0, 150),
+    description: cleanTruncate(excerpt, 155),
     alternates: {
       canonical: canonicalUrl,
       languages: {
@@ -60,12 +71,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     openGraph: {
       title,
-      description: excerpt.substring(0, 150),
+      description: cleanTruncate(excerpt, 155),
       type: "article",
       url: canonicalUrl,
       images: [
         {
-          url: post.imageUrl,
+          url: absoluteImageUrl,
           alt: title,
         },
       ],
@@ -73,8 +84,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     twitter: {
       card: "summary_large_image",
       title,
-      description: excerpt.substring(0, 150),
-      images: [post.imageUrl],
+      description: cleanTruncate(excerpt, 155),
+      images: [absoluteImageUrl],
     },
   };
 }
@@ -111,25 +122,15 @@ export default async function BlogPostPage({ params }: PageProps) {
     en: post.excerptEn,
   }[lang] || post.excerptRu;
 
-  // Join paragraphs for markdown rendering
   const fullContent = Array.isArray(contentParagraphs) ? contentParagraphs.join('\n\n') : contentParagraphs;
 
-  // Fetch all posts to determine related ones
   const blogPosts = await getBlogPosts();
 
-  // Filter out current post to find related ones
   const relatedPosts = blogPosts
     .filter((p) => p.slug !== slug && (p.categoryRu === post.categoryRu || p.categoryEn === post.categoryEn))
     .slice(0, 3);
 
-  // If no related posts in same category, just take first 3 posts
   const finalRelated = relatedPosts.length ? relatedPosts : blogPosts.filter((p) => p.slug !== slug).slice(0, 3);
-
-  const backLinkText = {
-    ru: "Назад в блог",
-    uk: "Назад до блогу",
-    en: "Back to Blog",
-  }[lang];
 
   const relatedTitleText = {
     ru: "Похожие статьи",
@@ -145,24 +146,32 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
   const canonicalUrl = `${baseUrl}/${lang}/blog/${slug}`;
+  const absoluteImageUrl = post.imageUrl.startsWith("http") ? post.imageUrl : `${baseUrl}${post.imageUrl}`;
+
+  const homeLabel = { ru: "Главная", uk: "Головна", en: "Home" }[lang] || "Главная";
+  const blogLabel = { ru: "Блог", uk: "Блог", en: "Blog" }[lang] || "Блог";
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": title,
-    "image": post.imageUrl,
+    "image": absoluteImageUrl,
     "datePublished": post.date,
-    "description": excerpt,
+    "dateModified": post.updatedAt ? post.updatedAt.toISOString() : post.date,
+    "description": cleanTruncate(excerpt, 155),
+    "articleSection": category,
+    "keywords": `${category}, hotel resort, zatoka, beachfront hotel`,
     "author": {
       "@type": "Organization",
-      "name": "Zatoka Resort"
+      "name": "Zatoka Resort",
+      "url": baseUrl
     },
     "publisher": {
       "@type": "Organization",
       "name": "Zatoka Resort",
       "logo": {
         "@type": "ImageObject",
-        "url": `${baseUrl}/og-image.png`
+        "url": `${baseUrl}/logo.png`
       }
     },
     "mainEntityOfPage": {
@@ -171,14 +180,48 @@ export default async function BlogPostPage({ params }: PageProps) {
     }
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": homeLabel,
+        "item": baseUrl + (lang === "ru" ? "" : `/${lang}`)
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": blogLabel,
+        "item": `${baseUrl}/${lang}/blog`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": category,
+        "item": `${baseUrl}/${lang}/blog?category=${(post.categoryEn || "activities").toLowerCase()}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": title,
+        "item": canonicalUrl
+      }
+    ]
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="bg-slate-950 text-slate-100 min-h-screen pb-20">
-      {/* Article Header Hero */}
       <section className="relative h-[60vh] min-h-[400px] flex items-end justify-start overflow-hidden bg-slate-900 text-white">
         <div className="absolute inset-0 z-0">
           <Image
@@ -192,15 +235,32 @@ export default async function BlogPostPage({ params }: PageProps) {
         </div>
 
         <div className="relative container mx-auto px-4 pb-12 z-10 max-w-4xl">
-          <div className="mb-6">
+          <nav className="mb-6 flex flex-wrap items-center gap-1.5 text-xs md:text-sm text-teal-200/90 font-medium">
+            <Link
+              href={`/${lang}`}
+              className="hover:text-teal-300 hover:underline transition-colors"
+            >
+              {homeLabel}
+            </Link>
+            <span className="text-slate-500">/</span>
             <Link
               href={`/${lang}/blog`}
-              className="inline-flex items-center gap-2 text-teal-300 hover:text-teal-200 transition-colors text-sm font-medium"
+              className="hover:text-teal-300 hover:underline transition-colors"
             >
-              <ArrowLeft className="h-4 w-4" />
-              <span>{backLinkText}</span>
+              {blogLabel}
             </Link>
-          </div>
+            <span className="text-slate-500">/</span>
+            <Link
+              href={`/${lang}/blog?category=${(post.categoryEn || "activities").toLowerCase()}`}
+              className="hover:text-teal-300 hover:underline transition-colors"
+            >
+              {category}
+            </Link>
+            <span className="text-slate-500">/</span>
+            <span className="text-slate-400 font-light truncate max-w-[120px] md:max-w-xs" title={title}>
+              {title}
+            </span>
+          </nav>
 
           <div className="inline-flex bg-teal-500/20 backdrop-blur-md text-teal-300 border border-teal-500/30 text-xs font-semibold rounded-lg px-2.5 py-1 mb-4">
             {category}
@@ -223,18 +283,21 @@ export default async function BlogPostPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Article Content */}
       <section className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="glass-card-dark border border-white/10 rounded-3xl p-6 md:p-12 shadow-2xl relative">
           <div className="prose prose-invert prose-teal max-w-none text-slate-200 font-light text-lg md:text-xl leading-relaxed prose-headings:font-bold prose-headings:text-white prose-headings:mt-12 prose-headings:mb-6 prose-p:mb-8 prose-a:text-teal-400 hover:prose-a:text-teal-300 prose-img:rounded-xl">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: ({node, ...props}) => <h2 {...props} />,
+              }}
+            >
               {fullContent}
             </ReactMarkdown>
           </div>
         </div>
       </section>
 
-      {/* Related Posts */}
       <section className="container mx-auto px-4 py-8 max-w-5xl border-t border-white/5 mt-8">
         <h2 className="text-2xl font-bold text-white mb-8 text-center md:text-left">
           {relatedTitleText}
