@@ -12,9 +12,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const currentYear = new Date().getFullYear();
 
   const data = {
-    ru: { title: "Отдых в Затоке | Zatoka Resort", desc: `Премиум-отель на первой линии в Затоке. Бассейн, море, комфорт ${currentYear}.` },
-    uk: { title: "Відпочинок в Затоці | Zatoka Resort", desc: `Преміум-готель на першій лінії в Затоці. Басейн, море, комфорт ${currentYear}.` },
-    en: { title: "Zatoka Resort | Seaside Hotel", desc: `Beachfront premium hotel in Zatoka. Pool, sea views, best rates ${currentYear}.` },
+    ru: { title: "Отдых в Затоке | Zatoka Resort", desc: `Премиум-отель в Затоке в 10 минутах от моря. Бассейн, комфорт ${currentYear}.` },
+    uk: { title: "Відпочинок в Затоці | Zatoka Resort", desc: `Преміум-готель в Затоці в 10 хвилинах від моря. Басейн, комфорт ${currentYear}.` },
+    en: { title: "Zatoka Resort | Seaside Hotel", desc: `Premium hotel in Zatoka just a 10-minute walk to the sea. Pool, best rates ${currentYear}.` },
   };
 
   const meta = data[lang as keyof typeof data] || data.ru;

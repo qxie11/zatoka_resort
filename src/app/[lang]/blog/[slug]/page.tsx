@@ -161,7 +161,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     "dateModified": post.updatedAt ? post.updatedAt.toISOString() : post.date,
     "description": cleanTruncate(excerpt, 155),
     "articleSection": category,
-    "keywords": `${category}, hotel resort, zatoka, beachfront hotel`,
+    "keywords": `${category}, hotel resort, zatoka, seaside hotel`,
     "author": {
       "@type": "Organization",
       "name": "Zatoka Resort",

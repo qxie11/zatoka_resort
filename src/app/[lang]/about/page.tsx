@@ -14,15 +14,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const data = {
     ru: {
       title: "О нас | Отдых в Затоке",
-      desc: `Узнайте больше о семейном отеле Zatoka Resort в Затоке: первая линия, бассейн и лучший сервис. Бронируйте напрямую по ценам ${currentYear}!`,
+      desc: `Узнайте больше о семейном отеле Zatoka Resort в Затоке: в 10 минутах от моря, бассейн и лучший сервис. Бронируйте напрямую по ценам ${currentYear}!`,
     },
     uk: {
       title: "Про нас | Відпочинок в Затоці",
-      desc: `Дізнайтеся більше про сімейний готель Zatoka Resort у Затоці: перша лінія, басейн та найкращий сервіс. Бронюйте напряму за цінами ${currentYear}!`,
+      desc: `Дізнайтеся більше про сімейний готель Zatoka Resort у Затоці: в 10 хвилинах від моря, басейн та найкращий сервіс. Бронюйте напряму за цінами ${currentYear}!`,
     },
     en: {
       title: "About Us | Zatoka Resort",
-      desc: `Discover more about Zatoka Resort: prime beachfront location, pool, and top-tier hospitality. Direct booking ${currentYear} at best rates.`,
+      desc: `Discover more about Zatoka Resort: peaceful location just a 10-minute walk to the sea, pool, and top-tier hospitality. Direct booking ${currentYear} at best rates.`,
     },
   };
 

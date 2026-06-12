@@ -158,7 +158,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 {/* Premium Micro-Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/20 text-[10px] font-bold text-teal-300 uppercase tracking-widest animate-fade-in shadow-[0_0_15px_rgba(20,184,166,0.1)]">
                   <Compass className="h-3.5 w-3.5 text-teal-400 animate-spin-slow" />
-                  <span>{translate("premiumBadge", "Премиум-отель на первой линии моря")}</span>
+                  <span>{translate("premiumBadge", "Премиум-отель рядом с морем")}</span>
                 </div>
  
                 {/* Heading */}
