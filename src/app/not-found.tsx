@@ -39,7 +39,6 @@ export default function NotFound() {
     }
   }[lang];
 
-  // Micro-interaction: Mouse move parallax effect for the stars & moon
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -55,7 +54,6 @@ export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-between bg-gradient-to-b from-slate-950 via-slate-900 to-sky-950 text-slate-100 relative overflow-hidden font-sans">
       
-      {/* Stars and Ambient Light Background */}
       <div 
         className="absolute inset-0 transition-transform duration-300 ease-out pointer-events-none opacity-40"
         style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
@@ -70,12 +68,9 @@ export default function NotFound() {
         </div>
       </div>
 
-      {/* Main Content Area */}
       <div className="flex-1 w-full flex flex-col lg:flex-row items-center justify-center container mx-auto px-6 py-12 gap-12 z-10">
         
-        {/* Left: Lighthouse CSS Illustration */}
         <div className="relative w-64 h-96 flex items-end justify-center select-none animate-fade-in">
-          {/* Light Beam Effect */}
           <div className="absolute bottom-[285px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none origin-bottom z-0">
             <div 
               className="w-full h-full bg-gradient-to-r from-transparent via-amber-200/20 to-transparent" 
@@ -86,9 +81,7 @@ export default function NotFound() {
             />
           </div>
 
-          {/* Lighthouse Tower Structure */}
           <div className="relative z-10 flex flex-col items-center">
-            {/* Top Light Lantern */}
             <div className="w-8 h-10 bg-amber-400 rounded-t-md relative flex items-center justify-center shadow-[0_0_30px_rgba(251,191,36,0.8)] border border-amber-300">
               <div className="absolute w-2 h-6 bg-slate-900 left-1" />
               <div className="absolute w-2 h-6 bg-slate-900 right-1" />
@@ -96,39 +89,32 @@ export default function NotFound() {
               <div className="absolute -top-3 w-0 h-0 border-l-[16px] border-l-transparent border-r-[16px] border-r-transparent border-b-[16px] border-b-slate-800" />
             </div>
 
-            {/* Gallery Deck */}
             <div className="w-16 h-2 bg-slate-800 rounded-sm shadow-md" />
             
-            {/* Upper Tower */}
             <div className="w-12 h-16 bg-gradient-to-b from-white to-slate-200 relative overflow-hidden flex flex-col justify-between items-center py-2">
               <div className="w-2 h-3 bg-slate-900 rounded-t-sm" />
               <div className="w-full h-4 bg-rose-600" />
             </div>
 
-            {/* Middle Tower */}
             <div className="w-16 h-20 bg-gradient-to-b from-slate-200 to-white relative overflow-hidden flex flex-col justify-between items-center py-2">
               <div className="w-2.5 h-4 bg-slate-900 rounded-t-sm" />
               <div className="w-full h-5 bg-rose-600" />
             </div>
 
-            {/* Lower Tower Base */}
             <div className="w-20 h-24 bg-gradient-to-b from-white to-slate-300 relative overflow-hidden flex flex-col justify-end items-center py-2">
               <div className="w-3 h-5 bg-slate-900 rounded-t-sm mb-4" />
               <div className="w-full h-6 bg-rose-600" />
             </div>
 
-            {/* Rocky Hill Foundation */}
             <div className="w-32 h-14 bg-gradient-to-t from-slate-800 to-slate-700 rounded-t-3xl border-t border-slate-600 shadow-xl flex items-center justify-center overflow-hidden">
               <span className="text-[10px] tracking-wider text-slate-500 uppercase font-mono font-semibold select-none pt-4">ZATOKA LIGHT</span>
             </div>
           </div>
 
-          {/* Drifting Clouds behind lighthouse */}
           <div className="absolute top-10 left-[-80px] w-20 h-6 bg-white/5 rounded-full blur-[2px] animate-float-slow" />
           <div className="absolute top-24 right-[-80px] w-24 h-8 bg-white/5 rounded-full blur-[2px] animate-float-slow" style={{ animationDelay: "2s" }} />
         </div>
 
-        {/* Right: Message and Actions */}
         <div className="max-w-xl text-center lg:text-left flex flex-col items-center lg:items-start">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-mono font-medium mb-4 uppercase tracking-wider animate-pulse">
             <Compass className="h-3.5 w-3.5" />
@@ -177,13 +163,11 @@ export default function NotFound() {
 
       </div>
 
-      {/* Decorative Sea Waves at the Bottom */}
       <div className="w-full relative z-20">
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent h-16 pointer-events-none -top-16" />
         <WaveDivider color="rgb(2, 6, 23)" height={100} />
       </div>
 
-      {/* Embedded styles for rotation of the beam */}
       <style jsx global>{`
         @keyframes sweep {
           0% {
