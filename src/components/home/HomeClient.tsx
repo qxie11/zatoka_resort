@@ -60,9 +60,10 @@ const amenityKeyMap: { [key: string]: string } = {
 
 interface HomeClientProps {
   rooms: Room[];
+  lang: string;
 }
 
-export default function HomeClient({ rooms }: HomeClientProps) {
+export default function HomeClient({ rooms, lang }: HomeClientProps) {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   const [, setLangUpdate] = useState(i18n.language);

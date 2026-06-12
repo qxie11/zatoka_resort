@@ -23,10 +23,12 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
     en: "Blog & Travel Tips | Zatoka Resort",
   };
 
+  const currentYear = new Date().getFullYear();
+
   const descriptions = {
-    ru: "Полезные статьи и советы для отдыха в Затоке 2026. Узнайте про отели на первой линии, рестораны, бассейны, развлечения и секреты прямого бронирования без переплат.",
-    uk: "Корисні статті та поради для відпочинку в Затоці 2026. Дізнайтеся про готелі на першій лінії, ресторани, басейни, розваги та секрети прямого бронювання без переплат.",
-    en: "Helpful travel tips and guides for your Zatoka vacation 2026. Explore beachfront hotels, private pool facilities, dining options, and direct booking tips.",
+    ru: `Полезные статьи и советы для отдыха в Затоке ${currentYear}. Узнайте про отели на первой линии, рестораны, бассейны, развлечения и секреты прямого бронирования без переплат.`,
+    uk: `Корисні статті та поради для відпочинку в Затоці ${currentYear}. Дізнайтеся про готелі на першій лінії, ресторани, басейни, розваги та секрети прямого бронювання без переплат.`,
+    en: `Helpful travel tips and guides for your Zatoka vacation ${currentYear}. Explore beachfront hotels, private pool facilities, dining options, and direct booking tips.`,
   };
 
   const categorySuffix = category ? `?category=${category}` : "";

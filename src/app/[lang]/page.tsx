@@ -1,37 +1,40 @@
+import { Metadata } from "next";
 import { getRooms, getReviews } from "@/lib/db";
 import HomeClient from "@/components/home/HomeClient";
-import { cookies } from "next/headers";
 
-export const dynamic = "force-dynamic";
+type PageProps = {
+  params: Promise<{ lang: string }>;
+};
 
-export default async function Home() {
-  const rooms = await getRooms();
-  const reviews = await getReviews();
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("lang")?.value || "ru";
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang } = await params;
+
+  const currentYear = new Date().getFullYear();
+
+  const data = {
+    ru: { title: "Отдых в Затоке | Zatoka Resort", desc: `Премиум-отель на первой линии в Затоке. Бассейн, море, комфорт ${currentYear}.` },
+    uk: { title: "Відпочинок в Затоці | Zatoka Resort", desc: `Преміум-готель на першій лінії в Затоці. Басейн, море, комфорт ${currentYear}.` },
+    en: { title: "Zatoka Resort | Seaside Hotel", desc: `Beachfront premium hotel in Zatoka. Pool, sea views, best rates ${currentYear}.` },
+  };
+
+  const meta = data[lang as keyof typeof data] || data.ru;
+
+  return {
+    title: meta.title,
+    description: meta.desc,
+  };
+}
+
+export default async function Home({ params }: PageProps) {
+  const { lang } = await params;
+  const [rooms, reviews] = await Promise.all([getRooms(), getReviews()]);
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
   const prices = rooms.map((r) => r.price);
   const minPrice = prices.length ? Math.min(...prices) : 1500;
   const maxPrice = prices.length ? Math.max(...prices) : 5000;
-  const priceRange = `${minPrice} UAH - ${maxPrice} UAH`;
 
-  const names = {
-    ru: "Отдых в Затоке",
-    uk: "Відпочинок в Затоці",
-    en: "Zatoka Resort",
-  };
-
-  const descriptions = {
-    ru: "Забронируйте свой идеальный пляжный отдых в 'Отдых в Затоке', премиум-отеле в Затоке, Одесса. Наслаждайтесь потрясающими видами на море, отличным сервисом и современными удобствами.",
-    uk: "Забронюйте свій ідеальний пляжний відпочинок у 'Відпочинок в Затоці', преміум-готелі в Затоці, Одеса. Насолоджуйтесь приголомшливими видами на море, чудовим сервісом та сучасними зручностями.",
-    en: "Book your perfect beach holiday at 'Zatoka Resort', a premium hotel in Zatoka, Odesa. Enjoy stunning sea views, excellent service, and modern amenities.",
-  };
-
-  const resortName = names[lang as keyof typeof names] || names.ru;
-  const resortDesc = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
-
-  const reviewCount = reviews.length || 124;
   const ratingValue = reviews.length
     ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
     : "4.9";
@@ -39,10 +42,9 @@ export default async function Home() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Hotel",
-    "name": resortName,
-    "description": resortDesc,
-    "image": `${baseUrl}/og-image.png`,
-    "logo": `${baseUrl}/og-image.png`,
+    "name": "Zatoka Resort",
+    "description": "Premium hotel in Zatoka, Odesa region.",
+    "image": [`${baseUrl}/og-image.png`],
     "url": baseUrl,
     "address": {
       "@type": "PostalAddress",
@@ -52,34 +54,13 @@ export default async function Home() {
       "postalCode": "67772",
       "addressCountry": "UA"
     },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": "46.0683",
-      "longitude": "30.4578"
-  },
-    "priceRange": priceRange,
-    "email": "contact@zatokagetaway.com",
-    "telephone": "+380501234567",
+    "priceRange": `${minPrice} - ${maxPrice} UAH`,
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": ratingValue,
-      "reviewCount": reviewCount,
+      "reviewCount": reviews.length || 124,
       "bestRating": "5",
       "worstRating": "1"
-    },
-    "openingHoursSpecification": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday"
-      ],
-      "opens": "00:00",
-      "closes": "23:59"
     }
   };
 
@@ -89,7 +70,7 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <HomeClient rooms={rooms} />
+      <HomeClient rooms={rooms} lang={lang} />
     </>
   );
 }

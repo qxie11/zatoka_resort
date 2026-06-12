@@ -1,120 +1,91 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { StickyBookingBar } from "@/components/conversion/StickyBookingBar";
-import { CallbackForm } from "@/components/conversion/CallbackForm";
 import { SeasonBanner } from "@/components/conversion/SeasonBanner";
+import { CallbackForm } from "@/components/conversion/CallbackForm";
 import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
 
-interface LayoutProps {
-  children: React.ReactNode;
-  params: Promise<{ lang: string }>;
-}
+const inter = Inter({ subsets: ["latin", "cyrillic"] });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0f172a",
+};
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
-
-  const appNames = {
-    ru: "Отдых в Затоке",
-    uk: "Відпочинок в Затоці",
-    en: "Zatoka Resort",
-  };
-
-  const titles = {
-    ru: "Отдых в Затоке | Ваш морской отель в Одесской области",
-    uk: "Відпочинок в Затоці | Ваш морський готель в Одеській області",
-    en: "Zatoka Resort | Your seaside hotel in Odesa region",
-  };
-
-  const titleTemplates = {
-    ru: "%s | Отдых в Затоке",
-    uk: "%s | Відпочинок в Затоці",
-    en: "%s | Zatoka Resort",
-  };
-
-  const descriptions = {
-    ru: "Отдых в Затоке: семейный отель Zatoka Resort на первой линии с собственным бассейном. Прямое бронирование номеров у самого моря, оптимальные цены 2026.",
-    uk: "Забронюйте відпочинок в Затоці: готель Zatoka Resort на першій лінії з власним басейном. Оптимальні ціни 2026, комфортні номери, сімейний відпочинок біля моря.",
-    en: "Book your holiday at Zatoka Resort: a beachfront hotel in Zatoka with a swimming pool. Direct booking, best prices 2026, comfortable rooms, and family seaside vacation.",
-  };
-
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
-  const appName = appNames[lang as keyof typeof appNames] || appNames.ru;
-  const defaultTitle = titles[lang as keyof typeof titles] || titles.ru;
-  const titleTemplate = titleTemplates[lang as keyof typeof titleTemplates] || titleTemplates.ru;
-  const description = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
 
-  const ogImageUrl = `${baseUrl}/og-image.png`;
-  const canonicalUrl = `${baseUrl}/${lang}`;
+  const currentYear = new Date().getFullYear();
+
+  const i18n = {
+    ru: { title: "Отдых в Затоке | Zatoka Resort", desc: `Семейный отель в Затоке на первой линии. Бассейн, комфортные номера, цены ${currentYear}.` },
+    uk: { title: "Відпочинок в Затоці | Zatoka Resort", desc: `Сімейний готель в Затоці на першій лінії. Басейн, комфортні номери, ціни ${currentYear}.` },
+    en: { title: "Zatoka Resort | Seaside Hotel", desc: `Beachfront family hotel in Zatoka. Pool, comfortable rooms, best rates ${currentYear}.` },
+  };
+
+  const { title, desc } = i18n[lang as keyof typeof i18n] || i18n.ru;
 
   return {
     metadataBase: new URL(baseUrl),
+    title: {
+      default: title,
+      template: "%s | Zatoka Resort",
+    },
+    description: desc,
     alternates: {
-      canonical: canonicalUrl,
+      canonical: `${baseUrl}/${lang}`,
       languages: {
-        "x-default": `${baseUrl}/`,
+        "x-default": `${baseUrl}/ru`,
         ru: `${baseUrl}/ru`,
         uk: `${baseUrl}/uk`,
         en: `${baseUrl}/en`,
       },
     },
-    applicationName: appName,
-    title: {
-      default: defaultTitle,
-      template: titleTemplate,
-    },
-    description: description,
-    manifest: "/manifest.json",
-    appleWebApp: {
-      capable: true,
-      statusBarStyle: "default",
-      title: defaultTitle,
-    },
-    formatDetection: {
-      telephone: false,
-    },
     openGraph: {
       type: "website",
-      siteName: appName,
-      title: {
-        default: defaultTitle,
-        template: titleTemplate,
-      },
-      description: description,
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          type: "image/png",
-          alt: defaultTitle,
-        },
-      ],
+      locale: lang,
+      siteName: "Zatoka Resort",
+      title,
+      description: desc,
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
-      title: {
-        default: defaultTitle,
-        template: titleTemplate,
-      },
-      description: description,
-      images: [ogImageUrl],
+      title,
+      description: desc,
     },
   };
 }
 
 export default async function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+
   return (
-    <>
-      <Header />
-      <SeasonBanner />
-      {children}
-      <Footer />
-      <StickyBookingBar />
-      <CallbackForm />
-      <ExitIntentPopup />
-    </>
+    <html lang={lang} className="scroll-smooth">
+      <body className={`${inter.className} bg-slate-950 text-slate-100 antialiased`}>
+        <Header />
+
+        <main className="min-h-screen">
+          <SeasonBanner />
+          {children}
+        </main>
+
+        <Footer />
+
+        <StickyBookingBar />
+        <CallbackForm />
+        <ExitIntentPopup />
+      </body>
+    </html>
   );
 }

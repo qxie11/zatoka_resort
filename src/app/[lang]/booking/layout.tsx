@@ -12,10 +12,12 @@ export async function generateMetadata(): Promise<Metadata> {
     en: "Book Your Stay | Zatoka Resort",
   };
 
+  const currentYear = new Date().getFullYear();
+
   const descriptions = {
-    ru: "Прямое бронирование номеров в отеле Zatoka Resort у самого моря. Комфортный семейный отдых в Затоке 2026, бассейн, первая линия, лучшие цены без посредников.",
-    uk: "Пряме бронювання номерів в готелі Zatoka Resort біля самого моря. Комфортний сімейний відпочинок в Затоці 2026, басейн, перша лінія, кращі ціни без посередників.",
-    en: "Direct room booking at Zatoka Resort beachfront hotel. Affordable family holidays in Zatoka 2026, swimming pool, seaside view, and booking without intermediaries.",
+    ru: `Прямое бронирование номеров в отеле Zatoka Resort у самого моря. Комфортный семейный отдых в Затоке ${currentYear}, бассейн, первая линия, лучшие цены без посредников.`,
+    uk: `Пряме бронювання номерів в готелі Zatoka Resort біля самого моря. Комфортний сімейний відпочинок в Затоці ${currentYear}, басейн, перша лінія, кращі ціни без посередників.`,
+    en: `Direct room booking at Zatoka Resort beachfront hotel. Affordable family holidays in Zatoka ${currentYear}, swimming pool, seaside view, and booking without intermediaries.`,
   };
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";

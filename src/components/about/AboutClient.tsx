@@ -39,7 +39,11 @@ const teamMembers = [
   { name: 'Андрій Шевченко', roleKey: 'roleChef', roleDefault: 'Шеф-повар', imageId: 'staff-3' },
 ];
 
-export default function AboutClient() {
+interface AboutClientProps {
+  lang: string;
+}
+
+export default function AboutClient({ lang }: AboutClientProps) {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   const [, setLangUpdate] = useState(i18n.language);

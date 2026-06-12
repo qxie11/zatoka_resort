@@ -307,8 +307,8 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
               />
             ))}
           </div>
-          <span className="text-lg font-bold text-white">{avgRating} / 5.0</span>
-          <span className="text-slate-400 text-xs font-light">({reviews.length} отзывов)</span>
+          <span className="text-lg font-bold text-white whitespace-nowrap">{avgRating} / 5.0</span>
+          <span className="text-slate-400 text-xs font-light whitespace-nowrap">({reviews.length} отзывов)</span>
         </div>
       </div>
 
