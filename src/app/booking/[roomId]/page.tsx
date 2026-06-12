@@ -6,21 +6,24 @@ import { Badge } from '@/components/ui/badge';
 import { BedDouble, MapPin, Waves, Compass, Navigation } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Metadata } from 'next';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import RoomReviews from '../components/RoomReviews';
 import { Button } from '@/components/ui/button';
 import GoogleMapComponent from '../components/GoogleMapComponent';
 
 interface PageProps {
   params: Promise<{ roomId: string }>;
+  searchParams: Promise<{ lang?: string }>;
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
   const { roomId } = await params;
+  const { lang: queryLang } = await searchParams;
   const room = await getRoomById(roomId);
   
+  const headerList = await headers();
   const cookieStore = await cookies();
-  const lang = cookieStore.get("lang")?.value || "ru";
+  const lang = queryLang || headerList.get("x-lang") || cookieStore.get("lang")?.value || "ru";
 
   if (!room) {
     const notFoundTitles = {
@@ -53,12 +56,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ? room.imageUrl
     : `${baseUrl}${room.imageUrl.startsWith("/") ? "" : "/"}${room.imageUrl}`;
 
+  const canonicalUrl = `${baseUrl}/booking/${roomId}${lang !== "ru" ? `?lang=${lang}` : ""}`;
+
   return {
     title,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        ru: `${baseUrl}/booking/${roomId}`,
+        uk: `${baseUrl}/booking/${roomId}?lang=uk`,
+        en: `${baseUrl}/booking/${roomId}?lang=en`,
+      },
+    },
     openGraph: {
       title,
       description,
+      url: canonicalUrl,
       images: [
         {
           url: imageUrl,

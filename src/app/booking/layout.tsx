@@ -1,14 +1,15 @@
 import { Metadata } from "next";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const headerList = await headers();
   const cookieStore = await cookies();
-  const lang = cookieStore.get("lang")?.value || "ru";
+  const lang = headerList.get("x-lang") || cookieStore.get("lang")?.value || "ru";
 
   const titles = {
-    ru: "Забронировать проживание",
-    uk: "Забронювати проживання",
-    en: "Book Your Stay",
+    ru: "Забронировать проживание | Отдых в Затоке",
+    uk: "Забронювати проживання | Відпочинок в Затоці",
+    en: "Book Your Stay | Zatoka Resort",
   };
 
   const descriptions = {
@@ -17,10 +18,21 @@ export async function generateMetadata(): Promise<Metadata> {
     en: "Check availability and book a room at 'Zatoka Resort'. Choose from our range of beautiful rooms and suites.",
   };
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
+  const canonicalUrl = `${baseUrl}/booking${lang !== "ru" ? `?lang=${lang}` : ""}`;
+
   return {
     title: titles[lang as keyof typeof titles] || titles.ru,
     description: descriptions[lang as keyof typeof descriptions] || descriptions.ru,
     keywords: ["бронирование", "отель в Затоке бронирование", "жилье в Одессе", "забронировать номер", "проверить наличие"],
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        ru: `${baseUrl}/booking`,
+        uk: `${baseUrl}/booking?lang=uk`,
+        en: `${baseUrl}/booking?lang=en`,
+      },
+    },
   };
 }
 
