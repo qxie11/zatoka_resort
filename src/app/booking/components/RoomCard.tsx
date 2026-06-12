@@ -79,7 +79,7 @@ export default function RoomCard({ room }: RoomCardProps) {
             </div>
             <div className="flex items-center gap-1.5 text-sky-300 font-medium bg-sky-500/10 border border-sky-500/20 px-2 py-0.5 rounded-lg">
               <Waves className="h-3.5 w-3.5 text-sky-400" />
-              <span>10м до пляжа (1-я линия)</span>
+              <span>10 мин до пляжа</span>
             </div>
           </div>
           <CardDescription className="pt-2 text-slate-300 font-light leading-relaxed">{room.description}</CardDescription>
