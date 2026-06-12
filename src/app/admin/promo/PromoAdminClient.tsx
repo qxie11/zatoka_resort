@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Tag, Trash2, Calendar, Plus, Save, X, ToggleLeft, ToggleRight, Loader2, Sparkles } from "lucide-react";
+import { Tag, Trash2, Calendar, Plus, Minus, Save, X, ToggleLeft, ToggleRight, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -215,14 +215,23 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
             </div>
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-400 uppercase">Скидка (%)</label>
-              <Input
-                type="number"
-                min={1}
-                max={100}
-                value={discount}
-                onChange={(e) => setDiscount(parseInt(e.target.value) || 0)}
-                className="bg-slate-950/40 border-white/10 text-white rounded-xl"
-              />
+              <div className="flex items-center justify-between bg-slate-950/40 border border-white/10 rounded-xl h-11 px-2.5 w-full max-w-[150px]">
+                <button
+                  type="button"
+                  onClick={() => setDiscount((prev) => Math.max(1, prev - 1))}
+                  className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95"
+                >
+                  <Minus className="h-4 w-4" />
+                </button>
+                <span className="text-base font-extrabold select-none text-white">{discount}</span>
+                <button
+                  type="button"
+                  onClick={() => setDiscount((prev) => Math.min(100, prev + 1))}
+                  className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-4 pt-2">

@@ -7,6 +7,7 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Minus, Plus } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -219,17 +220,59 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                  {form.formState.errors.description && <p className="text-xs text-rose-500">{form.formState.errors.description.message}</p>}
              </div>
             <div className="grid grid-cols-2 gap-4">
-                 <div className="grid gap-2">
-                     <Label htmlFor="price" className="font-semibold text-slate-300">Цена (грн)</Label>
-                     <Input id="price" type="number" {...form.register("price")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" />
-                     {form.formState.errors.price && <p className="text-xs text-rose-500">{form.formState.errors.price.message}</p>}
-                 </div>
-                 <div className="grid gap-2">
-                     <Label htmlFor="capacity" className="font-semibold text-slate-300">Вместимость (гостей)</Label>
-                     <Input id="capacity" type="number" {...form.register("capacity")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" />
-                     {form.formState.errors.capacity && <p className="text-xs text-rose-500">{form.formState.errors.capacity.message}</p>}
-                 </div>
-             </div>
+                  <div className="grid gap-2">
+                      <Label htmlFor="price" className="font-semibold text-slate-300">Цена (грн)</Label>
+                      <div className="flex items-center bg-slate-900 border border-white/10 rounded-xl h-11 px-1.5 w-full">
+                        <button
+                          type="button"
+                          onClick={() => form.setValue("price", Math.max(0, (form.watch("price") || 0) - 100))}
+                          className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95 shrink-0"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </button>
+                        <input
+                          id="price"
+                          type="number"
+                          {...form.register("price", { valueAsNumber: true })}
+                          className="w-full text-center bg-transparent border-0 outline-none focus:ring-0 text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => form.setValue("price", (form.watch("price") || 0) + 100)}
+                          className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95 shrink-0"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                      </div>
+                      {form.formState.errors.price && <p className="text-xs text-rose-500">{form.formState.errors.price.message}</p>}
+                  </div>
+                  <div className="grid gap-2">
+                      <Label htmlFor="capacity" className="font-semibold text-slate-300">Вместимость (гостей)</Label>
+                      <div className="flex items-center bg-slate-900 border border-white/10 rounded-xl h-11 px-1.5 w-full">
+                        <button
+                          type="button"
+                          onClick={() => form.setValue("capacity", Math.max(1, (form.watch("capacity") || 1) - 1))}
+                          className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95 shrink-0"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </button>
+                        <input
+                          id="capacity"
+                          type="number"
+                          {...form.register("capacity", { valueAsNumber: true })}
+                          className="w-full text-center bg-transparent border-0 outline-none focus:ring-0 text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => form.setValue("capacity", Math.min(10, (form.watch("capacity") || 1) + 1))}
+                          className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95 shrink-0"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                      </div>
+                      {form.formState.errors.capacity && <p className="text-xs text-rose-500">{form.formState.errors.capacity.message}</p>}
+                  </div>
+              </div>
             <div className="grid gap-2">
                  <Label htmlFor="amenities" className="font-semibold text-slate-300">Удобства (через запятую)</Label>
                  <Input id="amenities" {...form.register("amenities")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" />

@@ -147,58 +147,60 @@ export function DateRangePicker({
             </Button>
           </FormControl>
         </PopoverTrigger>
-        <PopoverPrimitive.Content 
-          className={cn("w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 text-white z-50 outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2")}
-          align="start"
-          sideOffset={4}
-        >
-          <Calendar
-            initialFocus
-            mode="range"
-            defaultMonth={value?.from}
-            selected={value?.from ? { from: value.from, to: value.to } : undefined}
-            onSelect={(range, selectedDay) => {
-              if (value?.from && value?.to) {
-                onChange({ from: selectedDay, to: undefined });
-                return;
-              }
-
-              if (range?.from && range?.to) {
-                const start = startOfDay(range.from);
-                const end = startOfDay(range.to);
-                if (start.getTime() === end.getTime()) {
-                  onChange({ from: range.from, to: undefined });
+        <PopoverPrimitive.Portal>
+          <PopoverPrimitive.Content 
+            className={cn("w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 text-white z-50 outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2")}
+            align="start"
+            sideOffset={4}
+          >
+            <Calendar
+              initialFocus
+              mode="range"
+              defaultMonth={value?.from}
+              selected={value?.from ? { from: value.from, to: value.to } : undefined}
+              onSelect={(range, selectedDay) => {
+                if (value?.from && value?.to) {
+                  onChange({ from: selectedDay, to: undefined });
                   return;
                 }
-                if (validateDateRange(range)) {
-                  onChange(range);
-                  setPopoverOpen(false);
+
+                if (range?.from && range?.to) {
+                  const start = startOfDay(range.from);
+                  const end = startOfDay(range.to);
+                  if (start.getTime() === end.getTime()) {
+                    onChange({ from: range.from, to: undefined });
+                    return;
+                  }
+                  if (validateDateRange(range)) {
+                    onChange(range);
+                    setPopoverOpen(false);
+                  } else {
+                    toast({
+                      title: t("datesOccupiedTitle", "Даты заняты"),
+                      description: t("datesOccupiedDesc", "Выбранный диапазон дат пересекается с существующими бронированиями. Пожалуйста, выберите другие даты."),
+                      variant: "destructive",
+                    });
+                  }
                 } else {
-                  toast({
-                    title: t("datesOccupiedTitle", "Даты заняты"),
-                    description: t("datesOccupiedDesc", "Выбранный диапазон дат пересекается с существующими бронированиями. Пожалуйста, выберите другие даты."),
-                    variant: "destructive",
-                  });
+                  onChange(range);
                 }
-              } else {
-                onChange(range);
-              }
-            }}
-            numberOfMonths={isMobile ? 1 : 2}
-            disabled={isDateRangeDisabled}
-            locale={activeLocale}
-            className="bg-slate-950 text-white border-0"
-            classNames={{
-              day_selected: "gradient-sunset text-slate-950 font-bold shadow-md rounded-lg",
-            }}
-            modifiers={{
-              booked: disabledDates,
-            }}
-            modifiersClassNames={{
-              booked: "gradient-sunset text-slate-950 font-bold rounded-lg",
-            }}
-          />
-        </PopoverPrimitive.Content>
+              }}
+              numberOfMonths={isMobile ? 1 : 2}
+              disabled={isDateRangeDisabled}
+              locale={activeLocale}
+              className="bg-slate-950 text-white border-0"
+              classNames={{
+                day_selected: "gradient-sunset text-slate-950 font-bold shadow-md rounded-lg",
+              }}
+              modifiers={{
+                booked: disabledDates,
+              }}
+              modifiersClassNames={{
+                booked: "gradient-sunset text-slate-950 font-bold rounded-lg",
+              }}
+            />
+          </PopoverPrimitive.Content>
+        </PopoverPrimitive.Portal>
       </Popover>
       <FormMessage />
       {existingBookings.length > 0 && disabledDates.length > 0 && (

@@ -7,6 +7,7 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Minus, Plus } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -232,7 +233,28 @@ export default function BlogForm({ isOpen, onOpenChange, onSubmit, post }: BlogP
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label htmlFor="readTime" className="font-semibold text-slate-300">Время чтения (минут)</Label>
-              <Input id="readTime" type="number" {...form.register("readTime")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 h-11" />
+              <div className="flex items-center bg-slate-900 border border-white/10 rounded-xl h-11 px-1.5 w-full">
+                <button
+                  type="button"
+                  onClick={() => form.setValue("readTime", Math.max(1, (form.watch("readTime") || 1) - 1))}
+                  className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95 shrink-0"
+                >
+                  <Minus className="h-4 w-4" />
+                </button>
+                <input
+                  id="readTime"
+                  type="number"
+                  {...form.register("readTime", { valueAsNumber: true })}
+                  className="w-full text-center bg-transparent border-0 outline-none focus:ring-0 text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => form.setValue("readTime", (form.watch("readTime") || 1) + 1)}
+                  className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95 shrink-0"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
+              </div>
               {form.formState.errors.readTime && <p className="text-xs text-rose-500">{form.formState.errors.readTime.message}</p>}
             </div>
           </div>

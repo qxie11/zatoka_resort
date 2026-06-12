@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { Users, Mail, Phone, User, Eye } from "lucide-react";
+import { Users, Mail, Phone, User, Eye, Minus, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -227,21 +227,34 @@ export default function RoomBookingForm({
               control={form.control}
               name="guests"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-teal-300 font-bold mb-2">Количество гостей</FormLabel>
-                  <div className="relative">
-                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-teal-400" />
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Количество гостей"
-                        className="pl-10 bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
-                        min={1}
-                        max={room.capacity}
-                        {...field}
-                      />
-                    </FormControl>
-                  </div>
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-teal-300 font-bold mb-2.5 flex items-center gap-1.5">
+                    <Users className="h-4 w-4 text-teal-400" />
+                    Количество гостей
+                  </FormLabel>
+                  <FormControl>
+                    <div className="flex items-center justify-between bg-slate-950/40 border border-white/10 rounded-xl h-11 px-2.5 w-full max-w-[200px]">
+                      <button
+                        type="button"
+                        onClick={() => field.onChange(Math.max(1, (field.value || 1) - 1))}
+                        className="h-7 w-7 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </button>
+                      
+                      <span className="text-base font-extrabold select-none text-white tracking-wider">
+                        {field.value || 1}
+                      </span>
+                      
+                      <button
+                        type="button"
+                        onClick={() => field.onChange(Math.min(room.capacity, (field.value || 1) + 1))}
+                        className="h-7 w-7 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </FormControl>
                   <p className="text-sm text-slate-400 mt-1">
                     Максимум {room.capacity} гостей
                   </p>

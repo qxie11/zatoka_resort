@@ -3,9 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { format } from "date-fns";
 import { ru, uk, enUS } from "date-fns/locale";
-import { CalendarIcon, Users } from "lucide-react";
+import { Users, Minus, Plus, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 
@@ -21,11 +20,9 @@ import {
 } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import type { Room, Booking } from "@/lib/types";
 import i18n from "@/lib/i18n";
 import { DateRangePicker } from "@/components/booking/DateRangePicker";
-
 
 const dateFnsLocales = {
   ru,
@@ -66,8 +63,6 @@ export default function BookingForm({
     };
   }, [i18nInstance]);
 
-  const activeLocale = dateFnsLocales[currentLang] || ru;
-
   const FormSchema = z.object({
     dateRange: z.object({
       from: z.date({
@@ -77,9 +72,7 @@ export default function BookingForm({
         required_error: t("dateOutRequired"),
       }),
     }),
-    guests: z.coerce
-      .number()
-      .min(1, { message: t("minGuests") }),
+    guests: z.number().min(1, { message: t("minGuests") }).max(10),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -145,7 +138,9 @@ export default function BookingForm({
   };
 
   return (
-    <Card className="max-w-4xl mx-auto my-12 shadow-2xl border border-white/10 glass-card-dark rounded-3xl text-white relative z-50">
+    <Card className="max-w-4xl mx-auto my-12 shadow-[0_0_50px_rgba(20,184,166,0.15)] border border-teal-500/25 bg-slate-900/60 backdrop-blur-md rounded-[2rem] text-white relative z-50 overflow-hidden">
+      {/* Decorative top border wave glow */}
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-400 via-sky-400 to-amber-300" />
       <CardContent className="p-8">
         <Form {...form}>
           <form
@@ -163,30 +158,50 @@ export default function BookingForm({
                 />
               )}
             />
+            
+            {/* Custom Interactive Plus/Minus Counter for Guests */}
             <FormField
               control={form.control}
               name="guests"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="text-teal-300 font-bold mb-2">
+                  <FormLabel className="text-teal-300 font-bold mb-2.5 flex items-center gap-1.5">
+                    <Users className="h-4 w-4 text-teal-400" />
                     {translate("guests", "Гости")}
                   </FormLabel>
-                  <div className="relative">
-                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-teal-400" />
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder={translate("guestsPlaceholder", "Количество гостей")}
-                        className="pl-10 bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
-                        {...field}
-                      />
-                    </FormControl>
-                  </div>
+                  <FormControl>
+                    <div className="flex items-center justify-between bg-slate-950/60 border border-white/10 rounded-xl h-12 px-2.5 w-full">
+                      <button
+                        type="button"
+                        onClick={() => field.onChange(Math.max(1, field.value - 1))}
+                        className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </button>
+                      
+                      <span className="text-base font-extrabold select-none text-white tracking-wider">
+                        {field.value}
+                      </span>
+                      
+                      <button
+                        type="button"
+                        onClick={() => field.onChange(Math.min(10, field.value + 1))}
+                        className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full h-11 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 hover:opacity-90 active:scale-[0.98] text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl transition-all duration-300">
+            
+            <Button 
+              type="submit" 
+              className="w-full h-12 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 hover:scale-[1.02] active:scale-95 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/25 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              <Search className="h-4.5 w-4.5 text-slate-950" />
               {translate("checkAvailability", "Проверить наличие")}
             </Button>
           </form>
