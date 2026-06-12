@@ -6,6 +6,7 @@ import { StickyBookingBar } from "@/components/conversion/StickyBookingBar";
 import { SeasonBanner } from "@/components/conversion/SeasonBanner";
 import { CallbackForm } from "@/components/conversion/CallbackForm";
 import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
+import ScratchCardPromo from "@/components/conversion/ScratchCardPromo";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
@@ -85,6 +86,7 @@ export default async function RootLayout({
         <StickyBookingBar />
         <CallbackForm />
         <ExitIntentPopup />
+        <ScratchCardPromo lang={lang} />
       </body>
     </html>
   );

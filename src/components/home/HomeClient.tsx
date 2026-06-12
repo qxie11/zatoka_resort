@@ -34,6 +34,8 @@ import type { LucideProps } from "lucide-react";
 import type { Room } from "@/lib/types";
 import { amenities } from "@/lib/data";
 import i18n from "@/lib/i18n";
+import SeasideStatusWidget from "@/components/conversion/SeasideStatusWidget";
+import RoomFinderQuiz from "@/components/conversion/RoomFinderQuiz";
 
 const iconMap: { [key: string]: React.FC<LucideProps> } = {
   Waves,
@@ -334,23 +336,33 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
             </div>
           </div>
           
-          <div className="container mx-auto px-4 text-center relative z-10">
-            <ScrollReveal variant="fade-up">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 text-xs font-semibold text-teal-300 uppercase tracking-widest mb-4">
-                <span>{translate("exclusiveService", "Эксклюзивный сервис")}</span>
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              <div className="lg:col-span-7 text-left space-y-6">
+                <ScrollReveal variant="fade-up">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 text-xs font-semibold text-teal-300 uppercase tracking-widest mb-2">
+                    <span>{translate("exclusiveService", "Эксклюзивный сервис")}</span>
+                  </div>
+                </ScrollReveal>
+                <ScrollReveal variant="tide-in" delay={100}>
+                  <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                    {translate("welcomeTitle", 'Добро пожаловать в "Отдых в Затоке"')}
+                  </h2>
+                  <WavyUnderline colorClassName='text-teal-300' />
+                </ScrollReveal>
+                <ScrollReveal variant="fade-up" delay={200}>
+                  <p className="mt-6 text-slate-300 text-lg font-light leading-relaxed">
+                    {translate("welcomeDesc", 'Расположенный на безмятежном побережье Черного моря, "Отдых в Затоке" предлагает идеальное сочетание роскоши, комфорта и природной красоты. Ищете ли вы романтический уик-энд или семейное приключение, наш отель — ваше идеальное место для незабываемого отдыха.')}
+                  </p>
+                </ScrollReveal>
               </div>
-            </ScrollReveal>
-            <ScrollReveal variant="tide-in" delay={100}>
-              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                {translate("welcomeTitle", 'Добро пожаловать в "Отдых в Затоке"')}
-              </h2>
-              <WavyUnderline colorClassName='text-teal-300' />
-            </ScrollReveal>
-            <ScrollReveal variant="fade-up" delay={200}>
-              <p className="mt-6 max-w-3xl mx-auto text-slate-300 text-lg md:text-xl font-light leading-relaxed">
-                {translate("welcomeDesc", 'Расположенный на безмятежном побережье Черного моря, "Отдых в Затоке" предлагает идеальное сочетание роскоши, комфорта и природной красоты. Ищете ли вы романтический уик-энд или семейное приключение, наш отель — ваше идеальное место для незабываемого отдыха.')}
-              </p>
-            </ScrollReveal>
+              
+              <div className="lg:col-span-5 w-full">
+                <ScrollReveal variant="scale-in" delay={300}>
+                  <SeasideStatusWidget lang={i18n.language} />
+                </ScrollReveal>
+              </div>
+            </div>
           </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
@@ -444,6 +456,13 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
               <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-teal-200/10" />
               <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
             </svg>
+          </div>
+        </section>
+
+        {/* ROOM FINDER QUIZ SECTION */}
+        <section className="py-16 bg-slate-950 relative overflow-hidden">
+          <div className="container mx-auto px-4 relative z-10">
+            <RoomFinderQuiz rooms={rooms} lang={lang} />
           </div>
         </section>
 
