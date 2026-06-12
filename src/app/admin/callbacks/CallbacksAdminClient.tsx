@@ -5,6 +5,7 @@ import { PhoneCall, Trash2, Calendar, User, MessageSquare, Loader2 } from "lucid
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface CallbackRequest {
   id: string;
@@ -25,6 +26,8 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
 
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [requestIdToDelete, setRequestIdToDelete] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [bulkDeleteConfirmOpen, setBulkDeleteConfirmOpen] = useState(false);
 
   const fetchRequests = async () => {
     try {
@@ -53,6 +56,7 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
 
     const performDelete = async () => {
       setRequests((prev) => prev.filter((r) => r.id !== id));
+      setSelectedIds((prev) => prev.filter((x) => x !== id));
       try {
         const res = await fetch(`/api/callbacks/${id}`, {
           method: "DELETE",
@@ -82,9 +86,55 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
     }
   };
 
+  const handleBulkDeleteConfirm = async () => {
+    const ids = selectedIds;
+    const rowEls = ids.map((id) => document.getElementById(`row-${id}`)).filter(Boolean) as HTMLElement[];
+
+    const performDelete = async () => {
+      setRequests((prev) => prev.filter((r) => !ids.includes(r.id)));
+      setSelectedIds([]);
+      try {
+        await Promise.all(
+          ids.map((id) =>
+            fetch(`/api/callbacks/${id}`, {
+              method: "DELETE",
+            })
+          )
+        );
+        toast({
+          title: "Успешно",
+          description: "Выбранные заявки успешно удалены",
+        });
+      } catch (error) {
+        fetchRequests();
+        toast({
+          variant: "destructive",
+          title: "Ошибка",
+          description: "Не удалось удалить некоторые заявки",
+        });
+      }
+    };
+
+    if (rowEls.length > 0) {
+      const { thanosSnap } = await import("@/lib/thanos");
+      let snappedCount = 0;
+      rowEls.forEach((el) => {
+        thanosSnap(el, () => {
+          snappedCount++;
+          if (snappedCount === rowEls.length) {
+            performDelete();
+          }
+        });
+      });
+    } else {
+      performDelete();
+    }
+    setBulkDeleteConfirmOpen(false);
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-white flex items-center gap-3">
             <PhoneCall className="h-7 w-7 text-teal-400" />
@@ -94,6 +144,16 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
             Просматривайте запросы гостей на обратную связь и звонки
           </p>
         </div>
+
+        {selectedIds.length > 0 && (
+          <Button
+            onClick={() => setBulkDeleteConfirmOpen(true)}
+            className="bg-gradient-to-r from-rose-500 to-red-650 hover:from-rose-400 hover:to-red-500 text-white font-bold border-0 shadow-lg shadow-rose-500/20 rounded-xl px-5 h-11 self-start sm:self-auto"
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            Удалить выбранные ({selectedIds.length})
+          </Button>
+        )}
       </div>
 
       {requests.length === 0 ? (
@@ -114,7 +174,23 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-white/10 bg-slate-950/50 text-slate-300 text-xs font-bold uppercase tracking-wider">
-                  <th className="p-4 pl-6">Дата</th>
+                  <th className="p-4 pl-6 sticky left-0 bg-slate-950/90 z-20 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)] w-12">
+                    <Checkbox
+                      checked={
+                        requests.length > 0 &&
+                        selectedIds.length === requests.length
+                      }
+                      onCheckedChange={(value) => {
+                        if (value) {
+                          setSelectedIds(requests.map((r) => r.id));
+                        } else {
+                          setSelectedIds([]);
+                        }
+                      }}
+                      className="border-white/20 text-white data-[state=checked]:bg-teal-500 data-[state=checked]:text-slate-950"
+                    />
+                  </th>
+                  <th className="p-4">Дата</th>
                   <th className="p-4">Имя</th>
                   <th className="p-4">Телефон</th>
                   <th className="p-4">Сообщение</th>
@@ -126,9 +202,24 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
                   <tr
                     key={request.id}
                     id={`row-${request.id}`}
-                    className="hover:bg-white/5 transition-colors"
+                    className="group hover:bg-white/5 transition-colors"
                   >
-                    <td className="p-4 pl-6 text-slate-400">
+                    <td className="p-4 pl-6 sticky left-0 bg-slate-900 group-hover:bg-slate-800/95 z-10 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)] transition-colors">
+                      <Checkbox
+                        checked={selectedIds.includes(request.id)}
+                        onCheckedChange={(value) => {
+                          if (value) {
+                            setSelectedIds((prev) => [...prev, request.id]);
+                          } else {
+                            setSelectedIds((prev) =>
+                              prev.filter((id) => id !== request.id)
+                            );
+                          }
+                        }}
+                        className="border-white/20 text-white data-[state=checked]:bg-teal-500 data-[state=checked]:text-slate-950"
+                      />
+                    </td>
+                    <td className="p-4 text-slate-400">
                       <span className="flex items-center gap-2 text-xs">
                         <Calendar className="h-3.5 w-3.5 text-teal-400 shrink-0" />
                         {new Date(request.createdAt).toLocaleString("ru-RU", {
@@ -184,6 +275,14 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
         title="Удалить заявку?"
         description="Вы уверены, что хотите удалить эту заявку на обратный звонок? Это действие необратимо."
       />
+      <DeleteConfirmDialog
+        isOpen={bulkDeleteConfirmOpen}
+        onOpenChange={setBulkDeleteConfirmOpen}
+        onConfirm={handleBulkDeleteConfirm}
+        title="Удалить выбранные заявки?"
+        description={`Вы действительно хотите удалить выбранные заявки (${selectedIds.length} шт.)? Это действие необратимо.`}
+      />
     </div>
   );
 }
+

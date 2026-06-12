@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import {
   Select,
@@ -53,6 +54,8 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
   // Deletion States
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [reviewIdToDelete, setReviewIdToDelete] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [bulkDeleteConfirmOpen, setBulkDeleteConfirmOpen] = useState(false);
 
   // Edition States
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -93,6 +96,7 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
 
     const performDelete = async () => {
       setReviews((prev) => prev.filter((r) => r.id !== id));
+      setSelectedIds((prev) => prev.filter((x) => x !== id));
       try {
         const res = await fetch(`/api/reviews/${id}`, {
           method: "DELETE",
@@ -123,6 +127,54 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
     }
     setReviewIdToDelete(null);
   };
+
+  const handleBulkDeleteConfirm = async () => {
+    const ids = selectedIds;
+    const rowEls = ids.map((id) => document.getElementById(`row-${id}`)).filter(Boolean) as HTMLElement[];
+
+    const performDelete = async () => {
+      setReviews((prev) => prev.filter((r) => !ids.includes(r.id)));
+      setSelectedIds([]);
+      try {
+        await Promise.all(
+          ids.map((id) =>
+            fetch(`/api/reviews/${id}`, {
+              method: "DELETE",
+            })
+          )
+        );
+        toast({
+          title: "Успешно",
+          description: "Выбранные отзывы успешно удалены",
+          className: "glass-card-dark border-l-4 border-l-rose-500 text-white"
+        });
+      } catch (error) {
+        fetchReviews();
+        toast({
+          variant: "destructive",
+          title: "Ошибка",
+          description: "Не удалось удалить некоторые отзывы",
+        });
+      }
+    };
+
+    if (rowEls.length > 0) {
+      const { thanosSnap } = await import("@/lib/thanos");
+      let snappedCount = 0;
+      rowEls.forEach((el) => {
+        thanosSnap(el, () => {
+          snappedCount++;
+          if (snappedCount === rowEls.length) {
+            performDelete();
+          }
+        });
+      });
+    } else {
+      performDelete();
+    }
+    setBulkDeleteConfirmOpen(false);
+  };
+
 
   const handleEdit = (review: Review) => {
     setEditingReview(review);
@@ -205,24 +257,37 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
           </p>
         </div>
 
-        {/* Room Filter Selector using Radix Select */}
-        <div className="flex items-center gap-2">
-          <span className="text-slate-400 text-xs uppercase tracking-wider font-semibold">Фильтр:</span>
-          <Select value={selectedRoomId} onValueChange={setSelectedRoomId}>
-            <SelectTrigger className="w-[200px] bg-slate-900 border border-white/10 text-white rounded-xl focus:ring-0 focus:ring-offset-0 focus:border-teal-400/50">
-              <SelectValue placeholder="Все номера" />
-            </SelectTrigger>
-            <SelectContent className="bg-slate-950 border border-white/10 text-white rounded-xl shadow-2xl">
-              <SelectItem value="all" className="focus:bg-teal-500/20 focus:text-white cursor-pointer hover:bg-white/5 transition-colors">
-                Все номера
-              </SelectItem>
-              {rooms.map((room) => (
-                <SelectItem key={room.id} value={room.id} className="focus:bg-teal-500/20 focus:text-white cursor-pointer hover:bg-white/5 transition-colors">
-                  {room.name}
+        {/* Action Panel */}
+        <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+          {selectedIds.length > 0 && (
+            <Button
+              onClick={() => setBulkDeleteConfirmOpen(true)}
+              className="bg-gradient-to-r from-rose-500 to-red-650 hover:from-rose-400 hover:to-red-500 text-white font-bold border-0 shadow-lg shadow-rose-500/20 rounded-xl px-5 h-11"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Удалить выбранные ({selectedIds.length})
+            </Button>
+          )}
+
+          {/* Room Filter Selector using Radix Select */}
+          <div className="flex items-center gap-2">
+            <span className="text-slate-400 text-xs uppercase tracking-wider font-semibold">Фильтр:</span>
+            <Select value={selectedRoomId} onValueChange={setSelectedRoomId}>
+              <SelectTrigger className="w-[200px] bg-slate-900 border border-white/10 text-white rounded-xl focus:ring-0 focus:ring-offset-0 focus:border-teal-400/50">
+                <SelectValue placeholder="Все номера" />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-950 border border-white/10 text-white rounded-xl shadow-2xl">
+                <SelectItem value="all" className="focus:bg-teal-500/20 focus:text-white cursor-pointer hover:bg-white/5 transition-colors">
+                  Все номера
                 </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+                {rooms.map((room) => (
+                  <SelectItem key={room.id} value={room.id} className="focus:bg-teal-500/20 focus:text-white cursor-pointer hover:bg-white/5 transition-colors">
+                    {room.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
@@ -247,7 +312,23 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-white/10 bg-slate-950/50 text-slate-300 text-xs font-bold uppercase tracking-wider">
-                  <th className="p-4 pl-6">Дата</th>
+                  <th className="p-4 pl-6 sticky left-0 bg-slate-950/90 z-20 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)] w-12">
+                    <Checkbox
+                      checked={
+                        filteredReviews.length > 0 &&
+                        selectedIds.length === filteredReviews.length
+                      }
+                      onCheckedChange={(value) => {
+                        if (value) {
+                          setSelectedIds(filteredReviews.map((r) => r.id));
+                        } else {
+                          setSelectedIds([]);
+                        }
+                      }}
+                      className="border-white/20 text-white data-[state=checked]:bg-teal-500 data-[state=checked]:text-slate-950"
+                    />
+                  </th>
+                  <th className="p-4">Дата</th>
                   <th className="p-4">Гость</th>
                   <th className="p-4">Номер</th>
                   <th className="p-4">Оценка</th>
@@ -260,9 +341,24 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
                   <tr
                     key={review.id}
                     id={`row-${review.id}`}
-                    className="hover:bg-white/5 transition-colors"
+                    className="group hover:bg-white/5 transition-colors"
                   >
-                    <td className="p-4 pl-6 text-slate-400">
+                    <td className="p-4 pl-6 sticky left-0 bg-slate-900 group-hover:bg-slate-800/95 z-10 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)] transition-colors">
+                      <Checkbox
+                        checked={selectedIds.includes(review.id)}
+                        onCheckedChange={(value) => {
+                          if (value) {
+                            setSelectedIds((prev) => [...prev, review.id]);
+                          } else {
+                            setSelectedIds((prev) =>
+                              prev.filter((id) => id !== review.id)
+                            );
+                          }
+                        }}
+                        className="border-white/20 text-white data-[state=checked]:bg-teal-500 data-[state=checked]:text-slate-950"
+                      />
+                    </td>
+                    <td className="p-4 text-slate-400">
                       <span className="flex items-center gap-2 text-xs">
                         <Calendar className="h-3.5 w-3.5 text-teal-400 shrink-0" />
                         {review.date}
@@ -415,7 +511,15 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
         title="Удалить отзыв?"
         description="Вы уверены, что хотите удалить этот отзыв гостя? Это действие безвозвратно удалит отзыв из базы данных."
       />
+      <DeleteConfirmDialog
+        isOpen={bulkDeleteConfirmOpen}
+        onOpenChange={setBulkDeleteConfirmOpen}
+        onConfirm={handleBulkDeleteConfirm}
+        title="Удалить выбранные отзывы?"
+        description={`Вы действительно хотите удалить выбранные отзывы (${selectedIds.length} шт.)? Это действие безвозвратно удалит их из базы данных.`}
+      />
     </div>
   );
 }
+
 

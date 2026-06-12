@@ -98,6 +98,42 @@ export default function BookingsAdminClient({
     }
   };
 
+  const handleBulkDelete = async (ids: string[]) => {
+    const performDelete = async () => {
+      setDeletingIds((prev) => [...prev, ...ids]);
+      try {
+        await Promise.all(ids.map((id) => deleteBooking(id).unwrap()));
+        toast({
+          title: "Успешно",
+          description: "Выбранные бронирования удалены",
+        });
+      } catch (error: any) {
+        setDeletingIds((prev) => prev.filter((id) => !ids.includes(id)));
+        toast({
+          title: "Ошибка",
+          description: error?.data?.error || error?.message || "Не удалось удалить некоторые бронирования",
+          variant: "destructive",
+        });
+      }
+    };
+
+    const rowEls = ids.map((id) => document.getElementById(`row-${id}`)).filter(Boolean) as HTMLElement[];
+    if (rowEls.length > 0) {
+      const { thanosSnap } = await import("@/lib/thanos");
+      let snappedCount = 0;
+      rowEls.forEach((el) => {
+        thanosSnap(el, () => {
+          snappedCount++;
+          if (snappedCount === rowEls.length) {
+            performDelete();
+          }
+        });
+      });
+    } else {
+      performDelete();
+    }
+  };
+
   const handleFormSubmit = async (values: Omit<Booking, 'id'>, id?: string) => {
     try {
       if (id) {
@@ -191,6 +227,7 @@ export default function BookingsAdminClient({
         <DataTable 
           columns={columns({ onEdit: handleEdit, onDelete: handleDelete })} 
           data={bookingsWithRoomNames} 
+          onDeleteSelected={handleBulkDelete}
         />
       </div>
       

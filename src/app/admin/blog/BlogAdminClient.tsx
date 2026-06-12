@@ -80,6 +80,42 @@ export default function BlogAdminClient({ initialData }: BlogAdminClientProps) {
     }
   };
 
+  const handleBulkDelete = async (ids: string[]) => {
+    const performDelete = async () => {
+      setDeletingIds((prev) => [...prev, ...ids]);
+      try {
+        await Promise.all(ids.map((id) => deletePost(id).unwrap()));
+        toast({
+          title: "Успешно",
+          description: "Выбранные статьи удалены",
+        });
+      } catch (error) {
+        setDeletingIds((prev) => prev.filter((id) => !ids.includes(id)));
+        toast({
+          title: "Ошибка",
+          description: error instanceof Error ? error.message : "Не удалось удалить некоторые статьи",
+          variant: "destructive",
+        });
+      }
+    };
+
+    const rowEls = ids.map((id) => document.getElementById(`row-${id}`)).filter(Boolean) as HTMLElement[];
+    if (rowEls.length > 0) {
+      const { thanosSnap } = await import("@/lib/thanos");
+      let snappedCount = 0;
+      rowEls.forEach((el) => {
+        thanosSnap(el, () => {
+          snappedCount++;
+          if (snappedCount === rowEls.length) {
+            performDelete();
+          }
+        });
+      });
+    } else {
+      performDelete();
+    }
+  };
+
   const handleFormSubmit = async (values: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'>, id?: string) => {
     try {
       if (id) {
@@ -141,6 +177,7 @@ export default function BlogAdminClient({ initialData }: BlogAdminClientProps) {
       <DataTable 
         columns={columns({ onEdit: handleEdit, onDelete: handleDelete })} 
         data={visiblePosts} 
+        onDeleteSelected={handleBulkDelete}
       />
       <BlogForm
         isOpen={sheetOpen}
