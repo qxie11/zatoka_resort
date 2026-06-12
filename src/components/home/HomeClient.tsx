@@ -420,12 +420,14 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 const Icon = item.icon;
                 return (
                   <ScrollReveal key={item.titleKey} variant="scale-in" delay={index * 100}>
-                    <div className="relative p-6 rounded-3xl glass-card-dark border border-white/10 hover:border-teal-400/30 transition-all duration-500 group h-full">
+                    <div className="relative p-6 rounded-3xl glass-card-dark border border-white/10 hover:border-teal-500/30 transition-all duration-500 group h-full overflow-hidden hover:shadow-[0_0_30px_rgba(20,184,166,0.12)]">
+                      {/* Subtle premium hover gradient glow */}
+                      <div className="absolute -inset-px bg-gradient-to-br from-teal-500/10 via-transparent to-sky-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl -z-10" />
                       <div className={`inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-br ${item.gradient} mb-5 group-hover:scale-110 transition-transform duration-300`}>
                         <Icon className={`h-7 w-7 ${item.iconColor}`} />
                       </div>
                       <h3 className="text-lg font-bold text-white mb-2">{translate(item.titleKey, item.titleFallback)}</h3>
-                      <p className="text-sm text-slate-400 leading-relaxed">{translate(item.descKey, item.descFallback)}</p>
+                      <p className="text-sm text-slate-400 leading-relaxed font-light">{translate(item.descKey, item.descFallback)}</p>
                     </div>
                   </ScrollReveal>
                 );
@@ -550,15 +552,20 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 const Icon = iconMap[amenity.icon];
                 const translationKey = amenityKeyMap[amenity.name] || "";
                 const displayName = translationKey ? translate(translationKey, amenity.name) : amenity.name;
+                const descKey = translationKey ? `${translationKey}Desc` : "";
+                const displayDesc = descKey ? translate(descKey, amenity.description || "") : (amenity.description || "");
 
                 return (
                   <ScrollReveal key={amenity.name} variant="scale-in" delay={index * 80}>
-                    <div className="flex flex-col items-center p-6 rounded-3xl glass-card-dark border border-white/10 marine-3d-card hover:bg-slate-900/60 hover:border-teal-400/50 hover:shadow-2xl transition-all duration-500 group h-full">
+                    <div className="relative flex flex-col items-center p-6 rounded-3xl glass-card-dark border border-white/10 marine-3d-card hover:border-teal-500/30 hover:shadow-2xl transition-all duration-500 group h-full overflow-hidden hover:shadow-[0_0_30px_rgba(20,184,166,0.12)]">
+                      {/* Hover background glow */}
+                      <div className="absolute -inset-px bg-gradient-to-br from-teal-500/10 via-transparent to-sky-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl -z-10" />
                       <div className="bg-teal-500/10 p-5 rounded-2xl transition-smooth hover:bg-teal-500/25 relative group/icon text-teal-300 marine-3d-card-inner">
                         {Icon && <Icon className="h-8 w-8 text-teal-400 transition-smooth group-hover/icon:animate-coral-sway glow-teal" />}
                         <div className="absolute inset-0 rounded-2xl bg-teal-500/5 opacity-0 group-hover/icon:opacity-100 group-hover/icon:animate-water-ripple transition-opacity" />
                       </div>
                       <h3 className="mt-5 text-lg font-bold text-white marine-3d-card-inner">{displayName}</h3>
+                      <p className="mt-2 text-xs text-slate-400 leading-relaxed font-light text-center marine-3d-card-inner">{displayDesc}</p>
                     </div>
                   </ScrollReveal>
                 );
