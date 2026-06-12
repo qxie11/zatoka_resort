@@ -72,7 +72,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
   const POSTS_PER_PAGE = 6;
 
   // Translation helpers
-  const translations = {
+  const allTranslations = {
     ru: {
       blogTitle: "Блог и полезные советы",
       searchPlaceholder: "Поиск статей...",
@@ -103,7 +103,9 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
       prev: "Previous",
       next: "Next",
     },
-  }[lang as "ru" | "uk" | "en"] || translations.ru;
+  };
+
+  const translations = allTranslations[lang as "ru" | "uk" | "en"] || allTranslations.ru;
 
   // Get unique categories (in current language)
   const categoriesMap = blogPosts.map((post) => {
