@@ -98,7 +98,7 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
       </section>
 
       {/* BOOKING CLIENT CONTAINER */}
-      <section className="py-12 bg-slate-950 relative z-10 -mt-8">
+      <section className="py-12 bg-slate-950 relative z-30 -mt-8">
         <div className="container mx-auto px-4">
           <Suspense fallback={null}>
             <SuccessMessage />

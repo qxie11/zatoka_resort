@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -20,16 +19,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { toast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { Room, Booking } from "@/lib/types";
 import i18n from "@/lib/i18n";
+import { DateRangePicker } from "@/components/booking/DateRangePicker";
+
 
 const dateFnsLocales = {
   ru,
@@ -149,7 +145,7 @@ export default function BookingForm({
   };
 
   return (
-    <Card className="max-w-4xl mx-auto my-12 shadow-2xl border border-white/10 glass-card-dark rounded-3xl text-white">
+    <Card className="max-w-4xl mx-auto my-12 shadow-2xl border border-white/10 glass-card-dark rounded-3xl text-white relative z-50">
       <CardContent className="p-8">
         <Form {...form}>
           <form
@@ -160,63 +156,11 @@ export default function BookingForm({
               control={form.control}
               name="dateRange"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel className="text-teal-300 font-bold mb-2">
-                    {translate("checkInOut", "Заезд / Выезд")}
-                  </FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal bg-slate-950/40 border-white/10 text-white hover:bg-white/10 hover:text-white transition-smooth rounded-xl h-11",
-                            !field.value?.from && "text-slate-400"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4 text-teal-400" />
-                          {field.value?.from ? (
-                            field.value.to ? (
-                              <>
-                                {format(field.value.from, "LLL dd, y", {
-                                  locale: activeLocale,
-                                })}{" "}
-                                -{" "}
-                                {format(field.value.to, "LLL dd, y", {
-                                  locale: activeLocale,
-                                })}
-                              </>
-                            ) : (
-                              format(field.value.from, "LLL dd, y", {
-                                locale: activeLocale,
-                              })
-                            )
-                          ) : (
-                            <span>{translate("selectDateRange", "Выберите диапазон дат")}</span>
-                          )}
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 text-white" align="start">
-                      <Calendar
-                        initialFocus
-                        mode="range"
-                        defaultMonth={field.value?.from}
-                        selected={{
-                          from: field.value?.from,
-                          to: field.value?.to,
-                        }}
-                        onSelect={field.onChange}
-                        numberOfMonths={2}
-                        disabled={(date) =>
-                          date < new Date(new Date().setHours(0, 0, 0, 0))
-                        }
-                        locale={activeLocale}
-                        className="bg-slate-950 text-white border-0"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </FormItem>
+                <DateRangePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  label={translate("checkInOut", "Заезд / Выезд")}
+                />
               )}
             />
             <FormField

@@ -1,10 +1,13 @@
 "use client";
 
 import { format, startOfDay } from "date-fns";
-import { ru } from "date-fns/locale";
+import { ru, uk, enUS } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
 import { useMemo, useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "@/hooks/use-toast";
+
+import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -17,7 +20,6 @@ import {
 } from "@/components/ui/form";
 import {
   Popover,
-  PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import type { Booking } from "@/lib/types";
@@ -38,11 +40,16 @@ export function DateRangePicker({
   existingBookings = [],
   excludeBookingId,
   disabled: customDisabled,
-  label = "Даты заезда и выезда",
+  label,
   className,
 }: DateRangePickerProps) {
+  const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const [popoverOpen, setPopoverOpen] = useState(false);
+
+  const currentLang = (i18n.language || "ru").slice(0, 2);
+  const activeLocale = currentLang === "uk" ? uk : currentLang === "en" ? enUS : ru;
+  const activeLabel = label || t("checkInOut", "Даты заезда и выезда");
 
   useEffect(() => {
     const handleResize = () => {
@@ -111,12 +118,13 @@ export function DateRangePicker({
   };
 
   return (
-    <FormItem className={cn("flex flex-col", className)}>
-      <FormLabel className="text-teal-300 font-bold mb-2">{label}</FormLabel>
-      <Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal={true}>
+    <FormItem className={cn("flex flex-col relative", popoverOpen ? "z-50" : "z-10", className)}>
+      <FormLabel className="text-teal-300 font-bold mb-2">{activeLabel}</FormLabel>
+      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger asChild>
           <FormControl>
             <Button
+              type="button"
               variant={"outline"}
               className={cn(
                 "w-full justify-start text-left font-normal bg-slate-950/40 border-white/10 text-white hover:bg-white/10 hover:text-white transition-smooth rounded-xl h-11",
@@ -127,42 +135,42 @@ export function DateRangePicker({
               {value?.from ? (
                 value.to ? (
                   <>
-                    {format(value.from, "LLL dd, y", { locale: ru })} -{" "}
-                    {format(value.to, "LLL dd, y", { locale: ru })}
+                    {format(value.from, "LLL dd, y", { locale: activeLocale })} -{" "}
+                    {format(value.to, "LLL dd, y", { locale: activeLocale })}
                   </>
                 ) : (
-                  format(value.from, "LLL dd, y", { locale: ru })
+                  format(value.from, "LLL dd, y", { locale: activeLocale })
                 )
               ) : (
-                <span>Выберите диапазон дат</span>
+                <span>{t("selectDateRange", "Выберите диапазон дат")}</span>
               )}
             </Button>
           </FormControl>
         </PopoverTrigger>
-        <PopoverContent 
-          onInteractOutside={(e) => {
-            const target = e.target as HTMLElement;
-            if (target && (!document.body.contains(target) || target.closest('.rdp') || target.closest('[data-radix-popper-content-wrapper]'))) {
-              e.preventDefault();
-            }
-          }}
-          className="w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 text-white z-50" 
+        <PopoverPrimitive.Content 
+          className={cn("w-auto p-0 rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 text-white z-50 outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2")}
           align="start"
+          sideOffset={4}
         >
           <Calendar
             initialFocus
             mode="range"
             defaultMonth={value?.from}
             selected={value?.from ? { from: value.from, to: value.to } : undefined}
-            onSelect={(range) => {
+            onSelect={(range, selectedDay) => {
+              if (value?.from && value?.to) {
+                onChange({ from: selectedDay, to: undefined });
+                return;
+              }
+
               if (range?.from && range?.to) {
                 if (validateDateRange(range)) {
                   onChange(range);
                   setPopoverOpen(false);
                 } else {
                   toast({
-                    title: "Даты заняты",
-                    description: "Выбранный диапазон дат пересекается с существующими бронированиями. Пожалуйста, выберите другие даты.",
+                    title: t("datesOccupiedTitle", "Даты заняты"),
+                    description: t("datesOccupiedDesc", "Выбранный диапазон дат пересекается с существующими бронированиями. Пожалуйста, выберите другие даты."),
                     variant: "destructive",
                   });
                 }
@@ -172,7 +180,7 @@ export function DateRangePicker({
             }}
             numberOfMonths={isMobile ? 1 : 2}
             disabled={isDateRangeDisabled}
-            locale={ru}
+            locale={activeLocale}
             className="bg-slate-950 text-white border-0"
             classNames={{
               day_selected: "gradient-sunset text-slate-950 font-bold shadow-md rounded-lg",
@@ -184,15 +192,16 @@ export function DateRangePicker({
               booked: "gradient-sunset text-slate-950 font-bold rounded-lg",
             }}
           />
-        </PopoverContent>
+        </PopoverPrimitive.Content>
       </Popover>
       <FormMessage />
       {existingBookings.length > 0 && disabledDates.length > 0 && (
         <p className="text-sm text-slate-400 mt-1">
-          Занятые даты отмечены в календаре
+          {t("bookedDatesMarked", "Занятые даты отмечены в календаре")}
         </p>
       )}
     </FormItem>
   );
 }
+
 

@@ -210,7 +210,7 @@ export default async function RoomBookingPage({ params, searchParams }: PageProp
         </section>
 
         {/* Main Content Area */}
-        <section className="container mx-auto px-4 py-12 max-w-4xl space-y-8">
+        <section className="container mx-auto px-4 py-12 max-w-4xl space-y-8 relative z-30">
           
           {/* Booking Form (First) */}
           <RoomBookingForm room={room} existingBookings={bookings} />

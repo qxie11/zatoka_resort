@@ -182,14 +182,12 @@ export default function BookingForm({
               control={form.control}
               name="dateRange"
               render={({ field }) => (
-                <div className="bg-slate-900/50 p-4 rounded-2xl border border-white/10 shadow-sm">
-                  <DateRangePicker
-                    value={field.value}
-                    onChange={field.onChange}
-                    existingBookings={roomBookings}
-                    excludeBookingId={booking?.id}
-                  />
-                </div>
+                <DateRangePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  existingBookings={roomBookings}
+                  excludeBookingId={booking?.id}
+                />
               )}
             />
 

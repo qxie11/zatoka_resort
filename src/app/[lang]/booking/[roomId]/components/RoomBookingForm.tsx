@@ -280,7 +280,7 @@ export default function RoomBookingForm({
                         {Math.ceil(
                           (form.watch("dateRange").to!.getTime() -
                             form.watch("dateRange").from!.getTime()) /
-                            (1000 * 60 * 60 * 24)
+                          (1000 * 60 * 60 * 24)
                         )}
                       </p>
                       <p className="text-lg font-bold text-teal-300">
@@ -288,7 +288,7 @@ export default function RoomBookingForm({
                         {Math.ceil(
                           (form.watch("dateRange").to!.getTime() -
                             form.watch("dateRange").from!.getTime()) /
-                            (1000 * 60 * 60 * 24)
+                          (1000 * 60 * 60 * 24)
                         ) * room.price}{" "}
                         грн
                       </p>
