@@ -19,9 +19,9 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
 
   return (
     <>
-      <BookingForm 
-        rooms={rooms} 
-        bookings={bookings} 
+      <BookingForm
+        rooms={rooms}
+        bookings={bookings}
         onFilterChange={setFilteredRooms}
       />
 
@@ -33,7 +33,7 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
             </h2>
             <WavyUnderline />
             <p className="mt-2 text-slate-300 font-light">
-              {filteredRooms !== null 
+              {filteredRooms !== null
                 ? t("roomsFound", { count: filteredRooms.length })
                 : t("findPerfectSpace")}
             </p>
