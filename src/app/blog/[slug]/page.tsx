@@ -216,7 +216,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-smooth"
                   />
-                  <div className="absolute top-3 left-3 bg-teal-500/20 backdrop-blur-md text-teal-300 border border-teal-500/25 text-xs font-medium rounded px-2 py-0.5">
+                  <div className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md text-teal-300 border border-teal-500/30 text-xs font-medium rounded px-2 py-0.5 shadow-md">
                     {relCategory}
                   </div>
                 </div>

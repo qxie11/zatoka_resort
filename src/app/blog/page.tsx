@@ -211,7 +211,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover group-hover:scale-105 transition-smooth duration-500"
                     />
-                    <div className="absolute top-4 left-4 bg-teal-500/20 backdrop-blur-md text-teal-300 border border-teal-500/30 text-xs font-semibold rounded-lg px-2.5 py-1">
+                    <div className="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-md text-teal-300 border border-teal-500/40 text-xs font-semibold rounded-lg px-2.5 py-1 shadow-lg">
                       {postCatDisplay}
                     </div>
                   </div>
