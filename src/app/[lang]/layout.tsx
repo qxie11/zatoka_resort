@@ -72,22 +72,20 @@ export default async function RootLayout({
   const { lang } = await params;
 
   return (
-    <html lang={lang} className="scroll-smooth">
-      <body className={`${inter.className} bg-slate-950 text-slate-100 antialiased`}>
-        <Header />
+    <div className={inter.className}>
+      <Header />
 
-        <main className="min-h-screen">
-          <SeasonBanner />
-          {children}
-        </main>
+      <main className="min-h-screen">
+        <SeasonBanner />
+        {children}
+      </main>
 
-        <Footer />
+      <Footer />
 
-        <StickyBookingBar />
-        <CallbackForm />
-        <ExitIntentPopup />
-        <ScratchCardPromo lang={lang} />
-      </body>
-    </html>
+      <StickyBookingBar />
+      <CallbackForm />
+      <ExitIntentPopup />
+      <ScratchCardPromo lang={lang} />
+    </div>
   );
 }
