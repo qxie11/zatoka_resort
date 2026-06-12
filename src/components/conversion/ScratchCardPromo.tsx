@@ -216,6 +216,7 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
             <div className="absolute -top-10 -left-10 w-24 h-24 bg-teal-400/10 rounded-full blur-2xl pointer-events-none" />
             <div className="absolute -bottom-10 -right-10 w-24 h-24 bg-amber-400/10 rounded-full blur-2xl pointer-events-none" />
 
+            {/* Text description inside the modal above the scratch card */}
             <div className="text-center space-y-2">
               <div className="h-12 w-12 rounded-full bg-amber-400/20 text-amber-400 flex items-center justify-center mx-auto mb-2 animate-bounce">
                 <Gift className="h-6 w-6" />
@@ -225,41 +226,43 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
                 {current.modalDesc}
               </p>
             </div>
-
-            {/* Scratch Arena Container (taller aspect ratio on mobile to prevent text overflow) */}
+ 
+            {/* Scratch Arena Container */}
             <div className="relative w-full aspect-[16/10] sm:aspect-[2/1] rounded-2xl overflow-hidden bg-gradient-to-br from-teal-500/10 to-sky-500/10 border border-teal-500/20 flex flex-col items-center justify-center p-4">
               
-              {/* Revealed Promo Code view */}
-              {isRevealed ? (
-                <div className="text-center space-y-3 animate-scale-in">
-                  <div className="inline-flex items-center gap-1 bg-teal-400/20 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-teal-300 uppercase tracking-widest">
-                    <Sparkles className="h-3 w-3 animate-pulse" />
-                    <span>{current.congrats}</span>
+              {/* Promo Code view (rendered behind canvas, always present in DOM) */}
+              <div className="text-center space-y-3 select-none">
+                <div className="inline-flex items-center gap-1 bg-teal-400/20 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-teal-300 uppercase tracking-widest">
+                  <Sparkles className="h-3 w-3 animate-pulse" />
+                  <span>{current.congrats}</span>
+                </div>
+                
+                <div className="flex flex-col items-center gap-2">
+                  <span className="text-xs text-slate-300">
+                    {lang === "uk"
+                      ? `Використовуйте цей промокод при бронюванні для отримання гарантованої знижки ${promoDiscount}%:`
+                      : lang === "en"
+                      ? `Use this promo code during booking to get a guaranteed ${promoDiscount}% discount:`
+                      : `Используйте этот промокод при бронировании для гарантированной скидки ${promoDiscount}%:`}
+                  </span>
+                  <div className="flex items-center gap-2 bg-slate-950/60 border border-white/10 px-4 py-2.5 rounded-xl text-lg font-black tracking-widest text-teal-300">
+                    <span>{promoCode}</span>
                   </div>
-                  
-                  <div className="flex flex-col items-center gap-2">
-                    <span className="text-xs text-slate-300">
-                      {lang === "uk"
-                        ? `Використовуйте цей промокод при бронюванні для отримання гарантованої знижки ${promoDiscount}%:`
-                        : lang === "en"
-                        ? `Use this promo code during booking to get a guaranteed ${promoDiscount}% discount:`
-                        : `Используйте этот промокод при бронировании для гарантированной скидки ${promoDiscount}%:`}
-                    </span>
-                    <div className="flex items-center gap-2 bg-slate-950/60 border border-white/10 px-4 py-2.5 rounded-xl text-lg font-black tracking-widest text-teal-300">
-                      <span>{promoCode}</span>
-                    </div>
-                  </div>
-
+                </div>
+ 
+                {isRevealed && (
                   <Button 
                     onClick={copyToClipboard} 
-                    className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 mx-auto"
+                    className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 mx-auto animate-scale-in"
                   >
                     {isCopied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                     <span>{isCopied ? current.copied : current.copyBtn}</span>
                   </Button>
-                </div>
-              ) : (
-                /* Interactive Canvas */
+                )}
+              </div>
+ 
+              {/* Interactive Canvas (absolutely positioned on top of the text) */}
+              {!isRevealed && (
                 <canvas
                   ref={canvasRef}
                   onMouseDown={(e) => {
