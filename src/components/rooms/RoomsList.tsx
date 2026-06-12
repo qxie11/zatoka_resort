@@ -1,7 +1,7 @@
 "use client";
 
 import type { Room } from '@/lib/types';
-import RoomCard from '@/app/booking/components/RoomCard';
+import RoomCard from '@/app/[lang]/booking/components/RoomCard';
 
 interface RoomsListProps {
   rooms: Room[];

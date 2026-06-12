@@ -43,9 +43,9 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   };
 
   const descTemplates = {
-    ru: `${room.name} в Затоке: до ${room.capacity} гостей, от ${room.price} грн/ночь. ${room.description.substring(0, 80)}...`,
-    uk: `${room.name} в Затоці: до ${room.capacity} гостей, від ${room.price} грн/ніч. ${room.description.substring(0, 80)}...`,
-    en: `${room.name} in Zatoka: up to ${room.capacity} guests, from ${room.price} UAH/night. ${room.description.substring(0, 80)}...`,
+    ru: `Забронируйте ${room.name} в отеле Zatoka Resort у самого моря. Первая линия, собственный бассейн, прямое бронирование на 2026 год. До ${room.capacity} гостей, от ${room.price} грн/ночь.`,
+    uk: `Забронюйте ${room.name} в готелі Zatoka Resort біля самого моря. Перша лінія, власний басейн, пряме бронювання на 2026 рік. До ${room.capacity} гостей, від ${room.price} грн/ніч.`,
+    en: `Book ${room.name} at Zatoka Resort beachfront hotel. Family seaside getaway 2026, private swimming pool, direct booking. Room up to ${room.capacity} guests, starting from ${room.price} UAH/night.`,
   };
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
@@ -64,6 +64,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     alternates: {
       canonical: canonicalUrl,
       languages: {
+        "x-default": `${baseUrl}/booking/${roomId}`,
         ru: `${baseUrl}/booking/${roomId}`,
         uk: `${baseUrl}/booking/${roomId}?lang=uk`,
         en: `${baseUrl}/booking/${roomId}?lang=en`,

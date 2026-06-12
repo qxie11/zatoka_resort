@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import "./globals.css";
+import "../globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/layout/Header";
@@ -13,8 +13,6 @@ import { CallbackForm } from "@/components/conversion/CallbackForm";
 import { SeasonBanner } from "@/components/conversion/SeasonBanner";
 import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
 
-import { cookies, headers } from "next/headers";
-
 const fontSans = Nunito({
   subsets: ["latin", "cyrillic"],
   variable: "--font-sans",
@@ -25,10 +23,13 @@ const fontHeading = Comfortaa({
   variable: "--font-heading",
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const headerList = await headers();
-  const cookieStore = await cookies();
-  const lang = headerList.get("x-lang") || cookieStore.get("lang")?.value || "ru";
+interface LayoutProps {
+  children: React.ReactNode;
+  params: Promise<{ lang: string }>;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params;
 
   const appNames = {
     ru: "Отдых в Затоке",
@@ -49,9 +50,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 
   const descriptions = {
-    ru: "Отдых в Затоке: премиум-отель у Черного моря. Панорамные виды на море, песчаный пляж, отличный сервис и современные номера. Забронируйте отпуск!",
-    uk: "Відпочинок в Затоці: преміум-готель біля Чорного моря. Панорамні види, піщаний пляж, чудовий сервіс та сучасні номери. Забронюйте відпочинок!",
-    en: "Zatoka Resort: premium Black Sea hotel. Enjoy stunning sea views, private beach, modern rooms, and top-tier service. Book your summer getaway!",
+    ru: "Отдых в Затоке: семейный отель Zatoka Resort на первой линии с собственным бассейном. Прямое бронирование номеров у самого моря, оптимальные цены 2026.",
+    uk: "Забронюйте відпочинок в Затоці: готель Zatoka Resort на першій лінії з власним басейном. Оптимальні ціни 2026, комфортні номери, сімейний відпочинок біля моря.",
+    en: "Book your holiday at Zatoka Resort: a beachfront hotel in Zatoka with a swimming pool. Direct booking, best prices 2026, comfortable rooms, and family seaside vacation.",
   };
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
@@ -61,16 +62,17 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
 
   const ogImageUrl = `${baseUrl}/og-image.png`;
-  const canonicalPath = lang === "ru" ? "/" : `/?lang=${lang}`;
+  const canonicalUrl = `${baseUrl}/${lang}`;
 
   return {
     metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: canonicalPath,
+      canonical: canonicalUrl,
       languages: {
-        ru: "/",
-        uk: "/?lang=uk",
-        en: "/?lang=en",
+        "x-default": `${baseUrl}/`,
+        ru: `${baseUrl}/ru`,
+        uk: `${baseUrl}/uk`,
+        en: `${baseUrl}/en`,
       },
     },
     applicationName: appName,
@@ -115,15 +117,6 @@ export async function generateMetadata(): Promise<Metadata> {
       description: description,
       images: [ogImageUrl],
     },
-    keywords: [
-      "отель",
-      "Затока",
-      "Одесса",
-      "пляжный курорт",
-      "Черное море",
-      "отдых",
-      "бронирование",
-    ],
   };
 }
 
@@ -137,12 +130,9 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const headerList = await headers();
-  const cookieStore = await cookies();
-  const lang = headerList.get("x-lang") || cookieStore.get("lang")?.value || "ru";
+  params,
+}: Readonly<LayoutProps>) {
+  const { lang } = await params;
 
   return (
     <html lang={lang} suppressHydrationWarning>

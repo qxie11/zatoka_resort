@@ -57,6 +57,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     alternates: {
       canonical: canonicalUrl,
       languages: {
+        "x-default": `${baseUrl}/blog/${slug}`,
         ru: `${baseUrl}/blog/${slug}`,
         uk: `${baseUrl}/blog/${slug}?lang=uk`,
         en: `${baseUrl}/blog/${slug}?lang=en`,
@@ -112,6 +113,12 @@ export default async function BlogPostPage({ params }: PageProps) {
     en: post.contentEn,
   }[lang] || post.contentRu;
 
+  const excerpt = {
+    ru: post.excerptRu,
+    uk: post.excerptUk,
+    en: post.excerptEn,
+  }[lang] || post.excerptRu;
+
   // Join paragraphs for markdown rendering
   const fullContent = Array.isArray(contentParagraphs) ? contentParagraphs.join('\n\n') : contentParagraphs;
 
@@ -144,8 +151,41 @@ export default async function BlogPostPage({ params }: PageProps) {
     en: "Read More",
   }[lang];
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
+  const canonicalUrl = `${baseUrl}/blog/${slug}${lang !== "ru" ? `?lang=${lang}` : ""}`;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "image": post.imageUrl,
+    "datePublished": post.date,
+    "description": excerpt,
+    "author": {
+      "@type": "Organization",
+      "name": "Zatoka Resort"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Zatoka Resort",
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${baseUrl}/og-image.png`
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": canonicalUrl
+    }
+  };
+
   return (
-    <div className="bg-slate-950 text-slate-100 min-h-screen pb-20">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="bg-slate-950 text-slate-100 min-h-screen pb-20">
       {/* Article Header Hero */}
       <section className="relative h-[60vh] min-h-[400px] flex items-end justify-start overflow-hidden bg-slate-900 text-white">
         <div className="absolute inset-0 z-0">
@@ -256,5 +296,6 @@ export default async function BlogPostPage({ params }: PageProps) {
         </div>
       </section>
     </div>
+    </>
   );
 }

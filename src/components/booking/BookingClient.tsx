@@ -5,8 +5,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Waves, Compass, Anchor } from "lucide-react";
 import { WavyUnderline } from "@/components/ui/wavy-underline";
-import SuccessMessage from "@/app/booking/components/SuccessMessage";
-import BookingPageClient from "@/app/booking/components/BookingPageClient";
+import SuccessMessage from "@/app/[lang]/booking/components/SuccessMessage";
+import BookingPageClient from "@/app/[lang]/booking/components/BookingPageClient";
 import type { Room, Booking } from "@/lib/types";
 import i18n from "@/lib/i18n";
 

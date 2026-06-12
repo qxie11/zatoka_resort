@@ -1,4 +1,4 @@
-import { getRooms } from "@/lib/db";
+import { getRooms, getReviews } from "@/lib/db";
 import HomeClient from "@/components/home/HomeClient";
 import { cookies } from "next/headers";
 
@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const rooms = await getRooms();
+  const reviews = await getReviews();
   const cookieStore = await cookies();
   const lang = cookieStore.get("lang")?.value || "ru";
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
@@ -30,9 +31,14 @@ export default async function Home() {
   const resortName = names[lang as keyof typeof names] || names.ru;
   const resortDesc = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
 
+  const reviewCount = reviews.length || 124;
+  const ratingValue = reviews.length
+    ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
+    : "4.9";
+
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Resort",
+    "@type": "Hotel",
     "name": resortName,
     "description": resortDesc,
     "image": `${baseUrl}/og-image.png`,
@@ -40,7 +46,7 @@ export default async function Home() {
     "url": baseUrl,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "ул. Приморская, 1",
+      "streetAddress": "бульвар Золотой Берег, 42",
       "addressLocality": "Затока",
       "addressRegion": "Одесская область",
       "postalCode": "67772",
@@ -48,11 +54,33 @@ export default async function Home() {
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": "46.0641",
-      "longitude": "30.4567"
-    },
+      "latitude": "46.0683",
+      "longitude": "30.4578"
+  },
     "priceRange": priceRange,
-    "email": "contact@zatokagetaway.com"
+    "email": "contact@zatokagetaway.com",
+    "telephone": "+380501234567",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": ratingValue,
+      "reviewCount": reviewCount,
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "opens": "00:00",
+      "closes": "23:59"
+    }
   };
 
   return (

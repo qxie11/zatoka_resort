@@ -65,7 +65,14 @@ export default function Header() {
           onClick={async () => {
             await i18n.changeLanguage(lang);
             document.cookie = `lang=${lang}; path=/; max-age=31536000; SameSite=Lax`;
-            router.refresh();
+            
+            const segments = pathname.split("/");
+            if (segments.length > 1 && ["ru", "uk", "en"].includes(segments[1])) {
+              segments[1] = lang;
+              router.push(segments.join("/"));
+            } else {
+              router.push(`/${lang}`);
+            }
           }}
           className={cn(
             "px-2.5 py-1 rounded-lg transition-all uppercase duration-300 relative text-xs",

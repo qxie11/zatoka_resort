@@ -25,26 +25,43 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
   };
 
   const descriptions = {
-    ru: "Читайте последние новости, путеводители, гастрономические гиды и полезные советы для идеального отдыха в Затоке.",
-    uk: "Читайте останні новини, путівники, гастрономічні гіди та корисні поради для ідеального відпочинку в Затоці.",
-    en: "Read the latest news, travel guides, seafood recommendations, and helpful tips for a perfect holiday in Zatoka.",
+    ru: "Полезные статьи и советы для отдыха в Затоке 2026. Узнайте про отели на первой линии, рестораны, бассейны, развлечения и секреты прямого бронирования без переплат.",
+    uk: "Корисні статті та поради для відпочинку в Затоці 2026. Дізнайтеся про готелі на першій лінії, ресторани, басейни, розваги та секрети прямого бронювання без переплат.",
+    en: "Helpful travel tips and guides for your Zatoka vacation 2026. Explore beachfront hotels, private pool facilities, dining options, and direct booking tips.",
   };
 
   const categorySuffix = category ? `?category=${category}` : "";
   const categoryAndLangUk = category ? `?category=${category}&lang=uk` : "?lang=uk";
   const categoryAndLangEn = category ? `?category=${category}&lang=en` : "?lang=en";
-  const canonicalPath = `/blog${categorySuffix}${lang !== "ru" ? (categorySuffix ? `&lang=${lang}` : `?lang=${lang}`) : ""}`;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
+  const canonicalPath = `${baseUrl}/blog${categorySuffix}${lang !== "ru" ? (categorySuffix ? `&lang=${lang}` : `?lang=${lang}`) : ""}`;
+  const title = titles[lang as keyof typeof titles] || titles.ru;
+  const description = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
 
   return {
-    title: titles[lang as keyof typeof titles] || titles.ru,
-    description: descriptions[lang as keyof typeof descriptions] || descriptions.ru,
+    title,
+    description,
     alternates: {
       canonical: canonicalPath,
       languages: {
-        ru: `/blog${categorySuffix}`,
-        uk: `/blog${categoryAndLangUk}`,
-        en: `/blog${categoryAndLangEn}`,
+        "x-default": `${baseUrl}/blog${categorySuffix}`,
+        ru: `${baseUrl}/blog${categorySuffix}`,
+        uk: `${baseUrl}/blog${categoryAndLangUk}`,
+        en: `${baseUrl}/blog${categoryAndLangEn}`,
       },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalPath,
+      siteName: "Zatoka Resort",
+      locale: lang,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
     },
   };
 }
