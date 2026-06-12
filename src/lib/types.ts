@@ -44,6 +44,8 @@ export type BlogPost = {
   contentRu: string[];
   contentUk: string[];
   contentEn: string[];
+  views: number;
+  likes: number;
   createdAt?: Date;
   updatedAt?: Date;
 };

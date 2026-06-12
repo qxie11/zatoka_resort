@@ -72,6 +72,8 @@ model BlogPost {
   contentRu   String[] // Array of paragraphs
   contentUk   String[] // Array of paragraphs
   contentEn   String[] // Array of paragraphs
+  views       Int      @default(0)
+  likes       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

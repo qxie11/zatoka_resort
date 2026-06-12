@@ -186,6 +186,8 @@ export default function BlogForm({ isOpen, onOpenChange, onSubmit, post }: BlogP
         contentRu: parseContent(data.contentRu),
         contentUk: parseContent(data.contentUk),
         contentEn: parseContent(data.contentEn),
+        views: post?.views || 0,
+        likes: post?.likes || 0,
       }, post?.id);
 
       setImageFile(null);

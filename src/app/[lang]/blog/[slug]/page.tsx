@@ -7,6 +7,7 @@ import { ArrowLeft, Clock, Calendar, ArrowRight } from "lucide-react";
 import { getBlogPosts, getBlogPostBySlug } from "@/lib/db";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { ArticleMetrics } from "@/components/blog/ArticleMetrics";
 
 export const dynamic = "force-dynamic";
 
@@ -270,33 +271,46 @@ export default async function BlogPostPage({ params }: PageProps) {
             {title}
           </h1>
 
-          <div className="flex items-center gap-4 text-sm text-slate-300">
-            <span className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4" />
-              {post.date}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4" />
-              {post.readTime} мин чтения
-            </span>
+            <div className="flex items-center gap-4 text-sm text-slate-300">
+              <span className="flex items-center gap-1.5">
+                <Calendar className="h-4 w-4" />
+                {post.date}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Clock className="h-4 w-4" />
+                {post.readTime} мин чтения
+              </span>
+              <ArticleMetrics 
+                postId={post.id} 
+                initialViews={post.views} 
+                initialLikes={post.likes} 
+                variant="hero" 
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="container mx-auto px-4 py-12 max-w-4xl">
-        <div className="glass-card-dark border border-white/10 rounded-3xl p-6 md:p-12 shadow-2xl relative">
-          <div className="prose prose-invert prose-teal max-w-none text-slate-200 font-light text-lg md:text-xl leading-relaxed prose-headings:font-bold prose-headings:text-white prose-headings:mt-12 prose-headings:mb-6 prose-p:mb-8 prose-a:text-teal-400 hover:prose-a:text-teal-300 prose-img:rounded-xl">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                h1: ({node, ...props}) => <h2 {...props} />,
-              }}
-            >
-              {fullContent}
-            </ReactMarkdown>
+        <section className="container mx-auto px-4 py-12 max-w-4xl space-y-8">
+          <div className="glass-card-dark border border-white/10 rounded-3xl p-6 md:p-12 shadow-2xl relative">
+            <div className="prose prose-invert prose-teal max-w-none text-slate-200 font-light text-lg md:text-xl leading-relaxed prose-headings:font-bold prose-headings:text-white prose-headings:mt-12 prose-headings:mb-6 prose-p:mb-8 prose-a:text-teal-400 hover:prose-a:text-teal-300 prose-img:rounded-xl">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  h1: ({node, ...props}) => <h2 {...props} />,
+                }}
+              >
+                {fullContent}
+              </ReactMarkdown>
+            </div>
           </div>
-        </div>
-      </section>
+          
+          <ArticleMetrics 
+            postId={post.id} 
+            initialViews={post.views} 
+            initialLikes={post.likes} 
+            variant="bottom" 
+          />
+        </section>
 
       <section className="container mx-auto px-4 py-8 max-w-5xl border-t border-white/5 mt-8">
         <h2 className="text-2xl font-bold text-white mb-8 text-center md:text-left">

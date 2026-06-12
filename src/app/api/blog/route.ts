@@ -59,6 +59,8 @@ export async function POST(request: NextRequest) {
       contentRu: Array.isArray(contentRu) ? contentRu : [contentRu],
       contentUk: Array.isArray(contentUk) ? contentUk : [contentUk || contentRu],
       contentEn: Array.isArray(contentEn) ? contentEn : [contentEn || contentRu],
+      views: 0,
+      likes: 0,
     });
 
     return NextResponse.json(newPost, { status: 201 });

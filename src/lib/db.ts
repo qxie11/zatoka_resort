@@ -290,6 +290,40 @@ export const updateBlogPost = async (id: string, post: Partial<Omit<BlogPost, 'i
   }
 };
 
+export const incrementBlogPostView = async (id: string): Promise<BlogPost | null> => {
+  try {
+    const updatedPost = await prisma.blogPost.update({
+      where: { id },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+    return updatedPost;
+  } catch (error) {
+    console.error("incrementBlogPostView error:", error);
+    return null;
+  }
+};
+
+export const incrementBlogPostLike = async (id: string, increment: boolean = true): Promise<BlogPost | null> => {
+  try {
+    const updatedPost = await prisma.blogPost.update({
+      where: { id },
+      data: {
+        likes: {
+          increment: increment ? 1 : -1,
+        },
+      },
+    });
+    return updatedPost;
+  } catch (error) {
+    console.error("incrementBlogPostLike error:", error);
+    return null;
+  }
+};
+
 export const deleteBlogPost = async (id: string): Promise<boolean> => {
   try {
     await prisma.blogPost.delete({
