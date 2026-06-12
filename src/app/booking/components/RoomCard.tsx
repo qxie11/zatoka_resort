@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { Room } from "@/lib/types";
-import { BedDouble, Eye } from "lucide-react";
+import { BedDouble, Eye, Waves } from "lucide-react";
 import ImageGallery from "@/components/rooms/ImageGallery";
 
 interface RoomCardProps {
@@ -72,9 +72,15 @@ export default function RoomCard({ room }: RoomCardProps) {
       <div className="flex flex-col justify-between w-full md:w-2/3 p-2">
         <CardHeader className="pb-2">
           <CardTitle className="text-2xl font-extrabold text-white">{room.name}</CardTitle>
-          <div className="flex items-center gap-2 mt-2 text-teal-300 font-medium text-sm">
-            <BedDouble className="h-4 w-4 text-teal-400" />
-            <span>До {room.capacity} гостей</span>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-sm">
+            <div className="flex items-center gap-1.5 text-teal-300 font-medium">
+              <BedDouble className="h-4 w-4 text-teal-400" />
+              <span>До {room.capacity} гостей</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-sky-300 font-medium bg-sky-500/10 border border-sky-500/20 px-2 py-0.5 rounded-lg">
+              <Waves className="h-3.5 w-3.5 text-sky-400" />
+              <span>10м до пляжа (1-я линия)</span>
+            </div>
           </div>
           <CardDescription className="pt-2 text-slate-300 font-light leading-relaxed">{room.description}</CardDescription>
         </CardHeader>
