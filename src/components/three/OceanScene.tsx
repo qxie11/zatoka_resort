@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { CuteFishPreloader } from "../ui/CuteFishPreloader";
 
-const MAX_RIPPLES = 15;
+// Снижаем количество кругов. 8 вполне достаточно для интерактива
+const MAX_RIPPLES = 8;
 
 export default function OceanScene() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -24,7 +25,9 @@ export default function OceanScene() {
       powerPreference: "high-performance"
     });
 
-    renderer.setPixelRatio(1);
+    // Оптимизация: Слегка снижаем разрешение рендера для сильного прироста FPS
+    const dpr = Math.min(window.devicePixelRatio, 1.5) * 0.75;
+    renderer.setPixelRatio(dpr);
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
     renderer.autoClear = false;
 
@@ -45,7 +48,7 @@ export default function OceanScene() {
       uniform vec3 iResolution;
       uniform float iTime;
       uniform vec4 iMouse;
-      uniform vec3 uRipples[${MAX_RIPPLES}]; // Массив кругов на воде (x, z, time)
+      uniform vec3 uRipples[${MAX_RIPPLES}];
       
       const float PI = 3.141592;
       const float EPSILON = 1e-3;
@@ -76,10 +79,8 @@ export default function OceanScene() {
           vec2 i = floor( p );
           vec2 f = fract( p );  
           vec2 u = f*f*(3.0-2.0*f);
-          return -1.0+2.0*mix( mix( hash( i + vec2(0.0,0.0) ), 
-                               hash( i + vec2(1.0,0.0) ), u.x),
-                      mix( hash( i + vec2(0.0,1.0) ), 
-                           hash( i + vec2(1.0,1.0) ), u.x), u.y);
+          return -1.0+2.0*mix( mix( hash( i + vec2(0.0,0.0) ), hash( i + vec2(1.0,0.0) ), u.x),
+                      mix( hash( i + vec2(0.0,1.0) ), hash( i + vec2(1.0,1.0) ), u.x), u.y);
       }
 
       float diffuse(vec3 n,vec3 l,float p) {
@@ -104,7 +105,7 @@ export default function OceanScene() {
           return pow(1.0-pow(wv.x * wv.y,0.65),choppy);
       }
 
-      // Базовая геометрия моря (без волн от мыши для оптимизации)
+      // Базовая геометрия моря
       float map(vec3 p) {
           float freq = 0.16;
           float amp = 0.6;
@@ -112,18 +113,14 @@ export default function OceanScene() {
           vec2 uv = p.xz; uv.x *= 0.75;
           
           float d, h = 0.0;    
-          for(int i = 0; i < 8; i++) {
-              if (i >= 1) break;
-              d = sea_octave((uv+SEA_TIME)*freq,choppy);
-              d += sea_octave((uv-SEA_TIME)*freq,choppy);
-              h += d * amp;        
-              uv *= octave_m; freq *= 1.9; amp *= 0.22;
-              choppy = mix(choppy,1.0,0.2);
-          }
+          // Оптимизация: убрано лишнее выполнение цикла
+          d = sea_octave((uv+SEA_TIME)*freq,choppy);
+          d += sea_octave((uv-SEA_TIME)*freq,choppy);
+          h += d * amp;        
           return p.y - h;
       }
 
-      // Детализированная геометрия: сюда добавляем круги от кликов
+      // Детализированная геометрия
       float map_detailed(vec3 p) {
           float freq = 0.16;
           float amp = 0.6;
@@ -131,8 +128,8 @@ export default function OceanScene() {
           vec2 uv = p.xz; uv.x *= 0.75;
           
           float d, h = 0.0;    
-          for(int i = 0; i < 8; i++) {
-              if (i >= 5) break;
+          // Оптимизация: Снижено с 5 до 3 итераций (колоссальный прирост FPS без особой потери качества)
+          for(int i = 0; i < 3; i++) {
               d = sea_octave((uv+SEA_TIME)*freq,choppy);
               d += sea_octave((uv-SEA_TIME)*freq,choppy);
               h += d * amp;        
@@ -140,25 +137,22 @@ export default function OceanScene() {
               choppy = mix(choppy,1.0,0.2);
           }
 
-          // Добавляем интерактивные круги на воде (Bump Mapping)
           float ripple = 0.0;
           for(int j = 0; j < ${MAX_RIPPLES}; j++) {
               float age = iTime - uRipples[j].z;
               if(age > 0.0 && age < 4.0) {
                   float dist = length(p.xz - uRipples[j].xy);
-                  float front = age * 6.0; // Скорость расширения круга
+                  float front = age * 6.0; 
                   float diff = dist - front;
-                  // Просчитываем волну только рядом с фронтом
                   if(diff < 1.0 && diff > -2.5) {
                       float env = smoothstep(1.0, 0.0, abs(diff + 0.75) - 0.75);
                       float wave = sin(dist * 5.0 - age * 30.0);
-                      float decay = exp(-age * 1.5); // Затухание со временем
+                      float decay = exp(-age * 1.5); 
                       ripple += wave * env * decay * 0.8;
                   }
               }
           }
           h += ripple;
-
           return p.y - h;
       }
 
@@ -168,14 +162,11 @@ export default function OceanScene() {
           
           vec3 reflected = getSkyColor(reflect(eye, n));    
           vec3 refracted = SEA_BASE + diffuse(n, l, 80.0) * SEA_WATER_COLOR * 0.12; 
-          
           vec3 color = mix(refracted, reflected, fresnel);
           
           float atten = max(1.0 - dot(dist, dist) * 0.001, 0.0);
           color += SEA_WATER_COLOR * (p.y - 0.6) * 0.18 * atten;
-          
           color += specular(n, l, eye, 60.0);
-          
           return color;
       }
 
@@ -197,8 +188,8 @@ export default function OceanScene() {
               return tx;   
           }
           float hm = map(ori);    
-          for(int i = 0; i < 128; i++) {
-              if (i >= 32) break;
+          // Оптимизация: Жестко ограничено 32 итерациями, убран лишний if
+          for(int i = 0; i < 32; i++) {
               float tmid = mix(tm, tx, hm / (hm - hx));
               p = ori + dir * tmid;
               float hmid = map(p);        
@@ -220,7 +211,7 @@ export default function OceanScene() {
           uv.x *= iResolution.x / iResolution.y;    
               
           vec3 ang = vec3(sin(time*3.0)*0.1,sin(time)*0.2+0.3,time);    
-          vec3 ori = vec3(0.0,3.5,time*5.0 * 1.0);  
+          vec3 ori = vec3(0.0,3.5,time*5.0);  
           vec3 dir = normalize(vec3(uv.xy,-2.0)); dir.z += length(uv) * 0.14;
           dir = normalize(dir) * fromEuler(ang);
           
@@ -238,7 +229,7 @@ export default function OceanScene() {
 
       void main() {
           vec2 fragCoord = gl_FragCoord.xy;
-          float time = iTime * 0.3 + iMouse.x * 0.01 * 0.1;
+          float time = iTime * 0.3 + iMouse.x * 0.001;
           vec3 color = getPixel(fragCoord, time);
           gl_FragColor = vec4(pow(color,vec3(0.65)), 1.0);
       }
@@ -271,17 +262,37 @@ export default function OceanScene() {
       0, 0, 0, 1, 0.2, -0.5, 0, 0, -1.0,
     ]);
     birdGeo.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-    birdGeo.computeVertexNormals();
 
-    const birdMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+    // Оптимизация процессора (CPU): Перенос анимации крыльев на GPU
+    const birdMat = new THREE.ShaderMaterial({
+      uniforms: { iTime: { value: 0 } },
+      vertexShader: `
+        uniform float iTime;
+        void main() {
+            vec3 pos = position;
+            // Использование позиции объекта как уникального смещения для каждой птицы
+            float offset = modelMatrix[3][0] * 0.5 + modelMatrix[3][2] * 0.5;
+            // Машут только внешние вершины крыльев
+            if (abs(pos.x) > 0.5) {
+                pos.y += sin(iTime * 15.0 + offset) * 0.5;
+            }
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        }
+      `,
+      fragmentShader: `
+        void main() { gl_FragColor = vec4(1.0); }
+      `,
+      side: THREE.DoubleSide
+    });
+
     const NUM_BIRDS = 15;
-    const birds: { mesh: THREE.Mesh; speed: number; offset: number; targetY: number }[] = [];
+    const birds: { mesh: THREE.Mesh; speed: number; offset: number }[] = [];
 
     for (let i = 0; i < NUM_BIRDS; i++) {
       const mesh = new THREE.Mesh(birdGeo, birdMat);
       mesh.position.set((Math.random() - 0.5) * 40, Math.random() * 5 + 2, (Math.random() - 0.5) * -30 - 10);
       mesh.scale.set(0.15, 0.15, 0.15);
-      birds.push({ mesh, speed: 0.05 + Math.random() * 0.03, offset: Math.random() * Math.PI * 2, targetY: mesh.position.y });
+      birds.push({ mesh, speed: 0.05 + Math.random() * 0.03, offset: Math.random() * Math.PI * 2 });
       birdScene.add(mesh);
     }
 
@@ -292,7 +303,7 @@ export default function OceanScene() {
 
     const spawnRipple = (clientX: number, clientY: number) => {
       const baseTime = clock.getElapsed();
-      if (baseTime - lastRippleTime < 0.12) return; // Ограничитель спавна
+      if (baseTime - lastRippleTime < 0.12) return;
       lastRippleTime = baseTime;
 
       const time = baseTime * 0.3 + oceanMaterial.uniforms.iMouse.value.x * 0.001;
@@ -369,6 +380,7 @@ export default function OceanScene() {
       const elapsedTime = clock.getElapsed();
 
       oceanMaterial.uniforms.iTime.value = elapsedTime;
+      birdMat.uniforms.iTime.value = elapsedTime; // Передаем время в шейдер птиц
 
       birds.forEach((bird) => {
         bird.mesh.position.z += bird.speed;
@@ -379,11 +391,6 @@ export default function OceanScene() {
           bird.mesh.position.x = (Math.random() - 0.5) * 40;
         }
 
-        const positions = bird.mesh.geometry.attributes.position.array as Float32Array;
-        const flap = Math.sin(elapsedTime * 15 + bird.offset) * 0.5;
-        positions[1] = flap;
-        positions[10] = flap;
-        bird.mesh.geometry.attributes.position.needsUpdate = true;
         bird.mesh.rotation.z = Math.sin(elapsedTime * 2 + bird.offset) * 0.1;
       });
 
