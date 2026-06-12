@@ -9,7 +9,7 @@ import { getBlogPosts } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 interface BlogPageProps {
-  searchParams: Promise<{ search?: string; category?: string }>;
+  searchParams: Promise<{ search?: string; category?: string; page?: string }>;
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -39,7 +39,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const cookieStore = await cookies();
   const lang = (cookieStore.get("lang")?.value as "ru" | "uk" | "en") || "ru";
 
-  const { search = "", category = "all" } = await searchParams;
+  const { search = "", category = "all", page = "1" } = await searchParams;
+  const currentPage = Math.max(1, parseInt(page, 10) || 1);
+  const POSTS_PER_PAGE = 6;
 
   // Translation helpers
   const translations = {
@@ -50,6 +52,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       readMore: "Читать далее",
       noArticles: "Статьи не найдены.",
       readTimeSuffix: "мин",
+      prev: "Назад",
+      next: "Вперед",
     },
     uk: {
       blogTitle: "Блог та корисні поради",
@@ -58,6 +62,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       readMore: "Читати далі",
       noArticles: "Статті не знайдено.",
       readTimeSuffix: "хв",
+      prev: "Назад",
+      next: "Вперед",
     },
     en: {
       blogTitle: "Blog & Helpful Tips",
@@ -66,6 +72,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       readMore: "Read More",
       noArticles: "No articles found.",
       readTimeSuffix: "min",
+      prev: "Previous",
+      next: "Next",
     },
   }[lang];
 
@@ -103,6 +111,23 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
     return matchesSearch && matchesCategory;
   });
+
+  // Pagination calculation
+  const totalPosts = filteredPosts.length;
+  const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
+  const activePage = Math.min(currentPage, totalPages || 1);
+  const paginatedPosts = filteredPosts.slice(
+    (activePage - 1) * POSTS_PER_PAGE,
+    activePage * POSTS_PER_PAGE
+  );
+
+  const buildPageUrl = (pageNumber: number) => {
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (category !== "all") params.set("category", category);
+    params.set("page", pageNumber.toString());
+    return `/blog?${params.toString()}`;
+  };
 
   return (
     <div className="bg-slate-950 text-slate-100 min-h-screen pb-20">
@@ -190,66 +215,109 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         </div>
 
         {/* Grid of articles */}
-        {filteredPosts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPosts.map((post) => {
-              const title = lang === "en" ? post.titleEn : lang === "uk" ? post.titleUk : post.titleRu;
-              const excerpt = lang === "en" ? post.excerptEn : lang === "uk" ? post.excerptUk : post.excerptRu;
-              const postCatDisplay = lang === "en" ? post.categoryEn : lang === "uk" ? post.categoryUk : post.categoryRu;
+        {paginatedPosts.length > 0 ? (
+          <div className="space-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {paginatedPosts.map((post) => {
+                const title = lang === "en" ? post.titleEn : lang === "uk" ? post.titleUk : post.titleRu;
+                const excerpt = lang === "en" ? post.excerptEn : lang === "uk" ? post.excerptUk : post.excerptRu;
+                const postCatDisplay = lang === "en" ? post.categoryEn : lang === "uk" ? post.categoryUk : post.categoryRu;
 
-              return (
-                <article
-                  key={post.slug}
-                  className="flex flex-col rounded-3xl overflow-hidden glass-card-dark border border-white/10 shadow-2xl hover-lift transition-smooth hover:border-teal-500/40 group"
-                >
-                  {/* Cover Image */}
-                  <div className="relative h-48 w-full overflow-hidden">
-                    <Image
-                      src={post.imageUrl}
-                      alt={title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-105 transition-smooth duration-500"
-                    />
-                    <div className="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-md text-teal-300 border border-teal-500/40 text-xs font-semibold rounded-lg px-2.5 py-1 shadow-lg">
-                      {postCatDisplay}
-                    </div>
-                  </div>
-
-                  {/* Card Content */}
-                  <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-4 text-xs text-slate-400">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="h-3.5 w-3.5" />
-                          {post.date}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="h-3.5 w-3.5" />
-                          {post.readTime} {translations.readTimeSuffix}
-                        </span>
+                return (
+                  <article
+                    key={post.slug}
+                    className="flex flex-col rounded-3xl overflow-hidden glass-card-dark border border-white/10 shadow-2xl hover-lift transition-smooth hover:border-teal-500/40 group"
+                  >
+                    {/* Cover Image */}
+                    <div className="relative h-48 w-full overflow-hidden">
+                      <Image
+                        src={post.imageUrl}
+                        alt={title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-smooth duration-500"
+                      />
+                      <div className="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-md text-teal-300 border border-teal-500/40 text-xs font-semibold rounded-lg px-2.5 py-1 shadow-lg">
+                        {postCatDisplay}
                       </div>
-                      <h2 className="text-xl font-bold text-white group-hover:text-teal-300 transition-colors">
-                        {title}
-                      </h2>
-                      <p className="text-slate-300 text-sm font-light leading-relaxed line-clamp-3">
-                        {excerpt}
-                      </p>
                     </div>
 
-                    <div>
-                      <Link
-                        href={`/blog/${post.slug}`}
-                        className="inline-flex items-center gap-2 text-teal-300 hover:text-teal-200 font-medium text-sm group/btn"
-                      >
-                        <span>{translations.readMore}</span>
-                        <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                      </Link>
+                    {/* Card Content */}
+                    <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-4 text-xs text-slate-400">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-3.5 w-3.5" />
+                            {post.date}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3.5 w-3.5" />
+                            {post.readTime} {translations.readTimeSuffix}
+                          </span>
+                        </div>
+                        <h2 className="text-2xl font-bold text-white group-hover:text-teal-300 transition-colors">
+                          {title}
+                        </h2>
+                        <p className="text-slate-300 text-base font-light leading-relaxed line-clamp-3">
+                          {excerpt}
+                        </p>
+                      </div>
+
+                      <div>
+                        <Link
+                          href={`/blog/${post.slug}`}
+                          className="inline-flex items-center gap-2 text-teal-300 hover:text-teal-200 font-medium text-sm group/btn"
+                        >
+                          <span>{translations.readMore}</span>
+                          <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              );
-            })}
+                  </article>
+                );
+              })}
+            </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-12">
+                <Link
+                  href={buildPageUrl(activePage - 1)}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 border border-white/5 ${
+                    activePage > 1
+                      ? "bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white"
+                      : "bg-slate-900/40 text-slate-600 pointer-events-none"
+                  }`}
+                >
+                  {translations.prev}
+                </Link>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                  <Link
+                    key={pageNum}
+                    href={buildPageUrl(pageNum)}
+                    className={`h-10 w-10 flex items-center justify-center rounded-xl text-sm font-medium transition-all duration-300 ${
+                      pageNum === activePage
+                        ? "bg-gradient-to-r from-teal-400 to-sky-500 text-slate-950 font-bold shadow-lg shadow-teal-500/20"
+                        : "bg-slate-900/80 border border-white/5 text-slate-300 hover:bg-slate-800 hover:text-white"
+                    }`}
+                  >
+                    {pageNum}
+                  </Link>
+                ))}
+
+                <Link
+                  href={buildPageUrl(activePage + 1)}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 border border-white/5 ${
+                    activePage < totalPages
+                      ? "bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white"
+                      : "bg-slate-900/40 text-slate-600 pointer-events-none"
+                  }`}
+                >
+                  {translations.next}
+                </Link>
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-center py-20 glass-card-dark border border-white/5 rounded-3xl">

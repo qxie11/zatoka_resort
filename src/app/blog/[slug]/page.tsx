@@ -176,7 +176,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       {/* Article Content */}
       <section className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="glass-card-dark border border-white/10 rounded-3xl p-6 md:p-12 shadow-2xl relative">
-          <div className="prose prose-invert max-w-none space-y-6 text-slate-200 font-light text-base md:text-lg leading-relaxed">
+          <div className="prose prose-invert max-w-none space-y-6 text-slate-200 font-light text-lg md:text-xl leading-relaxed">
             {contentParagraphs.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
@@ -221,7 +221,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   </div>
                 </div>
                 <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                  <h3 className="text-base font-bold text-white group-hover:text-teal-300 transition-colors">
+                  <h3 className="text-lg font-bold text-white group-hover:text-teal-300 transition-colors">
                     {relTitle}
                   </h3>
                   <Link
