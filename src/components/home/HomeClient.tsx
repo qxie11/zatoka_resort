@@ -228,7 +228,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
               <div className="lg:col-span-5 relative flex items-center justify-center animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards]">
                 <div className="relative w-full max-w-[400px] aspect-[4/5] rounded-[2rem] overflow-hidden border-2 border-white/20 shadow-2xl group hover:border-teal-400/50 transition-all duration-500">
                   <Image
-                    src="/hero-beach.jpg"
+                    src="/hero-beach.png"
                     alt="Beautiful Black Sea Beach"
                     fill
                     sizes="(max-width: 768px) 100vw, 400px"

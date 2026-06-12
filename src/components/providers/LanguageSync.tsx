@@ -8,12 +8,7 @@ interface LanguageSyncProps {
 }
 
 export default function LanguageSync({ lang }: LanguageSyncProps) {
-  // Sync language on initial render
-  if (i18n.language !== lang) {
-    i18n.changeLanguage(lang);
-  }
-
-  // Also sync language if the route parameter changes dynamically
+  // Sync language if the route parameter changes dynamically
   useEffect(() => {
     if (i18n.language !== lang) {
       i18n.changeLanguage(lang);
