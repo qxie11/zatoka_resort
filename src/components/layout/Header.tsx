@@ -25,7 +25,9 @@ export default function Header() {
     setCurrentLang(i18n.language || "ru");
 
     const handleLangChange = (lng: string) => {
-      setCurrentLang(lng);
+      setTimeout(() => {
+        setCurrentLang(lng);
+      }, 0);
     };
 
     i18n.on("languageChanged", handleLangChange);
