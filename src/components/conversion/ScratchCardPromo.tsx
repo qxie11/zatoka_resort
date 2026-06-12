@@ -52,7 +52,18 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
   };
 
   const current = t[lang as keyof typeof t] || t.ru;
-  const promoCode = "ZATOKAWAVE";
+  const [promoCode, setPromoCode] = useState("ZATOKAWAVE");
+  const [promoDiscount, setPromoDiscount] = useState(5);
+
+  useEffect(() => {
+    fetch("/api/promo/active")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code) setPromoCode(data.code);
+        if (typeof data.discount === "number") setPromoDiscount(data.discount);
+      })
+      .catch((err) => console.error("Error fetching active promo:", err));
+  }, []);
 
   // Countdown timer once revealed
   useEffect(() => {
@@ -215,7 +226,13 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
                   </div>
                   
                   <div className="flex flex-col items-center gap-2">
-                    <span className="text-xs text-slate-300">{current.promoDesc}</span>
+                    <span className="text-xs text-slate-300">
+                      {lang === "uk"
+                        ? `Використовуйте цей промокод при бронюванні для отримання гарантованої знижки ${promoDiscount}%:`
+                        : lang === "en"
+                        ? `Use this promo code during booking to get a guaranteed ${promoDiscount}% discount:`
+                        : `Используйте этот промокод при бронировании для гарантированной скидки ${promoDiscount}%:`}
+                    </span>
                     <div className="flex items-center gap-2 bg-slate-950/60 border border-white/10 px-4 py-2.5 rounded-xl text-lg font-black tracking-widest text-teal-300">
                       <span>{promoCode}</span>
                     </div>
