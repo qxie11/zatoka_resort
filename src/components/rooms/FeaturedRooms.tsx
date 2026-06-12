@@ -58,7 +58,7 @@ export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
                 <p className="text-xl font-extrabold text-teal-300 mr-auto">{room.price} грн <span className="text-xs text-slate-400 font-normal">/ ночь</span></p>
                 <div className="flex flex-col sm:flex-row gap-3 w-full">
                   <Button asChild variant="outline" className="w-full sm:flex-1 border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 rounded-xl">
-                    <Link href={`/${lang}/booking#${room.slug}`} className="flex items-center justify-center">
+                    <Link href={`/${lang}/rooms/${room.slug}`} className="flex items-center justify-center">
                       Подробнее <ArrowRight className="ml-1.5 h-4 w-4 text-teal-400" />
                     </Link>
                   </Button>

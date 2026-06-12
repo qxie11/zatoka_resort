@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -15,43 +14,10 @@ import {
 } from "@/components/ui/card";
 import type { Room } from "@/lib/types";
 import { BedDouble, Eye, Waves } from "lucide-react";
-import ImageGallery from "@/components/rooms/ImageGallery";
 import { usePathname } from "next/navigation";
 
 interface RoomCardProps {
   room: Room;
-}
-
-function ViewImagesButton({ room }: { room: Room }) {
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-
-  const allImages = room.imageUrl
-    ? [room.imageUrl, ...(room.imageUrls || [])]
-    : room.imageUrls || [];
-
-  if (allImages.length === 0) {
-    return null;
-  }
-
-  return (
-    <>
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => setIsGalleryOpen(true)}
-        className="w-full sm:w-auto border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 rounded-xl"
-      >
-        <Eye className="mr-2 h-4 w-4 text-teal-400" />
-        Посмотреть
-      </Button>
-      <ImageGallery
-        images={allImages}
-        isOpen={isGalleryOpen}
-        onClose={() => setIsGalleryOpen(false)}
-        roomName={room.name}
-      />
-    </>
-  );
 }
 
 export default function RoomCard({ room }: RoomCardProps) {
@@ -103,7 +69,12 @@ export default function RoomCard({ room }: RoomCardProps) {
             <p className="text-2xl font-extrabold text-teal-300 tracking-tight">{room.price} грн <span className="text-sm text-slate-400 font-normal">/ ночь</span></p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-            <ViewImagesButton room={room} />
+            <Button asChild variant="outline" className="w-full sm:w-auto border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 rounded-xl">
+              <Link href={`/${lang}/rooms/${room.slug}`}>
+                <Eye className="mr-2 h-4 w-4 text-teal-400" />
+                Посмотреть
+              </Link>
+            </Button>
             <Button asChild className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl px-6">
               <Link href={`/${lang}/booking/${room.slug}`}>Забронировать</Link>
             </Button>
