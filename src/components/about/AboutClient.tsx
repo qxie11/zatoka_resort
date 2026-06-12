@@ -3,7 +3,11 @@
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { Waves, Wifi, UtensilsCrossed, Sun, HeartPulse, Car, ConciergeBell, Dumbbell, Compass, Star, Anchor } from "lucide-react";
+import { 
+  Waves, Wifi, UtensilsCrossed, Sun, HeartPulse, Car, ConciergeBell, 
+  Dumbbell, Compass, Star, Anchor, Users, Trophy, Milestone, Award,
+  Sparkles
+} from "lucide-react";
 import type { LucideProps } from 'lucide-react';
 import { WavyUnderline } from '@/components/ui/wavy-underline';
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -21,7 +25,6 @@ const iconMap: { [key: string]: React.FC<LucideProps> } = {
   Dumbbell
 };
 
-// Map amenity names to their translation keys
 const amenityKeyMap: { [key: string]: { name: string; desc: string } } = {
   "Бассейн": { name: "pool", desc: "poolDesc" },
   "Бесплатный Wi-Fi": { name: "wifi", desc: "wifiDesc" },
@@ -34,9 +37,16 @@ const amenityKeyMap: { [key: string]: { name: string; desc: string } } = {
 };
 
 const teamMembers = [
-  { name: 'Олена Петренко', roleKey: 'roleGM', roleDefault: 'Генеральный менеджер', imageId: 'staff-1' },
-  { name: 'Михайло Коваль', roleKey: 'roleConcierge', roleDefault: 'Начальник консьерж-службы', imageId: 'staff-2' },
-  { name: 'Андрій Шевченко', roleKey: 'roleChef', roleDefault: 'Шеф-повар', imageId: 'staff-3' },
+  { name: 'Олена Петренко', roleKey: 'roleGM', roleDefault: 'Генеральный менеджер', imageId: 'staff-1', quote: '«Создаем уют и заботу в каждой детали вашего отдыха»' },
+  { name: 'Михайло Коваль', roleKey: 'roleConcierge', roleDefault: 'Начальник консьерж-службы', imageId: 'staff-2', quote: '«Ваш комфорт — наш главный приоритет 24/7»' },
+  { name: 'Андрій Шевченко', roleKey: 'roleChef', roleDefault: 'Шеф-повар', imageId: 'staff-3', quote: '«Морские вкусы и черноморская кухня в авторском исполнении»' },
+];
+
+const timelineEvents = [
+  { year: "2010", ru: "Основание гостевого дома", uk: "Заснування гостьового будинку", en: "Guesthouse foundation" },
+  { year: "2016", ru: "Открытие бассейна и ресторана", uk: "Відкриття басейну та ресторану", en: "Pool & restaurant opening" },
+  { year: "2021", ru: "Полная реновация и расширение", uk: "Повна реновація та розширення", en: "Full renovation & expansion" },
+  { year: "2026", ru: "Премиум сервис нового уровня", uk: "Преміум сервіс нового рівня", en: "New-level premium service" },
 ];
 
 interface AboutClientProps {
@@ -66,19 +76,33 @@ export default function AboutClient({ lang }: AboutClientProps) {
 
   const aboutImage = PlaceHolderImages.find(p => p.id === 'about-us');
 
+  // Multi-language labels
+  const L = {
+    beach: { ru: "10 метров", uk: "10 метрів", en: "10 meters" },
+    beachDesc: { ru: "До песчаного пляжа отеля", uk: "До піщаного пляжу готелю", en: "To the hotel private beach" },
+    rooms: { ru: "50+ номеров", uk: "50+ номерів", en: "50+ rooms" },
+    roomsDesc: { ru: "Различных категорий роскоши", uk: "Різних категорій розкоші", en: "Different luxury options" },
+    guests: { ru: "10k+ гостей", uk: "10k+ гостей", en: "10k+ guests" },
+    guestsDesc: { ru: "Доверили нам свой отдых", uk: "Довірили нам свій відпочинок", en: "Trusted us with their vacation" },
+    years: { ru: "15+ лет", uk: "15+ років", en: "15+ years" },
+    yearsDesc: { ru: "Опыта гостеприимства у моря", uk: "Досвіду гостинності біля моря", en: "Of hospitality by the sea" },
+    history: { ru: "История развития", uk: "Історія розвитку", en: "Our History Timeline" },
+  };
+
   return (
-    <div className="bg-slate-950 text-slate-100 min-h-screen">
-      {/* HEADER SECTION */}
-      <section className="relative py-24 lg:py-32 overflow-hidden bg-slate-900 text-white">
+    <div className="bg-slate-950 text-slate-100 min-h-screen overflow-x-hidden">
+      
+      {/* --- HERO HEADER --- */}
+      <section className="relative py-28 lg:py-36 overflow-hidden bg-slate-900 text-white">
         <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1683459285195-2bff6b201b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200"
             alt="Seaside background"
             fill
-            className="object-cover scale-105 animate-float-slow opacity-80 brightness-[0.7]"
+            className="object-cover scale-105 animate-float-slow opacity-65 brightness-[0.55]"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-900/80 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40" />
         </div>
 
@@ -93,24 +117,15 @@ export default function AboutClient({ lang }: AboutClientProps) {
           <div className="absolute bottom-1/4 left-1/3 animate-float" style={{ animationDelay: "5s" }}>
             <Waves className="h-20 w-20 text-teal-200" />
           </div>
-          <div className="absolute bottom-1/3 right-12 animate-current" style={{ animationDelay: '2s' }}>
-            <svg viewBox="0 0 100 60" className="h-24 w-24 text-teal-300 fill-current">
-              <path d="M10 30 C 25 15, 55 15, 70 30 C 80 25, 88 20, 95 15 C 92 25, 92 35, 95 45 C 88 40, 80 35, 70 30 C 55 45, 25 45, 10 30 Z M30 25 A 3 3 0 1 0 30 25.1" />
-            </svg>
-          </div>
-          <div className="absolute top-1/2 left-[15%] animate-float-slow opacity-15" style={{ animationDelay: '4s' }}>
-            <Anchor className="h-16 w-16 text-sky-200" />
-          </div>
         </div>
 
         <div className="relative container mx-auto px-4 text-center z-10 flex flex-col items-center">
-          {/* Premium Micro-Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card-dark text-xs font-semibold text-teal-300 uppercase tracking-widest animate-fade-in mb-6">
             <Compass className="h-4 w-4 animate-spin-slow" />
             <span>{translate("aboutService", "Премиум сервис у моря")}</span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md animate-fade-in-up py-2 px-1">
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md animate-fade-in-up py-2">
             {translate("aboutTitle", "Создавая незабываемый отдых")}
           </h1>
           <WavyUnderline colorClassName="text-teal-300" />
@@ -127,15 +142,52 @@ export default function AboutClient({ lang }: AboutClientProps) {
         </div>
       </section>
 
-      {/* STORY SECTION */}
-      <section className="py-20 lg:py-28 relative bg-slate-950">
+      {/* --- STATS COUNTER GRID --- */}
+      <section className="relative pt-12 pb-16 z-30 -mt-6">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            
+            <div className="glass-card-dark border border-teal-500/25 p-6 rounded-3xl bg-slate-950/80 backdrop-blur-md flex flex-col items-center text-center shadow-[0_4px_30px_rgba(20,184,166,0.1)] hover:border-teal-400 transition-all">
+              <Waves className="h-8 w-8 text-teal-400 mb-2.5 animate-pulse" />
+              <span className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">{L.beach[lang as keyof typeof L.beach]}</span>
+              <span className="text-xs md:text-sm text-slate-400 font-light mt-1">{L.beachDesc[lang as keyof typeof L.beachDesc]}</span>
+            </div>
+
+            <div className="glass-card-dark border border-teal-500/25 p-6 rounded-3xl bg-slate-950/80 backdrop-blur-md flex flex-col items-center text-center shadow-[0_4px_30px_rgba(20,184,166,0.1)] hover:border-teal-400 transition-all">
+              <Compass className="h-8 w-8 text-sky-400 mb-2.5" />
+              <span className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">{L.rooms[lang as keyof typeof L.rooms]}</span>
+              <span className="text-xs md:text-sm text-slate-400 font-light mt-1">{L.roomsDesc[lang as keyof typeof L.roomsDesc]}</span>
+            </div>
+
+            <div className="glass-card-dark border border-teal-500/25 p-6 rounded-3xl bg-slate-950/80 backdrop-blur-md flex flex-col items-center text-center shadow-[0_4px_30px_rgba(20,184,166,0.1)] hover:border-teal-400 transition-all">
+              <Users className="h-8 w-8 text-amber-400 mb-2.5" />
+              <span className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">{L.guests[lang as keyof typeof L.guests]}</span>
+              <span className="text-xs md:text-sm text-slate-400 font-light mt-1">{L.guestsDesc[lang as keyof typeof L.guestsDesc]}</span>
+            </div>
+
+            <div className="glass-card-dark border border-teal-500/25 p-6 rounded-3xl bg-slate-950/80 backdrop-blur-md flex flex-col items-center text-center shadow-[0_4px_30px_rgba(20,184,166,0.1)] hover:border-teal-400 transition-all">
+              <Trophy className="h-8 w-8 text-orange-400 mb-2.5" />
+              <span className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">{L.years[lang as keyof typeof L.years]}</span>
+              <span className="text-xs md:text-sm text-slate-400 font-light mt-1">{L.yearsDesc[lang as keyof typeof L.yearsDesc]}</span>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* --- STORY SECTION --- */}
+      <section className="py-24 lg:py-32 relative bg-slate-950">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            
             <div className="order-2 lg:order-1 space-y-6">
-              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white animate-fade-in-up">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/25 text-teal-300 text-xs font-mono">
+                <Sparkles className="h-3.5 w-3.5" /> Наследие и традиции
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 {translate("ourStory", "Наша история")}
               </h2>
-              <div className="h-1 w-20 bg-gradient-to-r from-teal-400 to-sky-500 rounded-full" />
+              <div className="h-1.5 w-24 bg-gradient-to-r from-teal-400 to-sky-500 rounded-full" />
               <p className="text-slate-300 text-lg leading-relaxed font-light">
                 {translate("storyDesc1", 'Основанный в 2010 году, "Отдых в Затоке" родился из мечты создать оазис спокойствия и роскоши в одном из самых красивых прибрежных городов Украины.')}
               </p>
@@ -144,40 +196,64 @@ export default function AboutClient({ lang }: AboutClientProps) {
               </p>
             </div>
             
-            <div className="order-1 lg:order-2 relative aspect-[4/3] rounded-[2rem] overflow-hidden border-4 border-slate-800 shadow-2xl group hover:border-teal-400/50 transition-all duration-500">
+            <div className="order-1 lg:order-2 relative aspect-[4/3] rounded-[2.5rem] overflow-hidden border-4 border-slate-900 shadow-2xl group transition-all duration-500 hover:border-teal-400/50">
               {aboutImage && (
                 <Image 
                   src={aboutImage.imageUrl} 
                   alt={aboutImage.description}
                   fill
-                  className="object-cover transition-smooth group-hover:scale-105"
+                  className="object-cover transition-all duration-700 group-hover:scale-105 group-hover:rotate-1"
                   data-ai-hint={aboutImage.imageHint}
                 />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent z-10" />
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* MISSION & VALUES */}
-      <section className="py-20 lg:py-28 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <div className="absolute top-10 right-10 animate-float">
-            <Waves className="h-40 w-40 text-teal-300/20" />
+      {/* --- TIMELINE HISTORY --- */}
+      <section className="py-20 bg-slate-900/40 border-y border-white/5 relative">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-extrabold tracking-tight text-white flex items-center justify-center gap-2.5">
+              <Milestone className="h-6 w-6 text-teal-400" />
+              {L.history[lang as keyof typeof L.history]}
+            </h2>
+            <div className="h-1 w-16 bg-teal-400 mx-auto mt-4 rounded-full" />
           </div>
-          <div className="absolute bottom-10 left-10 animate-float-slow" style={{ animationDelay: "2s" }}>
-            <Waves className="h-32 w-32 text-sky-300/20" />
-          </div>
-          <div className="absolute top-1/3 left-1/3 animate-float opacity-10" style={{ animationDelay: '3s' }}>
-            <Anchor className="h-28 w-28 text-teal-400" />
+
+          <div className="relative border-l border-teal-500/30 ml-4 md:ml-32 space-y-12">
+            {timelineEvents.map((event, idx) => (
+              <div key={event.year} className="relative pl-8 md:pl-12 group">
+                {/* Year dot indicator */}
+                <div className="absolute -left-2 top-1.5 h-4 w-4 rounded-full bg-slate-950 border-2 border-teal-400 group-hover:bg-teal-400 transition-colors z-20 shadow-[0_0_8px_rgba(45,212,191,0.5)]" />
+                
+                {/* Desktop Absolute Year display */}
+                <span className="hidden md:block absolute -left-28 top-0 text-xl font-extrabold text-teal-400 font-mono tracking-tight">
+                  {event.year}
+                </span>
+
+                <div className="bg-slate-950/60 border border-white/5 p-6 rounded-2xl group-hover:border-teal-500/20 transition-all hover:bg-slate-950/80">
+                  <span className="inline-block md:hidden text-lg font-bold text-teal-300 font-mono mb-2">{event.year}</span>
+                  <p className="text-slate-200 text-lg font-light leading-relaxed">
+                    {event[lang as keyof typeof event] || event.ru}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
+      </section>
 
+      {/* --- MISSION & VALUES --- */}
+      <section className="py-20 lg:py-28 bg-gradient-to-b from-slate-950 via-slate-900/60 to-slate-950 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
             
-            <div className="p-8 md:p-10 rounded-3xl glass-card-dark shadow-xl border border-white/10 space-y-4 hover-lift transition-smooth hover:border-teal-400/40">
+            <div className="p-8 md:p-10 rounded-3xl glass-card-dark shadow-2xl border border-white/10 space-y-4 hover-lift transition-smooth hover:border-teal-400/40 relative overflow-hidden">
+              <div className="absolute top-0 right-0 h-24 w-24 bg-teal-500/5 rounded-full blur-2xl pointer-events-none" />
               <div className="h-12 w-12 rounded-2xl bg-teal-500/20 flex items-center justify-center text-teal-300 mb-4 shadow-inner">
                 <Compass className="h-6 w-6" />
               </div>
@@ -187,9 +263,10 @@ export default function AboutClient({ lang }: AboutClientProps) {
               </p>
             </div>
 
-            <div className="p-8 md:p-10 rounded-3xl glass-card-dark shadow-xl border border-white/10 space-y-4 hover-lift transition-smooth hover:border-amber-400/40">
+            <div className="p-8 md:p-10 rounded-3xl glass-card-dark shadow-2xl border border-white/10 space-y-4 hover-lift transition-smooth hover:border-amber-400/40 relative overflow-hidden">
+              <div className="absolute top-0 right-0 h-24 w-24 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
               <div className="h-12 w-12 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-300 mb-4 shadow-inner">
-                <Sun className="h-6 w-6" />
+                <Award className="h-6 w-6" />
               </div>
               <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">{translate("ourValues", "Наши ценности")}</h2>
               <ul className="text-slate-300 space-y-3 font-light text-base md:text-lg">
@@ -212,7 +289,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
         </div>
       </section>
 
-      {/* TEAM SECTION */}
+      {/* --- TEAM SECTION --- */}
       <section className="py-20 lg:py-28 bg-slate-950">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -230,7 +307,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
               const memberImage = PlaceHolderImages.find(p => p.id === member.imageId);
               return (
                 <div key={member.name} className="flex flex-col items-center text-center p-8 rounded-3xl glass-card-dark border border-white/10 shadow-2xl hover-lift transition-smooth group hover:border-teal-400/50">
-                  <div className="relative w-36 h-36 rounded-full overflow-hidden mb-6 border-4 border-slate-800 shadow-md group-hover:border-teal-400/50 transition-colors">
+                  <div className="relative w-36 h-36 rounded-full overflow-hidden mb-6 border-4 border-slate-900 shadow-md group-hover:border-teal-400/50 transition-colors">
                     {memberImage && (
                       <Image
                         src={memberImage.imageUrl}
@@ -242,7 +319,10 @@ export default function AboutClient({ lang }: AboutClientProps) {
                     )}
                   </div>
                   <h3 className="text-xl font-bold text-white">{member.name}</h3>
-                  <p className="text-teal-300 font-medium mt-1">{translate(member.roleKey, member.roleDefault)}</p>
+                  <p className="text-teal-300 font-semibold mt-1">{translate(member.roleKey, member.roleDefault)}</p>
+                  <p className="text-slate-400 text-sm italic font-light mt-4 px-2 line-clamp-2">
+                    {member.quote}
+                  </p>
                 </div>
               );
             })}
@@ -250,7 +330,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
         </div>
       </section>
 
-      {/* AMENITIES SECTION */}
+      {/* --- AMENITIES SECTION --- */}
       <section className="py-20 lg:py-28 bg-slate-900/50 border-t border-slate-900 relative overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
