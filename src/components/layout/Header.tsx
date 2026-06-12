@@ -57,6 +57,7 @@ export default function Header() {
     { href: "/about", label: t("about") },
     { href: "/booking", label: t("booking") },
     { href: "/blog", label: t("blog") },
+    { href: "/quiz", label: t("quiz") },
   ];
 
   const getLanguageHref = (lang: string) => {
@@ -107,7 +108,7 @@ export default function Header() {
       
       {/* Light shimmer line effect */}
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-sky-400/30 to-transparent -z-10" />
-
+ 
       <div className="container relative mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         {/* Brand / Logo */}
         <Link
@@ -122,7 +123,7 @@ export default function Header() {
             {t("brandName")}
           </span>
         </Link>
-
+ 
         {/* Desktop Navigation Capsule */}
         <nav className="hidden lg:flex items-center gap-1.5 bg-slate-900/60 border border-white/10 px-2 py-1.5 rounded-full backdrop-blur-xl shadow-lg">
           {navLinks.map((link) => {
@@ -133,7 +134,7 @@ export default function Header() {
                 key={link.href}
                 href={localizedHref}
                 className={cn(
-                  "text-xs uppercase tracking-widest font-bold transition-all duration-300 px-4 py-2 rounded-full",
+                  "text-[10px] uppercase tracking-wide font-bold transition-all duration-300 px-3 py-1 rounded-full",
                   isActive
                     ? "text-slate-950 bg-gradient-to-r from-teal-300 to-sky-300 shadow-[0_0_16px_rgba(45,212,191,0.3)] font-extrabold"
                     : "text-slate-300 hover:text-white hover:bg-white/5"
@@ -147,7 +148,7 @@ export default function Header() {
             <Link
               href="/admin"
               className={cn(
-                "text-xs uppercase tracking-widest font-bold transition-all duration-300 px-4 py-2 rounded-full",
+                "text-[10px] uppercase tracking-wide font-bold transition-all duration-300 px-3 py-1 rounded-full",
                 pathname === "/admin"
                   ? "text-slate-950 bg-gradient-to-r from-teal-300 to-sky-300 shadow-[0_0_16px_rgba(45,212,191,0.3)] font-extrabold"
                   : "text-slate-300 hover:text-white hover:bg-white/5"
