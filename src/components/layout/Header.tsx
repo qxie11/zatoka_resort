@@ -62,7 +62,11 @@ export default function Header() {
       {(["uk", "ru", "en"] as const).map((lang) => (
         <button
           key={lang}
-          onClick={() => i18n.changeLanguage(lang)}
+          onClick={async () => {
+            await i18n.changeLanguage(lang);
+            document.cookie = `lang=${lang}; path=/; max-age=31536000; SameSite=Lax`;
+            router.refresh();
+          }}
           className={cn(
             "px-2.5 py-1 rounded-lg transition-all uppercase duration-300 relative text-xs",
             currentLang.startsWith(lang)

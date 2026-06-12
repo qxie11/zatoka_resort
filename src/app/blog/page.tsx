@@ -136,7 +136,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             <span>{translations.blogTitle}</span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md">
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md py-2 px-1">
             {translations.blogTitle}
           </h1>
           <WavyUnderline colorClassName="text-teal-300" />
@@ -229,7 +229,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                           {post.readTime} {translations.readTimeSuffix}
                         </span>
                       </div>
-                      <h2 className="text-xl font-bold text-white group-hover:text-teal-300 transition-colors line-clamp-2">
+                      <h2 className="text-xl font-bold text-white group-hover:text-teal-300 transition-colors">
                         {title}
                       </h2>
                       <p className="text-slate-300 text-sm font-light leading-relaxed line-clamp-3">
