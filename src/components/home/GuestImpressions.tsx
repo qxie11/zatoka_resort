@@ -235,18 +235,20 @@ export default function GuestImpressions() {
               </div>
 
               {/* Dots indicator */}
-              <div className="flex items-center justify-center gap-2 mt-8">
+              <div className="flex items-center justify-center mt-6 h-12">
                 {reviews.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => setCurrentIndex(i)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                    className="h-12 w-12 flex items-center justify-center group focus:outline-none -mx-2"
+                    aria-label={`Go to review ${i + 1}`}
+                  >
+                    <span className={`h-1.5 rounded-full transition-all duration-300 ${
                       i === currentIndex
                         ? "w-6 bg-amber-400"
-                        : "w-1.5 bg-slate-600 hover:bg-slate-500"
-                    }`}
-                    aria-label={`Go to review ${i + 1}`}
-                  />
+                        : "w-1.5 bg-slate-600 group-hover:bg-slate-500"
+                    }`} />
+                  </button>
                 ))}
               </div>
             </div>

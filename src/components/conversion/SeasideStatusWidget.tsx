@@ -92,7 +92,7 @@ export default function SeasideStatusWidget({ lang }: SeasideStatusWidgetProps) 
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
           </span>
-          <h4 className="font-extrabold text-sm uppercase tracking-widest text-slate-300">{current.title}</h4>
+          <p className="font-extrabold text-sm uppercase tracking-widest text-slate-300">{current.title}</p>
         </div>
         <span className="text-xs font-mono text-teal-300/80">{time}</span>
       </div>
@@ -148,7 +148,7 @@ export default function SeasideStatusWidget({ lang }: SeasideStatusWidgetProps) 
       <div className="p-4 rounded-2xl bg-gradient-to-br from-teal-500/5 to-sky-500/5 border border-teal-500/10 flex gap-3">
         <Sparkles className="h-5 w-5 text-teal-300 shrink-0 mt-0.5 animate-pulse" />
         <div className="space-y-1">
-          <h5 className="text-xs font-bold text-teal-300">{current.recommendationTitle}</h5>
+          <p className="text-xs font-bold text-teal-300">{current.recommendationTitle}</p>
           <p className="text-xs text-slate-300 font-light leading-relaxed">{current.recommendationText}</p>
         </div>
       </div>

@@ -127,7 +127,7 @@ export function SeasonBanner() {
           {/* CTA Button */}
           <Link
             href="/booking"
-            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white text-orange-600 hover:bg-orange-50 hover:text-orange-700 shadow-sm text-[9px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 shrink-0"
+            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white text-orange-800 hover:bg-orange-50 hover:text-orange-900 shadow-sm text-[9px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 shrink-0"
           >
             <CalendarDays className="h-3 w-3 hidden xs:inline" />
             {t("selectDates", "Выбрать даты")}
