@@ -122,7 +122,7 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
           </button>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+        <div className="absolute bottom-0 left-0 right-0 z-40 pointer-events-none">
           <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-16 md:h-24 fill-slate-950">
             <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-40 fill-sky-200/20" />
             <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
