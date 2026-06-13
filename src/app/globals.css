@@ -584,6 +584,17 @@
   .animate-float {
     animation: float 5s ease-in-out infinite;
   }
+
+  /* Scroll mouse dot animation */
+  @keyframes scroll-dot {
+    0% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(6px); opacity: 0.3; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  .animate-scroll {
+    animation: scroll-dot 2s ease-in-out infinite;
+  }
 }
 
 /* Custom styles for ReactMarkdown prose container to guarantee paragraph spacing */
