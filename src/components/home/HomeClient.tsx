@@ -91,8 +91,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
   return (
     <div className="flex flex-col min-h-dvh bg-slate-950 text-slate-100">
       <main className="flex-1">
-        {/* HERO SECTION */}
-        <section className="relative w-full min-h-[90vh] lg:min-h-screen flex items-center overflow-hidden bg-slate-900 py-16 lg:py-0">
+        <section className="relative w-full min-h-[90vh] lg:min-h-screen flex items-center overflow-hidden bg-slate-950 py-16 lg:py-0">
           <OceanSceneClient />
 
           {/* Dark gradient overlays */}
@@ -207,7 +206,10 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
  
               {/* RIGHT COLUMN: Premium Float Image */}
               <div className="lg:col-span-5 relative flex items-center justify-center animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards] select-none">
-                <div className="relative w-full max-w-[380px] aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(20,184,166,0.15)] group hover:border-teal-400/40 transition-all duration-700 hover:shadow-[0_0_60px_rgba(20,184,166,0.25)] bg-slate-950">
+                <div 
+                  className="relative w-full max-w-[380px] aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(20,184,166,0.15)] group hover:border-teal-400/40 transition-all duration-700 hover:shadow-[0_0_60px_rgba(20,184,166,0.25)] bg-slate-950"
+                  style={{ aspectRatio: "4/5" }}
+                >
                   <Image
                     src="/hero-beach.png"
                     alt="Beautiful Black Sea Beach"

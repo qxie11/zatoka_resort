@@ -25,8 +25,7 @@ export default function OceanScene() {
       powerPreference: "high-performance"
     });
 
-    // Оптимизация: Слегка снижаем разрешение рендера для сильного прироста FPS
-    const dpr = Math.min(window.devicePixelRatio, 1.5) * 0.75;
+    const dpr = Math.min(window.devicePixelRatio, 2);
     renderer.setPixelRatio(dpr);
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
     renderer.autoClear = false;
@@ -227,10 +226,19 @@ export default function OceanScene() {
               pow(smoothstep(0.0,-0.02,dir.y),0.2));
       }
 
+      float ditherHash(vec2 p) {
+          return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+      }
+
       void main() {
           vec2 fragCoord = gl_FragCoord.xy;
           float time = iTime * 0.3 + iMouse.x * 0.001;
           vec3 color = getPixel(fragCoord, time);
+          
+          // Dithering to break up gradient banding
+          float dither = ditherHash(fragCoord) - 0.5;
+          color += dither / 255.0;
+          
           gl_FragColor = vec4(pow(color,vec3(0.65)), 1.0);
       }
     `;
