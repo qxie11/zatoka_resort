@@ -13,6 +13,7 @@ import { WavyUnderline } from '@/components/ui/wavy-underline';
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { amenities } from "@/lib/data";
 import i18n from "@/lib/i18n";
+import BackgroundBubbles from "@/components/decorative/BackgroundBubbles";
 
 const iconMap: { [key: string]: React.FC<LucideProps> } = {
   Waves,
@@ -122,6 +123,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
 
         {/* Floating Premium Light Orbs and Waves */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+          <BackgroundBubbles count={12} deepCount={6} />
           <div className="absolute top-1/4 -left-12 w-96 h-96 rounded-full bg-teal-500/10 blur-[120px] animate-pulse" />
           <div className="absolute bottom-1/4 -right-12 w-96 h-96 rounded-full bg-amber-500/10 blur-[120px] animate-pulse" style={{ animationDelay: "2s" }} />
 
@@ -180,7 +182,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
       </section>
 
       {/* --- STATS COUNTER GRID --- */}
-      <section id="stats-section" className="relative pt-12 pb-16 z-30 -mt-6 scroll-mt-20">
+      <section id="stats-section" className="relative pt-12 pb-24 z-30 -mt-6 scroll-mt-20 overflow-hidden bg-slate-950">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
 
@@ -210,10 +212,19 @@ export default function AboutClient({ lang }: AboutClientProps) {
 
           </div>
         </div>
+
+        {/* Elegant Wave transition */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-950 scale-x-[-1]">
+            <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-teal-200/10" />
+            <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
+          </svg>
+        </div>
       </section>
 
       {/* --- STORY SECTION --- */}
-      <section className="py-24 lg:py-32 relative bg-slate-950">
+      <section className="py-24 lg:py-32 relative bg-slate-950 overflow-hidden">
+        <BackgroundBubbles count={10} deepCount={4} />
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
@@ -248,10 +259,18 @@ export default function AboutClient({ lang }: AboutClientProps) {
 
           </div>
         </div>
+
+        {/* Elegant Wave transition */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-950">
+            <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-sky-200/10" />
+            <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
+          </svg>
+        </div>
       </section>
 
       {/* --- TIMELINE HISTORY --- */}
-      <section className="py-20 bg-slate-900/40 border-y border-white/5 relative">
+      <section className="py-24 bg-slate-950 relative overflow-hidden">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-extrabold tracking-tight text-white flex items-center justify-center gap-2.5">
@@ -282,10 +301,19 @@ export default function AboutClient({ lang }: AboutClientProps) {
             ))}
           </div>
         </div>
+
+        {/* Elegant Wave transition */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-950 scale-x-[-1]">
+            <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-teal-200/10" />
+            <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
+          </svg>
+        </div>
       </section>
 
       {/* --- MISSION & VALUES --- */}
-      <section className="py-20 lg:py-28 bg-gradient-to-b from-slate-950 via-slate-900/60 to-slate-950 relative overflow-hidden">
+      <section className="py-20 lg:py-28 bg-slate-950 relative overflow-hidden">
+        <BackgroundBubbles count={8} deepCount={4} />
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
 
@@ -324,10 +352,19 @@ export default function AboutClient({ lang }: AboutClientProps) {
 
           </div>
         </div>
+
+        {/* Elegant Wave transition */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-950">
+            <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-sky-200/10" />
+            <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
+          </svg>
+        </div>
       </section>
 
       {/* --- TEAM SECTION --- */}
-      <section className="py-20 lg:py-28 bg-slate-950">
+      <section className="py-20 lg:py-28 bg-slate-950 relative overflow-hidden">
+        <BackgroundBubbles count={10} deepCount={5} />
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white">
@@ -365,10 +402,18 @@ export default function AboutClient({ lang }: AboutClientProps) {
             })}
           </div>
         </div>
+
+        {/* Elegant Wave transition */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-950 scale-x-[-1]">
+            <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-teal-200/10" />
+            <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
+          </svg>
+        </div>
       </section>
 
       {/* --- AMENITIES SECTION --- */}
-      <section className="py-20 lg:py-28 bg-slate-900/50 border-t border-slate-900 relative overflow-hidden">
+      <section className="py-24 lg:py-32 bg-slate-950 relative overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white">
@@ -400,6 +445,14 @@ export default function AboutClient({ lang }: AboutClientProps) {
               );
             })}
           </div>
+        </div>
+
+        {/* Elegant Wave transition */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-950">
+            <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-sky-200/10" />
+            <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
+          </svg>
         </div>
       </section>
     </div>

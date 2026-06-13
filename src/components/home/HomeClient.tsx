@@ -37,6 +37,7 @@ import { amenities } from "@/lib/data";
 import i18n from "@/lib/i18n";
 import SeasideStatusWidget from "@/components/conversion/SeasideStatusWidget";
 import RoomFinderQuiz from "@/components/conversion/RoomFinderQuiz";
+import BackgroundBubbles from "@/components/decorative/BackgroundBubbles";
 
 const iconMap: { [key: string]: React.FC<LucideProps> } = {
   Waves,
@@ -273,41 +274,9 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
         </section>
 
         {/* WELCOME SECTION */}
-        <section className="py-24 relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900">
+        <section className="py-24 relative overflow-hidden bg-slate-950">
           {/* Bubbles */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-            {[...Array(12)].map((_, i) => (
-              <span
-                key={i}
-                className="bubble-particle"
-                style={{
-                  left: `${i * 8.5 + 2}%`,
-                  width: `${(i % 3) * 6 + 6}px`,
-                  height: `${(i % 3) * 6 + 6}px`,
-                  '--bubble-duration': `${(i % 4) * 4 + 9}s`,
-                  '--bubble-delay': `${(i % 6) * 1.2}s`,
-                  '--bubble-drift': `${(i % 2 === 0 ? 1 : -1) * (i * 7 + 15)}px`,
-                } as React.CSSProperties}
-              />
-            ))}
-          </div>
-
-          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-            {[...Array(8)].map((_, i) => (
-              <span
-                key={i}
-                className="deep-particle"
-                style={{
-                  left: `${i * 13 + 5}%`,
-                  width: `${3 + (i % 3)}px`,
-                  height: `${3 + (i % 3)}px`,
-                  '--bubble-duration': `${6 + i * 1.5}s`,
-                  '--bubble-delay': `${i * 0.8}s`,
-                  '--bubble-drift': `${(i % 2 === 0 ? 1 : -1) * 20}px`,
-                } as React.CSSProperties}
-              />
-            ))}
-          </div>
+          <BackgroundBubbles count={12} deepCount={8} />
 
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute top-1/2 left-5 animate-current">
@@ -362,6 +331,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
 
         {/* WHY CHOOSE US SECTION */}
         <section className="py-24 bg-slate-950 relative overflow-hidden">
+          <BackgroundBubbles count={10} deepCount={5} />
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <ScrollReveal variant="fade-up">
@@ -450,6 +420,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
 
         {/* ROOM FINDER QUIZ SECTION */}
         <section className="py-16 bg-slate-950 relative overflow-hidden">
+          <BackgroundBubbles count={8} deepCount={4} />
           <div className="container mx-auto px-4 relative z-10">
             <RoomFinderQuiz rooms={rooms} lang={lang} />
           </div>
@@ -457,6 +428,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
 
         {/* FEATURED ROOMS SECTION */}
         <section className="py-24 bg-slate-950 relative overflow-hidden">
+          <BackgroundBubbles count={12} deepCount={6} />
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-60">
             <svg
               className="absolute animate-fish w-10 h-6 text-teal-900/60 fill-current"
@@ -495,7 +467,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
           </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-900">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-950">
               <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-40 fill-sky-200/20" />
               <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
             </svg>
@@ -503,7 +475,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
         </section>
 
         {/* HOTEL AMENITIES */}
-        <section className="py-24 bg-slate-900 relative overflow-hidden">
+        <section className="py-24 bg-slate-950 relative overflow-hidden">
           <div className="absolute top-10 right-10 w-64 h-64 rounded-full bg-teal-500/5 animate-jellyfish pointer-events-none" />
           <div className="absolute bottom-20 left-5 w-40 h-40 rounded-full bg-sky-500/5 animate-jellyfish pointer-events-none" style={{ animationDelay: '3s' }} />
           <div className="absolute top-1/3 right-12 animate-current opacity-10 pointer-events-none" style={{ animationDelay: '1s' }}>
@@ -515,22 +487,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
             <Anchor className="h-24 w-24 text-sky-300/30" />
           </div>
 
-          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-            {[...Array(8)].map((_, i) => (
-              <span
-                key={i}
-                className="bubble-particle"
-                style={{
-                  left: `${i * 13 + 3}%`,
-                  width: `${5 + (i % 4) * 3}px`,
-                  height: `${5 + (i % 4) * 3}px`,
-                  '--bubble-duration': `${10 + i * 2}s`,
-                  '--bubble-delay': `${i * 1.5}s`,
-                  '--bubble-drift': `${(i % 2 === 0 ? 1 : -1) * 30}px`,
-                } as React.CSSProperties}
-              />
-            ))}
-          </div>
+          <BackgroundBubbles count={10} deepCount={6} />
 
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
@@ -606,22 +563,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
             </svg>
           </div>
 
-          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-            {[...Array(10)].map((_, i) => (
-              <span
-                key={i}
-                className="bubble-particle"
-                style={{
-                  left: `${i * 10 + 3}%`,
-                  width: `${4 + (i % 5) * 4}px`,
-                  height: `${4 + (i % 5) * 4}px`,
-                  '--bubble-duration': `${8 + i * 2.5}s`,
-                  '--bubble-delay': `${i * 1.1}s`,
-                  '--bubble-drift': `${(i % 2 === 0 ? 1 : -1) * (i * 8 + 20)}px`,
-                } as React.CSSProperties}
-              />
-            ))}
-          </div>
+          <BackgroundBubbles count={12} deepCount={6} />
           
           <div className="container mx-auto px-4 text-center relative z-10 space-y-6">
             <ScrollReveal variant="tide-in">

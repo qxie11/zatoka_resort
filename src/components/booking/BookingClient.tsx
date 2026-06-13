@@ -3,12 +3,13 @@
 import Image from "next/image";
 import { Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Compass, Anchor, Sparkles, ChevronDown } from "lucide-react";
+import { Compass, Anchor, Sparkles, ChevronDown, Waves, Star } from "lucide-react";
 import { WavyUnderline } from "@/components/ui/wavy-underline";
 import SuccessMessage from "@/app/[lang]/booking/components/SuccessMessage";
 import BookingPageClient from "@/app/[lang]/booking/components/BookingPageClient";
 import type { Room, Booking } from "@/lib/types";
 import i18n from "@/lib/i18n";
+import BackgroundBubbles from "@/components/decorative/BackgroundBubbles";
 
 interface BookingClientProps {
   rooms: Room[];
@@ -47,7 +48,7 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-teal-500/30">
       {/* PREMIUM HERO SECTION */}
-      <section className="relative min-h-[75vh] flex flex-col items-center justify-center pt-24 pb-32 overflow-hidden bg-slate-950 text-center">
+      <section className="relative min-h-[60vh] flex flex-col items-center justify-center pt-24 pb-48 lg:pt-32 lg:pb-56 overflow-hidden bg-slate-950 text-white text-center">
         {/* Background Image with Cinematic Grading */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -55,76 +56,73 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
             alt="Luxury resort booking"
             fill
             quality={100}
-            className="object-cover scale-105 animate-float-slow opacity-60 mix-blend-luminosity"
+            className="object-cover scale-105 animate-float-slow opacity-60 brightness-[0.45]"
             priority
           />
-          <div className="absolute inset-0 bg-slate-950/60" />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-slate-950" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-teal-900/20 via-transparent to-slate-950/90" />
+          {/* Complex Premium Gradient Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/50 to-slate-950" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-teal-500/10 via-transparent to-transparent opacity-80" />
+
+          {/* Animated Luxury Gridlines Overlay */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-35" />
         </div>
 
         {/* Floating Holographic Elements */}
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden mix-blend-screen">
-          <div className="absolute top-[20%] left-[10%] animate-float opacity-20 blur-[1px]">
-            <Anchor className="h-24 w-24 text-teal-500/30 stroke-[1]" />
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+          <BackgroundBubbles count={12} deepCount={6} />
+          <div className="absolute top-1/4 -left-12 w-96 h-96 rounded-full bg-teal-500/10 blur-[120px] animate-pulse" />
+          <div className="absolute bottom-1/4 -right-12 w-96 h-96 rounded-full bg-amber-500/10 blur-[120px] animate-pulse" style={{ animationDelay: "2s" }} />
+
+          <div className="absolute top-12 left-10 animate-float opacity-20">
+            <Waves className="h-28 w-28 text-teal-400" />
           </div>
-          <div className="absolute bottom-[30%] right-[15%] animate-float-slow opacity-20 blur-[2px]" style={{ animationDelay: "2s" }}>
-            <Compass className="h-32 w-32 text-sky-400/20 stroke-[0.5]" />
+          <div className="absolute bottom-12 right-10 animate-float-slow opacity-20" style={{ animationDelay: "3s" }}>
+            <Anchor className="h-24 w-24 text-sky-400" />
           </div>
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-[100px] animate-pulse" />
-          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-sky-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "3s" }} />
         </div>
 
-        <div className="relative container mx-auto px-4 z-10 flex flex-col items-center mt-10">
+        <div className="relative container mx-auto px-4 z-10 flex flex-col items-center">
 
-          {/* Glassmorphism Premium Badge */}
-          <div className="group relative inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl shadow-[0_0_30px_rgba(45,212,191,0.15)] animate-fade-in mb-8 transition-all hover:bg-white/10 hover:border-teal-500/30 hover:shadow-[0_0_40px_rgba(45,212,191,0.3)] cursor-default">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-teal-500/20 to-sky-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative flex items-center justify-center">
-              <span className="absolute w-2 h-2 rounded-full bg-teal-400 animate-ping opacity-75" />
-              <span className="relative w-2 h-2 rounded-full bg-teal-300" />
-            </div>
-            <span className="relative text-xs font-bold text-slate-200 uppercase tracking-[0.2em] flex items-center gap-1.5">
-              {translate("bookingService", "VIP Бронирование")}
-              <Sparkles className="h-3.5 w-3.5 text-teal-400" />
-            </span>
+          {/* Glowing Luxury Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/90 border border-amber-500/30 text-xs font-semibold text-amber-300 uppercase tracking-[0.25em] animate-fade-in mb-8 shadow-[0_0_15px_rgba(245,158,11,0.15)] backdrop-blur-md">
+            <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400/20 animate-pulse" />
+            <span>EST. 2010 • VIP Booking</span>
           </div>
 
-          {/* High-End Typography */}
-          <div className="relative">
-            <div className="absolute -inset-4 bg-teal-500/20 blur-3xl rounded-full opacity-30 pointer-events-none" />
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md animate-fade-in-up py-2">
+          {/* Premium Headline */}
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.2] animate-fade-in-up py-4 flex flex-col gap-2 max-w-4xl overflow-visible">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-100 to-teal-200 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] py-2">
               {translate("bookingTitle", "Забронируйте номер")}
-            </h1>
-          </div>
+            </span>
+          </h1>
 
-          <div className="mt-4 opacity-80">
-            <WavyUnderline colorClassName="text-amber-300" />
-          </div>
+          <div className="w-32 h-[3px] bg-gradient-to-r from-transparent via-amber-400 to-transparent mt-4 mb-8 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
 
-          <p className="mt-8 max-w-2xl mx-auto text-slate-300 text-lg md:text-xl font-light leading-relaxed animate-fade-in-up tracking-wide [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards] drop-shadow-md">
+          {/* Luxury Description */}
+          <p className="max-w-2xl mx-auto text-slate-300 text-lg md:text-xl font-light leading-relaxed animate-fade-in-up tracking-wide [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards]">
             {translate("bookingDesc", "Погрузитесь в атмосферу абсолютного комфорта. Выберите даты для идеального отдыха на первой линии.")}
           </p>
         </div>
 
-        <div className="absolute bottom-6 md:bottom-12 left-0 w-full flex justify-center z-40">
+        {/* Стопроцентно отцентрированная кнопка скролла с правильным отступом снизу */}
+        <div className="absolute bottom-20 md:bottom-28 left-0 w-full flex justify-center z-30 pointer-events-none">
           <button
             onClick={scrollToBooking}
-            className="group flex flex-col items-center gap-2.5 focus:outline-none"
+            className="flex flex-col items-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity animate-bounce cursor-pointer focus:outline-none pointer-events-auto"
             aria-label={translate("scrollToBooking", "Прокрутить к бронированию")}
           >
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-teal-300/60 group-hover:text-amber-300 transition-colors duration-500 drop-shadow-md">
-              Scroll
-            </span>
-            <div className="relative flex justify-center w-6 h-11 rounded-full border border-white/20 bg-slate-950/60 backdrop-blur-md shadow-[0_0_15px_rgba(45,212,191,0.1)] group-hover:shadow-[0_0_30px_rgba(253,230,138,0.25)] group-hover:border-amber-300/50 transition-all duration-700">
-              <div className="w-1 h-2.5 mt-2 bg-teal-400 rounded-full animate-bounce group-hover:bg-amber-300 transition-colors duration-500 shadow-[0_0_8px_rgba(45,212,191,0.8)] group-hover:shadow-[0_0_10px_rgba(253,230,138,0.8)]" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-300 drop-shadow-md">Scroll</span>
+            <div className="w-5 h-9 rounded-full border border-slate-400/60 bg-slate-900/40 backdrop-blur-sm flex justify-center p-1 shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+              <div className="w-1 h-2 bg-amber-400 rounded-full animate-scroll shadow-[0_0_5px_rgba(245,158,11,0.8)]" />
             </div>
           </button>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 z-40 pointer-events-none">
+        {/* Elegant Wave transition */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
           <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-16 md:h-24 fill-slate-950">
-            <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-40 fill-sky-200/20" />
+            <path d="M0,60 C300,20 600,100 900,60 L1200,60 L1200,120 L0,120 Z" className="opacity-40 fill-teal-500/5" />
             <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
           </svg>
         </div>
