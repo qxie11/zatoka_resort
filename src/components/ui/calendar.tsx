@@ -2,7 +2,8 @@
 
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { DayPicker } from "react-day-picker"
+import { DayPicker, DayProps, useDayRender } from "react-day-picker"
+import { useTranslation } from "react-i18next"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
@@ -60,6 +61,46 @@ function Calendar({
         IconRight: ({ className, ...props }) => (
           <ChevronRight className={cn("h-4 w-4", className)} {...props} />
         ),
+        Day: (dayProps: DayProps) => {
+          const buttonRef = React.useRef<HTMLButtonElement>(null!)
+          const { activeModifiers, buttonProps, divProps, isButton } = useDayRender(
+            dayProps.date,
+            dayProps.displayMonth,
+            buttonRef
+          )
+          const { t } = useTranslation()
+
+          if (isButton) {
+            const isBooked = activeModifiers.booked
+            const isDayDisabled = activeModifiers.disabled
+            const titleText = isBooked ? t("dateAlreadyBooked", "Этот день уже забронирован") : undefined
+
+            // Destructure 'disabled' to prevent native disabled attribute
+            // and replace it with 'aria-disabled' for hover events
+            const { disabled, ...restProps } = buttonProps
+
+            return (
+              <button
+                ref={buttonRef}
+                {...restProps}
+                aria-disabled={disabled ? true : undefined}
+                title={titleText}
+                className={cn(buttonProps.className)}
+                onClick={(e) => {
+                  if (isDayDisabled) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return;
+                  }
+                  if (buttonProps.onClick) {
+                    buttonProps.onClick(e);
+                  }
+                }}
+              />
+            )
+          }
+          return <div {...divProps} />
+        }
       }}
       {...props}
     />
