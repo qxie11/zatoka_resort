@@ -191,13 +191,17 @@ export function DateRangePicker({
               locale={activeLocale}
               className="bg-slate-950 text-white border-0"
               classNames={{
-                day_selected: "gradient-sunset text-slate-950 font-bold shadow-md rounded-lg",
+                day_range_start: "day-range-start gradient-sunset text-slate-950 font-bold rounded-xl shadow-md z-30",
+                day_range_end: "day-range-end gradient-sunset text-slate-950 font-bold rounded-xl shadow-md z-30",
+                day_range_middle: "day-range-middle !bg-none !bg-transparent text-amber-100 font-semibold rounded-none hover:!bg-amber-500/20",
+                day_selected: "gradient-sunset text-slate-950 font-bold rounded-xl",
+                cell: "h-9 w-9 text-center text-sm p-0 relative [&:has(.day-range-start)]:rounded-l-xl [&:has(.day-range-end)]:rounded-r-xl [&:has([aria-selected])]:bg-amber-500/15 [&:has(.day-outside)]:bg-slate-900/40 first:[&:has([aria-selected])]:rounded-l-xl last:[&:has([aria-selected])]:rounded-r-xl focus-within:relative focus-within:z-20",
               }}
               modifiers={{
                 booked: disabledDates,
               }}
               modifiersClassNames={{
-                booked: "gradient-sunset text-slate-950 font-bold rounded-lg",
+                booked: "opacity-40 line-through text-slate-500 bg-slate-900/30 cursor-not-allowed",
               }}
             />
           </PopoverPrimitive.Content>
