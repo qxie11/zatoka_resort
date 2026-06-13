@@ -7,7 +7,7 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, ArrowLeft, ArrowRight, Trash2, Upload, Link as LinkIcon, Image as ImageIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -53,11 +53,17 @@ interface RoomFormProps {
   room: Room | null;
 }
 
+interface RoomFormImage {
+  id: string;
+  url: string;
+  file?: File;
+}
+
 export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomFormProps) {
   const { toast } = useToast();
-  const [mainImageFile, setMainImageFile] = useState<File | null>(null);
-  const [additionalImageFiles, setAdditionalImageFiles] = useState<File[]>([]);
+  const [images, setImages] = useState<RoomFormImage[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [urlInput, setUrlInput] = useState('');
 
   const form = useForm<RoomFormValues>({
     resolver: zodResolver(roomSchema),
@@ -74,8 +80,30 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
     }
   });
 
+  const clearLocalUrls = (imgs: RoomFormImage[]) => {
+    imgs.forEach(img => {
+      if (img.file && img.url.startsWith('blob:')) {
+        URL.revokeObjectURL(img.url);
+      }
+    });
+  };
+
   useEffect(() => {
+    // Clean up previous URLs
+    clearLocalUrls(images);
+
     if (room) {
+      const initialImages: RoomFormImage[] = [];
+      if (room.imageUrl) {
+        initialImages.push({ id: "main-initial", url: room.imageUrl });
+      }
+      if (room.imageUrls && room.imageUrls.length > 0) {
+        room.imageUrls.forEach((url, idx) => {
+          initialImages.push({ id: `add-initial-${idx}`, url });
+        });
+      }
+      setImages(initialImages);
+
       form.reset({
           name: room.name,
           slug: room.slug || '',
@@ -87,9 +115,8 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
           imageUrls: room.imageUrls?.join(', ') || '',
           imageHint: room.imageHint
       });
-      setMainImageFile(null);
-      setAdditionalImageFiles([]);
     } else {
+      setImages([]);
       form.reset({
         name: '',
         slug: '',
@@ -101,42 +128,74 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         imageUrls: '',
         imageHint: ''
       });
-      setMainImageFile(null);
-      setAdditionalImageFiles([]);
     }
-  }, [room, form, isOpen]);
+  }, [room, isOpen]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      clearLocalUrls(images);
+    };
+  }, []);
+
+  const moveImage = (index: number, direction: 'up' | 'down') => {
+    const newImages = [...images];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex >= 0 && targetIndex < newImages.length) {
+      const temp = newImages[index];
+      newImages[index] = newImages[targetIndex];
+      newImages[targetIndex] = temp;
+      setImages(newImages);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    const newImages = [...images];
+    const removed = newImages.splice(index, 1)[0];
+    if (removed && removed.file && removed.url.startsWith('blob:')) {
+      URL.revokeObjectURL(removed.url);
+    }
+    setImages(newImages);
+  };
+
+  const handleAddFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      const newImages = files.map(file => ({
+        id: Math.random().toString(36).substring(7) + '-' + Date.now(),
+        url: URL.createObjectURL(file),
+        file
+      }));
+      setImages(prev => [...prev, ...newImages]);
+    }
+    e.target.value = ''; // Reset
+  };
+
+  const handleAddUrl = () => {
+    if (urlInput.trim()) {
+      setImages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(36).substring(7) + '-' + Date.now(),
+          url: urlInput.trim()
+        }
+      ]);
+      setUrlInput('');
+    }
+  };
 
   const handleFormSubmit = form.handleSubmit(async (data) => {
     setIsUploading(true);
     try {
-      let mainImagePath: string | undefined = data.imageUrl || undefined;
-      let additionalImagePaths: string[] = data.imageUrls
-        ? String(data.imageUrls).split(',').map(s => s.trim()).filter(Boolean)
-        : [];
+      const filesToUpload = images.filter(img => img.file);
+      const uploadedMap = new Map<string, string>();
 
-      if (mainImageFile) {
+      if (filesToUpload.length > 0) {
         const formData = new FormData();
-        formData.append('files', mainImageFile);
-        
-        const uploadResponse = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!uploadResponse.ok) {
-          throw new Error('Ошибка при загрузке основного изображения');
-        }
-
-        const uploadResult = await uploadResponse.json();
-        if (uploadResult.paths && uploadResult.paths.length > 0) {
-          mainImagePath = uploadResult.paths[0];
-        }
-      }
-
-      if (additionalImageFiles.length > 0) {
-        const formData = new FormData();
-        additionalImageFiles.forEach((file) => {
-          formData.append('files', file);
+        filesToUpload.forEach(img => {
+          if (img.file) {
+            formData.append('files', img.file);
+          }
         });
 
         const uploadResponse = await fetch('/api/upload', {
@@ -145,27 +204,32 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         });
 
         if (!uploadResponse.ok) {
-          throw new Error('Ошибка при загрузке дополнительных изображений');
+          throw new Error('Ошибка при загрузке изображений');
         }
 
         const uploadResult = await uploadResponse.json();
-        if (uploadResult.paths && uploadResult.paths.length > 0) {
-          additionalImagePaths.push(...uploadResult.paths);
+        if (uploadResult.paths && uploadResult.paths.length === filesToUpload.length) {
+          filesToUpload.forEach((img, idx) => {
+            uploadedMap.set(img.id, uploadResult.paths[idx]);
+          });
+        } else {
+          throw new Error('Ошибка при сохранении загруженных изображений');
         }
       }
+
+      const finalUrls = images.map(img => {
+        if (img.file) {
+          return uploadedMap.get(img.id) || '';
+        }
+        return img.url;
+      }).filter(Boolean);
+
+      const mainImagePath = finalUrls[0] || '';
+      const additionalImagePaths = finalUrls.slice(1);
 
       const amenitiesArray = Array.isArray(data.amenities) 
         ? data.amenities 
         : String(data.amenities).split(',').map(s => s.trim()).filter(Boolean);
-
-      if (!mainImagePath && additionalImagePaths.length > 0) {
-        mainImagePath = additionalImagePaths[0];
-        additionalImagePaths.shift();
-      }
-
-      if (room && !mainImagePath && !mainImageFile) {
-        mainImagePath = room.imageUrl;
-      }
 
       onSubmit({ 
         name: data.name,
@@ -174,17 +238,18 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         price: data.price,
         capacity: data.capacity,
         amenities: amenitiesArray,
-        imageUrl: mainImagePath || (room?.imageUrl || ''),
+        imageUrl: mainImagePath,
         imageUrls: additionalImagePaths,
         imageHint: data.imageHint || ''
       }, room?.id);
 
-      setMainImageFile(null);
-      setAdditionalImageFiles([]);
+      // Reset local urls state
+      clearLocalUrls(images);
+      setImages([]);
     } catch (error) {
       toast({
         title: "Ошибка",
-        description: error instanceof Error ? error.message : 'Ошибка при загрузке изображений',
+        description: error instanceof Error ? error.message : 'Ошибка при сохранении изменений',
         variant: "destructive",
       });
     } finally {
@@ -278,100 +343,136 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                  <Input id="amenities" {...form.register("amenities")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" />
                  {form.formState.errors.amenities && <p className="text-xs text-rose-500">{form.formState.errors.amenities.message}</p>}
              </div>
-            <div className="grid gap-2 bg-slate-900/40 p-4 rounded-2xl border border-white/10">
-                 <Label htmlFor="mainImage" className="font-semibold text-slate-300">Основное изображение</Label>
-                 <Input 
-                   id="mainImage" 
-                   type="file" 
-                   accept="image/*"
-                   onChange={(e) => {
-                     const file = e.target.files?.[0];
-                     if (file) {
-                       setMainImageFile(file);
-                       form.setValue("imageUrl", "");
-                     }
-                   }}
-                   className="bg-slate-900 border-white/10 text-white rounded-xl shadow-sm cursor-pointer file:bg-slate-800 file:border-r file:border-white/10 file:text-slate-300 hover:file:bg-slate-700"
-                 />
-                 {mainImageFile && (
-                   <p className="text-xs text-slate-400">
-                     Выбран: {mainImageFile.name}
-                   </p>
-                 )}
-                 {room?.imageUrl && !mainImageFile && (
-                   <p className="text-xs text-slate-400 truncate">
-                     Текущее: {room.imageUrl}
-                   </p>
-                 )}
-                 <div className="text-xs text-slate-400 mt-2">
-                   Или укажите прямую ссылку:
-                   <Input 
-                     type="text" 
-                     placeholder="https://..."
-                     className="mt-1.5 bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-10"
-                     {...form.register("imageUrl")} 
-                   />
-                 </div>
-                 {form.formState.errors.imageUrl && <p className="text-xs text-rose-500">{form.formState.errors.imageUrl.message}</p>}
-             </div>
-            <div className="grid gap-2 bg-slate-900/40 p-4 rounded-2xl border border-white/10">
-                 <Label htmlFor="additionalImages" className="font-semibold text-slate-300">Дополнительные изображения</Label>
-                 <Input 
-                   id="additionalImages" 
-                   type="file" 
-                   accept="image/*"
-                   multiple
-                   onChange={(e) => {
-                     const files = Array.from(e.target.files || []);
-                     if (files.length > 0) {
-                       setAdditionalImageFiles(files);
-                       form.setValue("imageUrls", "");
-                     }
-                   }}
-                   className="bg-slate-900 border-white/10 text-white rounded-xl shadow-sm cursor-pointer file:bg-slate-800 file:border-r file:border-white/10 file:text-slate-300 hover:file:bg-slate-700"
-                 />
-                 {additionalImageFiles.length > 0 && (
-                   <div className="text-xs text-slate-400 mt-1">
-                     Выбрано файлов: {additionalImageFiles.length}
-                     <ul className="list-disc list-inside mt-1">
-                       {additionalImageFiles.map((file, idx) => (
-                         <li key={idx} className="truncate">{file.name}</li>
-                       ))}
-                     </ul>
+            
+            <div className="grid gap-4 bg-slate-900/40 p-4 rounded-2xl border border-white/10">
+                 <Label className="font-semibold text-slate-300">Галерея изображений</Label>
+                 
+                 {images.length === 0 ? (
+                   <div className="flex flex-col items-center justify-center border border-dashed border-white/10 rounded-xl p-8 text-slate-500">
+                     <ImageIcon className="h-10 w-10 mb-2 stroke-[1.5]" />
+                     <p className="text-sm">Нет изображений. Загрузите файлы или добавьте по ссылке.</p>
+                   </div>
+                 ) : (
+                   <div className="grid grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-1">
+                     {images.map((img, idx) => (
+                       <div key={img.id} className="group relative flex flex-col bg-slate-950 border border-white/10 rounded-xl overflow-hidden shadow-md">
+                         <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
+                           <img 
+                             src={img.url} 
+                             alt={`Preview ${idx + 1}`}
+                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                           />
+                           {idx === 0 && (
+                             <span className="absolute top-2 left-2 bg-teal-500 text-slate-950 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                               Основное
+                             </span>
+                           )}
+                           {img.file && (
+                             <span className="absolute top-2 right-2 bg-sky-500/80 backdrop-blur-md text-white text-[10px] px-2 py-0.5 rounded-full shadow-sm">
+                               Файл
+                             </span>
+                           )}
+                         </div>
+                         <div className="flex items-center justify-between p-2 bg-slate-900/80 border-t border-white/5">
+                           <div className="flex gap-1">
+                             <Button
+                               type="button"
+                               variant="ghost"
+                               size="icon"
+                               onClick={() => moveImage(idx, 'up')}
+                               disabled={idx === 0}
+                               className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/5 disabled:opacity-30 rounded-lg"
+                             >
+                               <ArrowLeft className="h-4 w-4" />
+                             </Button>
+                             <Button
+                               type="button"
+                               variant="ghost"
+                               size="icon"
+                               onClick={() => moveImage(idx, 'down')}
+                               disabled={idx === images.length - 1}
+                               className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/5 disabled:opacity-30 rounded-lg"
+                             >
+                               <ArrowRight className="h-4 w-4" />
+                             </Button>
+                           </div>
+                           <Button
+                             type="button"
+                             variant="ghost"
+                             size="icon"
+                             onClick={() => removeImage(idx)}
+                             className="h-8 w-8 text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 rounded-lg"
+                           >
+                             <Trash2 className="h-4 w-4" />
+                           </Button>
+                         </div>
+                       </div>
+                     ))}
                    </div>
                  )}
-                 {room?.imageUrls && room.imageUrls.length > 0 && additionalImageFiles.length === 0 && (
-                   <div className="text-xs text-slate-400 mt-1">
-                     Текущие дополнительные: {room.imageUrls.length} шт.
+
+                 <div className="grid gap-3 pt-2">
+                   <div className="flex flex-col gap-1.5">
+                     <span className="text-xs text-slate-400 font-medium">Загрузить с компьютера</span>
+                     <div className="flex items-center gap-2">
+                       <Input 
+                         id="gallery-upload"
+                         type="file" 
+                         accept="image/*"
+                         multiple
+                         onChange={handleAddFiles}
+                         className="hidden"
+                       />
+                       <Button
+                         type="button"
+                         variant="outline"
+                         onClick={() => document.getElementById('gallery-upload')?.click()}
+                         className="w-full bg-slate-900 border-white/10 hover:bg-slate-800 text-slate-200 rounded-xl h-11 gap-2 border"
+                       >
+                         <Upload className="h-4 w-4" /> Выберите файлы
+                       </Button>
+                     </div>
                    </div>
-                 )}
-                 <div className="text-xs text-slate-400 mt-2">
-                   Или укажите прямые ссылки (через запятую):
-                   <Textarea 
-                     placeholder="ссылка_1, ссылка_2, ..."
-                     className="mt-1.5 bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm min-h-[60px]"
-                     rows={2}
-                     {...form.register("imageUrls")} 
-                   />
+
+                   <div className="flex flex-col gap-1.5 mt-1">
+                     <span className="text-xs text-slate-400 font-medium">Или добавить по ссылке</span>
+                     <div className="flex gap-2">
+                       <Input 
+                         type="text" 
+                         placeholder="https://..."
+                         value={urlInput}
+                         onChange={(e) => setUrlInput(e.target.value)}
+                         className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11"
+                       />
+                       <Button
+                         type="button"
+                         onClick={handleAddUrl}
+                         className="bg-slate-800 border border-white/10 hover:bg-slate-700 text-white rounded-xl h-11 px-4 shrink-0"
+                       >
+                         <LinkIcon className="h-4 w-4" />
+                       </Button>
+                     </div>
+                   </div>
                  </div>
-                 {form.formState.errors.imageUrls && <p className="text-xs text-rose-500">{form.formState.errors.imageUrls.message}</p>}
-             </div>
+            </div>
+
             <div className="grid gap-2">
                  <Label htmlFor="imageHint" className="font-semibold text-slate-300">Подсказка для AI (1-2 слова)</Label>
                  <Input id="imageHint" {...form.register("imageHint")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" />
                  {form.formState.errors.imageHint && <p className="text-xs text-rose-500">{form.formState.errors.imageHint.message}</p>}
              </div>
- 
-              <SheetFooter className="mt-6 border-t border-white/10 pt-4 gap-2">
-                 <SheetClose asChild>
-                     <Button type="button" variant="outline" disabled={isUploading} className="rounded-xl border-white/10 text-slate-300 hover:bg-white/5 h-11">Отмена</Button>
-                 </SheetClose>
-                 <Button type="submit" disabled={isUploading} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">
-                   {isUploading ? "Сохранение..." : "Сохранить номер"}
-                 </Button>
-              </SheetFooter>
-        </form>
-      </SheetContent>
-    </Sheet>
+  
+               <SheetFooter className="mt-6 border-t border-white/10 pt-4 gap-2">
+                  <SheetClose asChild>
+                      <Button type="button" variant="outline" disabled={isUploading} className="rounded-xl border-white/10 text-slate-300 hover:bg-white/5 h-11">Отмена</Button>
+                  </SheetClose>
+                  <Button type="submit" disabled={isUploading} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">
+                    {isUploading ? "Сохранение..." : "Сохранить номер"}
+                  </Button>
+               </SheetFooter>
+         </form>
+       </SheetContent>
+     </Sheet>
   );
 }
+
