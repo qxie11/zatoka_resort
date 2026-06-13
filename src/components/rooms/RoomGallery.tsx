@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from "@/components/ui/dialog";
 
 interface RoomGalleryProps {
@@ -155,6 +156,7 @@ export default function RoomGallery({ images, roomName }: RoomGalleryProps) {
       {/* --- LIGHTBOX DIALOG MODAL --- */}
       <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
         <DialogContent className="max-w-[95vw] md:max-w-5xl bg-slate-950/95 border border-slate-800 p-4 overflow-hidden rounded-3xl shadow-2xl z-50">
+          <DialogTitle className="sr-only">Просмотр галереи {roomName}</DialogTitle>
           
           <div className="relative w-full h-[70vh] flex items-center justify-center bg-slate-950/40 rounded-xl overflow-hidden">
             <img 
