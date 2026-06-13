@@ -27,14 +27,12 @@ const iconMap: { [key: string]: React.FC<LucideProps> } = {
 };
 
 const amenityKeyMap: { [key: string]: { name: string; desc: string } } = {
-  "Бассейн": { name: "pool", desc: "poolDesc" },
   "Бесплатный Wi-Fi": { name: "wifi", desc: "wifiDesc" },
-  "Ресторан": { name: "restaurant", desc: "restaurantDesc" },
-  "Частный пляж": { name: "privateBeach", desc: "privateBeachDesc" },
-  "Спа и оздоровление": { name: "spa", desc: "spaDesc" },
+  "Кондиционер": { name: "pool", desc: "poolDesc" },
+  "Уютная общая кухня": { name: "restaurant", desc: "restaurantDesc" },
+  "Зона барбекю / Мангал": { name: "roomService", desc: "roomServiceDesc" },
+  "Детская площадка": { name: "spa", desc: "spaDesc" },
   "Парковка": { name: "parking", desc: "parkingDesc" },
-  "Обслуживание номеров": { name: "roomService", desc: "roomServiceDesc" },
-  "Фитнес-центр": { name: "fitness", desc: "fitnessDesc" },
 };
 
 const teamMembers = [

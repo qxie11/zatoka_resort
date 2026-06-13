@@ -52,14 +52,12 @@ const iconMap: { [key: string]: React.FC<LucideProps> } = {
 
 // Map amenity names to their translation keys
 const amenityKeyMap: { [key: string]: string } = {
-  "Бассейн": "pool",
   "Бесплатный Wi-Fi": "wifi",
-  "Ресторан": "restaurant",
-  "Частный пляж": "privateBeach",
-  "Спа и оздоровление": "spa",
+  "Кондиционер": "pool",
+  "Уютная общая кухня": "restaurant",
+  "Зона барбекю / Мангал": "roomService",
+  "Детская площадка": "spa",
   "Парковка": "parking",
-  "Обслуживание номеров": "roomService",
-  "Фитнес-центр": "fitness",
 };
 
 interface HomeClientProps {
@@ -509,8 +507,8 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
               </ScrollReveal>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center stagger-children">
-              {amenities.slice(0, 8).map((amenity, index) => {
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-center stagger-children">
+              {amenities.map((amenity, index) => {
                 const Icon = iconMap[amenity.icon];
                 const translationKey = amenityKeyMap[amenity.name] || "";
                 const displayName = translationKey ? translate(translationKey, amenity.name) : amenity.name;
