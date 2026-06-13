@@ -103,6 +103,7 @@ model PromoCode {
   code      String   @unique
   discount  Int      // Percentage discount
   isActive  Boolean  @default(true)
+  isGift    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

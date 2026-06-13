@@ -12,6 +12,7 @@ interface PromoCode {
   code: string;
   discount: number;
   isActive: boolean;
+  isGift: boolean;
   createdAt: string;
 }
 
@@ -29,6 +30,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
   const [code, setCode] = useState("");
   const [discount, setDiscount] = useState<number>(5);
   const [isActive, setIsActive] = useState(true);
+  const [isGift, setIsGift] = useState(false);
 
   const { toast } = useToast();
 
@@ -55,6 +57,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
     setCode("");
     setDiscount(5);
     setIsActive(true);
+    setIsGift(false);
     setFormOpen(true);
   };
 
@@ -63,6 +66,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
     setCode(promo.code);
     setDiscount(promo.discount);
     setIsActive(promo.isActive);
+    setIsGift(promo.isGift ?? false);
     setFormOpen(true);
   };
 
@@ -87,6 +91,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
           code: code.trim(),
           discount,
           isActive,
+          isGift,
         }),
       });
 
@@ -119,6 +124,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
           code: promo.code,
           discount: promo.discount,
           isActive: !promo.isActive,
+          isGift: promo.isGift,
         }),
       });
       if (!res.ok) throw new Error("Failed to toggle");
@@ -234,6 +240,19 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
               </div>
             </div>
           </div>
+
+          <div className="flex items-center gap-4 py-2">
+            <label className="flex items-center gap-2.5 text-sm text-slate-300 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={isGift}
+                onChange={(e) => setIsGift(e.target.checked)}
+                className="h-4.5 w-4.5 rounded border-white/10 bg-slate-950/40 text-teal-400 focus:ring-teal-400 accent-teal-400 cursor-pointer"
+              />
+              <span className="font-medium">Подарочный промокод (показывается в подарке при выходе)</span>
+            </label>
+          </div>
+
           <div className="flex items-center gap-4 pt-2">
             <Button type="submit" disabled={loading} className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold rounded-xl flex items-center gap-2">
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
@@ -267,6 +286,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
                 <tr className="border-b border-white/10 bg-slate-950/50 text-slate-300 text-xs font-bold uppercase tracking-wider">
                   <th className="p-4 pl-6">Промокод</th>
                   <th className="p-4">Скидка (%)</th>
+                  <th className="p-4">Тип</th>
                   <th className="p-4">Статус</th>
                   <th className="p-4">Дата создания</th>
                   <th className="p-4 pr-6 text-right">Действия</th>
@@ -284,6 +304,17 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
                     </td>
                     <td className="p-4 font-semibold text-white">
                       {promo.discount}%
+                    </td>
+                    <td className="p-4">
+                      {promo.isGift ? (
+                        <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/25">
+                          Подарок
+                        </span>
+                      ) : (
+                        <span className="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-500/10 text-slate-300 border border-white/5">
+                          Обычный
+                        </span>
+                      )}
                     </td>
                     <td className="p-4">
                       <button

@@ -17,7 +17,7 @@ export async function GET() {
 // POST create or update
 export async function POST(req: Request) {
   try {
-    const { id, code, discount, isActive } = await req.json();
+    const { id, code, discount, isActive, isGift } = await req.json();
 
     if (!code || typeof discount !== "number") {
       return NextResponse.json({ error: "Code and discount are required" }, { status: 400 });
@@ -33,6 +33,7 @@ export async function POST(req: Request) {
           code: formattedCode,
           discount,
           isActive: isActive ?? true,
+          isGift: isGift ?? false,
         },
       });
       return NextResponse.json(updated);
@@ -43,6 +44,7 @@ export async function POST(req: Request) {
           code: formattedCode,
           discount,
           isActive: isActive ?? true,
+          isGift: isGift ?? false,
         },
       });
       return NextResponse.json(created, { status: 201 });

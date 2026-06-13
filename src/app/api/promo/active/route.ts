@@ -13,13 +13,14 @@ export async function GET() {
           code: "ZATOKAWAVE",
           discount: 5,
           isActive: true,
+          isGift: true,
         },
       });
     }
 
-    // Fetch the latest active promo code
+    // Fetch the latest active gift promo code
     const activePromo = await prisma.promoCode.findFirst({
-      where: { isActive: true },
+      where: { isActive: true, isGift: true },
       orderBy: { createdAt: "desc" },
     });
 
