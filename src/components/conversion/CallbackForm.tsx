@@ -29,22 +29,22 @@ export function CallbackForm() {
 
   const textMap = {
     ru: {
-      conciergeName: "Елена",
-      conciergeTitle: "Старший консьерж",
+      conciergeName: "Владимир",
+      conciergeTitle: "Администратор",
       status: "Онлайн",
       phoneError: "Пожалуйста, введите корректный номер телефона (минимум 9 цифр)",
       nameError: "Имя должно содержать не менее 2 букв",
     },
     uk: {
-      conciergeName: "Олена",
-      conciergeTitle: "Старший консьєрж",
+      conciergeName: "Володимир",
+      conciergeTitle: "Адміністратор",
       status: "Онлайн",
       phoneError: "Будь ласка, введіть коректний номер телефону (мінімум 9 цифр)",
       nameError: "Ім'я має містити не менше 2 букв",
     },
     en: {
-      conciergeName: "Elena",
-      conciergeTitle: "Head Concierge",
+      conciergeName: "Vladimir",
+      conciergeTitle: "Guesthouse Manager",
       status: "Online",
       phoneError: "Please enter a valid phone number (minimum 9 digits)",
       nameError: "Name must be at least 2 characters long",

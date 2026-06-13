@@ -36,9 +36,9 @@ const amenityKeyMap: { [key: string]: { name: string; desc: string } } = {
 };
 
 const teamMembers = [
-  { name: 'Олена Петренко', roleKey: 'roleGM', roleDefault: 'Генеральный менеджер', imageId: 'staff-1', quote: '«Создаем уют и заботу в каждой детали вашего отдыха»' },
-  { name: 'Михайло Коваль', roleKey: 'roleConcierge', roleDefault: 'Начальник консьерж-службы', imageId: 'staff-2', quote: '«Ваш комфорт — наш главный приоритет 24/7»' },
-  { name: 'Андрій Шевченко', roleKey: 'roleChef', roleDefault: 'Шеф-повар', imageId: 'staff-3', quote: '«Морские вкусы и черноморская кухня в авторском исполнении»' },
+  { name: 'Владимир Петренко', nameUk: 'Володимир Петренко', nameEn: 'Vladimir Petrenko', roleKey: 'roleGM', roleDefault: 'Владелец гостевого дома', imageId: 'staff-1', quote: '«Создаем уют и заботу в каждой детали вашего отдыха»' },
+  { name: 'Михаил Коваль', nameUk: 'Михайло Коваль', nameEn: 'Mikhail Koval', roleKey: 'roleConcierge', roleDefault: 'Администратор двора', imageId: 'staff-2', quote: '«Ваш комфорт — наш главный приоритет 24/7»' },
+  { name: 'Андрей Шевченко', nameUk: 'Андрій Шевченко', nameEn: 'Andrey Shevchenko', roleKey: 'roleChef', roleDefault: 'Помощник по хозяйству', imageId: 'staff-3', quote: '«Свежие вкусы и домашняя кухня в авторском исполнении»' },
 ];
 
 const timelineEvents = [
@@ -377,20 +377,21 @@ export default function AboutClient({ lang }: AboutClientProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {teamMembers.map((member) => {
               const memberImage = PlaceHolderImages.find(p => p.id === member.imageId);
+              const displayName = lang === 'uk' ? member.nameUk : lang === 'en' ? member.nameEn : member.name;
               return (
                 <div key={member.name} className="flex flex-col items-center text-center p-8 rounded-3xl glass-card-dark border border-white/10 shadow-2xl hover-lift transition-smooth group hover:border-teal-400/50">
                   <div className="relative w-36 h-36 rounded-full overflow-hidden mb-6 border-4 border-slate-900 shadow-md group-hover:border-teal-400/50 transition-colors">
                     {memberImage && (
                       <Image
                         src={memberImage.imageUrl}
-                        alt={`Portrait ${member.name}`}
+                        alt={`Portrait ${displayName}`}
                         fill
                         className="object-cover transition-smooth group-hover:scale-110"
                         data-ai-hint={memberImage.imageHint}
                       />
                     )}
                   </div>
-                  <h3 className="text-xl font-bold text-white">{member.name}</h3>
+                  <h3 className="text-xl font-bold text-white">{displayName}</h3>
                   <p className="text-teal-300 font-semibold mt-1">{translate(member.roleKey, member.roleDefault)}</p>
                   <p className="text-slate-400 text-sm italic font-light mt-4 px-2 line-clamp-2">
                     {member.quote}
