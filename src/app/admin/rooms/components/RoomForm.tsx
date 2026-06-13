@@ -464,7 +464,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
   
                <SheetFooter className="mt-6 border-t border-white/10 pt-4 gap-2">
                   <SheetClose asChild>
-                      <Button type="button" variant="outline" disabled={isUploading} className="rounded-xl border-white/10 text-slate-300 hover:bg-white/5 h-11">Отмена</Button>
+                      <Button type="button" variant="outline" disabled={isUploading} className="rounded-xl border-white/10 text-slate-200 hover:!text-white hover:bg-white/10 h-11">Отмена</Button>
                   </SheetClose>
                   <Button type="submit" disabled={isUploading} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">
                     {isUploading ? "Сохранение..." : "Сохранить номер"}

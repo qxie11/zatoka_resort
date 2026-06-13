@@ -490,7 +490,7 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
             <Button
               variant="ghost"
               onClick={() => setEditDialogOpen(false)}
-              className="text-slate-300 hover:bg-white/10 rounded-xl"
+              className="text-slate-200 hover:!text-white hover:bg-white/10 rounded-xl"
             >
               Отмена
             </Button>

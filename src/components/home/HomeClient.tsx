@@ -181,9 +181,12 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="h-14 px-8 border-white/10 bg-white/5 text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 rounded-xl uppercase tracking-wider text-xs font-semibold">
-                    <Link href="/booking">{translate("learnMore", "Исследовать номера")}</Link>
-                  </Button>
+                  <Link
+                    href="/booking"
+                    className="inline-flex items-center justify-center h-14 px-8 border border-white/10 bg-white/5 text-white hover:bg-white/10 hover:!text-white hover:border-white/20 transition-all duration-300 rounded-xl uppercase tracking-wider text-xs font-semibold"
+                  >
+                    {translate("learnMore", "Исследовать номера")}
+                  </Link>
                 </div>
  
                 {/* Minimalist Trust Features */}

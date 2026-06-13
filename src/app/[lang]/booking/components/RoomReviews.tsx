@@ -371,7 +371,7 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
                       <Button
                         onClick={handleCancelEdit}
                         variant="ghost"
-                        className="text-slate-300 hover:bg-white/10 px-3 py-1.5 rounded-lg text-xs"
+                        className="text-slate-200 hover:!text-white hover:bg-white/10 px-3 py-1.5 rounded-lg text-xs"
                       >
                         <X className="h-3 w-3 mr-1" />
                         Отмена

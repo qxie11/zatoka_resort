@@ -379,7 +379,7 @@ export default function BlogForm({ isOpen, onOpenChange, onSubmit, post }: BlogP
 
           <SheetFooter className="mt-6 border-t border-white/10 pt-4 gap-2">
             <SheetClose asChild>
-              <Button type="button" variant="outline" disabled={isUploading} className="rounded-xl border-white/10 text-slate-300 hover:bg-white/5 h-11">
+              <Button type="button" variant="outline" disabled={isUploading} className="rounded-xl border-white/10 text-slate-200 hover:!text-white hover:bg-white/10 h-11">
                 Отмена
               </Button>
             </SheetClose>
