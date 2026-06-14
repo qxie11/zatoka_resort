@@ -316,8 +316,20 @@ export default function OceanScene() {
 
       const time = baseTime * 0.3 + oceanMaterial.uniforms.iMouse.value.x * 0.001;
 
-      let uvX = (clientX / currentCanvasWidth) * 2.0 - 1.0;
-      let uvY = -((clientY / currentCanvasHeight) * 2.0 - 1.0);
+      // Convert viewport coords to canvas-local CSS coords
+      const rect = canvas.getBoundingClientRect();
+      const localX = clientX - rect.left;
+      const localY = clientY - rect.top;
+
+      // Match shader UV exactly:
+      //   gl_FragCoord = (localX * dpr, (cssH - localY) * dpr)
+      //   iResolution  = (cssW, cssH)
+      //   uv = fragCoord / iResolution = (localX/cssW * dpr, (cssH-localY)/cssH * dpr)
+      //   uv = uv * 2.0 - 1.0
+      //   uv.x *= iResolution.x / iResolution.y
+      const currentDpr = renderer.getPixelRatio();
+      let uvX = (localX / currentCanvasWidth * currentDpr) * 2.0 - 1.0;
+      let uvY = ((currentCanvasHeight - localY) / currentCanvasHeight * currentDpr) * 2.0 - 1.0;
       uvX *= currentCanvasWidth / currentCanvasHeight;
 
       const angX = Math.sin(time * 3.0) * 0.1;
