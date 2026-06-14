@@ -29,7 +29,7 @@ const resources = {
       reviews: "отзывов",
       scarcityTitle: "Лето",
       scarcityText: "осталось мало свободных дат. Бронируйте сейчас.",
-      selectDates: "Выбрать dates",
+      selectDates: "Выбрать даты",
 
       // Callback / Contact
       callbackButton: "Связаться с нами",
