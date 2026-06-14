@@ -46,8 +46,8 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
 
       // Question 2
       q2Title: "Что для вас важнее всего?",
-      q2Sea: "Вид на море и балкон",
-      q2Pool: "Близость к бассейну",
+      q2Yard: "Тишина и зеленый двор",
+      q2Kitchen: "Своя кухня или терраса",
       q2Space: "Максимум пространства и комфорта",
       q2Budget: "Лучшая цена / Экономия",
 
@@ -78,8 +78,8 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
 
       // Question 2
       q2Title: "Що для вас найважливіше?",
-      q2Sea: "Вид на море та балкон",
-      q2Pool: "Близькість до басейну",
+      q2Yard: "Тиша та зелене подвір'я",
+      q2Kitchen: "Своя кухня або тераса",
       q2Space: "Максимум простору та комфорту",
       q2Budget: "Краща ціна / Економія",
 
@@ -110,8 +110,8 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
 
       // Question 2
       q2Title: "What is your main priority?",
-      q2Sea: "Sea view & private balcony",
-      q2Pool: "Close to the swimming pool",
+      q2Yard: "Quiet & green yard",
+      q2Kitchen: "Private kitchen or terrace",
       q2Space: "Maximum space & comfort",
       q2Budget: "Best price / budget-friendly",
 
@@ -153,20 +153,20 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
     if (filtered.length === 0) filtered = [...rooms];
 
     // 2. Preferences filter
-    if (finalAnswers.preference === "sea") {
-      // Look for sea view indicator (Russian name containing "море", "вид", or checking description)
-      const seaRooms = filtered.filter(r => 
-        r.name.toLowerCase().includes("люкс") || 
-        r.description.toLowerCase().includes("мор") || 
-        r.description.toLowerCase().includes("sea")
+    if (finalAnswers.preference === "yard") {
+      const yardRooms = filtered.filter(r => 
+        r.description.toLowerCase().includes("террас") || 
+        r.description.toLowerCase().includes("балкон") ||
+        r.description.toLowerCase().includes("terrace") ||
+        r.description.toLowerCase().includes("balcony")
       );
-      if (seaRooms.length > 0) filtered = seaRooms;
-    } else if (finalAnswers.preference === "pool") {
-      const poolRooms = filtered.filter(r => 
-        r.description.toLowerCase().includes("бассейн") || 
-        r.description.toLowerCase().includes("pool")
+      if (yardRooms.length > 0) filtered = yardRooms;
+    } else if (finalAnswers.preference === "kitchen") {
+      const kitchenRooms = filtered.filter(r => 
+        r.description.toLowerCase().includes("кухн") || 
+        r.description.toLowerCase().includes("kitchen")
       );
-      if (poolRooms.length > 0) filtered = poolRooms;
+      if (kitchenRooms.length > 0) filtered = kitchenRooms;
     } else if (finalAnswers.preference === "budget") {
       // Sort by price ascending
       filtered.sort((a, b) => a.price - b.price);
@@ -271,8 +271,8 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { id: "sea", text: current.q2Sea },
-              { id: "pool", text: current.q2Pool },
+              { id: "yard", text: current.q2Yard || (lang === "uk" ? "Тиша та зелене подвір'я" : lang === "en" ? "Quiet & green yard" : "Тишина и зеленый двор") },
+              { id: "kitchen", text: current.q2Kitchen || (lang === "uk" ? "Своя кухня або тераса" : lang === "en" ? "Private kitchen or terrace" : "Своя кухня или терраса") },
               { id: "space", text: current.q2Space },
               { id: "budget", text: current.q2Budget },
             ].map(opt => (
