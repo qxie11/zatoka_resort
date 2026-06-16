@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBookings, createBooking } from "@/lib/db";
 import { startOfDay } from "date-fns";
+import { sendBookingNotification } from "@/lib/email";
 
 export async function GET() {
   try {
@@ -65,6 +66,19 @@ export async function POST(request: NextRequest) {
       name: name.trim(),
       phone: phone.trim(),
       email: email?.trim() || undefined,
+      pricePaid: pricePaid ? parseInt(pricePaid) : undefined,
+      promoCode: promoCode || undefined,
+      discountApplied: discountApplied ? parseInt(discountApplied) : undefined,
+    });
+
+    // Send email notification (non-blocking)
+    await sendBookingNotification({
+      name: name.trim(),
+      phone: phone.trim(),
+      email: email?.trim(),
+      roomId,
+      startDate: start,
+      endDate: end,
       pricePaid: pricePaid ? parseInt(pricePaid) : undefined,
       promoCode: promoCode || undefined,
       discountApplied: discountApplied ? parseInt(discountApplied) : undefined,

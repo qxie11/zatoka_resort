@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendCallbackNotification } from "@/lib/email";
 
 export async function GET() {
   try {
@@ -35,6 +36,9 @@ export async function POST(request: NextRequest) {
         message: message || "",
       },
     });
+
+    // Send email notification (non-blocking)
+    await sendCallbackNotification({ name, phone, message });
 
     return NextResponse.json(contactRequest, { status: 201 });
   } catch (error: any) {
