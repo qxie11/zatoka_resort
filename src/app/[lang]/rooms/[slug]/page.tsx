@@ -167,12 +167,12 @@ export default async function RoomDetailsPage({ params }: PageProps) {
                     <Compass className="h-5 w-5 text-amber-300 mt-1 shrink-0" />
                     <div>
                       <h4 className="font-bold text-white text-sm">Гео-координаты</h4>
-                      <p className="text-slate-400 text-sm font-mono text-xs mt-1">46.0683° N, 30.4578° E</p>
+                      <p className="text-slate-400 text-sm font-mono text-xs mt-1">46.158222° N, 30.541194° E</p>
                     </div>
                   </div>
 
                   <Button asChild className="w-full bg-slate-950 border border-white/10 text-white hover:bg-slate-900 rounded-xl py-5 transition-all">
-                    <a href="https://www.google.com/maps/search/?api=1&query=46.0683,30.4578" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.google.com/maps/search/?api=1&query=46.158222,30.541194" target="_blank" rel="noopener noreferrer">
                       <Navigation className="mr-2 h-4 w-4 text-teal-400" />
                       Открыть в Google Картах
                     </a>

@@ -8,8 +8,8 @@ const containerStyle = {
 };
 
 const center = {
-  lat: 46.0683,
-  lng: 30.4578,
+  lat: 46.158222,
+  lng: 30.541194,
 };
 
 // Custom dark map styling matching the premium dark theme of Zatoka Resort
