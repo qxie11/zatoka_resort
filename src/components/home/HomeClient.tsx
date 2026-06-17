@@ -196,7 +196,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]" />
-                    <span>{translate("trustBadge2", "Оплата на месте")}</span>
+                    <span>{translate("trustBadge2", "Оплата при заезде")}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]" />
@@ -365,7 +365,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 {
                   icon: CreditCard,
                   titleKey: "whyPayment",
-                  titleFallback: "Оплата на месте",
+                  titleFallback: "Оплата при заезде",
                   descKey: "whyPaymentDesc",
                   descFallback: "Никакой предоплаты. Оплачивайте при заселении — наличными или картой.",
                   gradient: "from-amber-400/20 to-orange-400/20",
