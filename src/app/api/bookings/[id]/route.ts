@@ -31,7 +31,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { roomId, startDate, endDate, name, phone, email } = body;
+    const { roomId, startDate, endDate, name, phone, email, adminComment } = body;
 
     const updates: any = {};
 
@@ -61,6 +61,9 @@ export async function PUT(
 
     if (name !== undefined) updates.name = name.trim();
     if (phone !== undefined) updates.phone = phone.trim();
+    if (adminComment !== undefined) {
+      updates.adminComment = adminComment === null || adminComment === '' ? null : String(adminComment).trim();
+    }
     if (email !== undefined) {
       if (
         email === null ||

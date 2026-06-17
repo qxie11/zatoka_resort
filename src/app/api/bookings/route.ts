@@ -18,7 +18,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { roomId, startDate, endDate, name, phone, email, pricePaid, promoCode, discountApplied } = body;
+    const { roomId, startDate, endDate, name, phone, email, pricePaid, promoCode, discountApplied, adminComment } = body;
 
     if (!roomId || !startDate || !endDate || !name || !phone) {
       return NextResponse.json(
@@ -69,6 +69,7 @@ export async function POST(request: NextRequest) {
       pricePaid: pricePaid ? parseInt(pricePaid) : undefined,
       promoCode: promoCode || undefined,
       discountApplied: discountApplied ? parseInt(discountApplied) : undefined,
+      adminComment: adminComment && typeof adminComment === 'string' ? adminComment.trim() : undefined,
     });
 
     // Send email notification (non-blocking)
@@ -82,6 +83,7 @@ export async function POST(request: NextRequest) {
       pricePaid: pricePaid ? parseInt(pricePaid) : undefined,
       promoCode: promoCode || undefined,
       discountApplied: discountApplied ? parseInt(discountApplied) : undefined,
+      adminComment: adminComment && typeof adminComment === 'string' ? adminComment.trim() : undefined,
     });
 
     return NextResponse.json(newBooking, { status: 201 });

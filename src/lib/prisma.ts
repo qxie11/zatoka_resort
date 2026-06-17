@@ -10,8 +10,11 @@ declare global {
   var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
 }
 
-// Self-healing: clear the global cached instance if it doesn't have the newly generated models
-if (globalThis.prismaGlobal && (!('review' in globalThis.prismaGlobal) || !('promoCode' in globalThis.prismaGlobal) || !('systemCache' in globalThis.prismaGlobal))) {
+// In development, always clear the cached Prisma client instance on module reload
+// to avoid stale runtime behavior when the client is regenerated.
+if (process.env.NODE_ENV === 'development') {
+  globalThis.prismaGlobal = undefined;
+} else if (globalThis.prismaGlobal && (!('review' in globalThis.prismaGlobal) || !('promoCode' in globalThis.prismaGlobal) || !('systemCache' in globalThis.prismaGlobal))) {
   globalThis.prismaGlobal = undefined;
 }
 

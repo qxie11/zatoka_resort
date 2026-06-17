@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,17 +9,17 @@ datasource db {
 
 model Room {
   id          String    @id @default(uuid())
-  slug        String    @unique @default("")
   name        String
   description String
   price       Int
   capacity    Int
-  amenities   String[] // PostgreSQL array
+  amenities   String[]
   imageUrl    String
-  imageUrls   String[] @default([]) // Array of image URLs
+  imageUrls   String[]  @default([])
   imageHint   String    @default("")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  slug        String    @unique @default("")
   bookings    Booking[]
   reviews     Review[]
 
@@ -37,11 +34,12 @@ model Booking {
   name            String
   phone           String
   email           String?
-  pricePaid       Int?     // Price paid stored in DB
-  promoCode       String?  // Promo code applied
-  discountApplied Int?     // Discount percentage applied
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  discountApplied Int?
+  pricePaid       Int?
+  promoCode       String?
+  adminComment    String?
   room            Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
 
   @@map("bookings")
@@ -59,27 +57,27 @@ model ContactRequest {
 }
 
 model BlogPost {
-  id          String   @id @default(uuid())
-  slug        String   @unique
-  date        String
-  imageUrl    String
-  readTime    Int
-  categoryRu  String
-  categoryUk  String
-  categoryEn  String
-  titleRu     String
-  titleUk     String
-  titleEn     String
-  excerptRu   String
-  excerptUk   String
-  excerptEn   String
-  contentRu   String[] // Array of paragraphs
-  contentUk   String[] // Array of paragraphs
-  contentEn   String[] // Array of paragraphs
-  views       Int      @default(0)
-  likes       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(uuid())
+  slug       String   @unique
+  date       String
+  imageUrl   String
+  readTime   Int
+  categoryRu String
+  categoryUk String
+  categoryEn String
+  titleRu    String
+  titleUk    String
+  titleEn    String
+  excerptRu  String
+  excerptUk  String
+  excerptEn  String
+  contentRu  String[]
+  contentUk  String[]
+  contentEn  String[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  likes      Int      @default(0)
+  views      Int      @default(0)
 
   @@map("blog_posts")
 }
@@ -101,20 +99,19 @@ model Review {
 model PromoCode {
   id        String   @id @default(uuid())
   code      String   @unique
-  discount  Int      // Percentage discount
+  discount  Int
   isActive  Boolean  @default(true)
-  isGift    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  isGift    Boolean  @default(false)
 
   @@map("promo_codes")
 }
 
 model SystemCache {
   key       String   @id
-  value     String   // JSON string
+  value     String
   expiresAt DateTime
 
   @@map("system_caches")
 }
-

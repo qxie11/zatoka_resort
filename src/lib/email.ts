@@ -131,6 +131,7 @@ export async function sendBookingNotification(data: {
   pricePaid?: number;
   promoCode?: string;
   discountApplied?: number;
+  adminComment?: string;
 }) {
   const start = new Date(data.startDate);
   const end = new Date(data.endDate);
@@ -263,6 +264,17 @@ export async function sendBookingNotification(data: {
                             <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#64748b;">Сумма к оплате</p>
                             <p style="margin:0;font-size:26px;font-weight:900;color:#2dd4bf;">₴ ${data.pricePaid.toLocaleString("ru-UA")}</p>
                             ${data.promoCode ? `<p style="margin:4px 0 0;font-size:12px;color:#64748b;">Промокод: <b style="color:#a78bfa;">${data.promoCode}</b>${data.discountApplied ? ` (−${data.discountApplied}%)` : ""}</p>` : ""}
+                          </td>
+                        </tr>
+                      </table>
+                      ` : ""}
+
+                      ${data.adminComment ? `
+                      <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:12px;">
+                        <tr>
+                          <td style="background:#0f172a;border-radius:12px;padding:16px 20px;border-left:3px solid #ef4444;">
+                            <p style="margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#64748b;">Примечание администратора</p>
+                            <p style="margin:0;font-size:14px;color:#fecaca;line-height:1.6;">${data.adminComment}</p>
                           </td>
                         </tr>
                       </table>

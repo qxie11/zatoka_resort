@@ -173,7 +173,7 @@ export const getBookings = async (): Promise<Booking[]> => {
     orderBy: { createdAt: 'desc' },
   });
   
-  return bookings.map(booking => ({
+  return bookings.map((booking: any) => ({
     id: booking.id,
     roomId: booking.roomId,
     startDate: booking.startDate,
@@ -184,6 +184,7 @@ export const getBookings = async (): Promise<Booking[]> => {
     pricePaid: booking.pricePaid || undefined,
     promoCode: booking.promoCode || undefined,
     discountApplied: booking.discountApplied || undefined,
+    adminComment: booking.adminComment || undefined,
   }));
 };
 
@@ -193,7 +194,7 @@ export const getBookingsByRoomId = async (roomId: string): Promise<Booking[]> =>
     orderBy: { startDate: 'asc' },
   });
   
-  return bookings.map(booking => ({
+  return bookings.map((booking: any) => ({
     id: booking.id,
     roomId: booking.roomId,
     startDate: booking.startDate,
@@ -204,6 +205,7 @@ export const getBookingsByRoomId = async (roomId: string): Promise<Booking[]> =>
     pricePaid: booking.pricePaid || undefined,
     promoCode: booking.promoCode || undefined,
     discountApplied: booking.discountApplied || undefined,
+    adminComment: booking.adminComment || undefined,
   }));
 };
 
@@ -225,6 +227,7 @@ export const getBookingById = async (id: string): Promise<Booking | null> => {
     pricePaid: booking.pricePaid || undefined,
     promoCode: booking.promoCode || undefined,
     discountApplied: booking.discountApplied || undefined,
+    adminComment: (booking as any).adminComment || undefined,
   };
 };
 
@@ -240,6 +243,7 @@ export const createBooking = async (booking: Omit<Booking, 'id'>): Promise<Booki
       pricePaid: booking.pricePaid ?? null,
       promoCode: booking.promoCode ?? null,
       discountApplied: booking.discountApplied ?? null,
+      adminComment: booking.adminComment ?? null,
     },
   });
   
@@ -254,6 +258,7 @@ export const createBooking = async (booking: Omit<Booking, 'id'>): Promise<Booki
     pricePaid: newBooking.pricePaid ?? undefined,
     promoCode: newBooking.promoCode ?? undefined,
     discountApplied: newBooking.discountApplied ?? undefined,
+    adminComment: (newBooking as any).adminComment ?? undefined,
   };
 };
 
@@ -261,7 +266,11 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
   try {
     const updateData: any = {};
     
-    if (booking.roomId !== undefined) updateData.roomId = booking.roomId;
+    if (booking.roomId !== undefined) {
+      updateData.room = {
+        connect: { id: booking.roomId },
+      };
+    }
     if (booking.startDate !== undefined) updateData.startDate = booking.startDate;
     if (booking.endDate !== undefined) updateData.endDate = booking.endDate;
     if (booking.name !== undefined) updateData.name = booking.name;
@@ -270,6 +279,7 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
     if (booking.pricePaid !== undefined) updateData.pricePaid = booking.pricePaid;
     if (booking.promoCode !== undefined) updateData.promoCode = booking.promoCode;
     if (booking.discountApplied !== undefined) updateData.discountApplied = booking.discountApplied;
+    if ((booking as any).adminComment !== undefined) updateData.adminComment = (booking as any).adminComment || null;
     
     const updatedBooking = await prisma.booking.update({
       where: { id },
@@ -287,6 +297,7 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
       pricePaid: updatedBooking.pricePaid ?? undefined,
       promoCode: updatedBooking.promoCode ?? undefined,
       discountApplied: updatedBooking.discountApplied ?? undefined,
+      adminComment: updatedBooking.adminComment ?? undefined,
     };
   } catch (error) {
     return null;

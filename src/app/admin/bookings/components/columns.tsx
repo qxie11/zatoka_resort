@@ -56,6 +56,16 @@ export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<BookingWi
     },
   },
   {
+    accessorKey: "adminComment",
+    header: "Примечание",
+    cell: ({ row }) => {
+      const c = row.getValue("adminComment") as string | undefined;
+      if (!c) return <span className="text-slate-500">—</span>;
+      const short = c.length > 60 ? c.slice(0, 57) + "..." : c;
+      return <span className="text-sm text-slate-300">{short}</span>;
+    },
+  },
+  {
     accessorKey: "startDate",
     header: "Дата заезда",
     cell: ({ row }) => {

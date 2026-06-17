@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Users, Mail, Phone, User } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,6 +54,7 @@ const bookingSchema = z.object({
   email: z.string().optional().refine((val) => !val || z.string().email().safeParse(val).success, {
     message: "Неверный формат email",
   }),
+  adminComment: z.string().optional(),
 });
 
 type BookingFormValues = z.infer<typeof bookingSchema>;
@@ -84,6 +86,7 @@ export default function BookingForm({
       name: "",
       phone: "",
       email: "",
+      adminComment: "",
     },
   });
 
@@ -98,6 +101,7 @@ export default function BookingForm({
         name: booking.name,
         phone: booking.phone,
         email: booking.email || "",
+        adminComment: booking.adminComment || "",
       });
     } else {
       form.reset({
@@ -109,6 +113,7 @@ export default function BookingForm({
         name: "",
         phone: "",
         email: "",
+        adminComment: "",
       });
     }
   }, [booking, form, isOpen]);
@@ -131,6 +136,7 @@ export default function BookingForm({
       name: data.name,
       phone: data.phone,
       email: data.email || undefined,
+      adminComment: data.adminComment || undefined,
     };
     onSubmit(submissionData, booking?.id);
   });
@@ -249,6 +255,23 @@ export default function BookingForm({
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="adminComment"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold text-slate-300">Примечание администратора</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Например: Не доплатил 50 гривен"
+                      className="bg-slate-900 border-white/10 text-white rounded-xl"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
             <SheetFooter className="mt-6 border-t border-white/10 pt-4 gap-2">
               <SheetClose asChild>
