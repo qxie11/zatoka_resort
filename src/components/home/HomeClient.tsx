@@ -200,7 +200,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]" />
-                    <span>{translate("trustBadge3", "Лучшая цена")}</span>
+                    <span>{translate("trustBadge3", "Цена ниже рынка")}</span>
                   </div>
                 </div>
  

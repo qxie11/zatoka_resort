@@ -66,7 +66,7 @@ export default async function AboutPage({ params }: PageProps) {
       "name": "Zatoka Resort",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "бульвар Золотой Берег, 42",
+        "streetAddress": "ул. Садовая, 1835, станция Лиманская",
         "addressLocality": "Затока",
         "addressCountry": "UA"
       }

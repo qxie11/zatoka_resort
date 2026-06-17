@@ -158,7 +158,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
                     <div>
                       <h4 className="font-bold text-white text-sm">Точный адрес</h4>
                       <p className="text-slate-400 text-sm font-light mt-1">
-                        бульвар Золотой Берег, 42, Затока, Одесская область, Украина
+                        ул. Садовая, 1835, станция Лиманская, Затока, Одесская область, Украина
                       </p>
                     </div>
                   </div>

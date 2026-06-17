@@ -43,7 +43,7 @@ const resources = {
       callbackError: "Произошла ошибка. Пожалуйста, попробуйте еще раз.",
       trustBadge1: "Отмена за 7 дней",
       trustBadge2: "Оплата на месте",
-      trustBadge3: "Лучшая цена",
+      trustBadge3: "Цена ниже рынка",
 
       // Hero
       premiumBadge: "Уютный семейный гостевой дом",
@@ -219,7 +219,7 @@ const resources = {
       callbackError: "Сталася помилка. Будь ласка, спробуйте ще раз.",
       trustBadge1: "Скасування за 7 днів",
       trustBadge2: "Оплата на місці",
-      trustBadge3: "Найкраща ціна",
+      trustBadge3: "Ціна нижча за ринок",
 
       // Hero
       premiumBadge: "Затишний сімейний гостьовий будинок",
@@ -395,7 +395,7 @@ const resources = {
       callbackError: "An error occurred. Please try again.",
       trustBadge1: "7-day cancellation",
       trustBadge2: "Pay on arrival",
-      trustBadge3: "Best rate",
+      trustBadge3: "Below-market price",
 
       // Hero
       premiumBadge: "Cozy Family Guesthouse",

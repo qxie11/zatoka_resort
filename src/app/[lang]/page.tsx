@@ -48,10 +48,9 @@ export default async function Home({ params }: PageProps) {
     "url": baseUrl,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "бульвар Золотой Берег, 42",
+      "streetAddress": "ул. Садовая, 1835, станция Лиманская",
       "addressLocality": "Затока",
       "addressRegion": "Одесская область",
-      "postalCode": "67772",
       "addressCountry": "UA"
     },
     "priceRange": `${minPrice} - ${maxPrice} UAH`,

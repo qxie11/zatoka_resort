@@ -166,10 +166,10 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 text-teal-400/80 shrink-0 mt-0.5" />
                 <span>
-                  {currentLang === "en" ? "42, Zolotoy Bereg blvd, Zatoka" : "бульвар Золотой Берег, 42, Затока"}
+                  {currentLang === "en" ? "1835 Sadovaya St, Limanskaya Station, Zatoka" : "ул. Садовая, 1835, станция Лиманская, Затока"}
                   <br />
                   <span className="text-xs text-slate-400">
-                    {currentLang === "en" ? "Odesa region, 67772" : "Одесская область, 67772"}
+                    {currentLang === "en" ? "Odesa region, Ukraine" : "Одесская область, Украина"}
                   </span>
                 </span>
               </li>
