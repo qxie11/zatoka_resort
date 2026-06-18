@@ -281,63 +281,63 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
       ) : (
         <div className="border border-white/10 rounded-3xl overflow-hidden glass-card-dark shadow-2xl bg-slate-900/40">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
                 <tr className="border-b border-white/10 bg-slate-950/50 text-slate-300 text-xs font-bold uppercase tracking-wider">
-                  <th className="p-4 pl-6">Промокод</th>
-                  <th className="p-4">Скидка (%)</th>
-                  <th className="p-4">Тип</th>
-                  <th className="p-4">Статус</th>
-                  <th className="p-4">Дата создания</th>
-                  <th className="p-4 pr-6 text-right">Действия</th>
+                  <th className="p-2 sm:p-4 pl-3 sm:pl-6">Промокод</th>
+                  <th className="p-2 sm:p-4">Скидка (%)</th>
+                  <th className="p-2 sm:p-4 hidden sm:table-cell">Тип</th>
+                  <th className="p-2 sm:p-4">Статус</th>
+                  <th className="p-2 sm:p-4 hidden md:table-cell">Дата создания</th>
+                  <th className="p-2 sm:p-4 pr-3 sm:pr-6 text-right">Действия</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 text-sm text-slate-200">
+              <tbody className="divide-y divide-white/5 text-slate-200">
                 {promos.map((promo) => (
                   <tr
                     key={promo.id}
                     id={`row-${promo.id}`}
                     className="hover:bg-white/5 transition-colors"
                   >
-                    <td className="p-4 pl-6 font-mono text-teal-300 font-bold text-base">
+                    <td className="p-2 sm:p-4 pl-3 sm:pl-6 font-mono text-teal-300 font-bold whitespace-nowrap">
                       {promo.code}
                     </td>
-                    <td className="p-4 font-semibold text-white">
+                    <td className="p-2 sm:p-4 font-semibold text-white whitespace-nowrap">
                       {promo.discount}%
                     </td>
-                    <td className="p-4">
+                    <td className="p-2 sm:p-4 hidden sm:table-cell">
                       {promo.isGift ? (
-                        <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/25">
+                        <span className="px-1.5 sm:px-2.5 py-0.5 text-xs font-bold rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/25 whitespace-nowrap">
                           Подарок
                         </span>
                       ) : (
-                        <span className="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-500/10 text-slate-300 border border-white/5">
+                        <span className="px-1.5 sm:px-2.5 py-0.5 text-xs font-medium rounded-lg bg-slate-500/10 text-slate-300 border border-white/5 whitespace-nowrap">
                           Обычный
                         </span>
                       )}
                     </td>
-                    <td className="p-4">
+                    <td className="p-2 sm:p-4">
                       <button
                         onClick={() => handleToggleActive(promo)}
-                        className="flex items-center gap-1.5 focus:outline-none"
+                        className="flex items-center gap-1 focus:outline-none"
                         title={promo.isActive ? "Деактивировать" : "Активировать"}
                       >
                         {promo.isActive ? (
                           <>
-                            <ToggleRight className="h-6 w-6 text-teal-400" />
-                            <span className="text-xs text-teal-300 font-semibold">Активен</span>
+                            <ToggleRight className="h-5 w-5 sm:h-6 sm:w-6 text-teal-400" />
+                            <span className="hidden sm:inline text-xs text-teal-300 font-semibold">Активен</span>
                           </>
                         ) : (
                           <>
-                            <ToggleLeft className="h-6 w-6 text-slate-500" />
-                            <span className="text-xs text-slate-500 font-semibold">Неактивен</span>
+                            <ToggleLeft className="h-5 w-5 sm:h-6 sm:w-6 text-slate-500" />
+                            <span className="hidden sm:inline text-xs text-slate-500 font-semibold">Неактивен</span>
                           </>
                         )}
                       </button>
                     </td>
-                    <td className="p-4 text-slate-400">
-                      <span className="flex items-center gap-2 text-xs">
-                        <Calendar className="h-3.5 w-3.5 text-teal-400" />
+                    <td className="p-2 sm:p-4 text-slate-400 hidden md:table-cell whitespace-nowrap">
+                      <span className="flex items-center gap-1 sm:gap-2 text-xs">
+                        <Calendar className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-teal-400" />
                         {new Date(promo.createdAt).toLocaleDateString("ru-RU", {
                           day: "2-digit",
                           month: "2-digit",
@@ -345,12 +345,12 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
                         })}
                       </span>
                     </td>
-                    <td className="p-4 pr-6 text-right space-x-2">
+                    <td className="p-2 sm:p-4 pr-3 sm:pr-6 text-right space-x-1">
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleOpenEdit(promo)}
-                        className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl"
+                        className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl h-8 text-xs px-2"
                       >
                         Изменить
                       </Button>
@@ -358,9 +358,9 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
                         variant="ghost"
                         size="icon"
                         onClick={() => handleDeleteClick(promo.id)}
-                        className="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all"
+                        className="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all h-8 w-8"
                       >
-                        <Trash2 className="h-4.5 w-4.5" />
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </td>
                   </tr>

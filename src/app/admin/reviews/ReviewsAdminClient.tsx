@@ -309,10 +309,10 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
       ) : (
         <div className="border border-white/10 rounded-3xl overflow-hidden glass-card-dark shadow-2xl bg-slate-900/40">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
                 <tr className="border-b border-white/10 bg-slate-950/50 text-slate-300 text-xs font-bold uppercase tracking-wider">
-                  <th className="p-4 pl-6 sticky left-0 bg-slate-950/90 z-20 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)] w-12">
+                  <th className="p-2 sm:p-4 pl-3 sm:pl-6 sticky left-0 bg-slate-950/90 z-20 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)] w-8 sm:w-12">
                     <Checkbox
                       checked={
                         filteredReviews.length > 0 &&
@@ -328,22 +328,22 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
                       className="border-white/20 text-white data-[state=checked]:bg-teal-500 data-[state=checked]:text-slate-950"
                     />
                   </th>
-                  <th className="p-4">Дата</th>
-                  <th className="p-4">Гость</th>
-                  <th className="p-4">Номер</th>
-                  <th className="p-4">Оценка</th>
-                  <th className="p-4">Комментарий</th>
-                  <th className="p-4 pr-6 text-right">Действия</th>
+                  <th className="p-2 sm:p-4">Дата</th>
+                  <th className="p-2 sm:p-4">Гость</th>
+                  <th className="p-2 sm:p-4 hidden sm:table-cell">Номер</th>
+                  <th className="p-2 sm:p-4">Оценка</th>
+                  <th className="p-2 sm:p-4 hidden md:table-cell">Комментарий</th>
+                  <th className="p-2 sm:p-4 pr-3 sm:pr-6 text-right">Действия</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 text-sm text-slate-200">
+              <tbody className="divide-y divide-white/5 text-slate-200">
                 {filteredReviews.map((review) => (
                   <tr
                     key={review.id}
                     id={`row-${review.id}`}
                     className="group hover:bg-white/5 transition-colors"
                   >
-                    <td className="p-4 pl-6 sticky left-0 bg-slate-900 group-hover:bg-slate-800/95 z-10 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)] transition-colors">
+                    <td className="p-2 sm:p-4 pl-3 sm:pl-6 sticky left-0 bg-slate-900 group-hover:bg-slate-800/95 z-10 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)] transition-colors">
                       <Checkbox
                         checked={selectedIds.includes(review.id)}
                         onCheckedChange={(value) => {
@@ -358,52 +358,52 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
                         className="border-white/20 text-white data-[state=checked]:bg-teal-500 data-[state=checked]:text-slate-950"
                       />
                     </td>
-                    <td className="p-4 text-slate-400">
-                      <span className="flex items-center gap-2 text-xs">
-                        <Calendar className="h-3.5 w-3.5 text-teal-400 shrink-0" />
+                    <td className="p-2 sm:p-4 text-slate-400 whitespace-nowrap">
+                      <span className="flex items-center gap-1 sm:gap-2 text-xs">
+                        <Calendar className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-teal-400 shrink-0" />
                         {review.date}
                       </span>
                     </td>
-                    <td className="p-4 font-semibold text-white">
-                      <span className="flex items-center gap-2">
-                        <User className="h-3.5 w-3.5 text-sky-400 shrink-0" />
-                        {review.name}
+                    <td className="p-2 sm:p-4 font-semibold text-white">
+                      <span className="flex items-center gap-1 sm:gap-2 whitespace-nowrap">
+                        <User className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-sky-400 shrink-0" />
+                        <span className="truncate">{review.name}</span>
                       </span>
                     </td>
-                    <td className="p-4 text-slate-300">
-                      <span className="flex items-center gap-1.5">
-                        <Bed className="h-3.5 w-3.5 text-teal-500 shrink-0" />
+                    <td className="p-2 sm:p-4 text-slate-300 hidden sm:table-cell">
+                      <span className="flex items-center gap-1 sm:gap-1.5 whitespace-nowrap">
+                        <Bed className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-teal-500 shrink-0" />
                         {review.room?.name || "Неизвестный номер"}
                       </span>
                     </td>
-                    <td className="p-4">
-                      <div className="flex items-center text-amber-400 bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10 w-fit">
-                        <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 mr-1" />
+                    <td className="p-2 sm:p-4">
+                      <div className="flex items-center text-amber-400 bg-amber-500/5 px-1.5 sm:px-2 py-0.5 rounded border border-amber-500/10 w-fit">
+                        <Star className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-amber-400 text-amber-400 mr-1" />
                         <span className="text-xs font-bold">{review.rating}</span>
                       </div>
                     </td>
-                    <td className="p-4 max-w-xs truncate text-slate-300" title={review.comment}>
+                    <td className="p-2 sm:p-4 max-w-xs truncate text-slate-300 hidden md:table-cell" title={review.comment}>
                       {review.comment}
                     </td>
-                    <td className="p-4 pr-6 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="p-2 sm:p-4 pr-3 sm:pr-6 text-right">
+                      <div className="flex items-center justify-end gap-1">
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => handleEdit(review)}
-                          className="text-slate-400 hover:text-teal-400 hover:bg-teal-500/10 rounded-xl transition-all"
+                          className="text-slate-400 hover:text-teal-400 hover:bg-teal-500/10 rounded-xl transition-all h-8 w-8"
                           title="Редактировать отзыв"
                         >
-                          <Edit2 className="h-4.5 w-4.5" />
+                          <Edit2 className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => handleDelete(review.id)}
-                          className="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all"
+                          className="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all h-8 w-8"
                           title="Удалить отзыв"
                         >
-                          <Trash2 className="h-4.5 w-4.5" />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </td>

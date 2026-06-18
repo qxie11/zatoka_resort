@@ -143,9 +143,9 @@ export function DataTable<TData, TValue>({
                     <TableHead
                       key={header.id}
                       className={cn(
-                        "whitespace-nowrap font-bold text-teal-300 py-4 px-6",
+                        "whitespace-nowrap font-bold text-teal-300 py-2 px-2 sm:py-4 sm:px-6 text-xs sm:text-sm",
                         isFirst && "sticky left-0 bg-[#070b13] z-20 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)]",
-                        isSecond && "sticky left-[60px] bg-[#070b13] z-20 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)]"
+                        isSecond && "sticky left-8 sm:left-[60px] bg-[#070b13] z-20 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)]"
                       )}
                     >
                       {header.isPlaceholder
@@ -176,9 +176,9 @@ export function DataTable<TData, TValue>({
                       <TableCell
                         key={cell.id}
                         className={cn(
-                          "whitespace-nowrap py-4 px-6 text-slate-300 text-sm font-light",
+                          "whitespace-nowrap py-1.5 px-2 sm:py-4 sm:px-6 text-slate-300 text-xs sm:text-sm font-light",
                           isFirst && "sticky left-0 bg-[#0f172a] group-hover:bg-[#1e293b] group-data-[state=selected]:bg-[#0d2e30] group-data-[state=selected]:group-hover:bg-[#114b4e] z-10 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)] transition-colors",
-                          isSecond && "sticky left-[60px] bg-[#0f172a] group-hover:bg-[#1e293b] group-data-[state=selected]:bg-[#0d2e30] group-data-[state=selected]:group-hover:bg-[#114b4e] z-10 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)] transition-colors"
+                          isSecond && "sticky left-8 sm:left-[60px] bg-[#0f172a] group-hover:bg-[#1e293b] group-data-[state=selected]:bg-[#0d2e30] group-data-[state=selected]:group-hover:bg-[#114b4e] z-10 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)] transition-colors"
                         )}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
