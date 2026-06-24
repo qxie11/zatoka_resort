@@ -231,6 +231,18 @@ export const getBookingById = async (id: string): Promise<Booking | null> => {
   };
 };
 
+const saveCustomerEmail = async (email: string, name: string, phone: string) => {
+  try {
+    await prisma.customerEmail.upsert({
+      where: { email },
+      update: { name, phone },
+      create: { email, name, phone },
+    });
+  } catch (err) {
+    console.error("Failed to save customer email:", err);
+  }
+};
+
 export const createBooking = async (booking: Omit<Booking, 'id'>): Promise<Booking> => {
   const newBooking = await prisma.booking.create({
     data: {
@@ -246,6 +258,10 @@ export const createBooking = async (booking: Omit<Booking, 'id'>): Promise<Booki
       adminComment: booking.adminComment ?? null,
     },
   });
+
+  if (newBooking.email) {
+    await saveCustomerEmail(newBooking.email, newBooking.name, newBooking.phone);
+  }
   
   return {
     id: newBooking.id,
@@ -285,6 +301,10 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
       where: { id },
       data: updateData,
     });
+
+    if (updatedBooking.email) {
+      await saveCustomerEmail(updatedBooking.email, updatedBooking.name, updatedBooking.phone);
+    }
     
     return {
       id: updatedBooking.id,

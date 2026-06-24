@@ -115,3 +115,14 @@ model SystemCache {
 
   @@map("system_caches")
 }
+
+model CustomerEmail {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  phone     String?
+  createdAt DateTime @default(now())
+
+  @@map("customer_emails")
+}
+
