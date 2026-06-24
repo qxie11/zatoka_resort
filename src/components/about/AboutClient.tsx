@@ -99,89 +99,48 @@ export default function AboutClient({ lang }: AboutClientProps) {
   return (
     <div className="bg-slate-950 text-slate-100 min-h-screen overflow-x-hidden">
 
-      {/* --- HERO HEADER --- */}
-      <section className="relative min-h-[60vh] flex flex-col items-center justify-center pt-24 pb-48 lg:pt-32 lg:pb-56 overflow-hidden bg-slate-950 text-white">
-
-        {/* Dynamic Multi-layered Background */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600"
-            alt="Seaside Resort Hotel"
-            fill
-            className="object-cover scale-105 opacity-60 brightness-[0.45]"
-            priority
-          />
-          {/* Complex Premium Gradient Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/50 to-slate-950" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-teal-500/10 via-transparent to-transparent opacity-80" />
-
-          {/* Animated Luxury Gridlines Overlay */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-35" />
-        </div>
-
-        {/* Floating Premium Light Orbs and Waves */}
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-          <BackgroundBubbles count={12} deepCount={6} />
-          <div className="absolute top-1/4 -left-12 w-96 h-96 rounded-full bg-teal-500/10 blur-[120px] animate-pulse" />
-          <div className="absolute bottom-1/4 -right-12 w-96 h-96 rounded-full bg-amber-500/10 blur-[120px] animate-pulse" style={{ animationDelay: "2s" }} />
-
-          <div className="absolute top-12 left-10 animate-float opacity-20">
-            <Waves className="h-28 w-28 text-teal-400" />
+      {/* --- BUBBLE HERO HEADER --- */}
+      <section className="relative py-20 lg:py-28 overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white text-center border-b border-white/5">
+        {/* Floating Bubbles & Luxury Gridlines */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <BackgroundBubbles count={15} deepCount={8} />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-25" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] rounded-full bg-teal-500/10 blur-[130px] animate-pulse" />
+          <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-amber-500/5 blur-[100px] animate-pulse" style={{ animationDelay: "2s" }} />
+          
+          <div className="absolute top-1/4 left-10 opacity-10 animate-float">
+            <Waves className="h-24 w-24 text-teal-300" />
           </div>
-          <div className="absolute bottom-12 right-10 animate-float-slow opacity-20" style={{ animationDelay: "3s" }}>
-            <Anchor className="h-24 w-24 text-sky-400" />
+          <div className="absolute bottom-1/4 right-10 opacity-10 animate-float-slow" style={{ animationDelay: "3s" }}>
+            <Waves className="h-20 w-20 text-sky-300" />
           </div>
         </div>
 
-        <div className="relative container mx-auto px-4 z-10 flex flex-col items-center text-center">
-
-          {/* Glowing Luxury Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/90 border border-amber-500/30 text-xs font-semibold text-amber-300 uppercase tracking-[0.25em] animate-fade-in mb-8 shadow-[0_0_15px_rgba(245,158,11,0.15)] backdrop-blur-md">
-            <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400/20 animate-pulse" />
-            <span>EST. 2010 • Premium Retreat</span>
+        <div className="relative container mx-auto px-4 z-10 flex flex-col items-center">
+          {/* Compass Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card-dark text-xs font-semibold text-teal-300 uppercase tracking-widest animate-fade-in mb-6">
+            <Compass className="h-4 w-4 animate-spin-slow" />
+            <span>{translate("ourStory", "О нас")}</span>
           </div>
 
-          {/* Premium Headline - Уменьшен размер шрифта (text-4xl md:text-6xl lg:text-7xl) */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.2] animate-fade-in-up py-4 flex flex-col gap-2 max-w-4xl overflow-visible">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-100 to-teal-200 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] py-2">
-              {translate("aboutTitle", "Создавая незабываемый отдых")}
-            </span>
+          {/* Heading */}
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md py-2 px-1">
+            {translate("aboutTitle", "Создавая незабываемый отдых")}
           </h1>
-
-          <div className="w-32 h-[3px] bg-gradient-to-r from-transparent via-amber-400 to-transparent mt-4 mb-8 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-
-          {/* Luxury Description */}
-          <p className="max-w-2xl mx-auto text-slate-300 text-lg md:text-xl font-light leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards] tracking-wide">
-            {translate("aboutDesc", 'Откройте для себя историю, страсть и людей, которые делают "Отдых в Затоке" уникальным местом на побережье Черного моря.')}
-          </p>
-        </div>
-
-        {/* Стопроцентно отцентрированная кнопка скролла с правильным отступом снизу */}
-        <div className="absolute bottom-20 md:bottom-28 left-0 w-full flex justify-center z-30 pointer-events-none">
-          <button
-            onClick={handleScrollDown}
-            className="flex flex-col items-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity animate-bounce cursor-pointer focus:outline-none pointer-events-auto"
-            aria-label="Scroll to stats"
-          >
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-300 drop-shadow-md">Scroll</span>
-            <div className="w-5 h-9 rounded-full border border-slate-400/60 bg-slate-900/40 backdrop-blur-sm flex justify-center p-1 shadow-[0_0_10px_rgba(0,0,0,0.5)]">
-              <div className="w-1 h-2 bg-amber-400 rounded-full animate-scroll shadow-[0_0_5px_rgba(245,158,11,0.8)]" />
-            </div>
-          </button>
+          <WavyUnderline colorClassName="text-teal-300" />
         </div>
 
         {/* Elegant Wave transition */}
         <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-16 md:h-24 fill-slate-950">
-            <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-40 fill-teal-500/5" />
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-950 scale-x-[-1]">
+            <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-teal-200/10" />
             <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
           </svg>
         </div>
       </section>
 
       {/* --- STATS COUNTER GRID --- */}
-      <section id="stats-section" className="relative pt-12 pb-24 z-30 -mt-6 scroll-mt-20 overflow-hidden bg-slate-950">
+      <section id="stats-section" className="relative pt-12 pb-24 z-30 scroll-mt-20 overflow-hidden bg-slate-950">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
 
