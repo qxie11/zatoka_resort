@@ -306,3 +306,133 @@ export async function sendBookingNotification(data: {
     // Do not throw — email failure should not break the API
   }
 }
+
+// ─── Promo Newsletter / Рассылка промокодов ───────────────────────────────────
+
+export async function sendPromoNewsletter(data: {
+  emails: string[];
+  promoCode: string;
+  discount: number;
+  customSubject?: string;
+  customBody?: string;
+}) {
+  const subject = data.customSubject || `🎁 Эксклюзивный подарок для Вас от Затока Resort`;
+  const bodyText = data.customBody || `Мы приготовили для Вас особое предложение для идеального отдыха на побережье.`;
+  
+  console.log(`[Resend] Initiating newsletter to ${data.emails.length} recipients. From: ${FROM_EMAIL}`);
+  
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>${subject}</title>
+    </head>
+    <body style="margin:0;padding:0;background:#0b0f19;font-family:'Segoe UI',Arial,sans-serif;color:#f1f5f9;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#0b0f19;padding:40px 16px;">
+        <tr>
+          <td align="center">
+            <table width="600" cellpadding="0" cellspacing="0" style="background:#111827;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 40px rgba(0,0,0,0.4);">
+              
+              <!-- Brand Banner -->
+              <tr>
+                <td style="background:linear-gradient(135deg,#0d9488,#0ea5e9);padding:40px 32px;text-align:center;">
+                  <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.85);">Затока Resort</p>
+                  <h1 style="margin:10px 0 0;font-size:26px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;">Специальное предложение</h1>
+                </td>
+              </tr>
+
+              <!-- Email Body -->
+              <tr>
+                <td style="padding:40px 32px;">
+                  <p style="margin:0 0 24px;font-size:16px;color:#f1f5f9;line-height:1.7;text-align:center;font-weight:500;">
+                    Здравствуйте!
+                  </p>
+                  <p style="margin:0 0 32px;font-size:15px;color:#94a3b8;line-height:1.7;text-align:center;">
+                    ${bodyText}
+                  </p>
+
+                  <!-- Promo Box -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:36px;">
+                    <tr>
+                      <td align="center">
+                        <div style="background:linear-gradient(135deg,rgba(13,148,136,0.1),rgba(245,158,11,0.1));border:2px dashed #f59e0b;border-radius:18px;padding:32px 24px;max-width:400px;text-align:center;">
+                          <p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#f59e0b;">Промокод на скидку</p>
+                          <h2 style="margin:0 0 12px;font-size:38px;font-weight:900;color:#ffffff;letter-spacing:2px;font-family:monospace;">${data.promoCode}</h2>
+                          <div style="display:inline-block;background:rgba(245,158,11,0.15);border-radius:8px;padding:6px 14px;border:1px solid rgba(245,158,11,0.3);">
+                            <span style="font-size:15px;font-weight:800;color:#fbbf24;">Скидка ${data.discount}% на всё бронирование</span>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <!-- Call to action -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+                    <tr>
+                      <td align="center">
+                        <a href="https://zatoka-hotel.com" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#0d9488,#0ea5e9);color:#0f172a;font-size:15px;font-weight:800;text-decoration:none;padding:16px 36px;border-radius:14px;box-shadow:0 8px 20px rgba(13,148,136,0.3);transition:all 0.2s;">
+                          Забронировать со скидкой
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <p style="margin:24px 0 0;font-size:12px;color:#64748b;text-align:center;line-height:1.5;">
+                    Примените промокод при бронировании на сайте <a href="https://zatoka-hotel.com" target="_blank" style="color:#0ea5e9;text-decoration:none;font-weight:600;">zatoka-hotel.com</a>, чтобы получить скидку. Спешите, предложение ограничено!
+                  </p>
+                </td>
+              </tr>
+
+              <!-- Footer -->
+              <tr>
+                <td style="background:#090d16;padding:24px 32px;border-top:1px solid rgba(255,255,255,0.04);text-align:center;">
+                  <p style="margin:0 0 8px;font-size:13px;font-weight:600;color:#475569;">
+                    Затока Resort
+                  </p>
+                  <p style="margin:0;font-size:11px;color:#334155;">
+                    Вы получили это письмо, так как ранее бронировали номера или оставляли заявки на нашем сайте.<br />
+                    © ${new Date().getFullYear()} Затока Resort. Все права защищены.
+                  </p>
+                </td>
+              </tr>
+
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `;
+
+  // Resend batch has a limit of 100 emails per batch.
+  const batchLimit = 100;
+  let successCount = 0;
+  let errorCount = 0;
+
+  for (let i = 0; i < data.emails.length; i += batchLimit) {
+    const chunk = data.emails.slice(i, i + batchLimit);
+    const batchRequests = chunk.map((toEmail) => ({
+      from: FROM_EMAIL,
+      to: toEmail,
+      subject: subject,
+      html: htmlContent,
+    }));
+
+    try {
+      const response = await resend.batch.send(batchRequests);
+      console.log(`[Resend] Sent batch of ${chunk.length} emails. Response:`, response);
+      if (response.data) {
+        successCount += chunk.length;
+      } else {
+        errorCount += chunk.length;
+      }
+    } catch (err) {
+      console.error(`[Resend] Failed to send batch starting at index ${i}:`, err);
+      errorCount += chunk.length;
+    }
+  }
+
+  return { successCount, errorCount };
+}

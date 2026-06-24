@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Tag, Trash2, Calendar, Plus, Minus, Save, X, ToggleLeft, ToggleRight, Loader2, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Tag, Trash2, Calendar, Plus, Minus, Save, X, ToggleLeft, ToggleRight, Loader2, Sparkles, Mail, Send, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -36,6 +36,81 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
 
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [promoIdToDelete, setPromoIdToDelete] = useState<string | null>(null);
+
+  // Campaign states
+  const [campaignOpen, setCampaignOpen] = useState(false);
+  const [selectedPromoId, setSelectedPromoId] = useState("");
+  const [customSubject, setCustomSubject] = useState("");
+  const [customBody, setCustomBody] = useState("");
+  const [sendingCampaign, setSendingCampaign] = useState(false);
+  const [subscribersCount, setSubscribersCount] = useState(0);
+
+  const fetchSubscribersCount = async () => {
+    try {
+      const res = await fetch("/api/admin/promo/send");
+      if (res.ok) {
+        const data = await res.json();
+        setSubscribersCount(data.count);
+      }
+    } catch (e) {
+      console.error("Failed to load subscribers count", e);
+    }
+  };
+
+  useEffect(() => {
+    fetchSubscribersCount();
+  }, []);
+
+  const handleOpenCampaign = () => {
+    fetchSubscribersCount();
+    setCampaignOpen(true);
+    setFormOpen(false);
+  };
+
+  const handleSendCampaign = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedPromoId) {
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: "Выберите промокод для рассылки",
+      });
+      return;
+    }
+
+    setSendingCampaign(true);
+    try {
+      const res = await fetch("/api/admin/promo/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          promoId: selectedPromoId,
+          customSubject: customSubject.trim() || undefined,
+          customBody: customBody.trim() || undefined,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Не удалось отправить");
+
+      toast({
+        title: "Рассылка завершена",
+        description: `Успешно отправлено писем: ${data.successCount}. Ошибок: ${data.errorCount}.`,
+      });
+      setCampaignOpen(false);
+      setSelectedPromoId("");
+      setCustomSubject("");
+      setCustomBody("");
+    } catch (err: any) {
+      toast({
+        variant: "destructive",
+        title: "Ошибка при отправке",
+        description: err.message || "Не удалось запустить рассылку",
+      });
+    } finally {
+      setSendingCampaign(false);
+    }
+  };
 
   const fetchPromos = async () => {
     try {
@@ -187,7 +262,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-white flex items-center gap-3">
             <Tag className="h-7 w-7 text-teal-400" />
@@ -197,11 +272,81 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
             Создавайте, удаляйте и управляйте промокодами скидок для гостей отеля
           </p>
         </div>
-        <Button onClick={handleOpenCreate} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold rounded-xl flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Создать промокод
-        </Button>
+        <div className="flex items-center gap-3 self-start sm:self-center">
+          <Button 
+            onClick={handleOpenCampaign} 
+            variant="outline"
+            className="border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl flex items-center gap-2"
+          >
+            <Mail className="h-4 w-4 text-teal-400" />
+            Запустить рассылку ({subscribersCount})
+          </Button>
+          <Button onClick={handleOpenCreate} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold rounded-xl flex items-center gap-2">
+            <Plus className="h-4 w-4" />
+            Создать промокод
+          </Button>
+        </div>
       </div>
+
+      {campaignOpen && (
+        <form onSubmit={handleSendCampaign} className="p-6 rounded-3xl bg-slate-900/60 border border-white/10 space-y-4 max-w-xl animate-scale-in">
+          <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <Send className="h-5 w-5 text-teal-400" />
+            Рассылка по клиентам
+          </h2>
+          <p className="text-xs text-slate-400">
+            Письмо будет отправлено на все {subscribersCount} сохраненных email-адресов. Будет прикреплена ссылка на <span className="text-teal-300 font-semibold">zatoka-hotel.com</span>.
+          </p>
+          
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-slate-400 uppercase">Выберите промокод *</label>
+            <select
+              value={selectedPromoId}
+              onChange={(e) => setSelectedPromoId(e.target.value)}
+              required
+              className="w-full bg-slate-950/40 border border-white/10 text-white rounded-xl h-11 px-3 focus:outline-none focus:ring-1 focus:ring-teal-400 cursor-pointer"
+            >
+              <option value="" className="bg-slate-950 text-slate-400">-- Выберите активный промокод --</option>
+              {promos.filter(p => p.isActive).map(p => (
+                <option key={p.id} value={p.id} className="bg-slate-950 text-white">
+                  {p.code} (Скидка {p.discount}%)
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-slate-400 uppercase">Тема письма (необязательно)</label>
+            <Input
+              placeholder="🎁 Эксклюзивный подарок для Вас от Затока Resort"
+              value={customSubject}
+              onChange={(e) => setCustomSubject(e.target.value)}
+              className="bg-slate-950/40 border-white/10 text-white rounded-xl"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-slate-400 uppercase">Текст письма (необязательно)</label>
+            <textarea
+              placeholder="Мы приготовили для Вас особое предложение для идеального отдыха на побережье..."
+              value={customBody}
+              onChange={(e) => setCustomBody(e.target.value)}
+              className="w-full bg-slate-950/40 border border-white/10 text-white rounded-xl p-3 min-h-[100px] text-sm focus:outline-none focus:ring-1 focus:ring-teal-400"
+            />
+          </div>
+
+          <div className="flex items-center gap-4 pt-2">
+            <Button type="submit" disabled={sendingCampaign} className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold rounded-xl flex items-center gap-2">
+              {sendingCampaign ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              Отправить рассылку
+            </Button>
+            <Button type="button" onClick={() => setCampaignOpen(false)} variant="ghost" className="text-slate-400 hover:text-white rounded-xl">
+              <X className="h-4 w-4 mr-2" />
+              Отмена
+            </Button>
+          </div>
+        </form>
+      )}
 
       {formOpen && (
         <form onSubmit={handleSave} className="p-6 rounded-3xl bg-slate-900/60 border border-white/10 space-y-4 max-w-xl animate-scale-in">
