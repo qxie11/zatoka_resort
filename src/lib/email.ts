@@ -6,6 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // and set RESEND_FROM_EMAIL="noreply@your-verified-domain.com" in .env
 const NOTIFY_EMAIL = process.env.RESEND_NOTIFY_EMAIL || "zatokahotelresort@gmail.com";
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
+const SENDER_FROM = FROM_EMAIL.includes("<") ? FROM_EMAIL : `Затока Resort <${FROM_EMAIL}>`;
 
 // ─── Callback / Заявка обратного звонка ───────────────────────────────────────
 
@@ -14,11 +15,9 @@ export async function sendCallbackNotification(data: {
   phone: string;
   message?: string;
 }) {
-  console.log("[Resend] Sending callback notification to", NOTIFY_EMAIL, "from", FROM_EMAIL);
-  console.log("[Resend] API key present:", !!process.env.RESEND_API_KEY);
   try {
     const result = await resend.emails.send({
-      from: FROM_EMAIL,
+      from: SENDER_FROM,
       to: NOTIFY_EMAIL,
       subject: `📞 Новая заявка на обратный звонок — ${data.name}`,
       html: `
@@ -149,7 +148,7 @@ export async function sendBookingNotification(data: {
   console.log("[Resend] API key present:", !!process.env.RESEND_API_KEY);
   try {
     const result = await resend.emails.send({
-      from: FROM_EMAIL,
+      from: SENDER_FROM,
       to: NOTIFY_EMAIL,
       subject: `🏨 Новое бронирование — ${data.name} (${formatDate(start)})`,
       html: `
@@ -318,9 +317,9 @@ export async function sendPromoNewsletter(data: {
 }) {
   const subject = data.customSubject || `🎁 Эксклюзивный подарок для Вас от Затока Resort`;
   const bodyText = data.customBody || `Мы приготовили для Вас особое предложение для идеального отдыха на побережье.`;
-  
+
   console.log(`[Resend] Initiating newsletter to ${data.emails.length} recipients. From: ${FROM_EMAIL}`);
-  
+
   const htmlContent = `
     <!DOCTYPE html>
     <html lang="ru">
@@ -414,7 +413,7 @@ export async function sendPromoNewsletter(data: {
   for (let i = 0; i < data.emails.length; i += batchLimit) {
     const chunk = data.emails.slice(i, i + batchLimit);
     const batchRequests = chunk.map((toEmail) => ({
-      from: FROM_EMAIL,
+      from: SENDER_FROM,
       to: toEmail,
       subject: subject,
       html: htmlContent,
