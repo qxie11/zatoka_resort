@@ -130,7 +130,7 @@ export default function Header() {
         </Link>
  
         {/* Desktop Navigation Capsule */}
-        <nav className="hidden lg:flex items-center gap-2 bg-slate-900/60 border border-white/10 px-2.5 py-1.5 rounded-full backdrop-blur-xl shadow-lg">
+        <nav className="hidden lg:flex items-center gap-1 bg-slate-950/40 border border-white/5 px-4 py-1.5 rounded-full backdrop-blur-xl shadow-lg">
           {navLinks.map((link) => {
             const localizedHref = getLocalizedHref(link.href);
             const isActive = pathname === localizedHref;
@@ -139,13 +139,19 @@ export default function Header() {
                 key={link.href}
                 href={localizedHref}
                 className={cn(
-                  "text-[10px] uppercase tracking-wider font-bold transition-all duration-300 px-3.5 py-1.5 rounded-full border",
+                  "text-xs uppercase tracking-widest font-semibold transition-colors duration-300 px-4 py-2 relative group/link",
                   isActive
-                    ? "text-teal-300 bg-teal-500/10 border-teal-500/30 shadow-[0_0_12px_rgba(20,184,166,0.2)] font-extrabold"
-                    : "text-slate-300 hover:text-white hover:bg-white/5 border-transparent"
+                    ? "text-teal-300 font-bold"
+                    : "text-slate-350 hover:text-white"
                 )}
               >
-                {link.label}
+                <span>{link.label}</span>
+                <span
+                  className={cn(
+                    "absolute bottom-1.5 left-4 right-4 h-0.5 bg-gradient-to-r from-teal-400 to-sky-400 transform origin-left transition-transform duration-350 ease-out rounded-full",
+                    isActive ? "scale-x-100 shadow-[0_0_8px_rgba(20,184,166,0.5)]" : "scale-x-0 group-hover/link:scale-x-100"
+                  )}
+                />
               </Link>
             );
           })}
@@ -153,13 +159,19 @@ export default function Header() {
             <Link
               href="/admin"
               className={cn(
-                "text-[10px] uppercase tracking-wider font-bold transition-all duration-300 px-3.5 py-1.5 rounded-full border",
+                "text-xs uppercase tracking-widest font-semibold transition-colors duration-300 px-4 py-2 relative group/link",
                 pathname === "/admin"
-                  ? "text-teal-300 bg-teal-500/10 border-teal-500/30 shadow-[0_0_12px_rgba(20,184,166,0.2)] font-extrabold"
-                  : "text-slate-300 hover:text-white hover:bg-white/5 border-transparent"
+                  ? "text-teal-300 font-bold"
+                  : "text-slate-350 hover:text-white"
               )}
             >
-              {t("admin")}
+              <span>{t("admin")}</span>
+              <span
+                className={cn(
+                  "absolute bottom-1.5 left-4 right-4 h-0.5 bg-gradient-to-r from-teal-400 to-sky-400 transform origin-left transition-transform duration-350 ease-out rounded-full",
+                  pathname === "/admin" ? "scale-x-100 shadow-[0_0_8px_rgba(20,184,166,0.5)]" : "scale-x-0 group-hover/link:scale-x-100"
+                )}
+              />
             </Link>
           )}
         </nav>
