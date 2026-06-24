@@ -157,6 +157,8 @@ const resources = {
       roleChef: "Помощник по хозяйству",
       amenitiesServices: "Удобства и услуги",
       amenitiesServicesDesc: "Всё необходимое для беззаботного семейного отдыха у Черного моря.",
+      attractionsTitle: "Окрестности & Достопримечательности",
+      attractionsDesc: "Исследуйте самые интересные места рядом с Zatoka Resort: от песчаных пляжей и лимана до старинной крепости и центра культуры вина.",
 
       // Booking Page
       bookingService: "Бронирование комнат",
@@ -333,6 +335,8 @@ const resources = {
       roleChef: "Помічник по господарству",
       amenitiesServices: "Зручності та послуги",
       amenitiesServicesDesc: "Все необхідне для безтурботного сімейного відпочинку біля Чорного моря.",
+      attractionsTitle: "Околиці та визначні пам'ятки",
+      attractionsDesc: "Досліджуйте найцікавіші місця поруч із Zatoka Resort: від піщаних пляжів та лиману до старовинної фортеці та центру культури вина.",
 
       // Booking Page
       bookingService: "Бронювання кімнат",
@@ -509,6 +513,8 @@ const resources = {
       roleChef: "Guesthouse Assistant",
       amenitiesServices: "Amenities & Services",
       amenitiesServicesDesc: "Everything you need for a carefree family vacation by the Black Sea.",
+      attractionsTitle: "Surroundings & Attractions",
+      attractionsDesc: "Explore the most interesting places near Zatoka Resort: from sandy beaches and the estuary to an ancient fortress and a wine culture center.",
 
       // Booking Page
       bookingService: "Room Booking",

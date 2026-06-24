@@ -14,6 +14,7 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { amenities } from "@/lib/data";
 import i18n from "@/lib/i18n";
 import BackgroundBubbles from "@/components/decorative/BackgroundBubbles";
+import GoogleMapComponent from "@/app/[lang]/booking/components/GoogleMapComponent";
 
 const iconMap: { [key: string]: React.FC<LucideProps> } = {
   Waves,
@@ -452,6 +453,25 @@ export default function AboutClient({ lang }: AboutClientProps) {
             <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-sky-200/10" />
             <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
           </svg>
+        </div>
+      </section>
+
+      {/* --- ATTRACTIONS MAP SECTION --- */}
+      <section className="py-24 lg:py-32 bg-slate-950/40 relative overflow-hidden border-t border-white/5">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white font-heading">
+              {translate("attractionsTitle", "Окрестности & Достопримечательности")}
+            </h2>
+            <WavyUnderline colorClassName="text-teal-400" />
+            <p className="mt-4 max-w-2xl mx-auto text-slate-300 text-lg font-light">
+              {translate("attractionsDesc", "Исследуйте самые интересные места рядом с Zatoka Resort: от песчаных пляжей и лимана до старинной крепости и центра культуры вина.")}
+            </p>
+          </div>
+
+          <div className="relative z-30 shadow-2xl">
+            <GoogleMapComponent showAttractions={true} lang={lang} />
+          </div>
         </div>
       </section>
     </div>
