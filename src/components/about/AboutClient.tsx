@@ -14,6 +14,7 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { amenities } from "@/lib/data";
 import i18n from "@/lib/i18n";
 import BackgroundBubbles from "@/components/decorative/BackgroundBubbles";
+import BackgroundFishes from "@/components/decorative/BackgroundFishes";
 import GoogleMapComponent from "@/app/[lang]/booking/components/GoogleMapComponent";
 
 const iconMap: { [key: string]: React.FC<LucideProps> } = {
@@ -104,6 +105,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
         {/* Floating Bubbles & Luxury Gridlines */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <BackgroundBubbles count={15} deepCount={8} />
+          <BackgroundFishes />
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-25" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] rounded-full bg-teal-500/10 blur-[130px] animate-pulse" />
           <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-amber-500/5 blur-[100px] animate-pulse" style={{ animationDelay: "2s" }} />
