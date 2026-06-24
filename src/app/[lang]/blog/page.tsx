@@ -26,9 +26,9 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
   const currentYear = new Date().getFullYear();
 
   const descriptions = {
-    ru: `Полезные статьи и советы для отдыха в Затоке ${currentYear}. Узнайте про отели у моря, рестораны, бассейны, развлечения и секреты прямого бронирования без переплат.`,
-    uk: `Корисні статті та поради для відпочинку в Затоці ${currentYear}. Дізнайтеся про готелі біля моря, ресторани, басейни, розваги та секрети прямого бронювання без переплат.`,
-    en: `Helpful travel tips and guides for your Zatoka vacation ${currentYear}. Explore seaside hotels, private pool facilities, dining options, and direct booking tips.`,
+    ru: `Полезные статьи и советы для отдыха в Затоке ${currentYear}. Узнайте про отели у моря, рестораны, уютные номера, развлечения и секреты прямого бронирования без переплат.`,
+    uk: `Корисні статті та поради для відпочинку в Затоці ${currentYear}. Дізнайтеся про готелі біля моря, ресторани, затишні номери, розваги та секрети прямого бронювання без переплат.`,
+    en: `Helpful travel tips and guides for your Zatoka vacation ${currentYear}. Explore seaside hotels, comfortable rooms, dining options, and direct booking tips.`,
   };
 
   const categorySuffix = category ? `?category=${category}` : "";

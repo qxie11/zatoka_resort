@@ -169,7 +169,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
  
                 {/* Description */}
                 <p className="max-w-xl text-base md:text-lg text-slate-300 font-light leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards] drop-shadow-lg">
-                  {translate("heroDescription", "Отель премиум-класса. Кристально чистый бассейн, песчаный пляж в 10 метарах и безупречный пятизвездочный сервис для вашего абсолютного расслабления.")}
+                  {translate("heroDescription", "Отель премиум-класса. Комфортные номера с кондиционером, песчаный пляж в 10 минутах ходьбы и безупречный сервис для вашего абсолютного расслабления.")}
                 </p>
  
                 {/* Clean Horizontal Action Capsule */}

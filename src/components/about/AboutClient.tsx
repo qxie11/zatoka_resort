@@ -43,7 +43,7 @@ const teamMembers = [
 
 const timelineEvents = [
   { year: "2010", ru: "Основание гостевого дома", uk: "Заснування гостьового будинку", en: "Guesthouse foundation" },
-  { year: "2016", ru: "Открытие бассейна и ресторана", uk: "Відкриття басейну та ресторану", en: "Pool & restaurant opening" },
+  { year: "2016", ru: "Реновация номеров и открытие ресторана", uk: "Реновація номерів та відкриття ресторану", en: "Room renovation & restaurant opening" },
   { year: "2021", ru: "Полная реновация и расширение", uk: "Повна реновація та розширення", en: "Full renovation & expansion" },
   { year: "2026", ru: "Премиум сервис нового уровня", uk: "Преміум сервіс нового рівня", en: "New-level premium service" },
 ];
