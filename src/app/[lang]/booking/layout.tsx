@@ -1,10 +1,7 @@
 import { Metadata } from "next";
-import { cookies, headers } from "next/headers";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const headerList = await headers();
-  const cookieStore = await cookies();
-  const lang = headerList.get("x-lang") || cookieStore.get("lang")?.value || "ru";
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params;
 
   const titles = {
     ru: "Забронировать проживание | Отдых в Затоке",
@@ -21,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
-  const canonicalUrl = `${baseUrl}/booking${lang !== "ru" ? `?lang=${lang}` : ""}`;
+  const canonicalUrl = `${baseUrl}/${lang}/booking`;
   const title = titles[lang as keyof typeof titles] || titles.ru;
   const description = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
 
@@ -31,10 +28,10 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        "x-default": `${baseUrl}/booking`,
-        ru: `${baseUrl}/booking`,
-        uk: `${baseUrl}/booking?lang=uk`,
-        en: `${baseUrl}/booking?lang=en`,
+        "x-default": `${baseUrl}/ru/booking`,
+        ru: `${baseUrl}/ru/booking`,
+        uk: `${baseUrl}/uk/booking`,
+        en: `${baseUrl}/en/booking`,
       },
     },
     openGraph: {

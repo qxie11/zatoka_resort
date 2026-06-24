@@ -17,7 +17,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug, lang } = await params;
   const room = await getRoomBySlugOrId(slug);
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://zatoka-hotel.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://zatokaresort.com';
 
   if (!room) return { title: "Not Found" };
 

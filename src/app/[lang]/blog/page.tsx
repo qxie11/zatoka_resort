@@ -32,7 +32,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
   };
 
   const categorySuffix = category ? `?category=${category}` : "";
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
   const canonicalPath = `${baseUrl}/${lang}/blog${categorySuffix}`;
   const title = titles[lang as keyof typeof titles] || titles.ru;
   const description = descriptions[lang as keyof typeof descriptions] || descriptions.ru;

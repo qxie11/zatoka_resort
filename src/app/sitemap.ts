@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 export const revalidate = 43200; // Revalidate sitemap every 12 hours
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://zatoka-hotel.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
   const locales = ['ru', 'uk', 'en'];
 
   // 1. Define static paths (relative)
@@ -13,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/about',
     '/booking',
     '/blog',
+    '/quiz',
   ];
 
   // 2. Fetch rooms and posts from database with try-catch to prevent build-time crashes

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
@@ -28,8 +29,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const headerList = await headers();
+  const lang = headerList.get("x-lang") || "ru";
+
   return (
-    <html lang="ru" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <head>
         {/* Google Tag Manager */}
         <script

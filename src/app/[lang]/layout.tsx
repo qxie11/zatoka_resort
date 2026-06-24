@@ -30,6 +30,9 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 
   return {
     metadataBase: new URL(baseUrl),
+    verification: {
+      google: "PCgrYQ1lq2e315vICglOzO78yo3_FGhfwEXyPTDmR_8",
+    },
     title: {
       default: title,
       template: "%s | Zatoka Resort",
