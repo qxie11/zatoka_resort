@@ -628,3 +628,34 @@
 .prose strong {
   color: #fff !important;
 }
+
+@keyframes gentle-nudge {
+  0%, 85%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(45, 212, 191, 0.3);
+  }
+  90% {
+    transform: scale(1.04) translateY(-1px);
+    box-shadow: 0 0 28px rgba(45, 212, 191, 0.6);
+  }
+  93% {
+    transform: scale(0.98) translateY(0);
+  }
+  96% {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px rgba(45, 212, 191, 0.5);
+  }
+}
+
+.animate-gentle-nudge {
+  animation: gentle-nudge 6s ease-in-out infinite !important;
+}
+
+.animate-gentle-nudge:hover {
+  animation-play-state: paused !important;
+  transform: scale(1.03) !important;
+}
+
+.animate-gentle-nudge:active {
+  transform: scale(0.97) !important;
+}

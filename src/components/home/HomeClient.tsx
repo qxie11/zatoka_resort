@@ -174,7 +174,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
  
                 {/* Clean Horizontal Action Capsule */}
                 <div className="flex flex-col sm:flex-row gap-4 w-full pt-2 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards]">
-                  <Button asChild size="lg" className="h-14 px-8 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-[0_0_30px_rgba(45,212,191,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl uppercase tracking-wider text-xs">
+                  <Button asChild size="lg" className="h-14 px-8 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-[0_0_30px_rgba(45,212,191,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl uppercase tracking-wider text-xs animate-gentle-nudge">
                     <Link href="/booking" className="flex items-center justify-center">
                       {translate("bookStay", "Забронировать отдых")}
                       <ArrowRight className="ml-2 h-4 w-4" />
