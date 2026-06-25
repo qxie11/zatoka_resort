@@ -4,7 +4,6 @@ import Footer from "@/components/layout/Footer";
 import { StickyBookingBar } from "@/components/conversion/StickyBookingBar";
 import { SeasonBanner } from "@/components/conversion/SeasonBanner";
 import { CallbackForm } from "@/components/conversion/CallbackForm";
-import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
 import ScratchCardPromo from "@/components/conversion/ScratchCardPromo";
 import LanguageSync from "@/components/providers/LanguageSync";
 
@@ -86,7 +85,6 @@ export default async function RootLayout({
 
       <StickyBookingBar />
       <CallbackForm />
-      <ExitIntentPopup />
       <ScratchCardPromo lang={lang} />
     </div>
   );
