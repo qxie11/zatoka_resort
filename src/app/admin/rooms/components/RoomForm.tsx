@@ -7,7 +7,7 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Minus, Plus, ArrowLeft, ArrowRight, Trash2, Upload, Link as LinkIcon, Image as ImageIcon } from "lucide-react";
+import { Minus, Plus, ArrowLeft, ArrowRight, Trash2, Upload, Link as LinkIcon, Image as ImageIcon, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -28,7 +28,7 @@ const roomSchema = z.object({
   description: z.string().min(1, "Описание обязательно"),
   price: z.coerce.number().min(0, "Цена должна быть положительным числом"),
   capacity: z.coerce.number().int().min(1, "Вместимость должна быть не менее 1"),
-  amenities: z.string(),
+  amenities: z.any().optional(),
   imageUrl: z.string().optional(),
   imageUrls: z.string().optional(),
   imageHint: z.string().optional(),
@@ -40,7 +40,7 @@ type RoomFormValues = {
   description: string;
   price: number;
   capacity: number;
-  amenities: string;
+  amenities?: any;
   imageUrl?: string;
   imageUrls?: string;
   imageHint?: string;
@@ -64,6 +64,10 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
   const [images, setImages] = useState<RoomFormImage[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [urlInput, setUrlInput] = useState('');
+  
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  const [amenityInput, setAmenityInput] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const form = useForm<RoomFormValues>({
     resolver: zodResolver(roomSchema),
@@ -73,7 +77,6 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         description: '',
         price: 0,
         capacity: 1,
-        amenities: '',
         imageUrl: '',
         imageUrls: '',
         imageHint: ''
@@ -103,6 +106,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         });
       }
       setImages(initialImages);
+      setSelectedAmenities(room.amenities || []);
 
       form.reset({
           name: room.name,
@@ -110,20 +114,19 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
           description: room.description,
           price: room.price,
           capacity: room.capacity,
-          amenities: room.amenities.join(', '),
           imageUrl: room.imageUrl,
           imageUrls: room.imageUrls?.join(', ') || '',
           imageHint: room.imageHint
       });
     } else {
       setImages([]);
+      setSelectedAmenities(['Wi-Fi', 'Кондиционер', 'Балкон']);
       form.reset({
         name: '',
         slug: '',
         description: '',
         price: 0,
         capacity: 1,
-        amenities: '',
         imageUrl: '',
         imageUrls: '',
         imageHint: ''
@@ -227,17 +230,13 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
       const mainImagePath = finalUrls[0] || '';
       const additionalImagePaths = finalUrls.slice(1);
 
-      const amenitiesArray = Array.isArray(data.amenities) 
-        ? data.amenities 
-        : String(data.amenities).split(',').map(s => s.trim()).filter(Boolean);
-
       onSubmit({ 
         name: data.name,
         slug: data.slug,
         description: data.description,
         price: data.price,
         capacity: data.capacity,
-        amenities: amenitiesArray,
+        amenities: selectedAmenities,
         imageUrl: mainImagePath,
         imageUrls: additionalImagePaths,
         imageHint: data.imageHint || ''
@@ -338,11 +337,102 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                       {form.formState.errors.capacity && <p className="text-xs text-rose-500">{form.formState.errors.capacity.message}</p>}
                   </div>
               </div>
-            <div className="grid gap-2">
-                 <Label htmlFor="amenities" className="font-semibold text-slate-300">Удобства (через запятую)</Label>
-                 <Input id="amenities" {...form.register("amenities")} className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11" />
-                 {form.formState.errors.amenities && <p className="text-xs text-rose-500">{form.formState.errors.amenities.message}</p>}
-             </div>
+            <div className="grid gap-2 relative">
+                  <Label className="font-semibold text-slate-300">Удобства номера</Label>
+                  
+                  {/* Selected chips container */}
+                  <div className="flex flex-wrap gap-1.5 p-2 bg-slate-900 border border-white/10 rounded-xl min-h-[44px] focus-within:ring-1 focus-within:ring-teal-500 transition-all">
+                    {selectedAmenities.map((amenity, idx) => (
+                      <span 
+                        key={idx} 
+                        className="inline-flex items-center gap-1.5 bg-teal-500/10 border border-teal-500/20 text-teal-300 text-xs px-2.5 py-1 rounded-lg"
+                      >
+                        {amenity}
+                        <button
+                          type="button"
+                          onClick={() => setSelectedAmenities(prev => prev.filter((_, i) => i !== idx))}
+                          className="text-teal-400 hover:text-teal-200 transition-colors shrink-0"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </span>
+                    ))}
+                    
+                    <input
+                      type="text"
+                      placeholder={selectedAmenities.length === 0 ? "Начните вводить или выберите..." : "Добавить..."}
+                      value={amenityInput}
+                      onChange={(e) => {
+                        setAmenityInput(e.target.value);
+                        setShowSuggestions(true);
+                      }}
+                      onFocus={() => setShowSuggestions(true)}
+                      onBlur={() => {
+                        setTimeout(() => {
+                          setShowSuggestions(false);
+                        }, 200);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          const trimmed = amenityInput.trim();
+                          if (trimmed && !selectedAmenities.some(s => s.toLowerCase() === trimmed.toLowerCase())) {
+                            setSelectedAmenities(prev => [...prev, trimmed]);
+                            setAmenityInput('');
+                          }
+                        }
+                      }}
+                      className="flex-1 bg-transparent border-0 outline-none focus:ring-0 text-white text-sm min-w-[120px] h-7 px-1"
+                    />
+                  </div>
+
+                  {/* Autocomplete Dropdown */}
+                  {showSuggestions && (
+                    <div className="absolute top-[100%] left-0 right-0 z-[110] mt-1.5 bg-slate-900 border border-white/10 rounded-xl max-h-[180px] overflow-y-auto shadow-2xl p-1.5">
+                      {["Wi-Fi", "Кондиционер", "Балкон", "ТВ", "Холодильник", "Душ", "Мини-кухня", "Собственная терраса", "Детская кровать"]
+                        .filter(item => 
+                          !selectedAmenities.some(selected => selected.toLowerCase() === item.toLowerCase()) &&
+                          item.toLowerCase().includes(amenityInput.toLowerCase())
+                        )
+                        .map((item, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setSelectedAmenities(prev => [...prev, item]);
+                              setAmenityInput('');
+                              setShowSuggestions(false);
+                            }}
+                            className="w-full text-left px-3 py-1.5 rounded-lg text-sm text-slate-350 hover:text-white hover:bg-white/5 transition-colors"
+                          >
+                            {item}
+                          </button>
+                        ))
+                      }
+                      
+                      {/* Custom option */}
+                      {amenityInput.trim() && 
+                       !["Wi-Fi", "Кондиционер", "Балкон", "ТВ", "Холодильник", "Душ", "Мини-кухня", "Собственная терраса", "Детская кровать"]
+                          .some(p => p.toLowerCase() === amenityInput.trim().toLowerCase()) && 
+                       !selectedAmenities.some(s => s.toLowerCase() === amenityInput.trim().toLowerCase()) && (
+                        <button
+                          type="button"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            const trimmed = amenityInput.trim();
+                            setSelectedAmenities(prev => [...prev, trimmed]);
+                            setAmenityInput('');
+                            setShowSuggestions(false);
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-lg text-sm text-teal-400 hover:text-teal-300 hover:bg-teal-500/5 transition-colors font-medium border-t border-white/5 mt-1"
+                        >
+                          + Добавить "{amenityInput.trim()}"
+                        </button>
+                      )}
+                    </div>
+                  )}
+              </div>
             
             <div className="grid gap-4 bg-slate-900/40 p-4 rounded-2xl border border-white/10">
                  <Label className="font-semibold text-slate-300">Галерея изображений</Label>
