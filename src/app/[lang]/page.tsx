@@ -29,7 +29,7 @@ export default async function Home({ params }: PageProps) {
   const { lang } = await params;
   const [rooms, reviews] = await Promise.all([getRooms(), getReviews()]);
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
 
   const prices = rooms.map((r) => r.price);
   const minPrice = prices.length ? Math.min(...prices) : 1500;

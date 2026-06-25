@@ -7,7 +7,7 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
 
   const currentYear = new Date().getFullYear();
 
@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function AboutPage({ params }: PageProps) {
   const { lang } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
 
   const jsonLd = {
     "@context": "https://schema.org",

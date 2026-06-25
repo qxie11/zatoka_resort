@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     en: post.excerptEn,
   }[lang as "ru" | "uk" | "en"] || post.excerptRu;
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
   const canonicalUrl = `${baseUrl}/${lang}/blog/${slug}`;
   const absoluteImageUrl = post.imageUrl.startsWith("http") ? post.imageUrl : `${baseUrl}${post.imageUrl}`;
 
@@ -145,7 +145,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     en: "Read More",
   }[lang];
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
   const canonicalUrl = `${baseUrl}/${lang}/blog/${slug}`;
   const absoluteImageUrl = post.imageUrl.startsWith("http") ? post.imageUrl : `${baseUrl}${post.imageUrl}`;
 
@@ -223,53 +223,53 @@ export default async function BlogPostPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <div className="bg-slate-950 text-slate-100 min-h-screen pb-20">
-      <section className="relative h-[60vh] min-h-[400px] flex items-end justify-start overflow-hidden bg-slate-900 text-white">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src={post.imageUrl}
-            alt={title}
-            fill
-            className="object-cover scale-105 opacity-60 brightness-[0.5]"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-        </div>
-
-        <div className="relative container mx-auto px-4 pb-12 z-10 max-w-4xl">
-          <nav className="mb-6 flex flex-wrap items-center gap-1.5 text-xs md:text-sm text-teal-200/90 font-medium">
-            <Link
-              href={`/${lang}`}
-              className="hover:text-teal-300 hover:underline transition-colors"
-            >
-              {homeLabel}
-            </Link>
-            <span className="text-slate-500">/</span>
-            <Link
-              href={`/${lang}/blog`}
-              className="hover:text-teal-300 hover:underline transition-colors"
-            >
-              {blogLabel}
-            </Link>
-            <span className="text-slate-500">/</span>
-            <Link
-              href={`/${lang}/blog?category=${(post.categoryEn || "activities").toLowerCase()}`}
-              className="hover:text-teal-300 hover:underline transition-colors"
-            >
-              {category}
-            </Link>
-            <span className="text-slate-500">/</span>
-            <span className="text-slate-400 font-light truncate max-w-[120px] md:max-w-xs" title={title}>
-              {title}
-            </span>
-          </nav>
-
-          <div className="inline-flex bg-teal-500/20 backdrop-blur-md text-teal-300 border border-teal-500/30 text-xs font-semibold rounded-lg px-2.5 py-1 mb-4">
-            {category}
+        <section className="relative h-[60vh] min-h-[400px] flex items-end justify-start overflow-hidden bg-slate-900 text-white">
+          <div className="absolute inset-0 z-0">
+            <Image
+              src={post.imageUrl}
+              alt={title}
+              fill
+              className="object-cover scale-105 opacity-60 brightness-[0.5]"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-4 text-white">
-            {title}
-          </h1>
+          <div className="relative container mx-auto px-4 pb-12 z-10 max-w-4xl">
+            <nav className="mb-6 flex flex-wrap items-center gap-1.5 text-xs md:text-sm text-teal-200/90 font-medium">
+              <Link
+                href={`/${lang}`}
+                className="hover:text-teal-300 hover:underline transition-colors"
+              >
+                {homeLabel}
+              </Link>
+              <span className="text-slate-500">/</span>
+              <Link
+                href={`/${lang}/blog`}
+                className="hover:text-teal-300 hover:underline transition-colors"
+              >
+                {blogLabel}
+              </Link>
+              <span className="text-slate-500">/</span>
+              <Link
+                href={`/${lang}/blog?category=${(post.categoryEn || "activities").toLowerCase()}`}
+                className="hover:text-teal-300 hover:underline transition-colors"
+              >
+                {category}
+              </Link>
+              <span className="text-slate-500">/</span>
+              <span className="text-slate-400 font-light truncate max-w-[120px] md:max-w-xs" title={title}>
+                {title}
+              </span>
+            </nav>
+
+            <div className="inline-flex bg-teal-500/20 backdrop-blur-md text-teal-300 border border-teal-500/30 text-xs font-semibold rounded-lg px-2.5 py-1 mb-4">
+              {category}
+            </div>
+
+            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-4 text-white">
+              {title}
+            </h1>
 
             <div className="flex items-center gap-4 text-sm text-slate-300">
               <span className="flex items-center gap-1.5">
@@ -280,11 +280,11 @@ export default async function BlogPostPage({ params }: PageProps) {
                 <Clock className="h-4 w-4" />
                 {post.readTime} мин чтения
               </span>
-              <ArticleMetrics 
-                postId={post.id} 
-                initialViews={post.views} 
-                initialLikes={post.likes} 
-                variant="hero" 
+              <ArticleMetrics
+                postId={post.id}
+                initialViews={post.views}
+                initialLikes={post.likes}
+                variant="hero"
               />
             </div>
           </div>
@@ -296,75 +296,75 @@ export default async function BlogPostPage({ params }: PageProps) {
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                  h1: ({node, ...props}) => <h2 {...props} />,
+                  h1: ({ node, ...props }) => <h2 {...props} />,
                 }}
               >
                 {fullContent}
               </ReactMarkdown>
             </div>
           </div>
-          
-          <ArticleMetrics 
-            postId={post.id} 
-            initialViews={post.views} 
-            initialLikes={post.likes} 
-            variant="bottom" 
+
+          <ArticleMetrics
+            postId={post.id}
+            initialViews={post.views}
+            initialLikes={post.likes}
+            variant="bottom"
           />
         </section>
 
-      <section className="container mx-auto px-4 py-8 max-w-5xl border-t border-white/5 mt-8">
-        <h2 className="text-2xl font-bold text-white mb-8 text-center md:text-left">
-          {relatedTitleText}
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {finalRelated.map((rel) => {
-            const relTitle = {
-              ru: rel.titleRu,
-              uk: rel.titleUk,
-              en: rel.titleEn,
-            }[lang] || rel.titleRu;
+        <section className="container mx-auto px-4 py-8 max-w-5xl border-t border-white/5 mt-8">
+          <h2 className="text-2xl font-bold text-white mb-8 text-center md:text-left">
+            {relatedTitleText}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {finalRelated.map((rel) => {
+              const relTitle = {
+                ru: rel.titleRu,
+                uk: rel.titleUk,
+                en: rel.titleEn,
+              }[lang] || rel.titleRu;
 
-            const relCategory = {
-              ru: rel.categoryRu,
-              uk: rel.categoryUk,
-              en: rel.categoryEn,
-            }[lang] || rel.categoryRu;
+              const relCategory = {
+                ru: rel.categoryRu,
+                uk: rel.categoryUk,
+                en: rel.categoryEn,
+              }[lang] || rel.categoryRu;
 
-            return (
-              <article
-                key={rel.slug}
-                className="flex flex-col rounded-2xl overflow-hidden glass-card-dark border border-white/5 hover:border-teal-500/40 hover-lift transition-smooth group"
-              >
-                <div className="relative h-40 w-full overflow-hidden">
-                  <Image
-                    src={rel.imageUrl}
-                    alt={relTitle}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-smooth"
-                  />
-                  <div className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md text-teal-300 border border-teal-500/30 text-xs font-medium rounded px-2 py-0.5 shadow-md">
-                    {relCategory}
+              return (
+                <article
+                  key={rel.slug}
+                  className="flex flex-col rounded-2xl overflow-hidden glass-card-dark border border-white/5 hover:border-teal-500/40 hover-lift transition-smooth group"
+                >
+                  <div className="relative h-40 w-full overflow-hidden">
+                    <Image
+                      src={rel.imageUrl}
+                      alt={relTitle}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-smooth"
+                    />
+                    <div className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md text-teal-300 border border-teal-500/30 text-xs font-medium rounded px-2 py-0.5 shadow-md">
+                      {relCategory}
+                    </div>
                   </div>
-                </div>
-                <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                  <h3 className="text-lg font-bold text-white group-hover:text-teal-300 transition-colors">
-                    {relTitle}
-                  </h3>
-                  <Link
-                    href={`/${lang}/blog/${rel.slug}`}
-                    className="inline-flex items-center gap-1.5 text-teal-300 text-xs font-semibold group/btn"
-                  >
-                    <span>{readMoreText}</span>
-                    <ArrowRight className="h-3 w-3 group-hover/btn:translate-x-0.5 transition-transform" />
-                  </Link>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-    </div>
+                  <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                    <h3 className="text-lg font-bold text-white group-hover:text-teal-300 transition-colors">
+                      {relTitle}
+                    </h3>
+                    <Link
+                      href={`/${lang}/blog/${rel.slug}`}
+                      className="inline-flex items-center gap-1.5 text-teal-300 text-xs font-semibold group/btn"
+                    >
+                      <span>{readMoreText}</span>
+                      <ArrowRight className="h-3 w-3 group-hover/btn:translate-x-0.5 transition-transform" />
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      </div>
     </>
   );
 }

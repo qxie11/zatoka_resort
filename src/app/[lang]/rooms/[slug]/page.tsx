@@ -17,7 +17,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug, lang } = await params;
   const room = await getRoomBySlugOrId(slug);
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://zatokaresort.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://zatoka-hotel.com';
 
   if (!room) return { title: "Not Found" };
 
@@ -59,7 +59,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 pb-20">
-      
+
       {/* --- HERO HEADER --- */}
       <section className="relative h-[65vh] min-h-[460px] flex items-end justify-start overflow-hidden bg-slate-900 text-white">
         <div className="absolute inset-0 z-0">
@@ -87,14 +87,14 @@ export default async function RoomDetailsPage({ params }: PageProps) {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-6 border-t border-white/10 w-full">
             <div className="flex flex-wrap items-center gap-6 text-sm text-slate-300">
               <span className="flex items-center gap-1.5 bg-slate-900/50 backdrop-blur-sm border border-white/5 px-3 py-1.5 rounded-xl">
-                <BedDouble className="h-4.5 w-4.5 text-teal-400" /> 
+                <BedDouble className="h-4.5 w-4.5 text-teal-400" />
                 До {room.capacity} {t.guests[lang as keyof typeof t.guests]}
               </span>
               <span className="text-teal-300 font-extrabold text-2xl tracking-tight">
                 {room.price} <span className="text-sm font-normal text-slate-400">{t.price[lang as keyof typeof t.price]}</span>
               </span>
             </div>
-            
+
             <Button asChild size="lg" className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/25 rounded-2xl px-8 hover:scale-[1.03] active:scale-95 transition-all">
               <Link href={`/${lang}/booking/${room.slug}`} className="flex items-center gap-2">
                 {t.booking[lang as keyof typeof t.booking]}
@@ -108,10 +108,10 @@ export default async function RoomDetailsPage({ params }: PageProps) {
       {/* --- MAIN CONTENT & LAYOUT --- */}
       <section className="container mx-auto px-4 py-12 max-w-6xl relative z-30">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          
+
           {/* Left / Middle: Slider, About, Map & Reviews */}
           <div className="lg:col-span-2 space-y-8">
-            
+
             {/* Inline Premium Gallery Slider */}
             <RoomGallery images={allImages} roomName={room.name} />
 
@@ -121,7 +121,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
               <p className="text-slate-200 font-light text-base md:text-lg leading-relaxed mb-6">
                 {room.description}
               </p>
-              
+
               <h3 className="text-xl font-bold text-white mb-4 pt-4 border-t border-white/5">
                 {t.amenities[lang as keyof typeof t.amenities]}
               </h3>
@@ -193,12 +193,12 @@ export default async function RoomDetailsPage({ params }: PageProps) {
           <div className="lg:col-span-1 lg:sticky lg:top-24 space-y-6">
             <div className="glass-card-dark border border-teal-500/20 rounded-3xl p-6 shadow-2xl bg-slate-900/80 backdrop-blur-md relative overflow-hidden">
               <div className="absolute -right-12 -top-12 w-24 h-24 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
-              
+
               <div className="flex items-center justify-between mb-4">
                 <span className="text-slate-400 text-sm">Стоимость суток</span>
                 <span className="text-2xl font-extrabold text-teal-300">{room.price} грн</span>
               </div>
-              
+
               <div className="space-y-4 pt-4 border-t border-white/5">
                 <div className="flex items-center justify-between text-sm text-slate-300">
                   <span className="flex items-center gap-1.5"><BedDouble className="h-4 w-4 text-teal-500/80" /> Размещение</span>
@@ -209,7 +209,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
                   <span>10м до моря</span>
                 </div>
               </div>
-              
+
               <Button asChild size="lg" className="w-full mt-6 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl transition-all">
                 <Link href={`/${lang}/booking/${room.slug}`} className="flex items-center justify-center gap-2">
                   Перейти к бронированию

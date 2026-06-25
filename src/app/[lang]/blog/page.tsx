@@ -32,7 +32,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
   };
 
   const categorySuffix = category ? `?category=${category}` : "";
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
   const canonicalPath = `${baseUrl}/${lang}/blog${categorySuffix}`;
   const title = titles[lang as keyof typeof titles] || titles.ru;
   const description = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
@@ -208,8 +208,8 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
             <Link
               href={`/${lang}/blog?category=all${search ? `&search=${search}` : ""}`}
               className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${category === "all"
-                  ? "bg-gradient-to-r from-teal-400 to-sky-500 text-slate-950 shadow-lg shadow-teal-500/20 font-bold"
-                  : "bg-slate-900/80 border border-white/5 text-slate-300 hover:bg-slate-800"
+                ? "bg-gradient-to-r from-teal-400 to-sky-500 text-slate-950 shadow-lg shadow-teal-500/20 font-bold"
+                : "bg-slate-900/80 border border-white/5 text-slate-300 hover:bg-slate-800"
                 }`}
             >
               {translations.allCategories}
@@ -219,8 +219,8 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
                 key={cat.slug}
                 href={`/${lang}/blog?category=${cat.slug}${search ? `&search=${search}` : ""}`}
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${category === cat.slug
-                    ? "bg-gradient-to-r from-teal-400 to-sky-500 text-slate-950 shadow-lg shadow-teal-500/20 font-bold"
-                    : "bg-slate-900/80 border border-white/5 text-slate-300 hover:bg-slate-800"
+                  ? "bg-gradient-to-r from-teal-400 to-sky-500 text-slate-950 shadow-lg shadow-teal-500/20 font-bold"
+                  : "bg-slate-900/80 border border-white/5 text-slate-300 hover:bg-slate-800"
                   }`}
               >
                 {cat.display}
@@ -314,8 +314,8 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
                 <Link
                   href={buildPageUrl(activePage - 1)}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 border border-white/5 ${activePage > 1
-                      ? "bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white"
-                      : "bg-slate-900/40 text-slate-600 pointer-events-none"
+                    ? "bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white"
+                    : "bg-slate-900/40 text-slate-600 pointer-events-none"
                     }`}
                 >
                   {translations.prev}
@@ -326,8 +326,8 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
                     key={pageNum}
                     href={buildPageUrl(pageNum)}
                     className={`h-10 w-10 flex items-center justify-center rounded-xl text-sm font-medium transition-all duration-300 ${pageNum === activePage
-                        ? "bg-gradient-to-r from-teal-400 to-sky-500 text-slate-950 font-bold shadow-lg shadow-teal-500/20"
-                        : "bg-slate-900/80 border border-white/5 text-slate-300 hover:bg-slate-800 hover:text-white"
+                      ? "bg-gradient-to-r from-teal-400 to-sky-500 text-slate-950 font-bold shadow-lg shadow-teal-500/20"
+                      : "bg-slate-900/80 border border-white/5 text-slate-300 hover:bg-slate-800 hover:text-white"
                       }`}
                   >
                     {pageNum}
@@ -337,8 +337,8 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
                 <Link
                   href={buildPageUrl(activePage + 1)}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 border border-white/5 ${activePage < totalPages
-                      ? "bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white"
-                      : "bg-slate-900/40 text-slate-600 pointer-events-none"
+                    ? "bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white"
+                    : "bg-slate-900/40 text-slate-600 pointer-events-none"
                     }`}
                 >
                   {translations.next}

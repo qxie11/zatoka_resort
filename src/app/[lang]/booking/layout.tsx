@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     en: `Direct room booking at Zatoka Resort. Affordable family holidays in Zatoka ${currentYear} just a 10-minute walk to the beach, air conditioning, and booking without intermediaries.`,
   };
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatokaresort.com";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
   const canonicalUrl = `${baseUrl}/${lang}/booking`;
   const title = titles[lang as keyof typeof titles] || titles.ru;
   const description = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
