@@ -266,10 +266,6 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         imageUrls: additionalImagePaths,
         imageHint: data.imageHint || ''
       }, room?.id);
-
-      // Reset local urls state
-      clearLocalUrls(images);
-      setImages([]);
     } catch (error) {
       toast({
         title: "Ошибка",
