@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
       price,
       capacity,
       amenities,
+      units,
       imageUrl,
       imageUrls,
       imageHint,
@@ -62,11 +63,12 @@ export async function POST(request: NextRequest) {
 
     const newRoom = await createRoom({
       name,
-      slug: slug || undefined,
+      slug: slug || "",
       description,
       price: Number(price),
       capacity: Number(capacity),
       amenities: amenitiesArray,
+      units,
       imageUrl: imageUrl || "",
       imageUrls: imageUrlsArray,
       imageHint: imageHint || "",

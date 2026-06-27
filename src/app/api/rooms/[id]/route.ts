@@ -30,7 +30,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, slug, description, price, capacity, amenities, imageUrl, imageUrls, imageHint } = body;
+    const { name, slug, description, price, capacity, amenities, units, imageUrl, imageUrls, imageHint } = body;
 
     console.log('PUT /api/rooms/[id] - Room ID:', id);
     console.log('PUT /api/rooms/[id] - Slug:', slug);
@@ -76,6 +76,7 @@ export async function PUT(
     if (price !== undefined) updateData.price = Number(price);
     if (capacity !== undefined) updateData.capacity = Number(capacity);
     if (amenitiesArray !== undefined) updateData.amenities = amenitiesArray;
+    if (units !== undefined) updateData.units = units;
     if (imageUrl !== undefined) updateData.imageUrl = imageUrl;
     if (imageUrlsArray !== undefined) updateData.imageUrls = imageUrlsArray;
     if (imageHint !== undefined) updateData.imageHint = imageHint;
