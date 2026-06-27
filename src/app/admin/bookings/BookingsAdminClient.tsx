@@ -190,7 +190,7 @@ export default function BookingsAdminClient({
   }
 
   return (
-    <div className="w-full max-w-full overflow-hidden text-white bg-slate-950">
+    <div className="w-full max-w-full overflow-hidden text-white">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Управление бронированиями</h1>
         <Button onClick={handleAddNew} disabled={isCreating || isUpdating} className="w-full sm:w-auto bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">

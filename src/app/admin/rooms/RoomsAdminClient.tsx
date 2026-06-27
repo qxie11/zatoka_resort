@@ -167,7 +167,7 @@ export default function RoomsAdminClient({ initialData }: RoomsAdminClientProps)
 
   return (
     <>
-      <div className="flex items-center justify-between text-white bg-slate-950 mb-6">
+      <div className="flex items-center justify-between text-white mb-6">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Управление номерами</h1>
         <Button onClick={handleAddNew} disabled={isCreating || isUpdating} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">
           <PlusCircle className="mr-2 h-4 w-4" />
