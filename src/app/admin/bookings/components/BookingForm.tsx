@@ -39,7 +39,7 @@ import { DateRangePicker } from "@/components/booking/DateRangePicker";
 
 const bookingSchema = z.object({
   roomId: z.string().min(1, "Необходимо выбрать номер"),
-  unitId: z.string().optional(),
+  unitId: z.string().min(1, "Необходимо выбрать юнит"),
   dateRange: z.object({
     from: z.date({
       required_error: "Дата заезда обязательна.",
@@ -81,7 +81,7 @@ export default function BookingForm({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
       roomId: "",
-      unitId: "any",
+      unitId: "",
       dateRange: {
         from: undefined as any,
         to: undefined as any,
@@ -98,7 +98,7 @@ export default function BookingForm({
     if (booking) {
       form.reset({
         roomId: booking.roomId,
-        unitId: booking.unitId || "any",
+        unitId: booking.unitId || "",
         dateRange: {
           from: new Date(booking.startDate),
           to: new Date(booking.endDate),
@@ -112,7 +112,7 @@ export default function BookingForm({
     } else {
       form.reset({
         roomId: "",
-        unitId: "any",
+        unitId: "",
         dateRange: {
           from: undefined as any,
           to: undefined as any,
@@ -128,13 +128,32 @@ export default function BookingForm({
 
   const selectedRoomId = form.watch("roomId");
   const selectedRoom = useMemo(() => rooms.find(r => r.id === selectedRoomId), [rooms, selectedRoomId]);
+  const selectedUnitId = form.watch("unitId");
+
+  useEffect(() => {
+    if (selectedRoom?.units) {
+      if (selectedRoom.units.length === 1) {
+        const singleUnitId = selectedRoom.units[0].id;
+        if (selectedUnitId !== singleUnitId) {
+          form.setValue("unitId", singleUnitId);
+        }
+      } else {
+        const unitExists = selectedRoom.units.some(u => u.id === selectedUnitId);
+        if (!unitExists && selectedUnitId !== "") {
+          form.setValue("unitId", "");
+        }
+      }
+    } else if (selectedRoomId === "") {
+      if (selectedUnitId !== "") {
+        form.setValue("unitId", "");
+      }
+    }
+  }, [selectedRoom, selectedRoomId, selectedUnitId, form]);
 
   const roomBookings = useMemo(() => {
     if (!selectedRoomId) return [];
     return allBookings.filter((b: Booking) => b.roomId === selectedRoomId);
   }, [selectedRoomId, allBookings]);
-
-  const selectedUnitId = form.watch("unitId");
 
   const datePickerBookings = useMemo(() => {
     if (!selectedUnitId || selectedUnitId === "any") {
@@ -253,20 +272,38 @@ export default function BookingForm({
                   // we might still want to show it in the list (or it will just show as an ID).
                   // For simplicity, we just show the available ones.
 
+                  const isSingleUnit = selectedRoom?.units && selectedRoom.units.length === 1;
+
                   return (
                     <FormItem className="space-y-1.5">
                       <FormLabel className="font-semibold text-slate-300">Юнит (подномерок)</FormLabel>
                       <Select
                         value={field.value}
-                        onValueChange={field.onChange}
+                        onValueChange={(val) => {
+                          field.onChange(val);
+                          // Reset dates if the newly selected unit is not available on current dates
+                          const currentRange = form.getValues("dateRange");
+                          if (currentRange?.from && currentRange?.to && val) {
+                            const isBooked = roomBookings.some(b => {
+                              if (booking && b.id === booking.id) return false;
+                              if (b.unitId !== val) return false;
+                              const bStart = new Date(b.startDate);
+                              const bEnd = new Date(b.endDate);
+                              return currentRange.from! < bEnd && currentRange.to! > bStart;
+                            });
+                            if (isBooked) {
+                              form.setValue("dateRange", { from: undefined as any, to: undefined as any });
+                            }
+                          }
+                        }}
+                        disabled={isSingleUnit}
                       >
                         <FormControl>
                           <SelectTrigger className="w-full bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11">
-                            <SelectValue placeholder="Любой юнит" />
+                            <SelectValue placeholder={isSingleUnit ? selectedRoom?.units?.[0].name : "Выберите юнит"} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-md">
-                          <SelectItem value="any" className="focus:bg-teal-500/20 focus:text-teal-300 hover:bg-teal-500/20 hover:text-teal-300 data-[highlighted]:bg-teal-500/20 data-[highlighted]:text-teal-300 rounded-lg py-2 cursor-pointer">Любой свободный</SelectItem>
                           {availableUnits.map((unit) => (
                             <SelectItem key={unit.id} value={unit.id!} className="focus:bg-teal-500/20 focus:text-teal-300 hover:bg-teal-500/20 hover:text-teal-300 data-[highlighted]:bg-teal-500/20 data-[highlighted]:text-teal-300 rounded-lg py-2 cursor-pointer">
                               {unit.name}
@@ -281,19 +318,21 @@ export default function BookingForm({
               />
             )}
 
-            <FormField
-              control={form.control}
-              name="dateRange"
-              render={({ field }) => (
-                <DateRangePicker
-                  value={field.value}
-                  onChange={field.onChange}
-                  existingBookings={datePickerBookings}
-                  excludeBookingId={booking?.id}
-                  totalUnitsCount={datePickerTotalUnits}
-                />
-              )}
-            />
+            {form.watch("unitId") && (
+              <FormField
+                control={form.control}
+                name="dateRange"
+                render={({ field }) => (
+                  <DateRangePicker
+                    value={field.value}
+                    onChange={field.onChange}
+                    existingBookings={datePickerBookings}
+                    excludeBookingId={booking?.id}
+                    totalUnitsCount={1}
+                  />
+                )}
+              />
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
@@ -343,6 +382,7 @@ export default function BookingForm({
                           type="email"
                           placeholder="example@mail.com"
                           className="pl-10 bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11"
+                          suppressHydrationWarning
                           {...field}
                           value={field.value || ""}
                         />

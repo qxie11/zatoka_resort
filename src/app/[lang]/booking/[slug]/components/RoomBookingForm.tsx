@@ -33,7 +33,7 @@ import type { Room, Booking } from "@/lib/types";
 import { DateRangePicker } from "@/components/booking/DateRangePicker";
 
 const FormSchema = z.object({
-  unitId: z.string().optional(),
+  unitId: z.string().min(1, { message: "Пожалуйста, выберите домик / номер." }),
   dateRange: z.object({
     from: z.date({
       required_error: "Дата заезда обязательна.",
@@ -138,10 +138,12 @@ export default function RoomBookingForm({
     }
   };
 
+  const isSingleUnit = room.units && room.units.length === 1;
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      unitId: "any",
+      unitId: isSingleUnit ? room?.units?.[0]?.id : "",
       guests: 1,
       name: "",
       phone: "",
@@ -167,7 +169,7 @@ export default function RoomBookingForm({
         },
         body: JSON.stringify({
           roomId: room.id,
-          unitId: data.unitId === "any" ? undefined : data.unitId,
+          unitId: data.unitId,
           startDate: data.dateRange.from.toISOString(),
           endDate: data.dateRange.to.toISOString(),
           name: data.name,
@@ -221,58 +223,72 @@ export default function RoomBookingForm({
       <CardContent className="pt-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="dateRange"
-              render={({ field }) => (
-                <DateRangePicker
-                  value={field.value}
-                  onChange={field.onChange}
-                  existingBookings={existingBookings}
-                  totalUnitsCount={room.units?.length || 1}
-                />
-              )}
-            />
-
-            {room.units && room.units.length > 0 && form.watch("dateRange.from") && form.watch("dateRange.to") && (
+            {room.units && room.units.length > 0 && (
               <FormField
                 control={form.control}
                 name="unitId"
+                render={({ field }) => (
+                  <FormItem className="space-y-1.5">
+                    <FormLabel className="font-semibold text-slate-300">Домик / Номер</FormLabel>
+                    <Select
+                      value={field.value}
+                      onValueChange={(val) => {
+                        field.onChange(val);
+                        // Reset dates if the newly selected unit is not available on current dates
+                        const currentRange = form.getValues("dateRange");
+                        if (currentRange?.from && currentRange?.to && val) {
+                          const isBooked = existingBookings.some(b => {
+                            if (b.unitId !== val) return false;
+                            const bStart = new Date(b.startDate);
+                            const bEnd = new Date(b.endDate);
+                            return currentRange.from < bEnd && currentRange.to > bStart;
+                          });
+                          if (isBooked) {
+                            form.setValue("dateRange", { from: undefined as any, to: undefined as any });
+                            toast({
+                              title: "Даты сброшены",
+                              description: "Выбранный домик занят на ранее выбранные даты. Пожалуйста, выберите новые даты.",
+                              variant: "destructive",
+                            });
+                          }
+                        }
+                      }}
+                      disabled={isSingleUnit}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11">
+                          <SelectValue placeholder={isSingleUnit ? room.units?.[0].name : "Выберите домик / номер"} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-md">
+                        {room.units!.map((unit) => (
+                          <SelectItem key={unit.id} value={unit.id!} className="focus:bg-teal-500/20 focus:text-teal-300 rounded-lg py-2">
+                            {unit.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {form.watch("unitId") && (
+              <FormField
+                control={form.control}
+                name="dateRange"
                 render={({ field }) => {
-                  const dateRange = form.watch("dateRange");
-                  
-                  // Compute available units
-                  const overlappingBookings = existingBookings.filter(b => {
-                    const bStart = new Date(b.startDate);
-                    const bEnd = new Date(b.endDate);
-                    return dateRange.from < bEnd && dateRange.to > bStart;
-                  });
-                  const bookedUnitIds = new Set(overlappingBookings.map(b => b.unitId).filter(Boolean));
-                  const availableUnits = room.units!.filter(u => !bookedUnitIds.has(u.id));
+                  const selectedUnitId = form.watch("unitId");
+                  const filteredBookings = existingBookings.filter(b => b.unitId === selectedUnitId);
 
                   return (
-                    <FormItem className="space-y-1.5">
-                      <FormLabel className="font-semibold text-slate-300">Домик / Номер</FormLabel>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11">
-                            <SelectValue placeholder="Любой свободный" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-md">
-                          <SelectItem value="any" className="focus:bg-teal-500/20 focus:text-teal-300 rounded-lg py-2">Любой свободный</SelectItem>
-                          {availableUnits.map((unit) => (
-                            <SelectItem key={unit.id} value={unit.id!} className="focus:bg-teal-500/20 focus:text-teal-300 rounded-lg py-2">
-                              {unit.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
+                    <DateRangePicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      existingBookings={filteredBookings}
+                      totalUnitsCount={1}
+                    />
                   );
                 }}
               />
@@ -296,11 +312,11 @@ export default function RoomBookingForm({
                       >
                         <Minus className="h-4 w-4" />
                       </button>
-                      
+
                       <span className="text-base font-extrabold select-none text-white tracking-wider">
                         {field.value || 1}
                       </span>
-                      
+
                       <button
                         type="button"
                         onClick={() => field.onChange(Math.min(room.capacity, (field.value || 1) + 1))}
@@ -374,6 +390,7 @@ export default function RoomBookingForm({
                           type="email"
                           placeholder="example@email.com"
                           className="pl-10 bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
+                          suppressHydrationWarning
                           {...field}
                         />
                       </FormControl>

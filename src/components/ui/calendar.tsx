@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
@@ -75,16 +76,13 @@ function Calendar({
             const isDayDisabled = activeModifiers.disabled
             const titleText = isBooked ? t("dateAlreadyBooked", "Этот день уже забронирован") : undefined
 
-            // Destructure 'disabled' to prevent native disabled attribute
-            // and replace it with 'aria-disabled' for hover events
             const { disabled, ...restProps } = buttonProps
 
-            return (
+            const buttonElement = (
               <button
                 ref={buttonRef}
                 {...restProps}
                 aria-disabled={disabled ? true : undefined}
-                title={titleText}
                 className={cn(buttonProps.className)}
                 onClick={(e) => {
                   if (isDayDisabled) {
@@ -98,6 +96,23 @@ function Calendar({
                 }}
               />
             )
+
+            if (isBooked) {
+              return (
+                <TooltipProvider delayDuration={50}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      {buttonElement}
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-slate-950 border border-white/10 text-white rounded-lg px-2.5 py-1.5 text-xs shadow-lg max-w-[200px] text-center">
+                      {titleText}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )
+            }
+
+            return buttonElement;
           }
           return <div {...divProps} />
         }
