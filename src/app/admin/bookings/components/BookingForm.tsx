@@ -55,6 +55,7 @@ const bookingSchema = z.object({
   email: z.string().optional().refine((val) => !val || z.string().email().safeParse(val).success, {
     message: "Неверный формат email",
   }),
+  pricePaid: z.coerce.number().min(0, "Стоимость должна быть неотрицательной"),
   adminComment: z.string().optional(),
 });
 
@@ -63,7 +64,7 @@ type BookingFormValues = z.infer<typeof bookingSchema>;
 interface BookingFormProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  onSubmit: (values: Omit<Booking, "id">, id?: string) => void;
+  onSubmit: (values: Omit<Booking, "id">, id?: string) => Promise<void>;
   booking: Booking | null;
   rooms: Room[];
 }
@@ -88,6 +89,7 @@ export default function BookingForm({
       name: "",
       phone: "",
       email: "",
+      pricePaid: 0,
       adminComment: "",
     },
   });
@@ -104,6 +106,7 @@ export default function BookingForm({
         name: booking.name,
         phone: booking.phone,
         email: booking.email || "",
+        pricePaid: booking.pricePaid || 0,
         adminComment: booking.adminComment || "",
       });
     } else {
@@ -117,6 +120,7 @@ export default function BookingForm({
         name: "",
         phone: "",
         email: "",
+        pricePaid: 0,
         adminComment: "",
       });
     }
@@ -130,7 +134,42 @@ export default function BookingForm({
     return allBookings.filter((b: Booking) => b.roomId === selectedRoomId);
   }, [selectedRoomId, allBookings]);
 
-  const handleFormSubmit = form.handleSubmit((data) => {
+  const selectedUnitId = form.watch("unitId");
+
+  const datePickerBookings = useMemo(() => {
+    if (!selectedUnitId || selectedUnitId === "any") {
+      return roomBookings;
+    }
+    return roomBookings.filter((b: Booking) => b.unitId === selectedUnitId);
+  }, [roomBookings, selectedUnitId]);
+
+  const datePickerTotalUnits = useMemo(() => {
+    if (!selectedUnitId || selectedUnitId === "any") {
+      return selectedRoom?.units?.length || 1;
+    }
+    return 1;
+  }, [selectedRoom, selectedUnitId]);
+
+  const dateRange = form.watch("dateRange");
+
+  useEffect(() => {
+    if (isOpen) {
+      if (selectedRoom && dateRange?.from && dateRange?.to) {
+        const from = new Date(dateRange.from);
+        const to = new Date(dateRange.to);
+        const diffTime = to.getTime() - from.getTime();
+        const nights = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+        const calculatedPrice = nights * selectedRoom.price;
+
+        const currentPrice = form.getValues("pricePaid");
+        if (!booking || currentPrice === 0) {
+          form.setValue("pricePaid", calculatedPrice);
+        }
+      }
+    }
+  }, [selectedRoom, dateRange, form, isOpen, booking]);
+
+  const handleFormSubmit = form.handleSubmit(async (data) => {
     if (!data.dateRange.from || !data.dateRange.to) {
       return;
     }
@@ -142,9 +181,10 @@ export default function BookingForm({
       name: data.name,
       phone: data.phone,
       email: data.email || undefined,
+      pricePaid: data.pricePaid,
       adminComment: data.adminComment || undefined,
     };
-    onSubmit(submissionData, booking?.id);
+    await onSubmit(submissionData, booking?.id);
   });
 
   return (
@@ -248,9 +288,9 @@ export default function BookingForm({
                 <DateRangePicker
                   value={field.value}
                   onChange={field.onChange}
-                  existingBookings={roomBookings}
+                  existingBookings={datePickerBookings}
                   excludeBookingId={booking?.id}
-                  totalUnitsCount={selectedRoom?.units?.length || 1}
+                  totalUnitsCount={datePickerTotalUnits}
                 />
               )}
             />
@@ -313,6 +353,25 @@ export default function BookingForm({
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="pricePaid"
+              render={({ field }) => (
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="font-semibold text-slate-300">Стоимость проживания (грн)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Рассчитывается автоматически"
+                      className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
