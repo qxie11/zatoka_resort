@@ -98,13 +98,18 @@ export default function BookingForm({
   ): boolean {
     const roomBookings = bookings.filter((b) => b.roomId === room.id);
 
-    const hasOverlap = roomBookings.some((booking) => {
+    const overlappingBookings = roomBookings.filter((booking) => {
       const bookingStart = new Date(booking.startDate);
       const bookingEnd = new Date(booking.endDate);
       return datesOverlap(startDate, endDate, bookingStart, bookingEnd);
     });
 
-    return !hasOverlap;
+    if (!room.units || room.units.length === 0) {
+      return overlappingBookings.length === 0;
+    }
+
+    const bookedUnitIds = new Set(overlappingBookings.map(b => b.unitId).filter(Boolean));
+    return room.units.some(unit => !bookedUnitIds.has(unit.id));
   }
 
   function onSubmit(data: z.infer<typeof FormSchema>) {

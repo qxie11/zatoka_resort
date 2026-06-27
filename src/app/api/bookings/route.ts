@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getBookings, createBooking } from "@/lib/db";
+import { getBookings, createBooking, getRoomById, getBookingsByRoomId } from "@/lib/db";
 import { startOfDay } from "date-fns";
 import { sendBookingNotification } from "@/lib/email";
 
@@ -59,8 +59,37 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    let finalUnitId = body.unitId;
+
+    if (!finalUnitId) {
+      const room = await getRoomById(roomId);
+      if (!room || !room.units || room.units.length === 0) {
+         // No units or room not found, proceed without unitId or handle error?
+         // Since we just migrated, some might have no units, but we should allow it as fallback.
+      } else {
+         const roomBookings = await getBookingsByRoomId(roomId);
+         const overlappingBookings = roomBookings.filter(b => {
+           const bStart = new Date(b.startDate);
+           const bEnd = new Date(b.endDate);
+           return startDay < bEnd && bStart < endDay;
+         });
+         
+         const bookedUnitIds = new Set(overlappingBookings.map(b => b.unitId).filter(Boolean));
+         const availableUnit = room.units.find(u => !bookedUnitIds.has(u.id));
+         
+         if (!availableUnit) {
+           return NextResponse.json(
+             { error: "Нет доступных номеров на выбранные даты" },
+             { status: 400 }
+           );
+         }
+         finalUnitId = availableUnit.id;
+      }
+    }
+
     const newBooking = await createBooking({
       roomId,
+      unitId: finalUnitId,
       startDate: start,
       endDate: end,
       name: name.trim(),

@@ -19,9 +19,15 @@ interface BookingRange {
   endDate: Date;
 }
 
+interface UnitCalendarData {
+  unitId: string | null;
+  unitName: string;
+  bookedDates: Date[];
+  bookingRanges: BookingRange[];
+}
+
 export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarProps) {
-  const [bookedDates, setBookedDates] = useState<Date[]>([]);
-  const [bookingRanges, setBookingRanges] = useState<BookingRange[]>([]);
+  const [unitCalendars, setUnitCalendars] = useState<UnitCalendarData[]>([]);
 
   useEffect(() => {
     if (selectedRoom) {
@@ -32,42 +38,58 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
         return b.roomId === selectedRoom.id && (isAfter(endDate, today) || isToday(endDate));
       });
       
-      const dates: Date[] = [];
-      const ranges: BookingRange[] = [];
+      const computeDataForBookings = (filteredBookings: Booking[], unitId: string | null, unitName: string): UnitCalendarData => {
+        const dates: Date[] = [];
+        const ranges: BookingRange[] = [];
+        filteredBookings.forEach((booking) => {
+          const start = startOfDay(new Date(booking.startDate));
+          const end = startOfDay(new Date(booking.endDate));
+          
+          ranges.push({
+            booking,
+            startDate: start,
+            endDate: end,
+          });
 
-      roomBookings.forEach((booking) => {
-        const start = startOfDay(new Date(booking.startDate));
-        const end = startOfDay(new Date(booking.endDate));
-        
-        ranges.push({
-          booking,
-          startDate: start,
-          endDate: end,
+          let currentDate = new Date(start);
+          while (currentDate <= end) {
+            dates.push(new Date(currentDate));
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
         });
+        return { unitId, unitName, bookedDates: dates, bookingRanges: ranges };
+      };
 
-        let currentDate = new Date(start);
-        while (currentDate <= end) {
-          dates.push(new Date(currentDate));
-          currentDate.setDate(currentDate.getDate() + 1);
+      const result: UnitCalendarData[] = [];
+
+      if (selectedRoom.units && selectedRoom.units.length > 0) {
+        selectedRoom.units.forEach(unit => {
+          const unitBookings = roomBookings.filter(b => b.unitId === unit.id);
+          result.push(computeDataForBookings(unitBookings, unit.id!, unit.name));
+        });
+        
+        const unassignedBookings = roomBookings.filter(b => !b.unitId);
+        if (unassignedBookings.length > 0) {
+          result.push(computeDataForBookings(unassignedBookings, null, "Без привязки к конкретному юниту"));
         }
-      });
+      } else {
+        result.push(computeDataForBookings(roomBookings, null, "Общий календарь"));
+      }
 
-      setBookedDates(dates);
-      setBookingRanges(ranges);
+      setUnitCalendars(result);
     } else {
-      setBookedDates([]);
-      setBookingRanges([]);
+      setUnitCalendars([]);
     }
   }, [bookings, selectedRoom]);
 
   const stats = useMemo(() => {
-    if (!selectedRoom || bookingRanges.length === 0) {
+    if (!selectedRoom || unitCalendars.length === 0) {
       return { totalDays: 0, totalBookings: 0 };
     }
-    const totalDays = bookedDates.length;
-    const totalBookings = bookingRanges.length;
+    const totalDays = unitCalendars.reduce((sum, c) => sum + c.bookedDates.length, 0);
+    const totalBookings = unitCalendars.reduce((sum, c) => sum + c.bookingRanges.length, 0);
     return { totalDays, totalBookings };
-  }, [selectedRoom, bookedDates.length, bookingRanges.length]);
+  }, [selectedRoom, unitCalendars]);
 
   return (
     <Card className="glass-card-dark border border-white/10 bg-slate-900/60 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden text-white">
@@ -98,51 +120,59 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
       </CardHeader>
       <CardContent className="p-5 sm:p-6">
         {selectedRoom ? (
-          <div className="space-y-6">
-            <div className="flex justify-center bg-slate-950/40 p-4 rounded-2xl border border-white/10 shadow-inner max-w-full overflow-x-auto text-white">
-              <Calendar
-                mode="multiple"
-                selected={bookedDates}
-                defaultMonth={bookedDates.length > 0 ? bookedDates[0] : new Date()}
-                locale={ru}
-                numberOfMonths={2}
-                className="rounded-xl bg-slate-950 text-white border-0"
-                classNames={{
-                  day_selected: "gradient-sunset text-slate-950 font-bold shadow-md rounded-lg",
-                }}
-                modifiers={{
-                  booked: bookedDates,
-                }}
-                modifiersClassNames={{
-                  booked: "gradient-sunset text-slate-950 font-bold rounded-lg",
-                }}
-              />
-            </div>
-            
-            {bookingRanges.length > 0 && (
-              <div className="mt-6 space-y-4">
-                <h3 className="font-extrabold text-white text-lg">Детали бронирований</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {bookingRanges.map((range) => (
-                    <div
-                      key={range.booking.id}
-                      className="p-4 border border-white/10 bg-slate-950/40 rounded-2xl shadow-lg hover:border-teal-400/30 transition-smooth"
-                    >
-                      <div className="flex items-center justify-between mb-3 gap-2">
-                        <span className="font-extrabold text-white">{range.booking.name}</span>
-                        <Badge variant="outline" className="text-xs bg-slate-900 border-white/10 text-teal-300 px-2 py-0.5 rounded-md font-semibold">
-                          {format(range.startDate, "dd.MM")} - {format(range.endDate, "dd.MM.yyyy")}
-                        </Badge>
-                      </div>
-                      <div className="text-sm text-slate-300 space-y-1.5 font-light">
-                        {range.booking.email && <p className="flex items-center gap-1.5"><span>📧</span> <span className="hover:text-teal-300 transition-colors">{range.booking.email}</span></p>}
-                        <p className="flex items-center gap-1.5"><span>📞</span> <span>{range.booking.phone}</span></p>
-                      </div>
-                    </div>
-                  ))}
+          <div className="space-y-10">
+            {unitCalendars.map((uc, index) => (
+              <div key={uc.unitId || `unassigned-${index}`} className="space-y-6">
+                <h3 className="font-extrabold text-white text-lg flex items-center gap-2">
+                  <span className="bg-teal-500/20 text-teal-300 px-3 py-1 rounded-lg text-sm">{uc.unitName}</span>
+                </h3>
+                
+                <div className="flex justify-center bg-slate-950/40 p-4 rounded-2xl border border-white/10 shadow-inner max-w-full overflow-x-auto text-white">
+                  <Calendar
+                    mode="multiple"
+                    selected={uc.bookedDates}
+                    defaultMonth={uc.bookedDates.length > 0 ? uc.bookedDates[0] : new Date()}
+                    locale={ru}
+                    numberOfMonths={2}
+                    className="rounded-xl bg-slate-950 text-white border-0"
+                    classNames={{
+                      day_selected: "gradient-sunset text-slate-950 font-bold shadow-md rounded-lg",
+                    }}
+                    modifiers={{
+                      booked: uc.bookedDates,
+                    }}
+                    modifiersClassNames={{
+                      booked: "gradient-sunset text-slate-950 font-bold rounded-lg",
+                    }}
+                  />
                 </div>
+                
+                {uc.bookingRanges.length > 0 && (
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-slate-300 text-sm uppercase tracking-wider">Детали бронирований ({uc.unitName})</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {uc.bookingRanges.map((range) => (
+                        <div
+                          key={range.booking.id}
+                          className="p-4 border border-white/10 bg-slate-950/40 rounded-2xl shadow-lg hover:border-teal-400/30 transition-smooth"
+                        >
+                          <div className="flex items-center justify-between mb-3 gap-2">
+                            <span className="font-extrabold text-white">{range.booking.name}</span>
+                            <Badge variant="outline" className="text-xs bg-slate-900 border-white/10 text-teal-300 px-2 py-0.5 rounded-md font-semibold">
+                              {format(range.startDate, "dd.MM")} - {format(range.endDate, "dd.MM.yyyy")}
+                            </Badge>
+                          </div>
+                          <div className="text-sm text-slate-300 space-y-1.5 font-light">
+                            {range.booking.email && <p className="flex items-center gap-1.5"><span>📧</span> <span className="hover:text-teal-300 transition-colors">{range.booking.email}</span></p>}
+                            <p className="flex items-center gap-1.5"><span>📞</span> <span>{range.booking.phone}</span></p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
+            ))}
           </div>
         ) : (
           <div className="flex items-center justify-center h-64 text-slate-400 bg-slate-900/20 rounded-2xl border border-dashed border-white/10">

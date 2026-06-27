@@ -29,6 +29,7 @@ interface DateRangePickerProps {
   onChange: (range: { from?: Date; to?: Date } | undefined) => void;
   existingBookings?: Booking[];
   excludeBookingId?: string;
+  totalUnitsCount?: number;
   disabled?: (date: Date) => boolean;
   label?: string;
   className?: string;
@@ -39,6 +40,7 @@ export function DateRangePicker({
   onChange,
   existingBookings = [],
   excludeBookingId,
+  totalUnitsCount = 1,
   disabled: customDisabled,
   label,
   className,
@@ -61,7 +63,7 @@ export function DateRangePicker({
   }, []);
 
   const disabledDates = useMemo(() => {
-    const disabledDatesList: Date[] = [];
+    const bookingCounts: Record<number, number> = {};
     const today = startOfDay(new Date());
 
     existingBookings.forEach((booking) => {
@@ -73,14 +75,27 @@ export function DateRangePicker({
       if (end < today) return;
 
       let currentDate = new Date(start);
-      while (currentDate <= end) {
-        disabledDatesList.push(new Date(currentDate));
+      // Avoid over-counting the checkout day, but for strictness we might include it or not.
+      // Usually checkout day is available for checkin. We should probably do `< end`
+      while (currentDate < end) {
+        const time = currentDate.getTime();
+        bookingCounts[time] = (bookingCounts[time] || 0) + 1;
         currentDate.setDate(currentDate.getDate() + 1);
       }
     });
 
+    const disabledDatesList: Date[] = [];
+    // Only disable if the number of overlapping bookings >= totalUnitsCount
+    // If totalUnitsCount is 0 (fallback), treat as 1
+    const threshold = Math.max(1, totalUnitsCount);
+    for (const [timeStr, count] of Object.entries(bookingCounts)) {
+      if (count >= threshold) {
+        disabledDatesList.push(new Date(parseInt(timeStr)));
+      }
+    }
+
     return disabledDatesList;
-  }, [existingBookings, excludeBookingId]);
+  }, [existingBookings, excludeBookingId, totalUnitsCount]);
 
   const isDateDisabled = (date: Date) => {
     if (customDisabled && customDisabled(date)) return true;

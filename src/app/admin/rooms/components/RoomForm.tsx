@@ -69,6 +69,9 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
   const [amenityInput, setAmenityInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
 
+  const [units, setUnits] = useState<{ id?: string; name: string }[]>([]);
+  const [unitInput, setUnitInput] = useState('');
+
   const form = useForm<RoomFormValues>({
     resolver: zodResolver(roomSchema),
     defaultValues: {
@@ -107,6 +110,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
       }
       setImages(initialImages);
       setSelectedAmenities(room.amenities || []);
+      setUnits(room.units || []);
 
       form.reset({
           name: room.name,
@@ -121,6 +125,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
     } else {
       setImages([]);
       setSelectedAmenities(['Wi-Fi', 'Кондиционер', 'Балкон']);
+      setUnits([]);
       form.reset({
         name: '',
         slug: '',
@@ -187,6 +192,25 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
     }
   };
 
+  const removeAmenity = (index: number) => {
+    setSelectedAmenities(selectedAmenities.filter((_, i) => i !== index));
+  };
+
+  const handleAddUnit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const val = unitInput.trim();
+      if (val && !units.some(u => u.name === val)) {
+        setUnits([...units, { id: `new-${Date.now()}`, name: val }]);
+        setUnitInput('');
+      }
+    }
+  };
+
+  const removeUnit = (index: number) => {
+    setUnits(units.filter((_, i) => i !== index));
+  };
+
   const handleFormSubmit = form.handleSubmit(async (data) => {
     setIsUploading(true);
     try {
@@ -237,6 +261,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
         price: data.price,
         capacity: data.capacity,
         amenities: selectedAmenities,
+        units: units as any,
         imageUrl: mainImagePath,
         imageUrls: additionalImagePaths,
         imageHint: data.imageHint || ''
@@ -340,7 +365,6 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
             <div className="grid gap-2 relative">
                   <Label className="font-semibold text-slate-300">Удобства номера</Label>
                   
-                  {/* Selected chips container */}
                   <div className="flex flex-wrap gap-1.5 p-2 bg-slate-900 border border-white/10 rounded-xl min-h-[44px] focus-within:ring-1 focus-within:ring-teal-500 transition-all">
                     {selectedAmenities.map((amenity, idx) => (
                       <span 
@@ -350,7 +374,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                         {amenity}
                         <button
                           type="button"
-                          onClick={() => setSelectedAmenities(prev => prev.filter((_, i) => i !== idx))}
+                          onClick={() => removeAmenity(idx)}
                           className="text-teal-400 hover:text-teal-200 transition-colors shrink-0"
                         >
                           <X className="h-3 w-3" />
@@ -386,7 +410,6 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                     />
                   </div>
 
-                  {/* Autocomplete Dropdown */}
                   {showSuggestions && (
                     <div className="absolute top-[100%] left-0 right-0 z-[110] mt-1.5 bg-slate-900 border border-white/10 rounded-xl max-h-[180px] overflow-y-auto shadow-2xl p-1.5">
                       {["Wi-Fi", "Кондиционер", "Балкон", "ТВ", "Холодильник", "Душ", "Мини-кухня", "Собственная терраса", "Детская кровать"]
@@ -411,7 +434,6 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                         ))
                       }
                       
-                      {/* Custom option */}
                       {amenityInput.trim() && 
                        !["Wi-Fi", "Кондиционер", "Балкон", "ТВ", "Холодильник", "Душ", "Мини-кухня", "Собственная терраса", "Детская кровать"]
                           .some(p => p.toLowerCase() === amenityInput.trim().toLowerCase()) && 
@@ -434,7 +456,30 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                   )}
               </div>
             
-            <div className="grid gap-4 bg-slate-900/40 p-4 rounded-2xl border border-white/10">
+             {/* Юниты / Подномера */}
+             <div className="grid gap-2 border border-white/5 rounded-2xl p-5 bg-white/[0.02]">
+                <Label className="font-semibold text-slate-300">Юниты (подномера / домики)</Label>
+                <div className="text-xs text-slate-400 mb-2">Нажмите Enter, чтобы добавить. Если оставить пустым, тип номера не будет иметь конкретных юнитов.</div>
+                <Input
+                  value={unitInput}
+                  onChange={(e) => setUnitInput(e.target.value)}
+                  onKeyDown={handleAddUnit}
+                  placeholder="Домик 1, 1а..."
+                  className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 mb-2 h-11"
+                />
+                <div className="flex flex-wrap gap-2">
+                  {units.map((unit, index) => (
+                    <div key={index} className="flex items-center gap-1.5 bg-sky-500/10 text-sky-300 px-3 py-1.5 rounded-full border border-sky-500/20 text-sm">
+                      {unit.name}
+                      <button type="button" onClick={() => removeUnit(index)} className="hover:text-rose-400 focus:outline-none ml-1 opacity-70 hover:opacity-100 transition-opacity">
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+             </div>
+
+             <div className="grid gap-2 border border-white/5 rounded-2xl p-5 bg-white/[0.02]">
                  <Label className="font-semibold text-slate-300">Галерея изображений</Label>
                  
                  {images.length === 0 ? (

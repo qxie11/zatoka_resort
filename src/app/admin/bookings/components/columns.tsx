@@ -33,11 +33,16 @@ export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<BookingWi
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Номер
+          Номер / Юнит
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
+    cell: ({ row }) => {
+      const roomName = row.getValue("roomName") as string;
+      const unitName = row.original.unitName;
+      return unitName ? `${roomName} (${unitName})` : roomName;
+    }
   },
   {
     accessorKey: "name",

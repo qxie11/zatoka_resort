@@ -8,39 +8,52 @@ datasource db {
 }
 
 model Room {
-  id          String    @id @default(uuid())
+  id          String     @id @default(uuid())
   name        String
   description String
   price       Int
   capacity    Int
   amenities   String[]
   imageUrl    String
-  imageUrls   String[]  @default([])
-  imageHint   String    @default("")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  slug        String    @unique @default("")
+  imageUrls   String[]   @default([])
+  imageHint   String     @default("")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  slug        String     @unique @default("")
   bookings    Booking[]
   reviews     Review[]
+  units       RoomUnit[]
 
   @@map("rooms")
 }
 
+model RoomUnit {
+  id        String    @id @default(uuid())
+  name      String    // e.g. "1a", "Cottage 2"
+  roomId    String
+  room      Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  bookings  Booking[]
+  
+  @@map("room_units")
+}
+
 model Booking {
-  id              String   @id @default(uuid())
+  id              String    @id @default(uuid())
   roomId          String
+  unitId          String?
   startDate       DateTime
   endDate         DateTime
   name            String
   phone           String
   email           String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
   discountApplied Int?
   pricePaid       Int?
   promoCode       String?
   adminComment    String?
-  room            Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  room            Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  unit            RoomUnit? @relation(fields: [unitId], references: [id], onDelete: SetNull)
 
   @@map("bookings")
 }

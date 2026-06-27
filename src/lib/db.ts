@@ -5,6 +5,7 @@ import type { Room, Booking, BlogPost, Review } from './types';
 export const getRooms = async (): Promise<Room[]> => {
   const rooms = await prisma.room.findMany({
     orderBy: { createdAt: 'desc' },
+    include: { units: true },
   });
   
   return rooms.map(room => ({
@@ -18,12 +19,14 @@ export const getRooms = async (): Promise<Room[]> => {
     imageUrl: room.imageUrl,
     imageUrls: room.imageUrls || [],
     imageHint: room.imageHint,
+    units: room.units,
   }));
 };
 
 export const getRoomById = async (id: string): Promise<Room | null> => {
   const room = await prisma.room.findUnique({
     where: { id },
+    include: { units: true },
   });
   
   if (!room) return null;
@@ -39,17 +42,20 @@ export const getRoomById = async (id: string): Promise<Room | null> => {
     imageUrl: room.imageUrl,
     imageUrls: room.imageUrls || [],
     imageHint: room.imageHint,
+    units: room.units,
   };
 };
 
 export const getRoomBySlugOrId = async (slugOrId: string): Promise<Room | null> => {
   let room = await prisma.room.findUnique({
     where: { slug: slugOrId },
+    include: { units: true },
   });
   
   if (!room) {
     room = await prisma.room.findUnique({
       where: { id: slugOrId },
+      include: { units: true },
     });
   }
   
@@ -66,6 +72,7 @@ export const getRoomBySlugOrId = async (slugOrId: string): Promise<Room | null> 
     imageUrl: room.imageUrl,
     imageUrls: room.imageUrls || [],
     imageHint: room.imageHint,
+    units: room.units,
   };
 };
 
@@ -81,7 +88,11 @@ export const createRoom = async (room: Omit<Room, 'id' | 'slug'> & { slug?: stri
       imageUrl: room.imageUrl,
       imageUrls: room.imageUrls || [],
       imageHint: room.imageHint || '',
+      units: {
+        create: room.units?.map(u => ({ name: u.name })) || []
+      }
     },
+    include: { units: true },
   });
   
   return {
@@ -95,6 +106,7 @@ export const createRoom = async (room: Omit<Room, 'id' | 'slug'> & { slug?: stri
     imageUrl: newRoom.imageUrl,
     imageUrls: newRoom.imageUrls || [],
     imageHint: newRoom.imageHint,
+    units: newRoom.units,
   };
 };
 
@@ -112,8 +124,24 @@ export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id' | 'sl
     if (room.imageUrls !== undefined) updateData.imageUrls = room.imageUrls;
     if (room.imageHint !== undefined) updateData.imageHint = room.imageHint;
 
+    if (room.units !== undefined) {
+      const unitsToUpdate = room.units.filter(u => u.id && !u.id.startsWith('new-'));
+      const unitsToCreate = room.units.filter(u => !u.id || u.id.startsWith('new-'));
+
+      updateData.units = {
+        deleteMany: {
+          id: { notIn: unitsToUpdate.map(u => u.id) }
+        },
+        update: unitsToUpdate.map(u => ({
+          where: { id: u.id },
+          data: { name: u.name }
+        })),
+        create: unitsToCreate.map(u => ({ name: u.name }))
+      };
+    }
+
     if (Object.keys(updateData).length === 0) {
-      const existingRoom = await prisma.room.findUnique({ where: { id } });
+      const existingRoom = await prisma.room.findUnique({ where: { id }, include: { units: true } });
       if (!existingRoom) return null;
       
       return {
@@ -127,12 +155,14 @@ export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id' | 'sl
         imageUrl: existingRoom.imageUrl,
         imageUrls: existingRoom.imageUrls || [],
         imageHint: existingRoom.imageHint,
+        units: existingRoom.units,
       };
     }
 
     const updatedRoom = await prisma.room.update({
       where: { id },
       data: updateData,
+      include: { units: true },
     });
     
     return {
@@ -146,6 +176,7 @@ export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id' | 'sl
       imageUrl: updatedRoom.imageUrl,
       imageUrls: updatedRoom.imageUrls || [],
       imageHint: updatedRoom.imageHint,
+      units: updatedRoom.units,
     };
   } catch (error: any) {
     console.error('Error updating room:', error);
@@ -171,11 +202,14 @@ export const deleteRoom = async (id: string): Promise<boolean> => {
 export const getBookings = async (): Promise<Booking[]> => {
   const bookings = await prisma.booking.findMany({
     orderBy: { createdAt: 'desc' },
+    include: { unit: true },
   });
   
   return bookings.map((booking: any) => ({
     id: booking.id,
     roomId: booking.roomId,
+    unitId: booking.unitId || undefined,
+    unitName: booking.unit?.name || undefined,
     startDate: booking.startDate,
     endDate: booking.endDate,
     name: booking.name,
@@ -192,11 +226,14 @@ export const getBookingsByRoomId = async (roomId: string): Promise<Booking[]> =>
   const bookings = await prisma.booking.findMany({
     where: { roomId },
     orderBy: { startDate: 'asc' },
+    include: { unit: true },
   });
   
   return bookings.map((booking: any) => ({
     id: booking.id,
     roomId: booking.roomId,
+    unitId: booking.unitId || undefined,
+    unitName: booking.unit?.name || undefined,
     startDate: booking.startDate,
     endDate: booking.endDate,
     name: booking.name,
@@ -212,6 +249,7 @@ export const getBookingsByRoomId = async (roomId: string): Promise<Booking[]> =>
 export const getBookingById = async (id: string): Promise<Booking | null> => {
   const booking = await prisma.booking.findUnique({
     where: { id },
+    include: { unit: true },
   });
   
   if (!booking) return null;
@@ -219,6 +257,8 @@ export const getBookingById = async (id: string): Promise<Booking | null> => {
   return {
     id: booking.id,
     roomId: booking.roomId,
+    unitId: booking.unitId || undefined,
+    unitName: (booking as any).unit?.name || undefined,
     startDate: booking.startDate,
     endDate: booking.endDate,
     name: booking.name,
@@ -247,6 +287,7 @@ export const createBooking = async (booking: Omit<Booking, 'id'>): Promise<Booki
   const newBooking = await prisma.booking.create({
     data: {
       roomId: booking.roomId,
+      unitId: booking.unitId || null,
       startDate: booking.startDate,
       endDate: booking.endDate,
       name: booking.name,
@@ -257,6 +298,7 @@ export const createBooking = async (booking: Omit<Booking, 'id'>): Promise<Booki
       discountApplied: booking.discountApplied ?? null,
       adminComment: booking.adminComment ?? null,
     },
+    include: { unit: true },
   });
 
   if (newBooking.email) {
@@ -266,6 +308,8 @@ export const createBooking = async (booking: Omit<Booking, 'id'>): Promise<Booki
   return {
     id: newBooking.id,
     roomId: newBooking.roomId,
+    unitId: newBooking.unitId || undefined,
+    unitName: (newBooking as any).unit?.name || undefined,
     startDate: newBooking.startDate,
     endDate: newBooking.endDate,
     name: newBooking.name,
@@ -287,6 +331,17 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
         connect: { id: booking.roomId },
       };
     }
+    if (booking.unitId !== undefined) {
+      if (booking.unitId) {
+        updateData.unit = {
+          connect: { id: booking.unitId },
+        };
+      } else {
+        updateData.unit = {
+          disconnect: true,
+        };
+      }
+    }
     if (booking.startDate !== undefined) updateData.startDate = booking.startDate;
     if (booking.endDate !== undefined) updateData.endDate = booking.endDate;
     if (booking.name !== undefined) updateData.name = booking.name;
@@ -300,6 +355,7 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
     const updatedBooking = await prisma.booking.update({
       where: { id },
       data: updateData,
+      include: { unit: true },
     });
 
     if (updatedBooking.email) {
@@ -309,6 +365,8 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
     return {
       id: updatedBooking.id,
       roomId: updatedBooking.roomId,
+      unitId: updatedBooking.unitId || undefined,
+      unitName: (updatedBooking as any).unit?.name || undefined,
       startDate: updatedBooking.startDate,
       endDate: updatedBooking.endDate,
       name: updatedBooking.name,

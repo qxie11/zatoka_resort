@@ -62,6 +62,15 @@ export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Room>[] =
     cell: ({ row }) => <div className="text-center">{row.getValue("capacity")}</div>
   },
   {
+    id: "units",
+    header: "Юниты",
+    cell: ({ row }) => {
+      const units = row.original.units;
+      if (!units || units.length === 0) return "—";
+      return units.map(u => u.name).join(", ");
+    }
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       const room = row.original

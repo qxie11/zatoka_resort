@@ -39,6 +39,7 @@ import { DateRangePicker } from "@/components/booking/DateRangePicker";
 
 const bookingSchema = z.object({
   roomId: z.string().min(1, "Необходимо выбрать номер"),
+  unitId: z.string().optional(),
   dateRange: z.object({
     from: z.date({
       required_error: "Дата заезда обязательна.",
@@ -79,6 +80,7 @@ export default function BookingForm({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
       roomId: "",
+      unitId: "any",
       dateRange: {
         from: undefined as any,
         to: undefined as any,
@@ -94,6 +96,7 @@ export default function BookingForm({
     if (booking) {
       form.reset({
         roomId: booking.roomId,
+        unitId: booking.unitId || "any",
         dateRange: {
           from: new Date(booking.startDate),
           to: new Date(booking.endDate),
@@ -106,6 +109,7 @@ export default function BookingForm({
     } else {
       form.reset({
         roomId: "",
+        unitId: "any",
         dateRange: {
           from: undefined as any,
           to: undefined as any,
@@ -119,6 +123,7 @@ export default function BookingForm({
   }, [booking, form, isOpen]);
 
   const selectedRoomId = form.watch("roomId");
+  const selectedRoom = useMemo(() => rooms.find(r => r.id === selectedRoomId), [rooms, selectedRoomId]);
 
   const roomBookings = useMemo(() => {
     if (!selectedRoomId) return [];
@@ -131,6 +136,7 @@ export default function BookingForm({
     }
     const submissionData = {
       roomId: data.roomId,
+      unitId: data.unitId === "any" ? undefined : data.unitId,
       startDate: data.dateRange.from,
       endDate: data.dateRange.to,
       name: data.name,
@@ -184,6 +190,57 @@ export default function BookingForm({
               )}
             />
 
+            {selectedRoom?.units && selectedRoom.units.length > 0 && (
+              <FormField
+                control={form.control}
+                name="unitId"
+                render={({ field }) => {
+                  const dateRange = form.watch("dateRange");
+                  let availableUnits = selectedRoom.units || [];
+
+                  if (dateRange?.from && dateRange?.to) {
+                    const overlappingBookings = roomBookings.filter((b: Booking) => {
+                      if (booking && b.id === booking.id) return false;
+                      const bStart = new Date(b.startDate);
+                      const bEnd = new Date(b.endDate);
+                      return dateRange.from! < bEnd && dateRange.to! > bStart;
+                    });
+                    const bookedUnitIds = new Set(overlappingBookings.map((b: Booking) => b.unitId).filter(Boolean));
+                    availableUnits = availableUnits.filter(u => !bookedUnitIds.has(u.id));
+                  }
+
+                  // If the currently selected unit is no longer available but was previously selected
+                  // we might still want to show it in the list (or it will just show as an ID).
+                  // For simplicity, we just show the available ones.
+
+                  return (
+                    <FormItem className="space-y-1.5">
+                      <FormLabel className="font-semibold text-slate-300">Юнит (подномерок)</FormLabel>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11">
+                            <SelectValue placeholder="Любой юнит" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-md">
+                          <SelectItem value="any" className="focus:bg-teal-500/20 focus:text-teal-300 rounded-lg py-2">Любой свободный</SelectItem>
+                          {availableUnits.map((unit) => (
+                            <SelectItem key={unit.id} value={unit.id!} className="focus:bg-teal-500/20 focus:text-teal-300 rounded-lg py-2">
+                              {unit.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+            )}
+
             <FormField
               control={form.control}
               name="dateRange"
@@ -193,6 +250,7 @@ export default function BookingForm({
                   onChange={field.onChange}
                   existingBookings={roomBookings}
                   excludeBookingId={booking?.id}
+                  totalUnitsCount={selectedRoom?.units?.length || 1}
                 />
               )}
             />

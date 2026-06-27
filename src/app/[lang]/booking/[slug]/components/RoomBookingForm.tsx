@@ -22,10 +22,18 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Room, Booking } from "@/lib/types";
 import { DateRangePicker } from "@/components/booking/DateRangePicker";
 
 const FormSchema = z.object({
+  unitId: z.string().optional(),
   dateRange: z.object({
     from: z.date({
       required_error: "Дата заезда обязательна.",
@@ -133,6 +141,7 @@ export default function RoomBookingForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      unitId: "any",
       guests: 1,
       name: "",
       phone: "",
@@ -158,6 +167,7 @@ export default function RoomBookingForm({
         },
         body: JSON.stringify({
           roomId: room.id,
+          unitId: data.unitId === "any" ? undefined : data.unitId,
           startDate: data.dateRange.from.toISOString(),
           endDate: data.dateRange.to.toISOString(),
           name: data.name,
@@ -219,9 +229,54 @@ export default function RoomBookingForm({
                   value={field.value}
                   onChange={field.onChange}
                   existingBookings={existingBookings}
+                  totalUnitsCount={room.units?.length || 1}
                 />
               )}
             />
+
+            {room.units && room.units.length > 0 && form.watch("dateRange.from") && form.watch("dateRange.to") && (
+              <FormField
+                control={form.control}
+                name="unitId"
+                render={({ field }) => {
+                  const dateRange = form.watch("dateRange");
+                  
+                  // Compute available units
+                  const overlappingBookings = existingBookings.filter(b => {
+                    const bStart = new Date(b.startDate);
+                    const bEnd = new Date(b.endDate);
+                    return dateRange.from < bEnd && dateRange.to > bStart;
+                  });
+                  const bookedUnitIds = new Set(overlappingBookings.map(b => b.unitId).filter(Boolean));
+                  const availableUnits = room.units!.filter(u => !bookedUnitIds.has(u.id));
+
+                  return (
+                    <FormItem className="space-y-1.5">
+                      <FormLabel className="font-semibold text-slate-300">Домик / Номер</FormLabel>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11">
+                            <SelectValue placeholder="Любой свободный" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-md">
+                          <SelectItem value="any" className="focus:bg-teal-500/20 focus:text-teal-300 rounded-lg py-2">Любой свободный</SelectItem>
+                          {availableUnits.map((unit) => (
+                            <SelectItem key={unit.id} value={unit.id!} className="focus:bg-teal-500/20 focus:text-teal-300 rounded-lg py-2">
+                              {unit.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+            )}
 
             <FormField
               control={form.control}

@@ -1,3 +1,9 @@
+export type RoomUnit = {
+  id: string;
+  name: string;
+  roomId: string;
+};
+
 export type Room = {
   id: string;
   slug: string;
@@ -9,6 +15,7 @@ export type Room = {
   imageUrl: string;
   imageUrls: string[];
   imageHint: string;
+  units?: RoomUnit[];
 };
 
 export type Amenity = {
@@ -20,6 +27,8 @@ export type Amenity = {
 export type Booking = {
   id: string;
   roomId: string;
+  unitId?: string;
+  unitName?: string;
   startDate: Date;
   endDate: Date;
   name: string;
