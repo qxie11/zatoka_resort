@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
+import i18n from "@/lib/i18n";
 
 interface Review {
   id: string;
@@ -24,13 +25,19 @@ interface Review {
 interface RoomReviewsProps {
   roomId: string;
   roomName: string;
+  lang?: string;
 }
-
-export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
+export default function RoomReviews({ roomId, roomName, lang: propLang }: RoomReviewsProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const params = useParams();
-  const lang = (params?.lang as string) || "ru";
+  const lang = propLang || (params?.lang as string) || "ru";
+
+  useEffect(() => {
+    if (lang && i18n.language !== lang) {
+      i18n.changeLanguage(lang);
+    }
+  }, [lang]);
 
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
@@ -99,15 +106,15 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
       });
       setName(user.displayName || "");
       toast({
-        title: "Авторизован через Google",
-        description: `Добро пожаловать, ${user.displayName || "гость"}! Теперь вы можете оставить отзыв.`,
+        title: t("roomReviewsToastGoogleLoginTitle"),
+        description: t("roomReviewsToastGoogleLoginDesc"),
         className: "glass-card-dark border-l-4 border-l-teal-500 text-white"
       });
     } catch (e: any) {
       console.error(e);
       toast({
-        title: "Ошибка входа",
-        description: "Не удалось войти через Google. Убедитесь, что настроены переменные окружения в .env.",
+        title: t("roomReviewsToastGoogleLoginErrorTitle"),
+        description: t("roomReviewsToastGoogleLoginErrorDesc"),
         variant: "destructive"
       });
     }
@@ -119,8 +126,8 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
       setGoogleUser(null);
       setName("");
       toast({
-        title: "Выход выполнен",
-        description: "Вы вышли из учетной записи Google.",
+        title: t("roomReviewsToastGoogleLogoutTitle"),
+        description: t("roomReviewsToastGoogleLogoutDesc"),
         className: "glass-card-dark border-l-4 border-l-rose-500 text-white"
       });
     } catch (e) {
@@ -133,8 +140,8 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
 
     if (!name.trim()) {
       toast({
-        title: "Ошибка",
-        description: "Пожалуйста, введите ваше имя",
+        title: t("roomReviewsToastErrorTitle"),
+        description: t("roomReviewsToastErrorName"),
         variant: "destructive"
       });
       return;
@@ -142,8 +149,8 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
 
     if (!comment.trim()) {
       toast({
-        title: "Ошибка",
-        description: "Пожалуйста, напишите комментарий",
+        title: t("roomReviewsToastErrorTitle"),
+        description: t("roomReviewsToastErrorComment"),
         variant: "destructive"
       });
       return;
@@ -169,8 +176,8 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
         setRating(5);
         setComment("");
         toast({
-          title: "Отзыв добавлен",
-          description: "Спасибо! Ваш отзыв сохранен в базе данных.",
+          title: t("roomReviewsToastAddedTitle"),
+          description: t("roomReviewsToastAddedDesc"),
           className: "glass-card-dark border-l-4 border-l-teal-500 text-white"
         });
       } else {
@@ -178,8 +185,8 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
       }
     } catch (error) {
       toast({
-        title: "Ошибка",
-        description: "Не удалось отправить отзыв. Попробуйте еще раз.",
+        title: t("roomReviewsToastErrorTitle"),
+        description: t("roomReviewsToastErrorDesc"),
         variant: "destructive"
       });
     }
@@ -199,8 +206,8 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
   const handleSaveEdit = async (id: string) => {
     if (!editName.trim() || !editComment.trim()) {
       toast({
-        title: "Ошибка",
-        description: "Поля не могут быть пустыми",
+        title: t("roomReviewsToastErrorTitle"),
+        description: t("roomReviewsToastEmptyFields"),
         variant: "destructive"
       });
       return;
@@ -222,8 +229,8 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
         setReviews(reviews.map((r) => (r.id === id ? updatedReview : r)));
         setEditingId(null);
         toast({
-          title: "Отзыв обновлен",
-          description: "Изменения успешно сохранены.",
+          title: t("roomReviewsToastEditSuccessTitle"),
+          description: t("roomReviewsToastEditSuccessDesc"),
           className: "glass-card-dark border-l-4 border-l-teal-500 text-white"
         });
       } else {
@@ -231,8 +238,8 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
       }
     } catch (e) {
       toast({
-        title: "Ошибка",
-        description: "Не удалось сохранить изменения.",
+        title: t("roomReviewsToastErrorTitle"),
+        description: t("roomReviewsToastEditErrorDesc"),
         variant: "destructive"
       });
     }
@@ -252,8 +259,8 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
         if (res.ok) {
           setReviews((prev) => prev.filter((r) => r.id !== id));
           toast({
-            title: "Отзыв удален",
-            description: "Отзыв успешно удален из базы данных.",
+            title: t("roomReviewsToastDeleteTitle"),
+            description: t("roomReviewsToastDeleteDesc"),
             className: "glass-card-dark border-l-4 border-l-rose-500 text-white"
           });
         } else {
@@ -261,8 +268,8 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
         }
       } catch (e) {
         toast({
-          title: "Ошибка",
-          description: "Не удалось удалить отзыв.",
+          title: t("roomReviewsToastErrorTitle"),
+          description: t("roomReviewsToastDeleteErrorDesc"),
           variant: "destructive"
         });
       }
@@ -287,10 +294,10 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
         <div>
           <h3 className="text-2xl font-bold text-white flex items-center gap-2">
             <MessageSquare className="h-6 w-6 text-teal-400" />
-            Отзывы гостей о номере
+            {t("roomReviewsTitle")}
           </h3>
           <p className="text-slate-400 text-sm mt-1">
-            Реальные впечатления посетителей, забронировавших {roomName}
+            {t("roomReviewsDesc")} {roomName}
           </p>
         </div>
 
@@ -308,7 +315,7 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
             ))}
           </div>
           <span className="text-lg font-bold text-white whitespace-nowrap">{avgRating} / 5.0</span>
-          <span className="text-slate-400 text-xs font-light whitespace-nowrap">({reviews.length} отзывов)</span>
+          <span className="text-slate-400 text-xs font-light whitespace-nowrap">({reviews.length} {t("roomReviewsReviewsCount")})</span>
         </div>
       </div>
 
@@ -316,7 +323,7 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
         {/* Reviews List */}
         <div className="lg:col-span-2 space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
           {loading ? (
-            <div className="text-center py-12 text-slate-400 text-sm">Загрузка отзывов...</div>
+            <div className="text-center py-12 text-slate-400 text-sm">{t("roomReviewsLoadingReviews")}</div>
           ) : reviews.length > 0 ? (
             reviews.map((review) => (
               <div
@@ -333,7 +340,7 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
                         className="bg-slate-950/80 border-white/10 text-white rounded-xl text-sm max-w-xs focus:border-teal-400/50"
-                        placeholder="Имя"
+                        placeholder={t("roomReviewsNameInputPlaceholder")}
                       />
                       <div className="flex items-center gap-0.5">
                         {Array.from({ length: 5 }).map((_, i) => (
@@ -358,7 +365,7 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
                       onChange={(e) => setEditComment(e.target.value)}
                       className="bg-slate-950/80 border-white/10 text-white rounded-xl text-sm resize-none focus:border-teal-400/50"
                       rows={3}
-                      placeholder="Комментарий"
+                      placeholder={t("roomReviewsEditInputPlaceholder")}
                     />
                     <div className="flex gap-2">
                       <Button
@@ -366,7 +373,7 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
                         className="bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs"
                       >
                         <Check className="h-3 w-3 mr-1" />
-                        Сохранить
+                        {t("roomReviewsSaveBtn")}
                       </Button>
                       <Button
                         onClick={handleCancelEdit}
@@ -374,7 +381,7 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
                         className="text-slate-200 hover:!text-white hover:bg-white/10 px-3 py-1.5 rounded-lg text-xs"
                       >
                         <X className="h-3 w-3 mr-1" />
-                        Отмена
+                        {t("roomReviewsCancelBtn")}
                       </Button>
                     </div>
                   </div>
@@ -433,19 +440,19 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
           ) : (
             <div className="text-center py-12 bg-slate-900/20 border border-dashed border-white/10 rounded-2xl">
               <MessageSquare className="h-10 w-10 text-slate-600 mx-auto mb-3" />
-              <p className="text-slate-400 text-sm">Отзывов пока нет. Будьте первым!</p>
+              <p className="text-slate-400 text-sm">{t("roomReviewsEmpty")}</p>
             </div>
           )}
         </div>
 
         {/* Leave a Review Form */}
         <div className="p-6 rounded-2xl glass-card-dark border border-white/10 h-fit space-y-4 shadow-xl">
-          <h4 className="font-bold text-white text-lg">Оставить отзыв</h4>
+          <h4 className="font-bold text-white text-lg">{t("roomReviewsWriteTitle")}</h4>
           
           {!isAdmin && !googleUser ? (
             <div className="text-center py-6 space-y-4">
               <p className="text-slate-300 text-sm font-light leading-relaxed">
-                Чтобы оставить отзыв о номере, пожалуйста, авторизуйтесь через Google или войдите как администратор.
+                {t("roomReviewsWriteDesc")}
               </p>
               
               <div className="space-y-2.5">
@@ -471,7 +478,7 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
                       d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                     />
                   </svg>
-                  Войти через Google
+                  {t("roomReviewsGoogleBtn")}
                 </Button>
                 
                 <Button
@@ -480,7 +487,7 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
                   className="w-full border-white/10 bg-slate-900/60 text-white hover:bg-slate-800 rounded-xl py-5 text-sm"
                 >
                   <Link href={`/${lang}/login`}>
-                    Войти как Администратор
+                    {t("roomReviewsAdminBtn")}
                   </Link>
                 </Button>
               </div>
@@ -497,30 +504,30 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
                     onClick={handleGoogleLogout}
                     className="text-xs text-rose-400 hover:underline hover:text-rose-300 font-medium"
                   >
-                    Выйти
+                  {t("roomReviewsLogoutBtn")}
                   </button>
                 </div>
               )}
               {isAdmin && (
                 <div className="bg-amber-500/10 border border-amber-500/20 px-3 py-2 rounded-xl text-amber-300 text-xs font-semibold">
-                  Авторизован как Администратор
+                  {t("roomReviewsAdminAuth")}
                 </div>
               )}
               
               <div className="space-y-1.5">
-                <label className="text-slate-300 text-xs font-medium">Ваше имя</label>
+                <label className="text-slate-300 text-xs font-medium">{t("roomReviewsNameLabel")}</label>
                 <Input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Иван Иванов"
+                  placeholder={t("roomReviewsNameInputPlaceholder")}
                   className="bg-slate-950/80 border-white/10 text-white rounded-xl focus:border-teal-400/50"
                   disabled={!!googleUser}
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-slate-300 text-xs font-medium block">Ваша оценка</label>
+                <label className="text-slate-300 text-xs font-medium block">{t("roomReviewsRatingLabel")}</label>
                 <div className="flex items-center gap-1">
                   {Array.from({ length: 5 }).map((_, i) => {
                     const starValue = i + 1;
@@ -546,11 +553,11 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-slate-300 text-xs font-medium">Комментарий</label>
+                <label className="text-slate-300 text-xs font-medium">{t("roomReviewsCommentLabel")}</label>
                 <Textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder="Поделитесь вашими впечатлениями об отдыхе..."
+                  placeholder={t("roomReviewsCommentPlaceholder")}
                   rows={4}
                   className="bg-slate-950/80 border-white/10 text-white rounded-xl resize-none focus:border-teal-400/50"
                 />
@@ -561,7 +568,7 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
                 className="w-full bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/10 rounded-xl transition-all duration-300"
               >
                 <Send className="mr-2 h-4 w-4" />
-                Отправить отзыв
+                {t("roomReviewsSubmitBtn")}
               </Button>
             </form>
           )}
@@ -573,8 +580,8 @@ export default function RoomReviews({ roomId, roomName }: RoomReviewsProps) {
         isOpen={deletingId !== null}
         onOpenChange={(open) => !open && setDeletingId(null)}
         onConfirm={handleDelete}
-        title="Удалить отзыв?"
-        description="Вы уверены, что хотите удалить этот отзыв гостя? Это действие безвозвратно удалит отзыв из базы данных."
+        title={t("roomReviewsDeleteTitle")}
+        description={t("roomReviewsDeleteDesc")}
       />
     </div>
   );

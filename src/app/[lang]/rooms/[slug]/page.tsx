@@ -51,6 +51,26 @@ export default async function RoomDetailsPage({ params }: PageProps) {
     about: { ru: "О номере", uk: "Про номер", en: "About the Room" },
     amenities: { ru: "Удобства и услуги", uk: "Зручності та послуги", en: "Amenities & Services" },
     price: { ru: "грн / ночь", uk: "грн / ніч", en: "UAH / night" },
+    location: { ru: "Местоположение отеля", uk: "Місцезнаходження готелю", en: "Hotel Location" },
+    beachline: { ru: "Первая береговая линия", uk: "Перша берегова лінія", en: "First Beachline" },
+    beachlineDesc: {
+      ru: "До чистого песчаного пляжа всего 10 метров. Вы выходите из отеля прямо к морской воде.",
+      uk: "До чистого піщаного пляжу всього 10 метрів. Ви виходите з готелю прямо до морської води.",
+      en: "Only 10 meters to the clean sandy beach. You walk out of the hotel straight to the sea."
+    },
+    address: { ru: "Точный адрес", uk: "Точна адреса", en: "Exact Address" },
+    addressDesc: {
+      ru: "ул. Садовая, 1835, станция Лиманская, Затока, Одесская область, Украина",
+      uk: "вул. Садова, 1835, станція Лиманська, Затока, Одеська область, Україна",
+      en: "1835 Sadova str., Lymanska station, Zatoka, Odesa Oblast, Ukraine"
+    },
+    coords: { ru: "Гео-координаты", uk: "Гео-координати", en: "Geo Coordinates" },
+    openMaps: { ru: "Открыть в Google Картах", uk: "Відкрити в Google Картах", en: "Open in Google Maps" },
+    priceLabel: { ru: "Стоимость суток", uk: "Вартість доби", en: "Price per night" },
+    capacityLabel: { ru: "Размещение", uk: "Розміщення", en: "Capacity" },
+    capacityDesc: { ru: "до", uk: "до", en: "up to" },
+    seaDist: { ru: "10м до моря", uk: "10м до моря", en: "10m to the sea" },
+    goToBooking: { ru: "Перейти к бронированию", uk: "Перейти до бронювання", en: "Proceed to Booking" },
   };
 
   const allImages = room.imageUrl
@@ -138,7 +158,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
             <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 md:p-8 backdrop-blur-sm shadow-2xl">
               <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                 <MapPin className="h-6 w-6 text-teal-400" />
-                Местоположение отеля
+                {t.location[lang as keyof typeof t.location]}
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
@@ -146,9 +166,9 @@ export default async function RoomDetailsPage({ params }: PageProps) {
                   <div className="flex items-start gap-3 bg-slate-950/40 p-4 rounded-2xl border border-white/5">
                     <Waves className="h-5 w-5 text-teal-300 mt-1 shrink-0" />
                     <div>
-                      <h4 className="font-bold text-white text-sm">Первая береговая линия</h4>
+                      <h4 className="font-bold text-white text-sm">{t.beachline[lang as keyof typeof t.beachline]}</h4>
                       <p className="text-slate-400 text-sm font-light mt-1">
-                        До чистого песчаного пляжа всего 10 метров. Вы выходите из отеля прямо к морской воде.
+                        {t.beachlineDesc[lang as keyof typeof t.beachlineDesc]}
                       </p>
                     </div>
                   </div>
@@ -156,9 +176,9 @@ export default async function RoomDetailsPage({ params }: PageProps) {
                   <div className="flex items-start gap-3 bg-slate-950/40 p-4 rounded-2xl border border-white/5">
                     <MapPin className="h-5 w-5 text-sky-300 mt-1 shrink-0" />
                     <div>
-                      <h4 className="font-bold text-white text-sm">Точный адрес</h4>
+                      <h4 className="font-bold text-white text-sm">{t.address[lang as keyof typeof t.address]}</h4>
                       <p className="text-slate-400 text-sm font-light mt-1">
-                        ул. Садовая, 1835, станция Лиманская, Затока, Одесская область, Украина
+                        {t.addressDesc[lang as keyof typeof t.addressDesc]}
                       </p>
                     </div>
                   </div>
@@ -166,7 +186,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
                   <div className="flex items-start gap-3 bg-slate-950/40 p-4 rounded-2xl border border-white/5">
                     <Compass className="h-5 w-5 text-amber-300 mt-1 shrink-0" />
                     <div>
-                      <h4 className="font-bold text-white text-sm">Гео-координаты</h4>
+                      <h4 className="font-bold text-white text-sm">{t.coords[lang as keyof typeof t.coords]}</h4>
                       <p className="text-slate-400 text-sm font-mono text-xs mt-1">46.158222° N, 30.541194° E</p>
                     </div>
                   </div>
@@ -174,7 +194,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
                   <Button asChild className="w-full bg-slate-950 border border-white/10 text-white hover:bg-slate-900 rounded-xl py-5 transition-all">
                     <a href="https://www.google.com/maps/search/?api=1&query=46.158222,30.541194" target="_blank" rel="noopener noreferrer">
                       <Navigation className="mr-2 h-4 w-4 text-teal-400" />
-                      Открыть в Google Картах
+                      {t.openMaps[lang as keyof typeof t.openMaps]}
                     </a>
                   </Button>
                 </div>
@@ -186,7 +206,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
             </div>
 
             {/* Room Reviews Component */}
-            <RoomReviews roomId={room.id} roomName={room.name} />
+            <RoomReviews roomId={room.id} roomName={room.name} lang={lang} />
           </div>
 
           {/* Right Sidebar: Sticky Info panel */}
@@ -195,24 +215,24 @@ export default async function RoomDetailsPage({ params }: PageProps) {
               <div className="absolute -right-12 -top-12 w-24 h-24 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
 
               <div className="flex items-center justify-between mb-4">
-                <span className="text-slate-400 text-sm">Стоимость суток</span>
+                <span className="text-slate-400 text-sm">{t.priceLabel[lang as keyof typeof t.priceLabel]}</span>
                 <span className="text-2xl font-extrabold text-teal-300">{room.price} грн</span>
               </div>
 
               <div className="space-y-4 pt-4 border-t border-white/5">
                 <div className="flex items-center justify-between text-sm text-slate-300">
-                  <span className="flex items-center gap-1.5"><BedDouble className="h-4 w-4 text-teal-500/80" /> Размещение</span>
-                  <span>до {room.capacity} гостей</span>
+                  <span className="flex items-center gap-1.5"><BedDouble className="h-4 w-4 text-teal-500/80" /> {t.capacityLabel[lang as keyof typeof t.capacityLabel]}</span>
+                  <span>{t.capacityDesc[lang as keyof typeof t.capacityDesc]} {room.capacity} {t.guests[lang as keyof typeof t.guests]}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm text-slate-300">
-                  <span className="flex items-center gap-1.5"><Ship className="h-4 w-4 text-teal-500/80" /> Первая береговая линия</span>
-                  <span>10м до моря</span>
+                  <span className="flex items-center gap-1.5"><Ship className="h-4 w-4 text-teal-500/80" /> {t.beachline[lang as keyof typeof t.beachline]}</span>
+                  <span>{t.seaDist[lang as keyof typeof t.seaDist]}</span>
                 </div>
               </div>
 
               <Button asChild size="lg" className="w-full mt-6 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl transition-all">
                 <Link href={`/${lang}/booking/${room.slug}`} className="flex items-center justify-center gap-2">
-                  Перейти к бронированию
+                  {t.goToBooking[lang as keyof typeof t.goToBooking]}
                   <ArrowRight className="h-4 w-4 text-slate-950" />
                 </Link>
               </Button>
