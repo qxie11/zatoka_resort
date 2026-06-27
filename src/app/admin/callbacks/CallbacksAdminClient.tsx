@@ -262,7 +262,7 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
                         variant="ghost"
                         size="icon"
                         onClick={() => handleDelete(request.id)}
-                        className="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all h-8 w-8"
+                        className="text-slate-300 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all h-8 w-8"
                         title="Удалить заявку"
                       >
                         <Trash2 className="h-4 w-4" />

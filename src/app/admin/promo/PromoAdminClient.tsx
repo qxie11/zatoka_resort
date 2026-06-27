@@ -340,7 +340,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
               {!sendingCampaign && <Send className="h-4 w-4" />}
               Отправить рассылку
             </Button>
-            <Button type="button" onClick={() => setCampaignOpen(false)} variant="ghost" className="text-slate-400 hover:text-white rounded-xl">
+            <Button type="button" onClick={() => setCampaignOpen(false)} variant="ghost" className="text-slate-200 hover:!text-white hover:bg-white/10 rounded-xl">
               <X className="h-4 w-4 mr-2" />
               Отмена
             </Button>
@@ -403,7 +403,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
               {!loading && <Save className="h-4 w-4" />}
               Сохранить
             </Button>
-            <Button type="button" onClick={() => setFormOpen(false)} variant="ghost" className="text-slate-400 hover:text-white rounded-xl">
+            <Button type="button" onClick={() => setFormOpen(false)} variant="ghost" className="text-slate-200 hover:!text-white hover:bg-white/10 rounded-xl">
               <X className="h-4 w-4 mr-2" />
               Отмена
             </Button>
@@ -495,7 +495,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
                         variant="ghost"
                         size="sm"
                         onClick={() => handleOpenEdit(promo)}
-                        className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl h-8 text-xs px-2"
+                        className="text-slate-200 hover:!text-white hover:bg-white/10 rounded-xl h-8 text-xs px-2"
                       >
                         Изменить
                       </Button>
@@ -503,7 +503,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
                         variant="ghost"
                         size="icon"
                         onClick={() => handleDeleteClick(promo.id)}
-                        className="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all h-8 w-8"
+                        className="text-slate-300 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all h-8 w-8"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

@@ -512,7 +512,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                                size="icon"
                                onClick={() => moveImage(idx, 'up')}
                                disabled={idx === 0}
-                               className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/5 disabled:opacity-30 rounded-lg"
+                               className="h-8 w-8 text-slate-200 hover:text-white hover:bg-white/10 disabled:opacity-30 rounded-lg"
                              >
                                <ArrowLeft className="h-4 w-4" />
                              </Button>
@@ -522,7 +522,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                                size="icon"
                                onClick={() => moveImage(idx, 'down')}
                                disabled={idx === images.length - 1}
-                               className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/5 disabled:opacity-30 rounded-lg"
+                               className="h-8 w-8 text-slate-200 hover:text-white hover:bg-white/10 disabled:opacity-30 rounded-lg"
                              >
                                <ArrowRight className="h-4 w-4" />
                              </Button>

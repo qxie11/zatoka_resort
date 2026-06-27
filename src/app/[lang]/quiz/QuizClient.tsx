@@ -451,7 +451,7 @@ export default function QuizClient({ lang }: { lang: "ru" | "uk" | "en" }) {
               <Button
                 onClick={handleReset}
                 variant="ghost"
-                className="text-slate-400 hover:text-white rounded-xl hover:bg-white/5 transition-all text-sm"
+                className="text-slate-200 hover:!text-white rounded-xl hover:bg-white/10 transition-all text-sm"
               >
                 <RefreshCw className="mr-2 h-4 w-4" />
                 {t.retryBtn}

@@ -240,16 +240,16 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
               <button
                 key={opt.id}
                 onClick={() => handleAnswer("company", opt.id, "preference")}
-                className="p-5 rounded-2xl bg-slate-950/40 border border-white/10 hover:border-teal-400/50 hover:bg-slate-900/40 text-left text-sm md:text-base font-medium text-slate-200 transition-all active:scale-[0.98] focus:outline-none flex justify-between items-center group"
+                className="p-5 rounded-2xl bg-slate-950/40 border border-white/10 hover:border-teal-400/50 hover:bg-teal-500/10 text-left text-sm md:text-base font-medium text-slate-200 hover:text-white transition-all active:scale-[0.98] focus:outline-none flex justify-between items-center group"
               >
                 <span>{opt.text}</span>
-                <ChevronRight className="h-5 w-5 text-slate-500 group-hover:text-teal-300 group-hover:translate-x-1 transition-all" />
+                <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-teal-300 group-hover:translate-x-1 transition-all" />
               </button>
             ))}
           </div>
 
           <div className="pt-4 flex justify-start">
-            <Button onClick={() => setStep("intro")} variant="ghost" className="text-slate-400 hover:text-white">
+            <Button onClick={() => setStep("intro")} variant="ghost" className="text-slate-200 hover:!text-white hover:bg-white/10 rounded-xl">
               <ArrowLeft className="mr-2 h-4 w-4" /> {current.backBtn}
             </Button>
           </div>
@@ -279,16 +279,16 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
               <button
                 key={opt.id}
                 onClick={() => handleAnswer("preference", opt.id, "duration")}
-                className="p-5 rounded-2xl bg-slate-950/40 border border-white/10 hover:border-teal-400/50 hover:bg-slate-900/40 text-left text-sm md:text-base font-medium text-slate-200 transition-all active:scale-[0.98] focus:outline-none flex justify-between items-center group"
+                className="p-5 rounded-2xl bg-slate-950/40 border border-white/10 hover:border-teal-400/50 hover:bg-teal-500/10 text-left text-sm md:text-base font-medium text-slate-200 hover:text-white transition-all active:scale-[0.98] focus:outline-none flex justify-between items-center group"
               >
                 <span>{opt.text}</span>
-                <ChevronRight className="h-5 w-5 text-slate-500 group-hover:text-teal-300 group-hover:translate-x-1 transition-all" />
+                <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-teal-300 group-hover:translate-x-1 transition-all" />
               </button>
             ))}
           </div>
 
           <div className="pt-4 flex justify-start">
-            <Button onClick={() => setStep("company")} variant="ghost" className="text-slate-400 hover:text-white">
+            <Button onClick={() => setStep("company")} variant="ghost" className="text-slate-200 hover:!text-white hover:bg-white/10 rounded-xl">
               <ArrowLeft className="mr-2 h-4 w-4" /> {current.backBtn}
             </Button>
           </div>
@@ -316,16 +316,16 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
               <button
                 key={opt.id}
                 onClick={() => handleAnswer("duration", opt.id, "result")}
-                className="p-5 rounded-2xl bg-slate-950/40 border border-white/10 hover:border-teal-400/50 hover:bg-slate-900/40 text-left text-sm md:text-base font-medium text-slate-200 transition-all active:scale-[0.98] focus:outline-none flex justify-between items-center group"
+                className="p-5 rounded-2xl bg-slate-950/40 border border-white/10 hover:border-teal-400/50 hover:bg-teal-500/10 text-left text-sm md:text-base font-medium text-slate-200 hover:text-white transition-all active:scale-[0.98] focus:outline-none flex justify-between items-center group"
               >
                 <span>{opt.text}</span>
-                <ChevronRight className="h-5 w-5 text-slate-500 group-hover:text-teal-300 group-hover:translate-x-1 transition-all" />
+                <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-teal-300 group-hover:translate-x-1 transition-all" />
               </button>
             ))}
           </div>
 
           <div className="pt-4 flex justify-start">
-            <Button onClick={() => setStep("preference")} variant="ghost" className="text-slate-400 hover:text-white">
+            <Button onClick={() => setStep("preference")} variant="ghost" className="text-slate-200 hover:!text-white hover:bg-white/10 rounded-xl">
               <ArrowLeft className="mr-2 h-4 w-4" /> {current.backBtn}
             </Button>
           </div>
@@ -371,7 +371,7 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
                     {current.bookBtn}
                   </Link>
                 </Button>
-                <Button onClick={resetQuiz} variant="ghost" className="w-full text-slate-400 hover:text-white flex items-center justify-center gap-2">
+                <Button onClick={resetQuiz} variant="ghost" className="w-full text-slate-200 hover:!text-white hover:bg-white/10 rounded-xl flex items-center justify-center gap-2">
                   <RefreshCw className="h-4 w-4" />
                   {current.restartBtn}
                 </Button>
