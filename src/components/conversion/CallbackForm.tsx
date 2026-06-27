@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { MessageSquare, X, Phone, User, Send, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import i18n from "@/lib/i18n";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 export function CallbackForm() {
   const { t } = useTranslation();
@@ -103,24 +104,15 @@ export function CallbackForm() {
   };
 
   return (
-    <div className="fixed bottom-16 right-3 md:bottom-20 md:right-6 z-[95] flex flex-col items-end font-sans">
-      {/* Expanded Form Card */}
-      {isOpen && (
-        <div className="mb-4 w-[320px] sm:w-[360px] bg-slate-950/95 border border-white/10 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-fade-in-up backdrop-blur-2xl relative">
+    <>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="w-full max-w-sm bg-slate-950 border border-white/10 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-2xl p-0 text-white sm:rounded-3xl focus:outline-none">
+          <DialogTitle className="sr-only">Заказать обратный звонок</DialogTitle>
           
           {/* Header Card Band */}
-          <div className="bg-gradient-to-r from-teal-900/60 via-slate-900 to-sky-950/60 p-4 border-b border-white/10 relative">
+          <div className="bg-gradient-to-r from-teal-900/60 via-slate-900 to-sky-950/60 p-5 border-b border-white/10 relative">
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-teal-400 via-sky-400 to-teal-500" />
             
-            {/* Close button */}
-            <button
-              onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
-              aria-label="Close"
-            >
-              <X className="h-4.5 w-4.5" />
-            </button>
-
             {/* Personalized Concierge Profile */}
             <div className="flex items-center gap-3 pr-6">
               <div className="relative">
@@ -148,7 +140,7 @@ export function CallbackForm() {
             </div>
           </div>
 
-          <div className="p-5">
+          <div className="p-6">
             {success ? (
               <div className="py-8 flex flex-col items-center text-center space-y-4">
                 <div className="h-16 w-16 rounded-full bg-teal-500/10 flex items-center justify-center text-teal-400 border border-teal-500/20">
@@ -183,7 +175,7 @@ export function CallbackForm() {
                     placeholder={t("callbackName")}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-slate-950/70 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 transition-all"
+                    className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 transition-all"
                   />
                 </div>
 
@@ -199,7 +191,7 @@ export function CallbackForm() {
                     placeholder="+380..."
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full bg-slate-950/70 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 transition-all"
+                    className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 transition-all"
                   />
                 </div>
 
@@ -214,7 +206,7 @@ export function CallbackForm() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     rows={3}
-                    className="w-full bg-slate-950/70 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 transition-all resize-none"
+                    className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 transition-all resize-none"
                   />
                 </div>
 
@@ -239,33 +231,35 @@ export function CallbackForm() {
               </form>
             )}
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
 
       {/* Floating Trigger Button */}
-      <div className="relative">
-        {/* Soft breathing pulse behind the button */}
-        {!isOpen && (
-          <span className="absolute -inset-1 rounded-full bg-gradient-to-r from-teal-500 to-sky-500 opacity-40 blur-sm animate-pulse z-0" />
-        )}
-        
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="h-14 w-14 rounded-full bg-gradient-to-r from-teal-400 to-sky-500 text-slate-950 flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 relative group overflow-hidden z-10"
-          style={{
-            boxShadow: "0 0 25px rgba(45, 212, 191, 0.4)",
-          }}
-          aria-label="Связаться с консьержем"
-        >
-          <span className="absolute inset-0 bg-white/25 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500" />
-          {isOpen ? (
-            <X className="h-6 w-6 font-bold" />
-          ) : (
-            <MessageSquare className="h-6 w-6" />
+      <div className="fixed bottom-16 right-3 md:bottom-20 md:right-6 z-[95] flex flex-col items-end font-sans">
+        <div className="relative">
+          {/* Soft breathing pulse behind the button */}
+          {!isOpen && (
+            <span className="absolute -inset-1 rounded-full bg-gradient-to-r from-teal-500 to-sky-500 opacity-40 blur-sm animate-pulse z-0" />
           )}
-        </button>
+          
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="h-14 w-14 rounded-full bg-gradient-to-r from-teal-400 to-sky-500 text-slate-950 flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 relative group overflow-hidden z-10"
+            style={{
+              boxShadow: "0 0 25px rgba(45, 212, 191, 0.4)",
+            }}
+            aria-label="Связаться с консьержем"
+          >
+            <span className="absolute inset-0 bg-white/25 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500" />
+            {isOpen ? (
+              <X className="h-6 w-6 font-bold" />
+            ) : (
+              <MessageSquare className="h-6 w-6" />
+            )}
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
