@@ -64,20 +64,21 @@ export default function BookingForm({
   }, [i18nInstance]);
 
   const FormSchema = z.object({
-    dateRange: z.object({
-      from: z.date({
-        required_error: t("dateRequired"),
+    dateRange: z
+      .object({
+        from: z.date().optional(),
+        to: z.date().optional(),
+      })
+      .refine((data) => data && data.from && data.to, {
+        message: t("selectDateRange", "Выберите диапазон дат"),
       }),
-      to: z.date({
-        required_error: t("dateOutRequired"),
-      }),
-    }),
     guests: z.number().min(1, { message: t("minGuests") }).max(10),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      dateRange: { from: undefined, to: undefined },
       guests: 1,
     },
   });
@@ -143,75 +144,89 @@ export default function BookingForm({
   };
 
   return (
-    <Card className="max-w-4xl mx-auto my-12 shadow-[0_0_50px_rgba(20,184,166,0.15)] border border-teal-500/25 bg-slate-900/60 backdrop-blur-md rounded-[2rem] text-white relative z-50 overflow-hidden">
-      {/* Decorative top border wave glow */}
-      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-teal-400 via-sky-400 to-amber-300" />
-      <CardContent className="p-8">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end"
-          >
-            <FormField
-              control={form.control}
-              name="dateRange"
-              render={({ field }) => (
-                <DateRangePicker
-                  value={field.value}
-                  onChange={field.onChange}
-                  label={translate("checkInOut", "Заезд / Выезд")}
-                />
-              )}
-            />
-            
-            {/* Custom Interactive Plus/Minus Counter for Guests */}
-            <FormField
-              control={form.control}
-              name="guests"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel className="text-teal-300 font-bold mb-2.5 flex items-center gap-1.5">
-                    <Users className="h-4 w-4 text-teal-400" />
-                    {translate("guests", "Гости")}
-                  </FormLabel>
-                  <FormControl>
-                    <div className="flex items-center justify-between bg-slate-950/60 border border-white/10 rounded-xl h-12 px-2.5 w-full">
-                      <button
-                        type="button"
-                        onClick={() => field.onChange(Math.max(1, field.value - 1))}
-                        className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95"
-                      >
-                        <Minus className="h-4 w-4" />
-                      </button>
-                      
-                      <span className="text-base font-extrabold select-none text-white tracking-wider">
-                        {field.value}
-                      </span>
-                      
-                      <button
-                        type="button"
-                        onClick={() => field.onChange(Math.min(10, field.value + 1))}
-                        className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-all active:scale-95"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <Button 
-              type="submit" 
-              className="w-full h-12 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 hover:scale-[1.02] active:scale-95 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/25 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+    <div className="relative max-w-4xl mx-auto my-12 group">
+      {/* Dynamic Background Glows */}
+      <div className="absolute -inset-1 rounded-[2.5rem] bg-gradient-to-r from-teal-500 via-sky-500 to-amber-400 opacity-20 blur-xl group-hover:opacity-30 transition duration-1000 group-hover:duration-2000" />
+      
+      <Card className="relative overflow-hidden border border-white/[0.08] bg-slate-950/60 backdrop-blur-xl rounded-[2rem] text-white shadow-2xl">
+        {/* Glow corner highlights */}
+        <div className="absolute top-0 left-0 w-24 h-24 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+        
+        {/* Gradient border indicator */}
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-teal-500/80 via-sky-400/80 to-amber-300/80" />
+        
+        <CardContent className="p-8 md:p-10 pb-12 md:pb-14 relative z-10">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-end"
             >
-              <Search className="h-4.5 w-4.5 text-slate-950" />
-              {translate("checkAvailability", "Проверить наличие")}
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+              <div className="relative group/field">
+                <FormField
+                  control={form.control}
+                  name="dateRange"
+                  render={({ field }) => (
+                    <DateRangePicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      label={translate("checkInOut", "Заезд / Выезд")}
+                    />
+                  )}
+                />
+              </div>
+              
+              {/* Custom Interactive Plus/Minus Counter for Guests */}
+              <FormField
+                control={form.control}
+                name="guests"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col relative">
+                    <FormLabel className="text-teal-300 font-bold mb-2.5 flex items-center gap-2 tracking-wide text-xs uppercase">
+                      <Users className="h-4 w-4 text-teal-400" />
+                      {translate("guests", "Гости")}
+                    </FormLabel>
+                    <FormControl>
+                      <div className="flex items-center justify-between bg-slate-950/80 border border-white/[0.06] hover:border-white/15 focus-within:border-teal-500/50 rounded-xl h-12 px-3 w-full transition-all duration-300 shadow-inner">
+                        <button
+                          type="button"
+                          onClick={() => field.onChange(Math.max(1, field.value - 1))}
+                          className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition-all duration-300 active:scale-90"
+                        >
+                          <Minus className="h-3.5 w-3.5" />
+                        </button>
+                        
+                        <span className="text-lg font-black select-none text-white tracking-widest min-w-[20px] text-center">
+                          {field.value}
+                        </span>
+                        
+                        <button
+                          type="button"
+                          onClick={() => field.onChange(Math.min(10, field.value + 1))}
+                          className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition-all duration-300 active:scale-90"
+                        >
+                          <Plus className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormMessage className="absolute top-full left-0 mt-1.5 z-20 text-rose-400/90 text-xs font-semibold flex items-center gap-1 bg-slate-950 border border-rose-500/30 py-1.5 px-3 rounded-lg w-max max-w-full shadow-lg shadow-black/50 animate-in fade-in slide-in-from-top-1 duration-300" />
+                  </FormItem>
+                )}
+              />
+              
+              <div className="relative">
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 bg-gradient-to-r from-teal-400 via-sky-400 to-amber-300 hover:from-teal-300 hover:via-sky-300 hover:to-amber-200 text-slate-950 font-black border-0 shadow-lg shadow-teal-500/10 hover:shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs"
+                >
+                  <Search className="h-4 w-4 text-slate-950 stroke-[2.5]" />
+                  {translate("checkAvailability", "Проверить наличие")}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

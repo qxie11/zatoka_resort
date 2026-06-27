@@ -134,7 +134,10 @@ export function DateRangePicker({
 
   return (
     <FormItem className={cn("flex flex-col relative", popoverOpen ? "z-50" : "z-10", className)}>
-      <FormLabel className="text-teal-300 font-bold mb-2">{activeLabel}</FormLabel>
+      <FormLabel className="text-teal-300 font-bold mb-2.5 flex items-center gap-2 tracking-wide text-xs uppercase">
+        <CalendarIcon className="h-4 w-4 text-teal-400" />
+        {activeLabel}
+      </FormLabel>
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger asChild>
           <FormControl>
@@ -142,22 +145,23 @@ export function DateRangePicker({
               type="button"
               variant={"outline"}
               className={cn(
-                "w-full justify-start text-left font-normal bg-slate-950/40 border-white/10 text-white hover:bg-white/10 hover:text-white transition-smooth rounded-xl h-11",
-                !value?.from && "text-slate-400"
+                "w-full justify-start text-left font-semibold bg-slate-950/80 border border-white/[0.06] hover:border-white/15 focus:border-teal-500/50 text-white hover:bg-slate-900/50 hover:text-white transition-all duration-300 rounded-xl h-12 shadow-inner px-4",
+                !value?.from && "text-slate-400 font-normal"
               )}
             >
-              <CalendarIcon className="mr-2 h-4 w-4 text-teal-400" />
               {value?.from ? (
                 value.to ? (
-                  <>
-                    {format(value.from, "LLL dd, y", { locale: activeLocale })} -{" "}
-                    {format(value.to, "LLL dd, y", { locale: activeLocale })}
-                  </>
+                  <span className="text-sm text-slate-200 tracking-wide font-bold">
+                    {format(value.from, "dd MMM yyyy", { locale: activeLocale })} —{" "}
+                    {format(value.to, "dd MMM yyyy", { locale: activeLocale })}
+                  </span>
                 ) : (
-                  format(value.from, "LLL dd, y", { locale: activeLocale })
+                  <span className="text-sm text-slate-200 tracking-wide font-bold">
+                    {format(value.from, "dd MMM yyyy", { locale: activeLocale })}
+                  </span>
                 )
               ) : (
-                <span>{t("selectDateRange", "Выберите диапазон дат")}</span>
+                <span className="text-sm text-slate-400">{t("selectDateRange", "Выберите диапазон дат")}</span>
               )}
             </Button>
           </FormControl>
@@ -222,7 +226,7 @@ export function DateRangePicker({
           </PopoverPrimitive.Content>
         </PopoverPrimitive.Portal>
       </Popover>
-      <FormMessage />
+      <FormMessage className="absolute top-full left-0 mt-1.5 z-20 text-rose-400/90 text-xs font-semibold flex items-center gap-1 bg-slate-950 border border-rose-500/30 py-1.5 px-3 rounded-lg w-max max-w-full shadow-lg shadow-black/50 animate-in fade-in slide-in-from-top-1 duration-300" />
       {existingBookings.length > 0 && disabledDates.length > 0 && (
         <p className="text-sm text-slate-400 mt-1">
           {t("bookedDatesMarked", "Занятые даты отмечены в календаре")}
