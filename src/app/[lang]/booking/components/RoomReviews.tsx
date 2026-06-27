@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
-import i18n from "@/lib/i18n";
+import i18n, { resources } from "@/lib/i18n";
 
 interface Review {
   id: string;
@@ -28,10 +28,18 @@ interface RoomReviewsProps {
   lang?: string;
 }
 export default function RoomReviews({ roomId, roomName, lang: propLang }: RoomReviewsProps) {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
   const { toast } = useToast();
   const params = useParams();
   const lang = propLang || (params?.lang as string) || "ru";
+
+  const t = (key: string): string => {
+    const translationGroup = resources[lang as "ru" | "uk" | "en"]?.translation;
+    if (translationGroup && key in translationGroup) {
+      return (translationGroup as any)[key];
+    }
+    return translate(key);
+  };
 
   useEffect(() => {
     if (lang && i18n.language !== lang) {
