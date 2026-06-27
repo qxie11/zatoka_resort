@@ -336,8 +336,8 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
           </div>
 
           <div className="flex items-center gap-4 pt-2">
-            <Button type="submit" disabled={sendingCampaign} className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold rounded-xl flex items-center gap-2">
-              {sendingCampaign ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+            <Button type="submit" loading={sendingCampaign} className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold rounded-xl flex items-center gap-2">
+              {!sendingCampaign && <Send className="h-4 w-4" />}
               Отправить рассылку
             </Button>
             <Button type="button" onClick={() => setCampaignOpen(false)} variant="ghost" className="text-slate-400 hover:text-white rounded-xl">
@@ -399,8 +399,8 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
           </div>
 
           <div className="flex items-center gap-4 pt-2">
-            <Button type="submit" disabled={loading} className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold rounded-xl flex items-center gap-2">
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            <Button type="submit" loading={loading} className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold rounded-xl flex items-center gap-2">
+              {!loading && <Save className="h-4 w-4" />}
               Сохранить
             </Button>
             <Button type="button" onClick={() => setFormOpen(false)} variant="ghost" className="text-slate-400 hover:text-white rounded-xl">

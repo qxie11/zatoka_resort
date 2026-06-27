@@ -337,7 +337,7 @@ export default function BookingForm({
                   Отмена
                 </Button>
               </SheetClose>
-              <Button type="submit" className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">Сохранить бронирование</Button>
+              <Button type="submit" loading={form.formState.isSubmitting} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">Сохранить бронирование</Button>
             </SheetFooter>
           </form>
         </Form>

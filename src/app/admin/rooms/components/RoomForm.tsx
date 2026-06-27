@@ -49,7 +49,7 @@ type RoomFormValues = {
 interface RoomFormProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  onSubmit: (values: Omit<Room, 'id'>, id?: string) => void;
+  onSubmit: (values: Omit<Room, 'id'>, id?: string) => Promise<void> | void;
   room: Room | null;
 }
 
@@ -254,7 +254,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
       const mainImagePath = finalUrls[0] || '';
       const additionalImagePaths = finalUrls.slice(1);
 
-      onSubmit({ 
+      await onSubmit({ 
         name: data.name,
         slug: data.slug,
         description: data.description,
@@ -601,13 +601,12 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                   <SheetClose asChild>
                       <Button type="button" variant="outline" disabled={isUploading} className="rounded-xl border-white/10 text-slate-200 hover:!text-white hover:bg-white/10 h-11">Отмена</Button>
                   </SheetClose>
-                  <Button type="submit" disabled={isUploading} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">
-                    {isUploading ? "Сохранение..." : "Сохранить номер"}
+                  <Button type="submit" loading={isUploading} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">
+                    Сохранить номер
                   </Button>
-               </SheetFooter>
-         </form>
-       </SheetContent>
-     </Sheet>
-  );
+                </SheetFooter>
+          </form>
+        </SheetContent>
+      </Sheet>
+   );
 }
-

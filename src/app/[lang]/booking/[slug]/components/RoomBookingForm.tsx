@@ -462,10 +462,10 @@ export default function RoomBookingForm({
                 <Button
                   type="submit"
                   size="lg"
-                  disabled={isSubmitting}
+                  loading={isSubmitting}
                   className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl"
                 >
-                  {isSubmitting ? "Отправка..." : "Забронировать"}
+                  Забронировать
                 </Button>
               </div>
             </div>
