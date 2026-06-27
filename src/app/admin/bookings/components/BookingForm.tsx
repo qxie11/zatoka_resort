@@ -219,7 +219,7 @@ export default function BookingForm({
                     </FormControl>
                     <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-md">
                       {rooms.map((room) => (
-                        <SelectItem key={room.id} value={room.id} className="focus:bg-teal-500/20 focus:text-teal-300 rounded-lg py-2">
+                        <SelectItem key={room.id} value={room.id} className="focus:bg-teal-500/20 focus:text-teal-300 hover:bg-teal-500/20 hover:text-teal-300 data-[highlighted]:bg-teal-500/20 data-[highlighted]:text-teal-300 rounded-lg py-2 cursor-pointer">
                           {room.name}
                         </SelectItem>
                       ))}
@@ -266,9 +266,9 @@ export default function BookingForm({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-md">
-                          <SelectItem value="any" className="focus:bg-teal-500/20 focus:text-teal-300 rounded-lg py-2">Любой свободный</SelectItem>
+                          <SelectItem value="any" className="focus:bg-teal-500/20 focus:text-teal-300 hover:bg-teal-500/20 hover:text-teal-300 data-[highlighted]:bg-teal-500/20 data-[highlighted]:text-teal-300 rounded-lg py-2 cursor-pointer">Любой свободный</SelectItem>
                           {availableUnits.map((unit) => (
-                            <SelectItem key={unit.id} value={unit.id!} className="focus:bg-teal-500/20 focus:text-teal-300 rounded-lg py-2">
+                            <SelectItem key={unit.id} value={unit.id!} className="focus:bg-teal-500/20 focus:text-teal-300 hover:bg-teal-500/20 hover:text-teal-300 data-[highlighted]:bg-teal-500/20 data-[highlighted]:text-teal-300 rounded-lg py-2 cursor-pointer">
                               {unit.name}
                             </SelectItem>
                           ))}
