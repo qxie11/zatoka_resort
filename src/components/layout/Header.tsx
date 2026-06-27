@@ -139,7 +139,7 @@ export default function Header() {
                 key={link.href}
                 href={localizedHref}
                 className={cn(
-                  "text-xs uppercase tracking-widest font-semibold transition-colors duration-300 px-4 py-2 relative group/link",
+                  "text-[10px] uppercase tracking-widest font-semibold transition-colors duration-300 px-4 py-2 relative group/link",
                   isActive
                     ? "text-teal-300 font-bold"
                     : "text-slate-350 hover:text-white"
@@ -159,7 +159,7 @@ export default function Header() {
             <Link
               href="/admin"
               className={cn(
-                "text-xs uppercase tracking-widest font-semibold transition-colors duration-300 px-4 py-2 relative group/link",
+                "text-[10px] uppercase tracking-widest font-semibold transition-colors duration-300 px-4 py-2 relative group/link",
                 pathname === "/admin"
                   ? "text-teal-300 font-bold"
                   : "text-slate-350 hover:text-white"
@@ -258,7 +258,7 @@ export default function Header() {
                         href={localizedHref}
                         onClick={() => setIsMobileMenuOpen(false)}
                         className={cn(
-                          "text-sm uppercase tracking-widest font-bold py-2 px-3 rounded-xl transition-all duration-300 border border-transparent",
+                          "text-xs uppercase tracking-widest font-bold py-2 px-3 rounded-xl transition-all duration-300 border border-transparent",
                           pathname === localizedHref
                             ? "text-teal-300 bg-teal-500/5 border-teal-500/10"
                             : "text-slate-400 hover:text-white hover:bg-white/5"
@@ -273,7 +273,7 @@ export default function Header() {
                       href="/admin"
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={cn(
-                        "text-sm uppercase tracking-widest font-bold py-2 px-3 rounded-xl transition-all duration-300 border border-transparent",
+                        "text-xs uppercase tracking-widest font-bold py-2 px-3 rounded-xl transition-all duration-300 border border-transparent",
                         pathname === "/admin"
                           ? "text-teal-300 bg-teal-500/5 border-teal-500/10"
                           : "text-slate-400 hover:text-white hover:bg-white/5"
