@@ -488,16 +488,6 @@ export default function RoomReviews({ roomId, roomName, lang: propLang }: RoomRe
                   </svg>
                   {t("roomReviewsGoogleBtn")}
                 </Button>
-                
-                <Button
-                  asChild
-                  variant="outline"
-                  className="w-full border-white/10 bg-slate-900/60 text-white hover:bg-slate-800 rounded-xl py-5 text-sm"
-                >
-                  <Link href={`/${lang}/login`}>
-                    {t("roomReviewsAdminBtn")}
-                  </Link>
-                </Button>
               </div>
             </div>
           ) : (

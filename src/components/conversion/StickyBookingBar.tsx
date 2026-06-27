@@ -6,7 +6,10 @@ import { ArrowRight, CalendarDays, Star, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
 
+import { usePathname } from "next/navigation";
+
 export function StickyBookingBar() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const { t } = useTranslation();
@@ -29,7 +32,15 @@ export function StickyBookingBar() {
     };
   }, []);
 
-  if (dismissed || !visible) return null;
+  if (
+    dismissed || 
+    !visible || 
+    pathname.includes("/booking") || 
+    pathname.startsWith("/admin") || 
+    pathname.includes("/login")
+  ) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[100] animate-slide-up">
