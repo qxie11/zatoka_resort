@@ -31,7 +31,7 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
       nextBtn: "Далее",
       backBtn: "Назад",
       restartBtn: "Начать заново",
-      bookBtn: "Забронировать этот номер",
+      bookBtn: "Посмотреть этот номер",
       matchingRooms: "Ваш идеальный выбор:",
       bestMatch: "Рекомендация отеля",
       stepOf: "Шаг",
@@ -63,7 +63,7 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
       nextBtn: "Далі",
       backBtn: "Назад",
       restartBtn: "Почати спочатку",
-      bookBtn: "Забронювати цей номер",
+      bookBtn: "Подивитися цей номер",
       matchingRooms: "Ваш ідеальний вибір:",
       bestMatch: "Рекомендація готелю",
       stepOf: "Крок",
@@ -95,7 +95,7 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
       nextBtn: "Next",
       backBtn: "Back",
       restartBtn: "Retake Quiz",
-      bookBtn: "Book This Room Now",
+      bookBtn: "View This Room",
       matchingRooms: "Your Perfect Match:",
       bestMatch: "Best Hotel Match",
       stepOf: "Step",
@@ -367,7 +367,7 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
 
               <div className="space-y-3 pt-4 border-t border-white/5">
                 <Button asChild className="w-full bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold rounded-xl py-5">
-                  <Link href={`/${lang}/booking/${recommendation.slug}`}>
+                  <Link href={`/${lang}/rooms/${recommendation.slug}`}>
                     {current.bookBtn}
                   </Link>
                 </Button>
