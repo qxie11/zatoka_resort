@@ -100,7 +100,7 @@ export default function Footer() {
               <div className="p-2 rounded-xl bg-white/5 border border-white/10 group-hover:border-teal-500/30 group-hover:bg-teal-500/10 transition-all duration-500 shadow-inner">
                 <Waves className="h-6 w-6 text-teal-400 group-hover:animate-coral-sway transition-transform duration-500" />
               </div>
-              <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 tracking-wide drop-shadow-[0_2px_10px_rgba(45,212,191,0.15)]">
+              <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 tracking-wide drop-shadow-[0_2px_10px_rgba(45,212,191,0.15)]">
                 {t("brandName")}
               </span>
             </Link>

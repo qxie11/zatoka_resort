@@ -162,7 +162,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 {/* Heading */}
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] animate-fade-in-up drop-shadow-2xl font-heading">
                   {translate("heroTitle1", "Погрузитесь в роскошь")} <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-300 to-amber-200 drop-shadow-md animate-ocean-shimmer font-black">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 drop-shadow-md animate-ocean-shimmer font-black">
                     {translate("heroTitle2", "черноморского побережья")}
                   </span>
                 </h1>

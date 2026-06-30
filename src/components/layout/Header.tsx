@@ -169,7 +169,7 @@ export default function Header() {
             <Waves className="h-5 w-5 text-teal-400 group-hover:animate-coral-sway glow-teal" />
           </div>
           <div className="flex flex-col text-left">
-            <span className="text-sm font-black tracking-[0.15em] uppercase bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-200 group-hover:animate-ocean-shimmer">
+            <span className="text-sm font-black tracking-[0.15em] uppercase bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 group-hover:animate-ocean-shimmer">
               {t("brandName")}
             </span>
             <span className="text-[7px] font-bold tracking-[0.35em] text-teal-400/80 uppercase -mt-0.5">
@@ -295,7 +295,7 @@ export default function Header() {
                   <div className="p-1.5 rounded-lg bg-teal-500/10 border border-teal-500/20">
                     <Waves className="h-5 w-5 text-teal-400" />
                   </div>
-                  <span className="text-lg font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-200">
+                  <span className="text-lg font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500">
                     {t("brandName")}
                   </span>
                 </Link>
