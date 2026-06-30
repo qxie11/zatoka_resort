@@ -6,7 +6,7 @@ import { z } from "zod";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import { Users, Mail, Phone, User, Eye, Minus, Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -100,6 +100,8 @@ export default function RoomBookingForm({
   existingBookings,
 }: RoomBookingFormProps) {
   const router = useRouter();
+  const params = useParams();
+  const lang = (params?.lang as string) || "ru";
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [promoInput, setPromoInput] = useState("");
   const [discount, setDiscount] = useState(0); // discount in percentage
@@ -199,7 +201,16 @@ export default function RoomBookingForm({
         })} подтверждено.`,
       });
 
-      router.push("/booking?success=true");
+      const searchParams = new URLSearchParams({
+        roomName: room.name,
+        name: data.name,
+        startDate: format(data.dateRange.from, "yyyy-MM-dd"),
+        endDate: format(data.dateRange.to, "yyyy-MM-dd"),
+        pricePaid: pricePaid.toString(),
+        guests: data.guests.toString(),
+      });
+
+      router.push(`/${lang}/booking/success?${searchParams.toString()}`);
     } catch (error) {
       toast({
         title: "Ошибка",

@@ -119,7 +119,7 @@ export default function BookingForm({
         return false;
       }
 
-      return isRoomAvailable(room, data.dateRange.from, data.dateRange.to);
+      return isRoomAvailable(room, data.dateRange.from!, data.dateRange.to!);
     });
 
     onFilterChange(filteredRooms);
