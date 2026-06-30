@@ -202,6 +202,7 @@ export default function RoomBookingForm({
       });
 
       const searchParams = new URLSearchParams({
+        roomId: room.id,
         roomName: room.name,
         name: data.name,
         startDate: format(data.dateRange.from, "yyyy-MM-dd"),

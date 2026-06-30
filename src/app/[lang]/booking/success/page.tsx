@@ -3,7 +3,16 @@
 import { use, useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Calendar, Users, Home, ArrowLeft, Waves, Sparkles, ShieldCheck } from "lucide-react";
+import Image from "next/image";
+import {
+  Home,
+  ArrowLeft,
+  Sparkles,
+  ShieldCheck,
+  ChevronLeft,
+  ChevronRight,
+  Image as ImageIcon
+} from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { ru, uk, enUS } from "date-fns/locale";
 import BackgroundBubbles from "@/components/decorative/BackgroundBubbles";
@@ -33,6 +42,9 @@ const translations = {
     infoText: "Мы уже начали подготовку к вашему визиту. Наш администратор свяжется с вами по телефону в течение 15 минут для подтверждения деталей заезда.",
     btnHome: "На главную",
     btnRooms: "Выбрать другой номер",
+    galleryTitle: "Ваш будущий номер",
+    loadingGallery: "Загрузка фотографий номера...",
+    noImages: "Фотографии номера временно недоступны",
     guestsCount: (count: number) => {
       const lastDigit = count % 10;
       const lastTwoDigits = count % 100;
@@ -55,6 +67,9 @@ const translations = {
     infoText: "Ми вже розпочали підготовку до вашого визиту. Наш адміністратор зв'яжеться з вами телефоном протягом 15 хвилин для підтвердження деталей заїзду.",
     btnHome: "На головну",
     btnRooms: "Обрати інший номер",
+    galleryTitle: "Ваш майбутній номер",
+    loadingGallery: "Завантаження фотографій номера...",
+    noImages: "Фотографії номера тимчасово недоступні",
     guestsCount: (count: number) => {
       const lastDigit = count % 10;
       const lastTwoDigits = count % 100;
@@ -77,6 +92,9 @@ const translations = {
     infoText: "We are already preparing for your arrival. Our administrator will contact you by phone within 15 minutes to confirm check-in details.",
     btnHome: "Go Home",
     btnRooms: "View Other Rooms",
+    galleryTitle: "Your Upcoming Room",
+    loadingGallery: "Loading room photos...",
+    noImages: "Room photos are temporarily unavailable",
     guestsCount: (count: number) => `${count} ${count === 1 ? 'guest' : 'guests'}`
   }
 };
@@ -84,6 +102,7 @@ const translations = {
 function SuccessContent({ lang }: { lang: string }) {
   const searchParams = useSearchParams();
 
+  const roomId = searchParams.get("roomId") || "";
   const roomName = searchParams.get("roomName") || "";
   const name = searchParams.get("name") || "";
   const startDateStr = searchParams.get("startDate") || "";
@@ -92,10 +111,25 @@ function SuccessContent({ lang }: { lang: string }) {
   const guests = parseInt(searchParams.get("guests") || "1", 10);
 
   const [mounted, setMounted] = useState(false);
+  const [room, setRoom] = useState<any>(null);
+  const [activeImgIdx, setActiveImgIdx] = useState(0);
+  const [loadingRoom, setLoadingRoom] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (roomId) {
+      setLoadingRoom(true);
+      fetch(`/api/rooms/${roomId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && !data.error) {
+            setRoom(data);
+          }
+        })
+        .catch((err) => console.error("Error loading room data:", err))
+        .finally(() => setLoadingRoom(false));
+    }
+  }, [roomId]);
 
   const t = translations[lang as keyof typeof translations] || translations.ru;
   const currentLocale = locales[lang as keyof typeof locales] || ru;
@@ -111,6 +145,23 @@ function SuccessContent({ lang }: { lang: string }) {
       formattedDates = `${startDateStr} — ${endDateStr}`;
     }
   }
+
+  // Extract gallery images
+  const allImages = room
+    ? [room.imageUrl, ...(room.imageUrls || [])].filter(Boolean)
+    : [];
+
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (allImages.length === 0) return;
+    setActiveImgIdx((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (allImages.length === 0) return;
+    setActiveImgIdx((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+  };
 
   if (!mounted) {
     return (
@@ -128,113 +179,205 @@ function SuccessContent({ lang }: { lang: string }) {
         <BackgroundFishes />
         <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full bg-teal-500/10 blur-[120px] animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full bg-sky-500/10 blur-[100px] animate-pulse" style={{ animationDelay: "2.5s" }} />
-        
+
         {/* Decorative Gridlines */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-25" />
       </div>
 
-      <div className="relative z-10 w-full max-w-2xl text-center">
-        {/* Animated Checkmark Circle */}
-        <div className="relative mx-auto w-24 h-24 mb-8 flex items-center justify-center">
-          {/* Pulsing ring */}
-          <div className="absolute inset-0 rounded-full bg-teal-500/20 animate-ping opacity-75" style={{ animationDuration: "2s" }} />
-          
-          {/* Solid glass circle */}
-          <div className="absolute inset-1 rounded-full bg-slate-900 border border-teal-500/40 flex items-center justify-center shadow-[0_0_30px_rgba(20,184,166,0.3)]">
-            <svg 
-              className="w-12 h-12 text-teal-400 stroke-current"
-              viewBox="0 0 24 24" 
-              fill="none" 
-              strokeWidth="3" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            >
-              <polyline 
-                points="20 6 9 17 4 12" 
-                style={{
-                  strokeDasharray: 50,
-                  strokeDashoffset: 50,
-                  animation: "drawCheck 0.6s ease-in-out forwards 0.2s"
-                }}
-              />
-            </svg>
-          </div>
-        </div>
-
-        {/* Header Titles */}
-        <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-sm py-1 animate-fade-in-up">
-          {t.title}
-        </h1>
-        <p className="text-slate-400 max-w-lg mx-auto mb-10 text-base md:text-lg font-medium animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-          {t.subtitle}
-        </p>
-
-        {/* Premium Detail Card */}
-        <div 
-          className="glass-card-dark bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-[2rem] p-6 md:p-8 text-left shadow-[0_30px_60px_rgba(0,0,0,0.5)] mb-10 animate-fade-in-up"
-          style={{ animationDelay: "0.2s" }}
-        >
-          <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
-            <h3 className="font-heading font-extrabold text-white text-lg tracking-wide uppercase flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-teal-400" />
-              {t.detailsTitle}
-            </h3>
-            <span className="text-xs bg-teal-500/20 text-teal-300 border border-teal-500/30 px-3 py-1 rounded-full font-bold uppercase tracking-wider">
-              Zatoka VIP
-            </span>
-          </div>
-
-          <div className="space-y-4">
-            {name && (
-              <div className="flex items-center justify-between py-2 border-b border-white/5">
-                <span className="text-slate-400 text-sm">{t.guestName}</span>
-                <span className="text-white font-semibold text-right">{name}</span>
-              </div>
-            )}
-
-            {roomName && (
-              <div className="flex items-center justify-between py-2 border-b border-white/5">
-                <span className="text-slate-400 text-sm">{t.room}</span>
-                <span className="text-teal-300 font-bold text-right">{roomName}</span>
-              </div>
-            )}
-
-            {formattedDates && (
-              <div className="flex items-center justify-between py-2 border-b border-white/5">
-                <span className="text-slate-400 text-sm">{t.dates}</span>
-                <span className="text-white font-semibold text-right">{formattedDates}</span>
-              </div>
-            )}
-
-            <div className="flex items-center justify-between py-2 border-b border-white/5">
-              <span className="text-slate-400 text-sm">{t.guests}</span>
-              <span className="text-white font-semibold text-right">{t.guestsCount(guests)}</span>
+      <div className="relative z-10 w-full max-w-5xl">
+        {/* Animated Checkmark Circle & Header Titles */}
+        <div className="text-center mb-10">
+          <div className="relative mx-auto w-24 h-24 mb-6 flex items-center justify-center">
+            <div className="absolute inset-0 rounded-full bg-teal-500/20 animate-ping opacity-75" style={{ animationDuration: "2s" }} />
+            <div className="absolute inset-1 rounded-full bg-slate-900 border border-teal-500/40 flex items-center justify-center shadow-[0_0_30px_rgba(20,184,166,0.3)]">
+              <svg
+                className="w-12 h-12 text-teal-400 stroke-current"
+                viewBox="0 0 24 24"
+                fill="none"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline
+                  points="20 6 9 17 4 12"
+                  style={{
+                    strokeDasharray: 50,
+                    strokeDashoffset: 50,
+                    animation: "drawCheck 0.6s ease-in-out forwards 0.2s"
+                  }}
+                />
+              </svg>
             </div>
-
-            {pricePaid && (
-              <div className="flex items-center justify-between pt-3">
-                <span className="text-slate-400 text-sm">{t.price}</span>
-                <span className="text-2xl font-black text-amber-400 flex items-baseline gap-1">
-                  {pricePaid} <span className="text-sm font-semibold">{t.currency}</span>
-                </span>
-              </div>
-            )}
           </div>
-        </div>
-
-        {/* Administration Info Box */}
-        <div 
-          className="flex gap-3 text-left bg-slate-900/40 border border-teal-500/20 rounded-2xl p-5 mb-10 max-w-xl mx-auto animate-fade-in-up"
-          style={{ animationDelay: "0.3s" }}
-        >
-          <Sparkles className="h-6 w-6 text-teal-400 shrink-0 animate-pulse" />
-          <p className="text-sm text-slate-300 leading-relaxed font-medium">
-            {t.infoText}
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-3 bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-sm py-1 animate-fade-in-up">
+            {t.title}
+          </h1>
+          <p className="text-slate-400 max-w-2xl mx-auto text-base md:text-lg font-medium animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+            {t.subtitle}
           </p>
         </div>
 
-        {/* Custom Actions */}
-        <div 
+        {/* Two-Column Grid Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch mb-10">
+
+          {/* LEFT COLUMN: Booking Details */}
+          <div
+            className="glass-card-dark bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-[2rem] p-6 md:p-8 text-left shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col justify-between animate-fade-in-up"
+            style={{ animationDelay: "0.2s" }}
+          >
+            <div>
+              <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+                <h3 className="font-heading font-extrabold text-white text-lg tracking-wide uppercase flex items-center gap-2">
+                  <ShieldCheck className="h-5 w-5 text-teal-400" />
+                  {t.detailsTitle}
+                </h3>
+                <span className="text-xs bg-teal-500/20 text-teal-300 border border-teal-500/30 px-3 py-1 rounded-full font-bold uppercase tracking-wider">
+                  Zatoka VIP
+                </span>
+              </div>
+
+              <div className="space-y-4 mb-6">
+                {name && (
+                  <div className="flex items-center justify-between py-2 border-b border-white/5">
+                    <span className="text-slate-400 text-sm">{t.guestName}</span>
+                    <span className="text-white font-semibold text-right">{name}</span>
+                  </div>
+                )}
+
+                {roomName && (
+                  <div className="flex items-center justify-between py-2 border-b border-white/5">
+                    <span className="text-slate-400 text-sm">{t.room}</span>
+                    <span className="text-teal-300 font-bold text-right">{roomName}</span>
+                  </div>
+                )}
+
+                {formattedDates && (
+                  <div className="flex items-center justify-between py-2 border-b border-white/5">
+                    <span className="text-slate-400 text-sm">{t.dates}</span>
+                    <span className="text-white font-semibold text-right">{formattedDates}</span>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between py-2 border-b border-white/5">
+                  <span className="text-slate-400 text-sm">{t.guests}</span>
+                  <span className="text-white font-semibold text-right">{t.guestsCount(guests)}</span>
+                </div>
+
+                {pricePaid && (
+                  <div className="flex items-center justify-between pt-3">
+                    <span className="text-slate-400 text-sm">{t.price}</span>
+                    <span className="text-2xl font-black text-amber-400 flex items-baseline gap-1">
+                      {pricePaid} <span className="text-sm font-semibold">{t.currency}</span>
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Info Box */}
+            <div className="flex gap-3 text-left bg-slate-950/40 border border-teal-500/20 rounded-2xl p-4 mt-auto">
+              <Sparkles className="h-5 w-5 text-teal-400 shrink-0 animate-pulse mt-0.5" />
+              <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-medium">
+                {t.infoText}
+              </p>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: Interactive Room Photo Gallery */}
+          <div
+            className="glass-card-dark bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-[2rem] p-6 md:p-8 text-left shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col animate-fade-in-up"
+            style={{ animationDelay: "0.3s" }}
+          >
+            <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+              <h3 className="font-heading font-extrabold text-white text-lg tracking-wide uppercase flex items-center gap-2">
+                <ImageIcon className="h-5 w-5 text-sky-400" />
+                {t.galleryTitle}
+              </h3>
+            </div>
+
+            {/* Slider Content */}
+            <div className="flex-1 flex flex-col justify-center">
+              {loadingRoom ? (
+                <div className="flex flex-col items-center justify-center py-20 text-slate-400 gap-3">
+                  <div className="h-8 w-8 rounded-full border-2 border-sky-400 border-t-transparent animate-spin" />
+                  <span className="text-sm">{t.loadingGallery}</span>
+                </div>
+              ) : allImages.length > 0 ? (
+                <div className="space-y-4">
+                  {/* Large Active Image Box */}
+                  <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden border border-white/10 bg-slate-950 group">
+                    <Image
+                      src={allImages[activeImgIdx]}
+                      alt={room?.name || "Room preview"}
+                      fill
+                      className="object-cover transition-all duration-700 ease-out group-hover:scale-105"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      priority
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
+
+                    {/* Navigation Arrows */}
+                    {allImages.length > 1 && (
+                      <>
+                        <button
+                          onClick={handlePrevImage}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-slate-950/60 hover:bg-teal-500/80 border border-white/10 hover:border-teal-400 text-white transition-all duration-300 shadow-lg backdrop-blur-sm"
+                          aria-label="Previous image"
+                        >
+                          <ChevronLeft className="h-5 w-5" />
+                        </button>
+                        <button
+                          onClick={handleNextImage}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-slate-950/60 hover:bg-teal-500/80 border border-white/10 hover:border-teal-400 text-white transition-all duration-300 shadow-lg backdrop-blur-sm"
+                          aria-label="Next image"
+                        >
+                          <ChevronRight className="h-5 w-5" />
+                        </button>
+                      </>
+                    )}
+
+                    {/* Image Counter Badge */}
+                    <div className="absolute bottom-3 right-3 bg-slate-950/70 border border-white/10 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-bold text-slate-300">
+                      {activeImgIdx + 1} / {allImages.length}
+                    </div>
+                  </div>
+
+                  {/* Thumbnail Row */}
+                  {allImages.length > 1 && (
+                    <div className="flex gap-2.5 overflow-x-auto py-1 scrollbar-hide">
+                      {allImages.map((img, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setActiveImgIdx(idx)}
+                          className={`relative h-14 w-20 rounded-lg overflow-hidden shrink-0 border-2 transition-all duration-300 ${idx === activeImgIdx
+                            ? "border-teal-400 shadow-[0_0_10px_rgba(20,184,166,0.4)] scale-95"
+                            : "border-transparent opacity-60 hover:opacity-100"
+                            }`}
+                        >
+                          <Image
+                            src={img}
+                            alt={`Thumbnail ${idx + 1}`}
+                            fill
+                            className="object-cover"
+                            sizes="80px"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-20 text-slate-500 gap-2">
+                  <ImageIcon className="h-10 w-10 text-slate-600 animate-pulse" />
+                  <span className="text-sm font-medium">{t.noImages}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Global Control Buttons */}
+        <div
           className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up"
           style={{ animationDelay: "0.4s" }}
         >
@@ -274,6 +417,14 @@ function SuccessContent({ lang }: { lang: string }) {
         .animate-fade-in-up {
           opacity: 0;
           animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        /* Hide scrollbars for thumbnails row */
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
     </div>
