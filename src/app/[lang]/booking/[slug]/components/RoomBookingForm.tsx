@@ -300,6 +300,7 @@ export default function RoomBookingForm({
                       onChange={field.onChange}
                       existingBookings={filteredBookings}
                       totalUnitsCount={1}
+                      showBookingInstructions={!isSingleUnit}
                     />
                   );
                 }}

@@ -33,6 +33,7 @@ interface DateRangePickerProps {
   disabled?: (date: Date) => boolean;
   label?: string;
   className?: string;
+  showBookingInstructions?: boolean;
 }
 
 export function DateRangePicker({
@@ -44,6 +45,7 @@ export function DateRangePicker({
   disabled: customDisabled,
   label,
   className,
+  showBookingInstructions = false,
 }: DateRangePickerProps) {
   const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
@@ -226,10 +228,9 @@ export function DateRangePicker({
           </PopoverPrimitive.Content>
         </PopoverPrimitive.Portal>
       </Popover>
-      <FormMessage className="absolute top-full left-0 mt-1.5 z-20 text-rose-400/90 text-xs font-semibold flex items-center gap-1 bg-slate-950 border border-rose-500/30 py-1.5 px-3 rounded-lg w-max max-w-full shadow-lg shadow-black/50 animate-in fade-in slide-in-from-top-1 duration-300" />
-      {existingBookings.length > 0 && disabledDates.length > 0 && (
-        <p className="text-sm text-slate-400 mt-1">
-          {t("bookedDatesMarked", "Занятые даты отмечены в календаре")}
+      {showBookingInstructions && (
+        <p className="text-sm text-slate-400 mt-2 bg-slate-900/40 border border-white/5 p-3 rounded-xl leading-relaxed">
+          {t("bookedDatesMarked", "Если выбранные даты заняты (перечеркнуты в календаре), пожалуйста, выберите другую категорию номера/домика выше.")}
         </p>
       )}
     </FormItem>
