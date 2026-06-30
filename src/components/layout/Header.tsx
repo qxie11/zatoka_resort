@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
-import { Menu, Waves, LogOut } from "lucide-react";
+import { Menu, Waves, LogOut, ChevronDown, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
@@ -19,6 +19,7 @@ export default function Header() {
   const [mounted, setMounted] = useState(false);
   const { t } = useTranslation();
   const [currentLang, setCurrentLang] = useState("ru");
+  const [isLangOpen, setIsLangOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -38,10 +39,20 @@ export default function Header() {
     };
     checkAuth();
 
+    // Close language dropdown on outside click
+    const handleOutsideClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest(".lang-select-container")) {
+        setIsLangOpen(false);
+      }
+    };
+
     window.addEventListener("storage", checkAuth);
+    document.addEventListener("click", handleOutsideClick);
 
     return () => {
       window.removeEventListener("storage", checkAuth);
+      document.removeEventListener("click", handleOutsideClick);
       i18n.off("languageChanged", handleLangChange);
     };
   }, []);
@@ -70,25 +81,63 @@ export default function Header() {
     return `/${lang}`;
   };
 
+  const langNames: Record<string, { label: string; flag?: string }> = {
+    ru: { label: "RU" },
+    uk: { label: "UA", flag: "🇺🇦" },
+    en: { label: "EN", flag: "🇬🇧" },
+  };
+
   const LanguageSelector = () => (
-    <div className="flex items-center gap-1 bg-slate-950/60 border border-white/10 p-1 rounded-xl text-xs font-semibold backdrop-blur-xl shadow-inner">
-      {(["uk", "ru", "en"] as const).map((lang) => (
-        <Link
-          key={lang}
-          href={getLanguageHref(lang)}
-          onClick={() => {
-            document.cookie = `lang=${lang}; path=/; max-age=31536000; SameSite=Lax`;
-          }}
+    <div className="relative lang-select-container">
+      <button
+        onClick={() => setIsLangOpen(!isLangOpen)}
+        className="flex items-center gap-2 bg-slate-900/80 hover:bg-slate-800/80 border border-white/10 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-200 hover:text-white transition-all duration-300 backdrop-blur-xl shadow-lg focus:outline-none"
+      >
+        {langNames[currentLang.startsWith("uk") ? "uk" : currentLang]?.flag && (
+          <span className="text-sm leading-none">
+            {langNames[currentLang.startsWith("uk") ? "uk" : currentLang].flag}
+          </span>
+        )}
+        <span className="uppercase tracking-wider">
+          {currentLang.startsWith("uk") ? "UA" : currentLang}
+        </span>
+        <ChevronDown
           className={cn(
-            "px-2.5 py-1 rounded-lg transition-all uppercase duration-300 relative text-xs",
-            currentLang.startsWith(lang)
-              ? "bg-gradient-to-r from-teal-500/20 to-sky-500/20 text-teal-300 border border-teal-500/30 shadow-[0_0_12px_rgba(20,184,166,0.25)] font-bold"
-              : "text-slate-400 hover:text-white border border-transparent"
+            "h-3.5 w-3.5 text-slate-400 transition-transform duration-300",
+            isLangOpen && "transform rotate-180 text-teal-400"
           )}
-        >
-          {lang === "uk" ? "UA" : lang}
-        </Link>
-      ))}
+        />
+      </button>
+
+      {isLangOpen && (
+        <div className="absolute right-0 mt-2 w-28 rounded-2xl bg-slate-950/95 border border-white/10 p-1.5 backdrop-blur-2xl shadow-[0_15px_30px_rgba(0,0,0,0.5)] z-50 animate-fade-in origin-top-right">
+          {(["uk", "ru", "en"] as const).map((lang) => (
+            <Link
+              key={lang}
+              href={getLanguageHref(lang)}
+              onClick={() => {
+                document.cookie = `lang=${lang}; path=/; max-age=31536000; SameSite=Lax`;
+                setIsLangOpen(false);
+              }}
+              className={cn(
+                "flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all duration-255",
+                currentLang.startsWith(lang)
+                  ? "bg-gradient-to-r from-teal-500/20 to-sky-500/20 text-teal-300 border border-teal-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-white/5 border border-transparent"
+              )}
+            >
+              {langNames[lang].flag ? (
+                <>
+                  <span className="text-base leading-none">{langNames[lang].flag}</span>
+                  <span>{langNames[lang].label}</span>
+                </>
+              ) : (
+                <span className="w-full text-center">{langNames[lang].label}</span>
+              )}
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 
