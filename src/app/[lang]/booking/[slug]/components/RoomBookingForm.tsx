@@ -9,6 +9,7 @@ import { Users, Mail, Phone, User, Eye, Minus, Plus } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import ImageGallery from "@/components/rooms/ImageGallery";
 import {
@@ -32,30 +33,32 @@ import {
 import type { Room, Booking } from "@/lib/types";
 import { DateRangePicker } from "@/components/booking/DateRangePicker";
 
-const FormSchema = z.object({
-  unitId: z.string().min(1, { message: "Пожалуйста, выберите домик / номер." }),
+const getFormSchema = (t: any) => z.object({
+  unitId: z.string().min(1, { message: t("unitRequired") }),
   dateRange: z.object({
     from: z.date({
-      required_error: "Дата заезда обязательна.",
+      required_error: t("dateRequired"),
     }),
     to: z.date({
-      required_error: "Дата выезда обязательна.",
+      required_error: t("dateOutRequired"),
     }),
   }),
   guests: z.coerce
     .number()
-    .min(1, { message: "Требуется как минимум один гость." }),
+    .min(1, { message: t("minGuests") }),
   name: z
     .string()
-    .min(2, { message: "Имя должно содержать минимум 2 символа." }),
-  phone: z.string().min(10, { message: "Номер телефона обязателен." }),
+    .min(2, { message: t("nameMinLength") }),
+  phone: z.string().min(10, { message: t("phoneRequired") }),
   email: z
     .string()
     .optional()
     .refine((val) => !val || z.string().email().safeParse(val).success, {
-      message: "Некорректный email адрес.",
+      message: t("emailInvalid"),
     }),
 });
+
+type FormSchemaType = z.infer<ReturnType<typeof getFormSchema>>;
 
 interface RoomBookingFormProps {
   room: Room;
@@ -63,6 +66,7 @@ interface RoomBookingFormProps {
 }
 
 function ViewImagesButton({ room }: { room: Room }) {
+  const { t } = useTranslation();
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   const allImages = room.imageUrl
@@ -83,7 +87,7 @@ function ViewImagesButton({ room }: { room: Room }) {
         className="w-full sm:w-auto border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 rounded-xl"
       >
         <Eye className="mr-2 h-4 w-4 text-teal-400" />
-        Посмотреть
+        {t("viewPhotos")}
       </Button>
       <ImageGallery
         images={allImages}
@@ -124,17 +128,17 @@ export default function RoomBookingForm({
         setDiscount(data.discount);
         setAppliedPromo(data.code);
         toast({
-          title: "Промокод применен!",
-          description: `Скидка ${data.discount}% успешно применена.`,
+          title: t("promoAppliedTitle"),
+          description: t("promoAppliedDesc", { discount: data.discount }),
         });
       } else {
-        setPromoError("Неверный или неактивный промокод");
+        setPromoError(t("promoInvalid"));
         setDiscount(0);
         setAppliedPromo("");
       }
     } catch (err) {
       console.error(err);
-      setPromoError("Ошибка проверки промокода");
+      setPromoError(t("promoError"));
     } finally {
       setIsValidatingPromo(false);
     }
@@ -142,7 +146,11 @@ export default function RoomBookingForm({
 
   const isSingleUnit = room.units && room.units.length === 1;
 
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const { t } = useTranslation();
+  
+  const FormSchema = getFormSchema(t);
+  
+  const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       unitId: isSingleUnit ? room?.units?.[0]?.id : "",
@@ -185,20 +193,17 @@ export default function RoomBookingForm({
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || "Ошибка при создании бронирования");
+        throw new Error(error.message || t("bookingCreateError"));
       }
 
       const booking = await response.json();
 
       toast({
-        title: "Бронирование успешно создано!",
-        description: `Ваше бронирование на ${format(
-          data.dateRange.from,
-          "dd.MM.yyyy",
-          { locale: ru }
-        )} - ${format(data.dateRange.to, "dd.MM.yyyy", {
-          locale: ru,
-        })} подтверждено.`,
+        title: t("bookingSuccessTitle"),
+        description: t("bookingSuccessDesc", {
+          start: format(data.dateRange.from, "dd.MM.yyyy", { locale: ru }),
+          end: format(data.dateRange.to, "dd.MM.yyyy", { locale: ru })
+        }),
       });
 
       const searchParams = new URLSearchParams({
@@ -214,11 +219,11 @@ export default function RoomBookingForm({
       router.push(`/${lang}/booking/success?${searchParams.toString()}`);
     } catch (error) {
       toast({
-        title: "Ошибка",
+        title: t("errorTitle"),
         description:
           error instanceof Error
             ? error.message
-            : "Не удалось создать бронирование. Попробуйте еще раз.",
+            : t("bookingCreateFail"),
         variant: "destructive",
       });
     } finally {
@@ -229,7 +234,7 @@ export default function RoomBookingForm({
   return (
     <Card className="shadow-2xl border border-white/10 bg-slate-900/60 backdrop-blur-md text-white rounded-3xl">
       <CardHeader className="relative">
-        <CardTitle className="text-2xl font-extrabold font-heading text-white">Оформление бронирования</CardTitle>
+        <CardTitle className="text-2xl font-extrabold font-heading text-white">{t("bookingCheckoutTitle")}</CardTitle>
         <div className="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-teal-500/20 to-transparent" />
       </CardHeader>
       <CardContent className="pt-6">
@@ -241,7 +246,7 @@ export default function RoomBookingForm({
                 name="unitId"
                 render={({ field }) => (
                   <FormItem className="space-y-1.5">
-                    <FormLabel className="font-semibold text-slate-300">Домик / Номер</FormLabel>
+                    <FormLabel className="font-semibold text-slate-300">{t("roomUnitLabel")}</FormLabel>
                     <Select
                       value={field.value}
                       onValueChange={(val) => {
@@ -258,8 +263,8 @@ export default function RoomBookingForm({
                           if (isBooked) {
                             form.setValue("dateRange", { from: undefined as any, to: undefined as any });
                             toast({
-                              title: "Даты сброшены",
-                              description: "Выбранный домик занят на ранее выбранные даты. Пожалуйста, выберите новые даты.",
+                              title: t("datesResetTitle"),
+                              description: t("datesResetDesc"),
                               variant: "destructive",
                             });
                           }
@@ -269,7 +274,7 @@ export default function RoomBookingForm({
                     >
                       <FormControl>
                         <SelectTrigger className="w-full bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11">
-                          <SelectValue placeholder={isSingleUnit ? room.units?.[0].name : "Выберите домик / номер"} />
+                          <SelectValue placeholder={isSingleUnit ? room.units?.[0].name : t("roomUnitPlaceholder")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-md">
@@ -314,7 +319,7 @@ export default function RoomBookingForm({
                 <FormItem className="flex flex-col">
                   <FormLabel className="text-teal-300 font-bold mb-2.5 flex items-center gap-1.5">
                     <Users className="h-4 w-4 text-teal-400" />
-                    Количество гостей
+                    {t("guestCountLabel")}
                   </FormLabel>
                   <FormControl>
                     <div className="flex items-center justify-between bg-slate-950/40 border border-white/10 rounded-xl h-11 px-2.5 w-full max-w-[200px]">
@@ -340,7 +345,7 @@ export default function RoomBookingForm({
                     </div>
                   </FormControl>
                   <p className="text-sm text-slate-400 mt-1">
-                    Максимум {room.capacity} гостей
+                    {t("maxGuests", { capacity: room.capacity })}
                   </p>
                   <FormMessage />
                 </FormItem>
@@ -353,12 +358,12 @@ export default function RoomBookingForm({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-teal-300 font-bold mb-2">Имя</FormLabel>
+                    <FormLabel className="text-teal-300 font-bold mb-2">{t("nameLabel")}</FormLabel>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-teal-400" />
                       <FormControl>
                         <Input
-                          placeholder="Ваше имя"
+                          placeholder={t("namePlaceholder")}
                           className="pl-10 bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
                           {...field}
                         />
@@ -374,7 +379,7 @@ export default function RoomBookingForm({
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-teal-300 font-bold mb-2">Телефон</FormLabel>
+                    <FormLabel className="text-teal-300 font-bold mb-2">{t("phoneLabel")}</FormLabel>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-teal-400" />
                       <FormControl>
@@ -395,7 +400,7 @@ export default function RoomBookingForm({
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-teal-300 font-bold mb-2">Email</FormLabel>
+                    <FormLabel className="text-teal-300 font-bold mb-2">{t("emailLabel")}</FormLabel>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-teal-400" />
                       <FormControl>
@@ -416,10 +421,10 @@ export default function RoomBookingForm({
 
             {/* Promo Code Entry */}
             <div className="pt-4 border-t border-white/5 space-y-2">
-              <label className="text-sm font-bold text-teal-300">Промокод на скидку</label>
+              <label className="text-sm font-bold text-teal-300">{t("promoLabel")}</label>
               <div className="flex gap-2 max-w-sm">
                 <Input
-                  placeholder="Введите промокод (например: ZATOKAWAVE)"
+                  placeholder={t("promoPlaceholder")}
                   value={promoInput}
                   onChange={(e) => setPromoInput(e.target.value)}
                   className="bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
@@ -430,11 +435,11 @@ export default function RoomBookingForm({
                   disabled={isValidatingPromo || !promoInput.trim()}
                   className="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-xl px-4 h-11"
                 >
-                  {isValidatingPromo ? "..." : "Применить"}
+                  {isValidatingPromo ? "..." : t("applyPromo")}
                 </Button>
               </div>
               {promoError && <p className="text-xs text-rose-400">{promoError}</p>}
-              {appliedPromo && <p className="text-xs text-teal-400">Применен промокод: {appliedPromo} ({discount}% скидка)</p>}
+              {appliedPromo && <p className="text-xs text-teal-400">{t("appliedPromoText", { appliedPromo, discount })}</p>}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between pt-4 border-t border-white/5">
@@ -443,7 +448,7 @@ export default function RoomBookingForm({
                   form.watch("dateRange")?.to && (
                     <div className="text-sm">
                       <p className="text-slate-400">
-                        Количество ночей:{" "}
+                        {t("nightsCount")}{" "}
                         {Math.ceil(
                           (form.watch("dateRange").to!.getTime() -
                             form.watch("dateRange").from!.getTime()) /
@@ -453,16 +458,16 @@ export default function RoomBookingForm({
                       {discount > 0 ? (
                         <div>
                           <p className="text-xs text-slate-400 line-through">
-                            Итого без скидки:{" "}
+                            {t("totalWithoutDiscount")}{" "}
                             {Math.ceil(
                               (form.watch("dateRange").to!.getTime() -
                                 form.watch("dateRange").from!.getTime()) /
                               (1000 * 60 * 60 * 24)
                             ) * room.price}{" "}
-                            грн
+                            {t("currency")}
                           </p>
                           <p className="text-lg font-bold text-teal-300">
-                            Итого со скидкой ({discount}%):{" "}
+                            {t("totalWithDiscount", { discount })}{" "}
                             {Math.round(
                               Math.ceil(
                                 (form.watch("dateRange").to!.getTime() -
@@ -470,18 +475,18 @@ export default function RoomBookingForm({
                                 (1000 * 60 * 60 * 24)
                               ) * room.price * (1 - discount / 100)
                             )}{" "}
-                            грн
+                            {t("currency")}
                           </p>
                         </div>
                       ) : (
                         <p className="text-lg font-bold text-teal-300">
-                          Итого:{" "}
+                          {t("totalLabel")}{" "}
                           {Math.ceil(
                             (form.watch("dateRange").to!.getTime() -
                               form.watch("dateRange").from!.getTime()) /
                             (1000 * 60 * 60 * 24)
                           ) * room.price}{" "}
-                          грн
+                          {t("currency")}
                         </p>
                       )}
                     </div>
@@ -495,7 +500,7 @@ export default function RoomBookingForm({
                   loading={isSubmitting}
                   className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl"
                 >
-                  Забронировать
+                  {t("bookBtn")}
                 </Button>
               </div>
             </div>

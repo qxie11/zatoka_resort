@@ -163,7 +163,7 @@ export function DateRangePicker({
                   </span>
                 )
               ) : (
-                <span className="text-sm text-slate-400">{t("selectDateRange", "Выберите диапазон дат")}</span>
+                <span className="text-sm text-slate-400">{t("selectDateRange")}</span>
               )}
             </Button>
           </FormControl>
@@ -198,8 +198,8 @@ export function DateRangePicker({
                     setPopoverOpen(false);
                   } else {
                     toast({
-                      title: t("datesOccupiedTitle", "Даты заняты"),
-                      description: t("datesOccupiedDesc", "Выбранный диапазон дат пересекается с существующими бронированиями. Пожалуйста, выберите другие даты."),
+                      title: t("datesOccupiedTitle"),
+                      description: t("datesOccupiedDesc"),
                       variant: "destructive",
                     });
                   }
@@ -230,7 +230,7 @@ export function DateRangePicker({
       </Popover>
       {showBookingInstructions && (
         <p className="text-sm text-slate-400 mt-2 bg-slate-900/40 border border-white/5 p-3 rounded-xl leading-relaxed">
-          {t("bookedDatesMarked", "Если выбранные даты заняты (перечеркнуты в календаре), пожалуйста, выберите другую категорию номера/домика выше.")}
+          {t("bookedDatesMarked")}
         </p>
       )}
     </FormItem>

@@ -273,7 +273,7 @@ export default function Header() {
                 className="border-white/10 bg-slate-900/60 text-white hover:bg-slate-800/80 rounded-xl h-9 w-9 backdrop-blur-md transition-all"
               >
                 <Menu className="h-5 w-5" />
-                <span className="sr-only">Открыть меню</span>
+                <span className="sr-only">{t("openMenu")}</span>
               </Button>
             </SheetTrigger>
             <SheetContent
@@ -282,7 +282,7 @@ export default function Header() {
             >
               <SheetHeader>
                 <VisuallyHidden>
-                  <SheetTitle>Навигационное меню</SheetTitle>
+                  <SheetTitle>{t("navMenu")}</SheetTitle>
                 </VisuallyHidden>
               </SheetHeader>
               
