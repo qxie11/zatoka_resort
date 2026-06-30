@@ -11,7 +11,9 @@ import {
   ShieldCheck,
   ChevronLeft,
   ChevronRight,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Share2,
+  Check
 } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { ru, uk, enUS } from "date-fns/locale";
@@ -45,6 +47,10 @@ const translations = {
     galleryTitle: "Ваш будущий номер",
     loadingGallery: "Загрузка фотографий номера...",
     noImages: "Фотографии номера временно недоступны",
+    btnShare: "Поделиться",
+    btnShareCopied: "Скопировано!",
+    shareText: (room: string, dates: string, price: string) =>
+      `🏨 Я забронировал ${room} в Затока Resort!\n📅 Даты: ${dates}\n💰 Сумма: ${price} грн\n\nЗаписывайте: zatoka-hotel.com`,
     guestsCount: (count: number) => {
       const lastDigit = count % 10;
       const lastTwoDigits = count % 100;
@@ -70,6 +76,10 @@ const translations = {
     galleryTitle: "Ваш майбутній номер",
     loadingGallery: "Завантаження фотографій номера...",
     noImages: "Фотографії номера тимчасово недоступні",
+    btnShare: "Поділитись",
+    btnShareCopied: "Скопійовано!",
+    shareText: (room: string, dates: string, price: string) =>
+      `🏨 Я забронював ${room} у Zatoka Resort!\n📅 Дати: ${dates}\n💰 Сума: ${price} грн\n\nЗаписуйте: zatoka-hotel.com`,
     guestsCount: (count: number) => {
       const lastDigit = count % 10;
       const lastTwoDigits = count % 100;
@@ -95,6 +105,10 @@ const translations = {
     galleryTitle: "Your Upcoming Room",
     loadingGallery: "Loading room photos...",
     noImages: "Room photos are temporarily unavailable",
+    btnShare: "Share",
+    btnShareCopied: "Copied!",
+    shareText: (room: string, dates: string, price: string) =>
+      `🏨 I just booked ${room} at Zatoka Resort!\n📅 Dates: ${dates}\n💰 Total: ${price} UAH\n\nBook at: zatoka-hotel.com`,
     guestsCount: (count: number) => `${count} ${count === 1 ? 'guest' : 'guests'}`
   }
 };
@@ -114,6 +128,7 @@ function SuccessContent({ lang }: { lang: string }) {
   const [room, setRoom] = useState<any>(null);
   const [activeImgIdx, setActiveImgIdx] = useState(0);
   const [loadingRoom, setLoadingRoom] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -161,6 +176,26 @@ function SuccessContent({ lang }: { lang: string }) {
     e.preventDefault();
     if (allImages.length === 0) return;
     setActiveImgIdx((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleShare = async () => {
+    const text = t.shareText(roomName, formattedDates, pricePaid);
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title: "Zatoka Resort — бронирование",
+          text,
+          url: "https://zatoka-hotel.com",
+        });
+        return;
+      } catch {}
+    }
+    // Fallback: copy to clipboard
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {}
   };
 
   if (!mounted) {
@@ -394,6 +429,21 @@ function SuccessContent({ lang }: { lang: string }) {
               {t.btnRooms}
             </button>
           </Link>
+
+          <button
+            onClick={handleShare}
+            className={`w-full sm:w-auto px-8 py-3.5 rounded-2xl font-extrabold transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 ${
+              copied
+                ? "bg-emerald-500/20 border border-emerald-500/40 text-emerald-300"
+                : "bg-white/5 border border-white/10 hover:bg-sky-500/15 hover:border-sky-400/40 text-slate-300 hover:text-sky-300"
+            }`}
+          >
+            {copied ? (
+              <><Check className="h-4 w-4" />{t.btnShareCopied}</>
+            ) : (
+              <><Share2 className="h-4 w-4" />{t.btnShare}</>
+            )}
+          </button>
         </div>
       </div>
 
