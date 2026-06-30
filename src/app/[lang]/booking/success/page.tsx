@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Calendar, Users, Home, ArrowLeft, Waves, Sparkles, ShieldCheck } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { ru, uk, enUS } from "date-fns/locale";
+import BackgroundBubbles from "@/components/decorative/BackgroundBubbles";
+import BackgroundFishes from "@/components/decorative/BackgroundFishes";
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -122,6 +124,8 @@ function SuccessContent({ lang }: { lang: string }) {
     <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center px-4 py-16 overflow-hidden selection:bg-teal-500/30">
       {/* Background Animated Blobs */}
       <div className="absolute inset-0 pointer-events-none z-0">
+        <BackgroundBubbles count={20} deepCount={10} />
+        <BackgroundFishes />
         <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full bg-teal-500/10 blur-[120px] animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full bg-sky-500/10 blur-[100px] animate-pulse" style={{ animationDelay: "2.5s" }} />
         
