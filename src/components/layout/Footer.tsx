@@ -175,8 +175,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-4.5 w-4.5 text-sky-400/80 shrink-0" />
-                <a href="mailto:contact@zatokagetaway.com" className="hover:text-teal-300 transition-colors">
-                  contact@zatokagetaway.com
+                <a href="mailto:zatokahotelresort@gmail.com" className="hover:text-teal-300 transition-colors">
+                  zatokahotelresort@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-3">
