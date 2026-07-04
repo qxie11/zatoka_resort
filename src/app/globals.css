@@ -659,3 +659,87 @@
 .animate-gentle-nudge:active {
   transform: scale(0.97) !important;
 }
+
+/* Premium Border Shimmer and Neon Ocean Glow */
+@keyframes border-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.border-shimmer-card {
+  position: relative;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.border-shimmer-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5rem;
+  padding: 1.5px;
+  background: linear-gradient(
+    90deg,
+    rgba(20, 184, 166, 0) 0%,
+    rgba(20, 184, 166, 0.4) 25%,
+    rgba(56, 189, 248, 0.6) 50%,
+    rgba(20, 184, 166, 0.4) 75%,
+    rgba(20, 184, 166, 0) 100%
+  );
+  background-size: 200% auto;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  animation: border-shimmer 4s linear infinite;
+}
+
+.border-shimmer-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 40px -15px rgba(20, 184, 166, 0.25);
+}
+
+.border-shimmer-card:hover::before {
+  opacity: 1;
+}
+
+/* Floating bubble animation for custom cursor */
+@keyframes bubble-drift-up {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(var(--drift-x, 15px), -80px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.cursor-bubble {
+  position: fixed;
+  pointer-events: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.7), rgba(45, 212, 191, 0.3) 60%, rgba(56, 189, 248, 0.1));
+  border: 0.5px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.4);
+  z-index: 9999;
+  animation: bubble-drift-up 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+

@@ -8,6 +8,7 @@ import StoreProvider from "@/components/providers/StoreProvider";
 import { Comfortaa, Nunito } from "next/font/google";
 import NextTopLoader from 'nextjs-toploader';
 import { GlobalMarineBackground } from "@/components/decorative/GlobalMarineBackground";
+import CursorTrail from "@/components/decorative/CursorTrail";
 
 const fontSans = Nunito({
   subsets: ["latin", "cyrillic"],
@@ -80,6 +81,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             shadow="0 0 10px #2dd4bf,0 0 5px #2dd4bf"
           />
           <div className="relative flex min-h-dvh flex-col bg-slate-950 text-slate-100">
+            <CursorTrail />
             <GlobalMarineBackground />
             <main className="relative flex-1 z-10">{children}</main>
           </div>
