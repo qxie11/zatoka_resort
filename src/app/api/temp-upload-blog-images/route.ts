@@ -42,6 +42,7 @@ export async function GET(request: Request) {
       // Upload to Vercel Blob (it will automatically use process.env.BLOB_READ_WRITE_TOKEN)
       const blob = await put(`blog/${item.fileName}`, fileBuffer, {
         access: 'public',
+        addRandomSuffix: true,
       });
 
       // Update database
