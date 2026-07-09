@@ -335,7 +335,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   key={rel.slug}
                   className="flex flex-col rounded-2xl overflow-hidden glass-card-dark border border-white/5 hover:border-teal-500/40 hover-lift transition-smooth group"
                 >
-                  <div className="relative aspect-square w-full overflow-hidden">
+                  <div className="relative h-40 w-full overflow-hidden">
                     <Image
                       src={rel.imageUrl}
                       alt={relTitle}

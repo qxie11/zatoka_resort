@@ -259,7 +259,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
                     className="flex flex-col rounded-3xl overflow-hidden glass-card-dark border border-white/10 shadow-2xl hover-lift transition-smooth hover:border-teal-500/40 group"
                   >
                     {/* Cover Image */}
-                    <div className="relative aspect-square w-full overflow-hidden">
+                    <div className="relative h-48 w-full overflow-hidden">
                       <Image
                         src={post.imageUrl}
                         alt={title}
