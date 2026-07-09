@@ -48,3 +48,4 @@ firestore-debug.log
 # uploads (keep directory but ignore files)
 /public/uploads/*
 !/public/uploads/.gitkeep
+.env*.local
