@@ -44,10 +44,9 @@ const teamMembers = [
 ];
 
 const timelineEvents = [
-  { year: "2010", ru: "Основание гостевого дома", uk: "Заснування гостьового будинку", en: "Guesthouse foundation" },
-  { year: "2016", ru: "Реновация номеров и открытие ресторана", uk: "Реновація номерів та відкриття ресторану", en: "Room renovation & restaurant opening" },
-  { year: "2021", ru: "Полная реновация и расширение", uk: "Повна реновація та розширення", en: "Full renovation & expansion" },
-  { year: "2026", ru: "Премиум сервис нового уровня", uk: "Преміум сервіс нового рівня", en: "New-level premium service" },
+  { year: "2016", ru: "Основание гостевого дома", uk: "Заснування гостьового будинку", en: "Guesthouse foundation" },
+  { year: "2021", ru: "Обустройство зеленой зоны и детской площадки", uk: "Облаштування зеленої зони та дитячого майданчика", en: "Green yard & playground addition" },
+  { year: "2026", ru: "Полное обновление и новый уровень комфорта", uk: "Повне оновлення та новий рівень комфорту", en: "Full room update & new comfort level" },
 ];
 
 interface AboutClientProps {
@@ -60,6 +59,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
   const [, setLangUpdate] = useState(i18n.language);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const handleLangChange = (lng: string) => {
       setLangUpdate(lng);
@@ -79,13 +79,13 @@ export default function AboutClient({ lang }: AboutClientProps) {
 
   // Multi-language labels
   const L = {
-    beach: { ru: "10 метров", uk: "10 метрів", en: "10 meters" },
-    beachDesc: { ru: "До песчаного пляжа отеля", uk: "До піщаного пляжу готелю", en: "To the hotel private beach" },
-    rooms: { ru: "50+ номеров", uk: "50+ номерів", en: "50+ rooms" },
-    roomsDesc: { ru: "Различных категорий роскоши", uk: "Різних категорій розкоші", en: "Different luxury options" },
+    beach: { ru: "10 минут", uk: "10 хвилин", en: "10 minutes" },
+    beachDesc: { ru: "Пешком до песчаного пляжа", uk: "Пішки до піщаного пляжу", en: "Walk to the sandy beach" },
+    rooms: { ru: "30 номеров", uk: "30 номерів", en: "30 rooms" },
+    roomsDesc: { ru: "Различных категорий комфорта", uk: "Різних категорій комфорту", en: "Different comfort options" },
     guests: { ru: "10k+ гостей", uk: "10k+ гостей", en: "10k+ guests" },
     guestsDesc: { ru: "Доверили нам свой отдых", uk: "Довірили нам свій відпочинок", en: "Trusted us with their vacation" },
-    years: { ru: "15+ лет", uk: "15+ років", en: "15+ years" },
+    years: { ru: "10 лет", uk: "10 років", en: "10 years" },
     yearsDesc: { ru: "Опыта гостеприимства у моря", uk: "Досвіду гостинності біля моря", en: "Of hospitality by the sea" },
     history: { ru: "История развития", uk: "Історія розвитку", en: "Our History Timeline" },
   };

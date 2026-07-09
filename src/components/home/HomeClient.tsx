@@ -71,6 +71,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
   const [, setLangUpdate] = useState(i18n.language);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const handleLangChange = (lng: string) => {
       setLangUpdate(lng);
@@ -356,7 +357,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 {
                   icon: Umbrella,
                   titleKey: "whyBeach",
-                  titleFallback: "10 метров до пляжа",
+                  titleFallback: "10 минут до пляжа",
                   descKey: "whyBeachDesc",
                   descFallback: "Первая береговая линия — выходите из номера и через минуту вы на песчаном пляже.",
                   gradient: "from-sky-400/20 to-teal-400/20",

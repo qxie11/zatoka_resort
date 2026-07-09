@@ -32,9 +32,9 @@
     },
     {
       "id": "about-us",
-      "description": "The welcoming reception area of the Zatoka Getaway hotel.",
-      "imageUrl": "https://images.unsplash.com/photo-1558959357-685f9c7ace7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxob3RlbCUyMHJlY2VwdGlvbnxlbnwwfHx8fDE3NjA3MzExNzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "hotel reception"
+      "description": "The beautiful sandy beach of Zatoka near the guesthouse.",
+      "imageUrl": "/images/about-beach.png",
+      "imageHint": "zatoka beach"
     },
     {
       "id": "amenity-pool",

@@ -52,11 +52,11 @@ export default async function RoomDetailsPage({ params }: PageProps) {
     amenities: { ru: "Удобства и услуги", uk: "Зручності та послуги", en: "Amenities & Services" },
     price: { ru: "грн / ночь", uk: "грн / ніч", en: "UAH / night" },
     location: { ru: "Местоположение отеля", uk: "Місцезнаходження готелю", en: "Hotel Location" },
-    beachline: { ru: "Первая береговая линия", uk: "Перша берегова лінія", en: "First Beachline" },
+    beachline: { ru: "Близость к пляжу", uk: "Близькість до пляжу", en: "Close to the Beach" },
     beachlineDesc: {
-      ru: "До чистого песчаного пляжа всего 10 метров. Вы выходите из отеля прямо к морской воде.",
-      uk: "До чистого піщаного пляжу всього 10 метрів. Ви виходите з готелю прямо до морської води.",
-      en: "Only 10 meters to the clean sandy beach. You walk out of the hotel straight to the sea."
+      ru: "До чистого песчаного пляжа всего 10 минут приятной ходьбы прогулочным шагом.",
+      uk: "До чистого піщаного пляжу всього 10 хвилин приємної ходьби прогулянковим кроком.",
+      en: "Only a pleasant 10-minute walk to the clean sandy beach."
     },
     address: { ru: "Точный адрес", uk: "Точна адреса", en: "Exact Address" },
     addressDesc: {
