@@ -1,11 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PhoneCall, Trash2, Calendar, User, MessageSquare, Loader2 } from "lucide-react";
+import { PhoneCall, Trash2, Calendar, User, MessageSquare, Loader2, Eye, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface CallbackRequest {
   id: string;
@@ -28,6 +35,20 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
   const [requestIdToDelete, setRequestIdToDelete] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkDeleteConfirmOpen, setBulkDeleteConfirmOpen] = useState(false);
+
+  // States for viewing callback request details
+  const [viewRequest, setViewRequest] = useState<CallbackRequest | null>(null);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  const handleCopy = (text: string, fieldName: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(fieldName);
+    toast({
+      title: "Скопировано",
+      description: `Поле «${fieldName}» скопировано в буфер обмена`,
+    });
+    setTimeout(() => setCopiedField(null), 2000);
+  };
 
   const fetchRequests = async () => {
     try {
@@ -257,16 +278,27 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
                         <span className="text-slate-500 italic">—</span>
                       )}
                     </td>
-                    <td className="p-2 sm:p-4 pr-3 sm:pr-6 text-right">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDelete(request.id)}
-                        className="text-slate-300 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all h-8 w-8"
-                        title="Удалить заявку"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                    <td className="p-2 sm:p-4 pr-3 sm:pr-6 text-right whitespace-nowrap">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setViewRequest(request)}
+                          className="text-slate-300 hover:text-teal-400 hover:bg-teal-500/10 rounded-xl transition-all h-8 w-8"
+                          title="Просмотреть заявку"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDelete(request.id)}
+                          className="text-slate-300 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all h-8 w-8"
+                          title="Удалить заявку"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -289,6 +321,83 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
         title="Удалить выбранные заявки?"
         description={`Вы действительно хотите удалить выбранные заявки (${selectedIds.length} шт.)? Это действие необратимо.`}
       />
+
+      <Dialog open={!!viewRequest} onOpenChange={(open) => !open && setViewRequest(null)}>
+        <DialogContent className="bg-slate-900 border border-white/10 text-white rounded-2xl max-w-md shadow-2xl p-6">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-extrabold flex items-center gap-2 text-teal-300">
+              <Eye className="h-5 w-5 text-teal-400" />
+              Детали заявки
+            </DialogTitle>
+            <DialogDescription className="text-slate-400 text-xs">
+              Нажмите на любое поле ниже, чтобы скопировать его значение в буфер обмена.
+            </DialogDescription>
+          </DialogHeader>
+          {viewRequest && (
+            <div className="space-y-4 mt-4">
+              <div 
+                onClick={() => handleCopy(new Date(viewRequest.createdAt).toLocaleString("ru-RU"), "Дата")}
+                className="group/item flex flex-col p-2.5 rounded-xl bg-slate-950/40 border border-white/5 hover:border-teal-500/30 hover:bg-teal-500/5 cursor-pointer transition-all duration-200"
+              >
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Дата создания</span>
+                <span className="text-sm font-medium mt-0.5 text-white flex justify-between items-center">
+                  {new Date(viewRequest.createdAt).toLocaleString("ru-RU")}
+                  {copiedField === "Дата" ? (
+                    <Check className="h-3.5 w-3.5 text-teal-400 font-bold" />
+                  ) : (
+                    <Copy className="h-3.5 w-3.5 text-slate-500 group-hover/item:text-teal-400 opacity-0 group-hover/item:opacity-100 transition-opacity" />
+                  )}
+                </span>
+              </div>
+
+              <div 
+                onClick={() => handleCopy(viewRequest.name, "Имя")}
+                className="group/item flex flex-col p-2.5 rounded-xl bg-slate-950/40 border border-white/5 hover:border-teal-500/30 hover:bg-teal-500/5 cursor-pointer transition-all duration-200"
+              >
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Имя клиента</span>
+                <span className="text-sm font-medium mt-0.5 text-white flex justify-between items-center">
+                  {viewRequest.name}
+                  {copiedField === "Имя" ? (
+                    <Check className="h-3.5 w-3.5 text-teal-400 font-bold" />
+                  ) : (
+                    <Copy className="h-3.5 w-3.5 text-slate-500 group-hover/item:text-teal-400 opacity-0 group-hover/item:opacity-100 transition-opacity" />
+                  )}
+                </span>
+              </div>
+
+              <div 
+                onClick={() => handleCopy(viewRequest.phone, "Телефон")}
+                className="group/item flex flex-col p-2.5 rounded-xl bg-slate-950/40 border border-white/5 hover:border-teal-500/30 hover:bg-teal-500/5 cursor-pointer transition-all duration-200"
+              >
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Номер телефона</span>
+                <span className="text-sm font-medium mt-0.5 text-teal-350 font-mono flex justify-between items-center">
+                  {viewRequest.phone}
+                  {copiedField === "Телефон" ? (
+                    <Check className="h-3.5 w-3.5 text-teal-400 font-bold" />
+                  ) : (
+                    <Copy className="h-3.5 w-3.5 text-slate-500 group-hover/item:text-teal-400 opacity-0 group-hover/item:opacity-100 transition-opacity" />
+                  )}
+                </span>
+              </div>
+
+              <div 
+                onClick={() => handleCopy(viewRequest.message || "", "Сообщение")}
+                className="group/item flex flex-col p-2.5 rounded-xl bg-slate-950/40 border border-white/5 hover:border-teal-500/30 hover:bg-teal-500/5 cursor-pointer transition-all duration-200"
+              >
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Сообщение / Комментарий</span>
+                <span className="text-sm font-medium mt-0.5 text-white flex justify-between items-start">
+                  <span className="break-words max-w-[90%] whitespace-pre-wrap">{viewRequest.message || "—"}</span>
+                  {copiedField === "Сообщение" ? (
+                    <Check className="h-3.5 w-3.5 text-teal-400 shrink-0 font-bold" />
+                  ) : (
+                    <Copy className="h-3.5 w-3.5 text-slate-500 group-hover/item:text-teal-400 opacity-0 group-hover/item:opacity-100 transition-opacity shrink-0" />
+                  )}
+                </span>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

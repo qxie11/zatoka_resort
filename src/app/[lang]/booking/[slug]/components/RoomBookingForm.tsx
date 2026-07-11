@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { Users, Mail, Phone, User, Eye, Minus, Plus } from "lucide-react";
+import { Users, Mail, Phone, User, Eye, Minus, Plus, Zap } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { useState } from "react";
 
@@ -32,6 +32,14 @@ import {
 } from "@/components/ui/select";
 import type { Room, Booking } from "@/lib/types";
 import { DateRangePicker } from "@/components/booking/DateRangePicker";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const getFormSchema = (t: any) => z.object({
   unitId: z.string().min(1, { message: t("unitRequired") }),
@@ -112,6 +120,96 @@ export default function RoomBookingForm({
   const [promoError, setPromoError] = useState("");
   const [isValidatingPromo, setIsValidatingPromo] = useState(false);
   const [appliedPromo, setAppliedPromo] = useState("");
+
+  // Quick Messenger booking support
+  const [isQuickBookOpen, setIsQuickBookOpen] = useState(false);
+  const [quickName, setQuickName] = useState("");
+  const [quickPhone, setQuickPhone] = useState("");
+  const [isQuickSubmitting, setIsQuickSubmitting] = useState(false);
+
+  const quickBookTexts = {
+    ru: {
+      btn: "Бронь через мессенджер",
+      title: "Бронирование через мессенджер",
+      desc: "Оставьте ваше имя и телефон. Мы свяжемся с вами в мессенджере (Telegram/Viber) для уточнения дат и деталей бронирования.",
+      nameLabel: "Имя",
+      namePlaceholder: "Иван",
+      phoneLabel: "Номер телефона",
+      submitBtn: "Отправить заявку",
+      submitting: "Отправка...",
+      successTitle: "Заявка принята!",
+      successDesc: "Мы свяжемся с вами в мессенджере в ближайшее время."
+    },
+    uk: {
+      btn: "Бронь через месенджер",
+      title: "Бронювання через месенджер",
+      desc: "Залиште ваше ім'я та телефон. Ми зв'яжемося з вами в месенджері (Telegram/Viber) для уточнення дат та деталей бронювання.",
+      nameLabel: "Ім'я",
+      namePlaceholder: "Иван",
+      phoneLabel: "Номер телефону",
+      submitBtn: "Надіслати заявку",
+      submitting: "Надсилання...",
+      successTitle: "Заявка прийнята!",
+      successDesc: "Ми зв'яжемося з вами в месенджері найближчим часом."
+    },
+    en: {
+      btn: "Book via Messenger",
+      title: "Messenger Booking",
+      desc: "Leave your name and phone number. We will contact you via messenger (Telegram/Viber) to confirm dates and details.",
+      nameLabel: "Name",
+      namePlaceholder: "John",
+      phoneLabel: "Phone number",
+      submitBtn: "Submit Request",
+      submitting: "Submitting...",
+      successTitle: "Request Received!",
+      successDesc: "We will contact you via messenger shortly."
+    }
+  };
+  const qbt = quickBookTexts[lang as keyof typeof quickBookTexts] || quickBookTexts.ru;
+
+  const handleQuickBook = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickName.trim() || !quickPhone.trim()) {
+      toast({
+        title: lang === "uk" ? "Помилка" : lang === "en" ? "Error" : "Ошибка",
+        description: lang === "uk" ? "Будь ласка, заповніть всі поля" : lang === "en" ? "Please fill in all fields" : "Пожалуйста, заполните все поля",
+        variant: "destructive",
+      });
+      return;
+    }
+    setIsQuickSubmitting(true);
+    try {
+      const res = await fetch("/api/callbacks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: quickName,
+          phone: quickPhone,
+          message: `Бронирование номера "${room.name}" (через мессенджер)`,
+        }),
+      });
+      if (res.ok) {
+        toast({
+          title: qbt.successTitle,
+          description: qbt.successDesc,
+        });
+        setIsQuickBookOpen(false);
+        setQuickName("");
+        setQuickPhone("");
+      } else {
+        throw new Error("Failed to submit request");
+      }
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: lang === "uk" ? "Помилка" : lang === "en" ? "Error" : "Ошибка",
+        description: lang === "uk" ? "Не вдалося відправити запит" : lang === "en" ? "Failed to send request" : "Не удалось отправить запрос",
+        variant: "destructive",
+      });
+    } finally {
+      setIsQuickSubmitting(false);
+    }
+  };
 
   const handleValidatePromo = async () => {
     if (!promoInput.trim()) return;
@@ -446,54 +544,123 @@ export default function RoomBookingForm({
               <div>
                 {form.watch("dateRange")?.from &&
                   form.watch("dateRange")?.to && (
-                    <div className="text-sm">
-                      <p className="text-slate-400">
-                        {t("nightsCount")}{" "}
-                        {Math.ceil(
-                          (form.watch("dateRange").to!.getTime() -
-                            form.watch("dateRange").from!.getTime()) /
-                          (1000 * 60 * 60 * 24)
-                        )}
+                    <div className="text-sm bg-slate-950/80 border border-teal-500/20 rounded-2xl p-4 shadow-[0_0_15px_rgba(20,184,166,0.15)] animate-fade-in-up">
+                      <p className="text-slate-400 flex justify-between gap-4">
+                        <span>{t("nightsCount")}</span>
+                        <span className="font-bold text-white">
+                          {Math.ceil(
+                            (form.watch("dateRange").to!.getTime() -
+                              form.watch("dateRange").from!.getTime()) /
+                            (1000 * 60 * 60 * 24)
+                          )}
+                        </span>
                       </p>
                       {discount > 0 ? (
-                        <div>
-                          <p className="text-xs text-slate-400 line-through">
-                            {t("totalWithoutDiscount")}{" "}
+                        <div className="mt-2 pt-2 border-t border-white/5 space-y-1">
+                          <p className="text-xs text-slate-500 line-through flex justify-between gap-4">
+                            <span>{t("totalWithoutDiscount")}</span>
+                            <span>
+                              {Math.ceil(
+                                (form.watch("dateRange").to!.getTime() -
+                                  form.watch("dateRange").from!.getTime()) /
+                                (1000 * 60 * 60 * 24)
+                              ) * room.price}{" "}
+                              {t("currency")}
+                            </span>
+                          </p>
+                          <div className="flex justify-between items-center gap-4">
+                            <span className="text-teal-300 font-extrabold flex items-center gap-1.5">
+                              {t("totalLabel")}
+                              <span className="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold rounded-lg px-1.5 py-0.5 animate-pulse">
+                                -{discount}%
+                              </span>
+                            </span>
+                            <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-sky-300 drop-shadow-sm">
+                              {Math.round(
+                                Math.ceil(
+                                  (form.watch("dateRange").to!.getTime() -
+                                    form.watch("dateRange").from!.getTime()) /
+                                  (1000 * 60 * 60 * 24)
+                                ) * room.price * (1 - discount / 100)
+                              )}{" "}
+                              {t("currency")}
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="mt-2 pt-2 border-t border-white/5 flex justify-between items-center gap-4">
+                          <span className="text-slate-300 font-semibold">{t("totalLabel")}</span>
+                          <span className="text-xl font-black text-teal-300">
                             {Math.ceil(
                               (form.watch("dateRange").to!.getTime() -
                                 form.watch("dateRange").from!.getTime()) /
                               (1000 * 60 * 60 * 24)
                             ) * room.price}{" "}
                             {t("currency")}
-                          </p>
-                          <p className="text-lg font-bold text-teal-300">
-                            {t("totalWithDiscount", { discount })}{" "}
-                            {Math.round(
-                              Math.ceil(
-                                (form.watch("dateRange").to!.getTime() -
-                                  form.watch("dateRange").from!.getTime()) /
-                                (1000 * 60 * 60 * 24)
-                              ) * room.price * (1 - discount / 100)
-                            )}{" "}
-                            {t("currency")}
-                          </p>
+                          </span>
                         </div>
-                      ) : (
-                        <p className="text-lg font-bold text-teal-300">
-                          {t("totalLabel")}{" "}
-                          {Math.ceil(
-                            (form.watch("dateRange").to!.getTime() -
-                              form.watch("dateRange").from!.getTime()) /
-                            (1000 * 60 * 60 * 24)
-                          ) * room.price}{" "}
-                          {t("currency")}
-                        </p>
                       )}
                     </div>
                   )}
               </div>
-              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-center">
                 <ViewImagesButton room={room} />
+                
+                <Dialog open={isQuickBookOpen} onOpenChange={setIsQuickBookOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="lg"
+                      className="w-full sm:w-auto border-teal-500/30 bg-teal-500/5 text-teal-300 hover:bg-teal-500/10 hover:border-teal-500/50 transition-all duration-300 rounded-xl flex items-center justify-center gap-1.5"
+                    >
+                      <Zap className="h-4 w-4 fill-teal-300/20 animate-pulse text-teal-400" />
+                      {qbt.btn}
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-slate-900 border border-white/10 text-white rounded-2xl max-w-md shadow-2xl p-6">
+                    <DialogHeader>
+                      <DialogTitle className="text-xl font-extrabold flex items-center gap-2 text-teal-300">
+                        <Zap className="h-5 w-5 fill-teal-300/30 text-teal-400" />
+                        {qbt.title}
+                      </DialogTitle>
+                      <DialogDescription className="text-slate-350 text-sm mt-2 leading-relaxed">
+                        {qbt.desc}
+                      </DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleQuickBook} className="space-y-4 mt-4">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-slate-400">{qbt.nameLabel}</label>
+                        <Input
+                          placeholder={qbt.namePlaceholder}
+                          value={quickName}
+                          onChange={(e) => setQuickName(e.target.value)}
+                          required
+                          className="bg-slate-950/60 border-white/10 text-white rounded-xl h-11"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-slate-400">{qbt.phoneLabel}</label>
+                        <Input
+                          type="tel"
+                          placeholder="+380..."
+                          value={quickPhone}
+                          onChange={(e) => setQuickPhone(e.target.value)}
+                          required
+                          className="bg-slate-950/60 border-white/10 text-white rounded-xl h-11"
+                        />
+                      </div>
+                      <Button
+                        type="submit"
+                        disabled={isQuickSubmitting}
+                        className="w-full h-11 mt-2 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-black border-0 shadow-lg shadow-teal-500/20 rounded-xl"
+                      >
+                        {isQuickSubmitting ? qbt.submitting : qbt.submitBtn}
+                      </Button>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+
                 <Button
                   type="submit"
                   size="lg"

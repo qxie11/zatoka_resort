@@ -2,7 +2,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { MoreHorizontal, ArrowUpDown } from "lucide-react"
+import { MoreHorizontal, ArrowUpDown, Eye } from "lucide-react"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
 
@@ -22,9 +22,10 @@ type BookingWithRoomName = Booking & { roomName: string };
 type ColumnsProps = {
   onEdit: (booking: Booking) => void;
   onDelete: (bookingId: string) => void;
+  onView: (booking: Booking) => void;
 };
 
-export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<BookingWithRoomName>[] => [
+export const columns = ({ onEdit, onDelete, onView }: ColumnsProps): ColumnDef<BookingWithRoomName>[] => [
   {
     accessorKey: "roomName",
     header: ({ column }) => {
@@ -113,27 +114,39 @@ export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<BookingWi
       const booking = row.original
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Открыть меню</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Действия</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => onEdit(booking)}>
-              Редактировать
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem 
-              onClick={() => onDelete(booking.id)} 
-              className="text-destructive focus:text-destructive"
-            >
-              Удалить
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center justify-end gap-1.5">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onView(booking)}
+            className="text-slate-300 hover:text-teal-400 hover:bg-teal-500/10 rounded-xl transition-all h-8 w-8"
+            title="Просмотреть детали"
+          >
+            <Eye className="h-4 w-4" />
+          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-white/5 rounded-xl">
+                <span className="sr-only">Открыть меню</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white rounded-xl">
+              <DropdownMenuLabel>Действия</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => onEdit(booking)} className="focus:bg-white/10 focus:text-teal-300 cursor-pointer">
+                Редактировать
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-white/10" />
+              <DropdownMenuItem 
+                onClick={() => onDelete(booking.id)} 
+                className="text-rose-450 focus:text-rose-400 focus:bg-rose-500/10 cursor-pointer"
+              >
+                Удалить
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       )
     },
   },
