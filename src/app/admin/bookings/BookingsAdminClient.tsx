@@ -271,7 +271,7 @@ export default function BookingsAdminClient({
       />
 
       <Dialog open={!!viewBooking} onOpenChange={(open) => !open && setViewBooking(null)}>
-        <DialogContent className="bg-slate-900 border border-white/10 text-white rounded-2xl max-w-md shadow-2xl p-6">
+        <DialogContent aria-describedby={undefined} className="bg-slate-900 border border-white/10 text-white rounded-2xl max-w-md shadow-2xl p-6">
           <DialogHeader>
             <DialogTitle className="text-xl font-extrabold flex items-center gap-2 text-teal-300">
               <Eye className="h-5 w-5 text-teal-400" />
