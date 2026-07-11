@@ -20,9 +20,9 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const currentYear = new Date().getFullYear();
 
   const i18n = {
-    ru: { title: "Отдых в Затоке | Zatoka Resort", desc: `Семейный отель в Затоке в 10 минутах от моря. Кондиционеры, комфортные номера, цены ${currentYear}.` },
-    uk: { title: "Відпочинок в Затоці | Zatoka Resort", desc: `Сімейний готель в Затоці в 10 хвилинах від моря. Кондиціонери, комфортні номери, ціни ${currentYear}.` },
-    en: { title: "Zatoka Resort | Seaside Hotel", desc: `Family hotel in Zatoka, just a 10-minute walk to the beach. Air conditioning, comfortable rooms, best rates ${currentYear}.` },
+    ru: { title: "Отдых в Затоке | Zatoka Resort", desc: `Семейный отель в Затоке в 5 минутах от моря. Кондиционеры, комфортные номера, цены ${currentYear}.` },
+    uk: { title: "Відпочинок в Затоці | Zatoka Resort", desc: `Сімейний готель в Затоці в 5 хвилинах від моря. Кондиціонери, комфортні номери, ціни ${currentYear}.` },
+    en: { title: "Zatoka Resort | Seaside Hotel", desc: `Family hotel in Zatoka, just a 5-minute walk to the beach. Air conditioning, comfortable rooms, best rates ${currentYear}.` },
   };
 
   const { title, desc } = i18n[lang as keyof typeof i18n] || i18n.ru;

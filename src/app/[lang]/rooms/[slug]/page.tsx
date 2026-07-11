@@ -54,9 +54,9 @@ export default async function RoomDetailsPage({ params }: PageProps) {
     location: { ru: "Местоположение отеля", uk: "Місцезнаходження готелю", en: "Hotel Location" },
     beachline: { ru: "Близость к пляжу", uk: "Близькість до пляжу", en: "Close to the Beach" },
     beachlineDesc: {
-      ru: "До чистого песчаного пляжа всего 10 минут приятной ходьбы прогулочным шагом.",
-      uk: "До чистого піщаного пляжу всього 10 хвилин приємної ходьби прогулянковим кроком.",
-      en: "Only a pleasant 10-minute walk to the clean sandy beach."
+      ru: "До чистого песчаного пляжа всего 5 минут приятной ходьбы прогулочным шагом.",
+      uk: "До чистого піщаного пляжу всього 5 хвилин приємної ходьби прогулянковим кроком.",
+      en: "Only a pleasant 5-minute walk to the clean sandy beach."
     },
     address: { ru: "Точный адрес", uk: "Точна адреса", en: "Exact Address" },
     addressDesc: {
@@ -69,7 +69,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
     priceLabel: { ru: "Стоимость суток", uk: "Вартість доби", en: "Price per night" },
     capacityLabel: { ru: "Размещение", uk: "Розміщення", en: "Capacity" },
     capacityDesc: { ru: "до", uk: "до", en: "up to" },
-    seaDist: { ru: "10м до моря", uk: "10м до моря", en: "10m to the sea" },
+    seaDist: { ru: "5 мин до моря", uk: "5 хв до моря", en: "5 min to the sea" },
     goToBooking: { ru: "Перейти к бронированию", uk: "Перейти до бронювання", en: "Proceed to Booking" },
   };
 

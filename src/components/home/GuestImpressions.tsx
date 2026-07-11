@@ -28,9 +28,9 @@ const reviews: Review[] = [
     name: "Алина К.",
     nameUk: "Аліна К.",
     nameEn: "Alina K.",
-    text: "Прекрасный гостевой дом! До моря всего 10 минут неспешным шагом. Дети в восторге от игровой площадки во дворе, а мы — от уютной беседки. Обязательно вернёмся!",
-    textUk: "Чудовий гостьовий будинок! До моря всього 10 хвилин неспішним кроком. Діти в захваті від ігрового майданчика у дворі, а ми — від затишної альтанки. Обов'язково повернемось!",
-    textEn: "Wonderful guesthouse! Just a 10-minute leisurely walk to the beach. Kids loved the playground in the yard, and we enjoyed the cozy gazebo. Will definitely come back!",
+    text: "Прекрасный гостевой дом! До моря всего 5 минут неспешным шагом. Дети в восторге от игровой площадки во дворе, а мы — от уютной беседки. Обязательно вернёмся!",
+    textUk: "Чудовий гостьовий будинок! До моря всього 5 хвилин неспішним кроком. Діти в захваті від ігрового майданчика у дворі, а ми — від затишної альтанки. Обов'язково повернемось!",
+    textEn: "Wonderful guesthouse! Just a 5-minute leisurely walk to the beach. Kids loved the playground in the yard, and we enjoyed the cozy gazebo. Will definitely come back!",
     rating: 5,
     date: "Август 2025",
     roomType: "Семейный номер",
@@ -88,6 +88,7 @@ export default function GuestImpressions() {
   const [, setLangUpdate] = useState(i18n.language || "ru");
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const handleLangChange = (lng: string) => {
       setLangUpdate(lng);

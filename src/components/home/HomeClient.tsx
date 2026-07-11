@@ -170,7 +170,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
  
                 {/* Description */}
                 <p className="max-w-xl text-base md:text-lg text-slate-300 font-light leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards] drop-shadow-lg">
-                  {translate("heroDescription", "Отель премиум-класса. Комфортные номера с кондиционером, песчаный пляж в 10 минутах ходьбы и безупречный сервис для вашего абсолютного расслабления.")}
+                  {translate("heroDescription", "Отель премиум-класса. Комфортные номера с кондиционером, песчаный пляж в 5 минутах ходьбы и безупречный сервис для вашего абсолютного расслабления.")}
                 </p>
  
                 {/* Clean Horizontal Action Capsule */}
@@ -357,7 +357,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 {
                   icon: Umbrella,
                   titleKey: "whyBeach",
-                  titleFallback: "10 минут до пляжа",
+                  titleFallback: "5 минут до пляжа",
                   descKey: "whyBeachDesc",
                   descFallback: "Первая береговая линия — выходите из номера и через минуту вы на песчаном пляже.",
                   gradient: "from-sky-400/20 to-teal-400/20",

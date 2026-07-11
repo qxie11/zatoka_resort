@@ -84,7 +84,7 @@ const ATTRACTIONS: Attraction[] = [
     desc: { ru: "Широкий песчаный пляж с пологим входом в Черное море, шезлонгами и развлечениями.", uk: "Широкий піщаний пляж з пологим входом у Чорне море, шезлонгами та розвагами.", en: "Wide sandy beach with a shallow entrance to the Black Sea, sunbeds, and activities." },
     lat: 46.1565,
     lng: 30.5460,
-    distance: { ru: "400 м (10 мин пешком)", uk: "400 м (10 хв пішки)", en: "400 m (10 min walk)" }
+    distance: { ru: "400 м (5 мин пешком)", uk: "400 м (5 хв пішки)", en: "400 m (5 min walk)" }
   },
   {
     id: "liman",

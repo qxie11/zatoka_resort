@@ -79,7 +79,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
 
   // Multi-language labels
   const L = {
-    beach: { ru: "10 минут", uk: "10 хвилин", en: "10 minutes" },
+    beach: { ru: "5 минут", uk: "5 хвилин", en: "5 minutes" },
     beachDesc: { ru: "Пешком до песчаного пляжа", uk: "Пішки до піщаного пляжу", en: "Walk to the sandy beach" },
     rooms: { ru: "30 номеров", uk: "30 номерів", en: "30 rooms" },
     roomsDesc: { ru: "Различных категорий комфорта", uk: "Різних категорій комфорту", en: "Different comfort options" },
