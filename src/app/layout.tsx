@@ -26,6 +26,17 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+export const metadata: Metadata = {
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" }
+    ],
+    apple: [
+      { url: "/apple-icon.svg", type: "image/svg+xml" }
+    ]
+  }
+};
+
 export default async function RootLayout({
   children,
 }: {
