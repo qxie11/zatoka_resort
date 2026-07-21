@@ -18,9 +18,10 @@ import { usePathname } from "next/navigation";
 
 interface RoomCardProps {
   room: Room;
+  onCompareClick?: () => void;
 }
 
-export default function RoomCard({ room }: RoomCardProps) {
+export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
   const pathname = usePathname();
   const segments = pathname?.split("/") || [];
   const lang = ["ru", "uk", "en"].includes(segments[1]) ? segments[1] : "ru";
@@ -69,6 +70,11 @@ export default function RoomCard({ room }: RoomCardProps) {
             <p className="text-2xl font-extrabold text-teal-300 tracking-tight">{room.price} грн <span className="text-sm text-slate-400 font-normal">/ ночь</span></p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            {onCompareClick && (
+              <Button onClick={onCompareClick} variant="outline" className="w-full sm:w-auto border-teal-500/30 bg-teal-500/5 text-teal-300 hover:bg-teal-500/10 hover:border-teal-500/50 transition-all duration-300 rounded-xl px-4">
+                Сравнить
+              </Button>
+            )}
             <Button asChild variant="outline" className="w-full sm:w-auto border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 rounded-xl">
               <Link href={`/${lang}/rooms/${room.slug}`}>
                 <Eye className="mr-2 h-4 w-4 text-teal-400" />

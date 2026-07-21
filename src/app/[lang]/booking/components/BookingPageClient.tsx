@@ -62,74 +62,85 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
         </div>
       </div>
 
-      {/* Collapsible Comparison Table */}
-      <div className="max-w-4xl mx-auto mb-16 text-center">
-        <button
-          onClick={() => setShowComparison(!showComparison)}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 border border-white/10 text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-all duration-300"
-        >
-          {showComparison ? "Скрыть таблицу сравнения" : "Сравнить характеристики номеров"}
-        </button>
+      {/* Comparison Modal */}
+      {showComparison && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onClick={() => setShowComparison(false)} />
+          
+          {/* Modal Container */}
+          <div className="relative max-w-4xl w-full max-h-[90vh] overflow-y-auto bg-slate-950 border border-white/10 rounded-[2.5rem] p-6 md:p-10 shadow-2xl z-10 animate-scale-in">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
+              <h3 className="text-2xl font-extrabold text-white">Сравнение характеристик номеров</h3>
+              <button
+                onClick={() => setShowComparison(false)}
+                className="h-10 w-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-colors"
+              >
+                ✕
+              </button>
+            </div>
 
-        {showComparison && (
-          <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10 bg-slate-900/50 backdrop-blur-xl animate-fade-in">
-            <table className="w-full text-left border-collapse text-sm">
-              <thead>
-                <tr className="border-b border-white/10 bg-slate-900/80">
-                  <th className="p-4 text-slate-400 font-semibold w-1/4">Характеристика</th>
-                  {rooms.map((room) => (
-                    <th key={room.id} className="p-4 font-bold text-white text-center">{room.name}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                <tr>
-                  <td className="p-4 text-slate-300 font-medium">Стоимость</td>
-                  {rooms.map((room) => (
-                    <td key={room.id} className="p-4 text-center text-teal-300 font-bold">{room.price} грн / ночь</td>
-                  ))}
-                </tr>
-                <tr>
-                  <td className="p-4 text-slate-300 font-medium">Вместимость</td>
-                  {rooms.map((room) => (
-                    <td key={room.id} className="p-4 text-center text-slate-200">{room.capacity} гостей</td>
-                  ))}
-                </tr>
-                <tr>
-                  <td className="p-4 text-slate-300 font-medium">Кондиционер</td>
-                  {rooms.map((room) => (
-                    <td key={room.id} className="p-4 text-center text-slate-200">
-                      {room.amenities.some(a => a.toLowerCase().includes("кондиционер") || a.toLowerCase().includes("ac")) ? (
-                        <Check className="h-5 w-5 text-emerald-400 mx-auto" />
-                      ) : "—"}
-                    </td>
-                  ))}
-                </tr>
-                <tr>
-                  <td className="p-4 text-slate-300 font-medium">Собственный балкон</td>
-                  {rooms.map((room) => (
-                    <td key={room.id} className="p-4 text-center text-slate-200">
-                      {room.amenities.some(a => a.toLowerCase().includes("балкон")) ? (
-                        <Check className="h-5 w-5 text-emerald-400 mx-auto" />
-                      ) : "—"}
-                    </td>
-                  ))}
-                </tr>
-                <tr>
-                  <td className="p-4 text-slate-300 font-medium">Спутниковое ТВ</td>
-                  {rooms.map((room) => (
-                    <td key={room.id} className="p-4 text-center text-slate-200">
-                      {room.amenities.some(a => a.toLowerCase().includes("тв") || a.toLowerCase().includes("телевизор")) ? (
-                        <Check className="h-5 w-5 text-emerald-400 mx-auto" />
-                      ) : "—"}
-                    </td>
-                  ))}
-                </tr>
-              </tbody>
-            </table>
+            {/* Table */}
+            <div className="overflow-x-auto rounded-2xl border border-white/10 bg-slate-900/50">
+              <table className="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr className="border-b border-white/10 bg-slate-900/80">
+                    <th className="p-4 text-slate-400 font-semibold w-1/4">Характеристика</th>
+                    {rooms.map((room) => (
+                      <th key={room.id} className="p-4 font-bold text-white text-center">{room.name}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  <tr>
+                    <td className="p-4 text-slate-300 font-medium">Стоимость</td>
+                    {rooms.map((room) => (
+                      <td key={room.id} className="p-4 text-center text-teal-300 font-bold">{room.price} грн / ночь</td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className="p-4 text-slate-300 font-medium">Вместимость</td>
+                    {rooms.map((room) => (
+                      <td key={room.id} className="p-4 text-center text-slate-200">{room.capacity} гостей</td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className="p-4 text-slate-300 font-medium">Кондиционер</td>
+                    {rooms.map((room) => (
+                      <td key={room.id} className="p-4 text-center text-slate-200">
+                        {room.amenities.some(a => a.toLowerCase().includes("кондиционер") || a.toLowerCase().includes("ac")) ? (
+                          <Check className="h-5 w-5 text-emerald-400 mx-auto" />
+                        ) : "—"}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className="p-4 text-slate-300 font-medium">Собственный балкон</td>
+                    {rooms.map((room) => (
+                      <td key={room.id} className="p-4 text-center text-slate-200">
+                        {room.amenities.some(a => a.toLowerCase().includes("балкон")) ? (
+                          <Check className="h-5 w-5 text-emerald-400 mx-auto" />
+                        ) : "—"}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className="p-4 text-slate-300 font-medium">Спутниковое ТВ</td>
+                    {rooms.map((room) => (
+                      <td key={room.id} className="p-4 text-center text-slate-200">
+                        {room.amenities.some(a => a.toLowerCase().includes("тв") || a.toLowerCase().includes("телевизор")) ? (
+                          <Check className="h-5 w-5 text-emerald-400 mx-auto" />
+                        ) : "—"}
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <section id="available-rooms" className="py-16 lg:py-24 bg-slate-950 scroll-mt-20">
         <div className="container mx-auto px-0">
@@ -144,7 +155,7 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
                 : t("findPerfectSpace")}
             </p>
           </div>
-          <RoomsList rooms={displayRooms} />
+          <RoomsList rooms={displayRooms} onCompareClick={() => setShowComparison(true)} />
         </div>
       </section>
     </>

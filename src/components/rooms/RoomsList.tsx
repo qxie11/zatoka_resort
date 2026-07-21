@@ -5,9 +5,10 @@ import RoomCard from '@/app/[lang]/booking/components/RoomCard';
 
 interface RoomsListProps {
   rooms: Room[];
+  onCompareClick?: () => void;
 }
 
-export default function RoomsList({ rooms }: RoomsListProps) {
+export default function RoomsList({ rooms, onCompareClick }: RoomsListProps) {
   if (rooms.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -19,7 +20,7 @@ export default function RoomsList({ rooms }: RoomsListProps) {
   return (
     <div className="grid grid-cols-1 gap-8">
       {rooms.map((room) => (
-        <RoomCard key={room.id} room={room} />
+        <RoomCard key={room.id} room={room} onCompareClick={onCompareClick} />
       ))}
     </div>
   );
