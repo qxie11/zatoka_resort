@@ -72,8 +72,15 @@ export default async function RootLayout({
   const { lang } = await params;
   
   // Fetch rooms on the Server Side to get the lowest price
-  const rooms = await getRooms();
-  const minPrice = rooms.length ? Math.min(...rooms.map((r) => r.price)) : 1500;
+  let minPrice = 1500;
+  try {
+    const rooms = await getRooms();
+    if (rooms && rooms.length) {
+      minPrice = Math.min(...rooms.map((r) => r.price));
+    }
+  } catch (err) {
+    console.error("Failed to fetch rooms in RootLayout:", err);
+  }
 
   return (
     <div>
