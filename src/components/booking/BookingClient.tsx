@@ -102,7 +102,9 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
           <Suspense fallback={null}>
             <SuccessMessage />
           </Suspense>
-          <BookingPageClient rooms={rooms} bookings={bookings} />
+          <Suspense fallback={<div className="text-center py-20 text-slate-400">Загрузка формы бронирования...</div>}>
+            <BookingPageClient rooms={rooms} bookings={bookings} />
+          </Suspense>
         </div>
       </section>
     </div>

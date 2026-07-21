@@ -24,6 +24,8 @@ import type { Room, Booking } from "@/lib/types";
 import i18n from "@/lib/i18n";
 import { DateRangePicker } from "@/components/booking/DateRangePicker";
 
+import { useSearchParams } from "next/navigation";
+
 const dateFnsLocales = {
   ru,
   uk,
@@ -44,16 +46,20 @@ export default function BookingForm({
   onFilterChange,
 }: BookingFormProps) {
   const { t, i18n: i18nInstance } = useTranslation();
+  const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
   const [currentLang, setCurrentLang] = useState<SupportedLanguage>("ru");
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const lang = (i18nInstance.language || "ru").slice(0, 2) as SupportedLanguage;
+     
     setCurrentLang(dateFnsLocales[lang] ? lang : "en");
 
     const handleLangChange = (lng: string) => {
       const detected = lng.slice(0, 2) as SupportedLanguage;
+       
       setCurrentLang(dateFnsLocales[detected] ? detected : "en");
     };
 
@@ -82,6 +88,38 @@ export default function BookingForm({
       guests: 1,
     },
   });
+
+  useEffect(() => {
+    if (!mounted) return;
+    const checkin = searchParams.get("checkin");
+    const checkout = searchParams.get("checkout");
+    const guests = searchParams.get("guests");
+
+    if (checkin || checkout || guests) {
+      const from = checkin ? new Date(checkin) : undefined;
+      const to = checkout ? new Date(checkout) : undefined;
+      const parsedGuests = guests ? parseInt(guests, 10) : 1;
+      const validGuests = isNaN(parsedGuests) ? 1 : parsedGuests;
+
+       
+      form.reset({
+        dateRange: { from, to },
+        guests: validGuests,
+      });
+
+      if (from && to && !isNaN(from.getTime()) && !isNaN(to.getTime())) {
+        const filteredRooms = rooms.filter((room) => {
+          if (room.capacity < validGuests) {
+            return false;
+          }
+          return isRoomAvailable(room, from, to);
+        });
+         
+        onFilterChange(filteredRooms);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, mounted]);
 
   function datesOverlap(
     start1: Date,

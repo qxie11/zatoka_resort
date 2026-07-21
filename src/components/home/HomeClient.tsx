@@ -4,12 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
+import { DateRangePicker } from "@/components/booking/DateRangePicker";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { WavyUnderline } from "@/components/ui/wavy-underline";
 import OceanSceneClient from "@/components/three/OceanSceneClient";
 import FeaturedRooms from "@/components/rooms/FeaturedRooms";
 import GuestImpressions from "@/components/home/GuestImpressions";
+import { Users, Minus, Plus, CalendarDays } from "lucide-react";
 import {
   ArrowRight,
   Waves,
@@ -67,8 +72,28 @@ interface HomeClientProps {
 
 export default function HomeClient({ rooms, lang }: HomeClientProps) {
   const { t } = useTranslation();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [, setLangUpdate] = useState(i18n.language);
+
+  const widgetForm = useForm({
+    defaultValues: {
+      dateRange: { from: undefined, to: undefined },
+      guests: 1,
+    },
+  });
+
+  const onWidgetSubmit = (data: any) => {
+    const params = new URLSearchParams();
+    if (data.dateRange?.from) {
+      params.set("checkin", data.dateRange.from.toISOString());
+    }
+    if (data.dateRange?.to) {
+      params.set("checkout", data.dateRange.to.toISOString());
+    }
+    params.set("guests", data.guests.toString());
+    router.push(`/${lang}/booking?${params.toString()}`);
+  };
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -173,24 +198,69 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                   {translate("heroDescription", "Семейный отель «Отдых в Затоке». Зеленый двор с мангалами, детская игровая зона, общая кухня, кондиционеры, Wi-Fi и бесплатная парковка. Всего 5 минут ходьбы до песчаного пляжа.")}
                 </p>
  
-                {/* Clean Horizontal Action Capsule */}
-                <div className="flex flex-col sm:flex-row gap-4 w-full pt-4 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards]">
-                  <Button asChild size="lg" className="h-14 px-8 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-[0_0_30px_rgba(45,212,191,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl uppercase tracking-wider text-sm animate-gentle-nudge">
-                    <Link href="/booking" className="flex items-center justify-center">
-                      {translate("bookStay", "Забронировать отдых")}
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                  </Button>
-                  <Link
-                    href="#rooms"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById("rooms")?.scrollIntoView({ behavior: "smooth" });
-                    }}
-                    className="inline-flex items-center justify-center h-14 px-8 bg-white/5 backdrop-blur-md border border-white/10 text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 rounded-xl uppercase tracking-wider text-sm font-semibold shadow-lg"
-                  >
-                    {translate("learnMore", "Исследовать комнаты")}
-                  </Link>
+                {/* Horizontal Booking Widget */}
+                <div className="w-full pt-4 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards] z-20 relative">
+                  <Form {...widgetForm}>
+                    <form
+                      onSubmit={widgetForm.handleSubmit(onWidgetSubmit)}
+                      className="flex flex-col md:flex-row gap-4 p-4 rounded-2xl bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl items-end w-full"
+                    >
+                      <div className="w-full md:flex-1 relative group/field">
+                        <FormField
+                          control={widgetForm.control}
+                          name="dateRange"
+                          render={({ field }) => (
+                            <DateRangePicker
+                              value={field.value}
+                              onChange={field.onChange}
+                              label={translate("checkInOut", "Заезд / Выезд")}
+                            />
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={widgetForm.control}
+                        name="guests"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col relative w-full md:w-36">
+                            <FormLabel className="text-teal-300 font-bold mb-2.5 flex items-center gap-2 tracking-wide text-xs uppercase">
+                              <Users className="h-4 w-4 text-teal-400" />
+                              {translate("guests", "Гости")}
+                            </FormLabel>
+                            <FormControl>
+                              <div className="flex items-center justify-between bg-slate-950/80 border border-white/[0.06] hover:border-white/15 focus-within:border-teal-500/50 rounded-xl h-12 px-3 w-full transition-all duration-300 shadow-inner">
+                                <button
+                                  type="button"
+                                  onClick={() => field.onChange(Math.max(1, field.value - 1))}
+                                  className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition-all duration-300 active:scale-90"
+                                >
+                                  <Minus className="h-3.5 w-3.5" />
+                                </button>
+                                <span className="text-lg font-black select-none text-white tracking-widest min-w-[20px] text-center">
+                                  {field.value}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => field.onChange(Math.min(10, field.value + 1))}
+                                  className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition-all duration-300 active:scale-90"
+                                >
+                                  <Plus className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+
+                      <Button
+                        type="submit"
+                        className="w-full md:w-auto h-12 px-8 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap"
+                      >
+                        {translate("checkAvailability", "Найти номера")}
+                      </Button>
+                    </form>
+                  </Form>
                 </div>
  
                 {/* Minimalist Trust Features */}
