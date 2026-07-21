@@ -8,7 +8,11 @@ import i18n from "@/lib/i18n";
 
 import { usePathname } from "next/navigation";
 
-export function StickyBookingBar() {
+interface StickyBookingBarProps {
+  minPrice: number;
+}
+
+export function StickyBookingBar({ minPrice = 1500 }: StickyBookingBarProps) {
   const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -59,7 +63,7 @@ export function StickyBookingBar() {
               </div>
               <div className="h-3 w-px bg-slate-700 shrink-0" />
               <span className="text-xs text-slate-300 truncate">
-                {t("stickyMobileFrom", "от")} <span className="text-white font-bold">1500 грн</span>/{t("stickyMobileNight", "ночь")}
+                {t("stickyMobileFrom", "от")} <span className="text-white font-bold">{minPrice} грн</span>/{t("stickyMobileNight", "ночь")}
               </span>
             </div>
             <div className="flex items-center gap-1.5 shrink-0">

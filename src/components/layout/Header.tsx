@@ -22,6 +22,7 @@ export default function Header() {
   const [isLangOpen, setIsLangOpen] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     setCurrentLang(i18n.language || "ru");
 
@@ -87,7 +88,7 @@ export default function Header() {
     en: { label: "EN", flag: "🇬🇧" },
   };
 
-  const LanguageSelector = () => (
+  const renderLanguageSelector = () => (
     <div className="relative lang-select-container">
       <button
         onClick={() => setIsLangOpen(!isLangOpen)}
@@ -148,17 +149,19 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full transition-all duration-500">
-      {/* Premium Glassmorphism and Backdrop Blur Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/80 to-slate-950/75 backdrop-blur-xl -z-10 border-b border-white/10" />
-      
-      {/* Elegant Sea-Glow Bottom Border with Pulse Effect */}
-      <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-teal-400/60 to-transparent -z-10 animate-pulse" />
-      
-      {/* Light shimmer line effect */}
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-sky-400/30 to-transparent -z-10" />
- 
-      <div className="container relative mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full container px-2 lg:px-4 transition-all duration-500">
+      <div className="relative w-full h-14 rounded-2xl border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-teal-500/20 hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)] group/header flex items-center justify-between px-6">
+        {/* Background & Effects Wrapper (handles clipping of absolute elements without clipping dropdowns) */}
+        <div className="absolute inset-0 rounded-2xl overflow-hidden -z-10">
+          {/* Premium Glassmorphism and Backdrop Blur Background */}
+          <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-xl" />
+          
+          {/* Elegant Sea-Glow Bottom Border with Pulse Effect */}
+          <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-teal-400/40 to-transparent group-hover/header:via-teal-400 transition-all duration-700" />
+          
+          {/* Light shimmer line effect */}
+          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-sky-400/20 to-transparent" />
+        </div>
         {/* Brand / Logo */}
         <Link
           href={getLocalizedHref("/")}
@@ -227,7 +230,7 @@ export default function Header() {
  
         {/* Desktop Right Actions */}
         <div className="hidden lg:flex items-center gap-4">
-          {mounted && <LanguageSelector />}
+          {mounted && renderLanguageSelector()}
  
           {mounted && isAuthenticated ? (
             <div className="flex items-center gap-3">
@@ -248,7 +251,7 @@ export default function Header() {
             !pathname.includes("/booking") && (
               <Button
                 asChild
-                className="relative overflow-hidden bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-[0_0_20px_rgba(45,212,191,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl px-5 h-9 text-[10px] uppercase tracking-wider flex items-center gap-1.5 animate-gentle-nudge"
+                className="relative overflow-hidden bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-[0_0_20px_rgba(45,212,191,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl px-5 h-9 text-[10px] uppercase tracking-wider flex items-center gap-1.5"
               >
                 <Link href={getLocalizedHref("/booking")}>
                   <span className="relative flex h-1.5 w-1.5">
@@ -264,7 +267,7 @@ export default function Header() {
 
         {/* Mobile Actions and Hamburger */}
         <div className="lg:hidden flex items-center gap-3">
-          {mounted && <LanguageSelector />}
+          {mounted && renderLanguageSelector()}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button

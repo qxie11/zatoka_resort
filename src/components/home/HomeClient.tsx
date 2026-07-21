@@ -148,22 +148,22 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
             </div>
           </div>
 
-          <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full pt-8 pb-32 lg:pt-0 lg:pb-20">
+          <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full pt-24 pb-16 lg:pt-24 lg:pb-20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               
               {/* LEFT COLUMN: Family Copy & Streamlined CTAs */}
               <div className="lg:col-span-7 flex flex-col items-start text-left text-white space-y-8">
                 
                 {/* Family Micro-Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-xs font-bold text-amber-300 uppercase tracking-widest animate-fade-in shadow-[0_0_15px_rgba(245,158,11,0.15)]">
-                  <Sun className="h-4 w-4 text-amber-400 animate-pulse" />
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/20 text-xs font-bold text-teal-300 uppercase tracking-widest animate-fade-in shadow-[0_0_15px_rgba(20,184,166,0.15)]">
+                  <Sun className="h-4 w-4 text-teal-400 animate-pulse" />
                   <span>{translate("familyBadge", "Уютный семейный гостевой дом")}</span>
                 </div>
  
                 {/* Heading */}
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] animate-fade-in-up drop-shadow-2xl font-heading pb-2">
                   {translate("heroTitle1", "Уютный летний отдых")} <br />
-                  <span className="inline-block py-1 px-1 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-400 to-rose-400 animate-ocean-shimmer font-black">
+                  <span className="inline-block py-1 px-1 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 animate-ocean-shimmer font-black">
                     {translate("heroTitle2", "для всей вашей семьи")}
                   </span>
                 </h1>
@@ -175,7 +175,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
  
                 {/* Clean Horizontal Action Capsule */}
                 <div className="flex flex-col sm:flex-row gap-4 w-full pt-4 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards]">
-                  <Button asChild size="lg" className="h-14 px-8 bg-gradient-to-r from-amber-400 via-orange-400 to-orange-500 hover:from-amber-300 hover:via-orange-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-[0_0_30px_rgba(245,158,11,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl uppercase tracking-wider text-sm animate-gentle-nudge">
+                  <Button asChild size="lg" className="h-14 px-8 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-[0_0_30px_rgba(45,212,191,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl uppercase tracking-wider text-sm animate-gentle-nudge">
                     <Link href="/booking" className="flex items-center justify-center">
                       {translate("bookStay", "Забронировать отдых")}
                       <ArrowRight className="ml-2 h-5 w-5" />

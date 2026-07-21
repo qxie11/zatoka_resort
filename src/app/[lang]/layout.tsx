@@ -6,6 +6,7 @@ import { SeasonBanner } from "@/components/conversion/SeasonBanner";
 import { CallbackForm } from "@/components/conversion/CallbackForm";
 import ScratchCardPromo from "@/components/conversion/ScratchCardPromo";
 import LanguageSync from "@/components/providers/LanguageSync";
+import { getRooms } from "@/lib/db";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -69,6 +70,10 @@ export default async function RootLayout({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
+  
+  // Fetch rooms on the Server Side to get the lowest price
+  const rooms = await getRooms();
+  const minPrice = rooms.length ? Math.min(...rooms.map((r) => r.price)) : 1500;
 
   return (
     <div>
@@ -82,7 +87,7 @@ export default async function RootLayout({
 
       <Footer />
 
-      <StickyBookingBar />
+      <StickyBookingBar minPrice={minPrice} />
       <CallbackForm />
       <ScratchCardPromo lang={lang} />
     </div>
