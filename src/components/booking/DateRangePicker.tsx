@@ -68,17 +68,27 @@ export function DateRangePicker({
     const bookingCounts: Record<number, number> = {};
     const today = startOfDay(new Date());
 
+    const parseUTCAsLocal = (dateInput: Date | string) => {
+      if (typeof dateInput === "string") {
+        const cleanStr = dateInput.split("T")[0];
+        const parts = cleanStr.split("-").map(Number);
+        if (parts.length === 3 && !parts.some(isNaN)) {
+          return new Date(parts[0], parts[1] - 1, parts[2]);
+        }
+      }
+      const d = new Date(dateInput);
+      return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+    };
+
     existingBookings.forEach((booking) => {
       if (excludeBookingId && booking.id === excludeBookingId) return;
 
-      const start = startOfDay(new Date(booking.startDate));
-      const end = startOfDay(new Date(booking.endDate));
+      const start = startOfDay(parseUTCAsLocal(booking.startDate));
+      const end = startOfDay(parseUTCAsLocal(booking.endDate));
 
       if (end < today) return;
 
       let currentDate = new Date(start);
-      // Avoid over-counting the checkout day, but for strictness we might include it or not.
-      // Usually checkout day is available for checkin. We should probably do `< end`
       while (currentDate < end) {
         const time = currentDate.getTime();
         bookingCounts[time] = (bookingCounts[time] || 0) + 1;
@@ -114,7 +124,32 @@ export function DateRangePicker({
   };
 
   const isDateRangeDisabled = (date: Date) => {
-    return isDateDisabled(date);
+    const dateStart = startOfDay(date);
+    const today = startOfDay(new Date());
+
+    if (dateStart < today) return true;
+
+    if (customDisabled && customDisabled(date)) return true;
+
+    if (value?.from && !value?.to) {
+      const checkIn = startOfDay(value.from);
+
+      if (dateStart <= checkIn) return true;
+
+      const hasOccupiedNight = disabledDates.some((disabledDate) => {
+        const disabledStart = startOfDay(disabledDate);
+        return disabledStart >= checkIn && disabledStart < dateStart;
+      });
+
+      if (hasOccupiedNight) return true;
+
+      return false;
+    }
+
+    return disabledDates.some((disabledDate) => {
+      const disabledStart = startOfDay(disabledDate);
+      return dateStart.getTime() === disabledStart.getTime();
+    });
   };
 
   const validateDateRange = (range: { from?: Date; to?: Date } | undefined) => {
@@ -124,7 +159,7 @@ export function DateRangePicker({
     const end = startOfDay(range.to);
 
     let currentDate = new Date(start);
-    while (currentDate <= end) {
+    while (currentDate < end) {
       if (isDateDisabled(currentDate)) {
         return false;
       }

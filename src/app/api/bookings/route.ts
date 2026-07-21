@@ -39,8 +39,15 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const parseDateSafe = (d: string) => {
+      // YYYY-MM-DD → parse as UTC noon to avoid any TZ shifting
+      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d);
+      if (m) return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 12, 0, 0));
+      return new Date(d);
+    };
+
+    const start = parseDateSafe(startDate);
+    const end = parseDateSafe(endDate);
 
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
       return NextResponse.json(

@@ -251,7 +251,7 @@ export default function RoomBookingForm({
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      unitId: isSingleUnit ? room?.units?.[0]?.id : "",
+      unitId: room?.units && room.units.length > 0 ? room.units[0].id : "",
       guests: 1,
       name: "",
       phone: "",
@@ -278,8 +278,8 @@ export default function RoomBookingForm({
         body: JSON.stringify({
           roomId: room.id,
           unitId: data.unitId,
-          startDate: data.dateRange.from.toISOString(),
-          endDate: data.dateRange.to.toISOString(),
+          startDate: `${data.dateRange.from.getFullYear()}-${String(data.dateRange.from.getMonth() + 1).padStart(2, '0')}-${String(data.dateRange.from.getDate()).padStart(2, '0')}`,
+          endDate: `${data.dateRange.to.getFullYear()}-${String(data.dateRange.to.getMonth() + 1).padStart(2, '0')}-${String(data.dateRange.to.getDate()).padStart(2, '0')}`,
           name: data.name,
           phone: data.phone,
           email: data.email || undefined,
@@ -352,10 +352,21 @@ export default function RoomBookingForm({
                         // Reset dates if the newly selected unit is not available on current dates
                         const currentRange = form.getValues("dateRange");
                         if (currentRange?.from && currentRange?.to && val) {
+                          const parseUTCAsLocal = (dInput: Date | string) => {
+                            if (typeof dInput === "string") {
+                              const cleanStr = dInput.split("T")[0];
+                              const parts = cleanStr.split("-").map(Number);
+                              if (parts.length === 3 && !parts.some(isNaN)) {
+                                return new Date(parts[0], parts[1] - 1, parts[2]);
+                              }
+                            }
+                            const d = new Date(dInput);
+                            return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+                          };
                           const isBooked = existingBookings.some(b => {
                             if (b.unitId !== val) return false;
-                            const bStart = new Date(b.startDate);
-                            const bEnd = new Date(b.endDate);
+                            const bStart = parseUTCAsLocal(b.startDate);
+                            const bEnd = parseUTCAsLocal(b.endDate);
                             return currentRange.from < bEnd && currentRange.to > bStart;
                           });
                           if (isBooked) {
@@ -389,26 +400,29 @@ export default function RoomBookingForm({
               />
             )}
 
-            {form.watch("unitId") && (
-              <FormField
-                control={form.control}
-                name="dateRange"
-                render={({ field }) => {
-                  const selectedUnitId = form.watch("unitId");
-                  const filteredBookings = existingBookings.filter(b => b.unitId === selectedUnitId);
+            <FormField
+              control={form.control}
+              name="dateRange"
+              render={({ field }) => {
+                const selectedUnitId = form.watch("unitId");
+                const filteredBookings = existingBookings.filter(b => {
+                  if (selectedUnitId) {
+                    return b.unitId === selectedUnitId || !b.unitId;
+                  }
+                  return true;
+                });
 
-                  return (
-                    <DateRangePicker
-                      value={field.value}
-                      onChange={field.onChange}
-                      existingBookings={filteredBookings}
-                      totalUnitsCount={1}
-                      showBookingInstructions={!isSingleUnit}
-                    />
-                  );
-                }}
-              />
-            )}
+                return (
+                  <DateRangePicker
+                    value={field.value}
+                    onChange={field.onChange}
+                    existingBookings={filteredBookings}
+                    totalUnitsCount={1}
+                    showBookingInstructions={!isSingleUnit}
+                  />
+                );
+              }}
+            />
 
             <FormField
               control={form.control}
