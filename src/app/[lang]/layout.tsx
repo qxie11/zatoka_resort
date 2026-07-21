@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { StickyBookingBar } from "@/components/conversion/StickyBookingBar";
-import { SeasonBanner } from "@/components/conversion/SeasonBanner";
 import { CallbackForm } from "@/components/conversion/CallbackForm";
 import ScratchCardPromo from "@/components/conversion/ScratchCardPromo";
 import LanguageSync from "@/components/providers/LanguageSync";
@@ -88,7 +87,6 @@ export default async function RootLayout({
       <Header />
 
       <main className="min-h-screen">
-        <SeasonBanner />
         {children}
       </main>
 

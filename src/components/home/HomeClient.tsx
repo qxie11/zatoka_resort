@@ -148,7 +148,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
             </div>
           </div>
 
-          <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full pt-24 pb-16 lg:pt-24 lg:pb-20">
+          <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full pt-28 pb-16 lg:pt-32 lg:pb-20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               
               {/* LEFT COLUMN: Family Copy & Streamlined CTAs */}

@@ -53,8 +53,10 @@ export function SeasonBanner() {
   useEffect(() => {
     const wasDismissed = sessionStorage.getItem("season-banner-dismissed");
     if (!wasDismissed) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDismissed(false);
     }
+     
     setSeasonData(getSeasonPhase(new Date()));
 
     const handleLangChange = (lng: string) => {
@@ -77,7 +79,7 @@ export function SeasonBanner() {
   const daysWord = pluralDays(seasonData.daysLeft, lang);
 
   return (
-    <div className="sticky top-16 z-[49] bg-gradient-to-r from-amber-500/90 via-orange-500/90 to-rose-500/90 text-white overflow-hidden backdrop-blur-sm shadow-md">
+    <div className="relative w-full mt-2 rounded-xl border border-white/10 shadow-[0_10px_35px_rgba(0,0,0,0.3)] bg-gradient-to-r from-amber-500/90 via-orange-500/90 to-rose-500/90 text-white overflow-hidden backdrop-blur-sm">
       {/* Animated shimmer */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -89,7 +91,7 @@ export function SeasonBanner() {
         }}
       />
 
-      <div className="container mx-auto max-w-7xl px-8 py-2 relative">
+      <div className="container mx-auto max-w-7xl px-8 py-2">
         <div className="flex flex-row items-center justify-center gap-2 sm:gap-4 text-center">
           {/* Text & Icon wrapper */}
           <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs md:text-sm font-medium flex-nowrap">
@@ -134,16 +136,16 @@ export function SeasonBanner() {
             <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
-
-        {/* Close Button - Absolutely Positioned */}
-        <button
-          onClick={handleDismiss}
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-colors"
-          aria-label="Close"
-        >
-          <X className="h-4 w-4" />
-        </button>
       </div>
+
+      {/* Close Button - Absolutely Positioned inside the outer relative wrapper */}
+      <button
+        onClick={handleDismiss}
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-colors z-10"
+        aria-label="Close"
+      >
+        <X className="h-4 w-4" />
+      </button>
 
       {/* Season shimmer keyframe injected via style tag */}
       <style jsx>{`
