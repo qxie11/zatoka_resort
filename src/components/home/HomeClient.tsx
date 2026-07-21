@@ -208,7 +208,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
               </div>
  
               {/* RIGHT COLUMN: Premium Float Image */}
-              <div className="lg:col-span-5 relative flex items-center justify-center animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards] select-none">
+              <div className="lg:col-span-5 relative hidden lg:flex items-center justify-center animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards] select-none">
                 <div 
                   className="relative w-full max-w-[380px] aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(20,184,166,0.15)] group hover:border-teal-400/40 transition-all duration-700 hover:shadow-[0_0_60px_rgba(20,184,166,0.25)] bg-slate-950"
                   style={{ aspectRatio: "4/5" }}
