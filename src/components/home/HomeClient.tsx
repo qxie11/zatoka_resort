@@ -216,7 +216,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 {/* Main Image Container */}
                 <div className="relative w-full max-w-[420px] aspect-[4/5] rounded-[2rem] overflow-hidden border-[6px] border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group hover:border-white/20 transition-all duration-700 bg-slate-900 -rotate-2 hover:rotate-0">
                   <Image
-                    src="/hero-beach.png"
+                    src="/zatoka-hero.png"
                     alt="Family Beach Holiday"
                     fill
                     priority
