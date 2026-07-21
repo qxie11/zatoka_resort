@@ -73,7 +73,7 @@ interface RoomBookingFormProps {
   existingBookings: Booking[];
 }
 
-function ViewImagesButton({ room }: { room: Room }) {
+export function ViewImagesButton({ room }: { room: Room }) {
   const { t } = useTranslation();
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
@@ -607,8 +607,6 @@ export default function RoomBookingForm({
                   )}
               </div>
               <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-center">
-                <ViewImagesButton room={room} />
-                
                 <Dialog open={isQuickBookOpen} onOpenChange={setIsQuickBookOpen}>
                   <DialogTrigger asChild>
                     <Button

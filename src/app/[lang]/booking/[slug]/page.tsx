@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getRoomBySlugOrId, getBookingsByRoomId } from '@/lib/db';
-import RoomBookingForm from './components/RoomBookingForm';
+import RoomBookingForm, { ViewImagesButton } from './components/RoomBookingForm';
 import Image from 'next/image';
 import { BedDouble } from 'lucide-react';
 import { Metadata } from 'next';
@@ -58,23 +58,29 @@ export default async function RoomBookingPage({ params }: PageProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
         </div>
 
-        <div className="relative container mx-auto px-4 pb-12 z-10 max-w-6xl">
-          <nav className="mb-6 flex flex-wrap items-center gap-1.5 text-xs md:text-sm text-teal-200/90 font-medium">
-            <Link href={`/${lang}`} className="hover:text-teal-300 hover:underline">{t.home[lang as keyof typeof t.home]}</Link>
-            <span className="text-slate-500">/</span>
-            <Link href={`/${lang}/booking`} className="hover:text-teal-300 hover:underline">{t.rooms[lang as keyof typeof t.rooms]}</Link>
-            <span className="text-slate-500">/</span>
-            <span className="text-slate-400">{room.name}</span>
-          </nav>
+        <div className="relative container mx-auto px-4 pb-12 z-10 max-w-6xl flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <nav className="mb-6 flex flex-wrap items-center gap-1.5 text-xs md:text-sm text-teal-200/90 font-medium">
+              <Link href={`/${lang}`} className="hover:text-teal-300 hover:underline">{t.home[lang as keyof typeof t.home]}</Link>
+              <span className="text-slate-500">/</span>
+              <Link href={`/${lang}/booking`} className="hover:text-teal-300 hover:underline">{t.rooms[lang as keyof typeof t.rooms]}</Link>
+              <span className="text-slate-500">/</span>
+              <span className="text-slate-400">{room.name}</span>
+            </nav>
 
-          <div className="inline-flex bg-teal-500/20 backdrop-blur-md text-teal-300 border border-teal-500/30 text-xs font-semibold rounded-lg px-2.5 py-1 mb-4">
-            {t.booking[lang as keyof typeof t.booking]}
+            <div className="inline-flex bg-teal-500/20 backdrop-blur-md text-teal-300 border border-teal-500/30 text-xs font-semibold rounded-lg px-2.5 py-1 mb-4">
+              {t.booking[lang as keyof typeof t.booking]}
+            </div>
+
+            <h1 className="text-3xl md:text-5xl font-extrabold mb-4">{room.name}</h1>
+            <div className="flex items-center gap-6 text-sm text-slate-300">
+              <span className="flex items-center gap-1.5"><BedDouble className="h-4 w-4 text-teal-400" /> До {room.capacity} {t.guests[lang as keyof typeof t.guests]}</span>
+              <span className="text-teal-300 font-bold text-lg">{room.price} {t.price[lang as keyof typeof t.price]}</span>
+            </div>
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-extrabold mb-4">{room.name}</h1>
-          <div className="flex items-center gap-6 text-sm text-slate-300">
-            <span className="flex items-center gap-1.5"><BedDouble className="h-4 w-4 text-teal-400" /> До {room.capacity} {t.guests[lang as keyof typeof t.guests]}</span>
-            <span className="text-teal-300 font-bold text-lg">{room.price} {t.price[lang as keyof typeof t.price]}</span>
+          <div className="shrink-0 w-full md:w-auto">
+            <ViewImagesButton room={room} />
           </div>
         </div>
       </section>
