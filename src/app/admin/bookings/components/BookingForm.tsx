@@ -192,18 +192,22 @@ export default function BookingForm({
     if (!data.dateRange.from || !data.dateRange.to) {
       return;
     }
+    const formatDateSafe = (d: Date) => {
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    };
+
     const submissionData = {
       roomId: data.roomId,
       unitId: data.unitId === "any" ? undefined : data.unitId,
-      startDate: data.dateRange.from,
-      endDate: data.dateRange.to,
+      startDate: formatDateSafe(data.dateRange.from),
+      endDate: formatDateSafe(data.dateRange.to),
       name: data.name,
       phone: data.phone,
       email: data.email || undefined,
       pricePaid: data.pricePaid,
       adminComment: data.adminComment || undefined,
     };
-    await onSubmit(submissionData, booking?.id);
+    await onSubmit(submissionData as unknown as Omit<Booking, "id">, booking?.id);
   });
 
   return (
@@ -258,10 +262,22 @@ export default function BookingForm({
                   let availableUnits = selectedRoom.units || [];
 
                   if (dateRange?.from && dateRange?.to) {
+                    const parseUTCAsLocal = (dInput: Date | string) => {
+                      if (typeof dInput === "string") {
+                        const cleanStr = dInput.split("T")[0];
+                        const parts = cleanStr.split("-").map(Number);
+                        if (parts.length === 3 && !parts.some(isNaN)) {
+                          return new Date(parts[0], parts[1] - 1, parts[2]);
+                        }
+                      }
+                      const d = new Date(dInput);
+                      return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+                    };
+
                     const overlappingBookings = roomBookings.filter((b: Booking) => {
                       if (booking && b.id === booking.id) return false;
-                      const bStart = new Date(b.startDate);
-                      const bEnd = new Date(b.endDate);
+                      const bStart = parseUTCAsLocal(b.startDate);
+                      const bEnd = parseUTCAsLocal(b.endDate);
                       return dateRange.from! < bEnd && dateRange.to! > bStart;
                     });
                     const bookedUnitIds = new Set(overlappingBookings.map((b: Booking) => b.unitId).filter(Boolean));
@@ -284,11 +300,22 @@ export default function BookingForm({
                           // Reset dates if the newly selected unit is not available on current dates
                           const currentRange = form.getValues("dateRange");
                           if (currentRange?.from && currentRange?.to && val) {
+                            const parseUTCAsLocal = (dInput: Date | string) => {
+                              if (typeof dInput === "string") {
+                                const cleanStr = dInput.split("T")[0];
+                                const parts = cleanStr.split("-").map(Number);
+                                if (parts.length === 3 && !parts.some(isNaN)) {
+                                  return new Date(parts[0], parts[1] - 1, parts[2]);
+                                }
+                              }
+                              const d = new Date(dInput);
+                              return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+                            };
                             const isBooked = roomBookings.some(b => {
                               if (booking && b.id === booking.id) return false;
                               if (b.unitId !== val) return false;
-                              const bStart = new Date(b.startDate);
-                              const bEnd = new Date(b.endDate);
+                              const bStart = parseUTCAsLocal(b.startDate);
+                              const bEnd = parseUTCAsLocal(b.endDate);
                               return currentRange.from! < bEnd && currentRange.to! > bStart;
                             });
                             if (isBooked) {

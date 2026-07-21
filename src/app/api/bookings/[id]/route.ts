@@ -37,8 +37,16 @@ export async function PUT(
 
     if (roomId !== undefined) updates.roomId = roomId;
 
+    const parseDateSafe = (d: string | Date) => {
+      if (typeof d === "string") {
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d);
+        if (m) return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 12, 0, 0));
+      }
+      return new Date(d);
+    };
+
     if (startDate !== undefined) {
-      const start = new Date(startDate);
+      const start = parseDateSafe(startDate);
       if (isNaN(start.getTime())) {
         return NextResponse.json(
           { error: "Неверный формат даты заезда" },
@@ -49,7 +57,7 @@ export async function PUT(
     }
 
     if (endDate !== undefined) {
-      const end = new Date(endDate);
+      const end = parseDateSafe(endDate);
       if (isNaN(end.getTime())) {
         return NextResponse.json(
           { error: "Неверный формат даты выезда" },
