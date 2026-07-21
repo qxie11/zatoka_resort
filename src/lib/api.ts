@@ -57,7 +57,7 @@ export const roomsApi = createApi({
 export const bookingsApi = createApi({
   reducerPath: "bookingsApi",
   baseQuery,
-  tagTypes: ["Booking"],
+  tagTypes: ["Booking", "Room"],
   endpoints: (builder) => ({
     getBookings: builder.query<Booking[], void>({
       query: () => "/bookings",
@@ -80,16 +80,19 @@ export const bookingsApi = createApi({
       }),
     }),
     createBooking: builder.mutation<Booking, Omit<Booking, "id">>({
-      query: (booking) => ({
-        url: "/bookings",
-        method: "POST",
-        body: {
-          ...booking,
-          startDate: booking.startDate.toISOString(),
-          endDate: booking.endDate.toISOString(),
-        },
-      }),
-      invalidatesTags: ["Booking"],
+      query: (booking) => {
+        const safeDate = (d: any) => typeof d === 'string' ? d : d?.toISOString();
+        return {
+          url: "/bookings",
+          method: "POST",
+          body: {
+            ...booking,
+            startDate: safeDate(booking.startDate),
+            endDate: safeDate(booking.endDate),
+          },
+        };
+      },
+      invalidatesTags: ["Booking", "Room"],
       transformResponse: (response: Booking) => ({
         ...response,
         startDate: new Date(response.startDate),
@@ -100,15 +103,18 @@ export const bookingsApi = createApi({
       Booking,
       { id: string; data: Partial<Omit<Booking, "id">> }
     >({
-      query: ({ id, data }) => ({
-        url: `/bookings/${id}`,
-        method: "PUT",
-        body: {
-          ...data,
-          ...(data.startDate && { startDate: data.startDate.toISOString() }),
-          ...(data.endDate && { endDate: data.endDate.toISOString() }),
-        },
-      }),
+      query: ({ id, data }) => {
+        const safeDate = (d: any) => typeof d === 'string' ? d : d?.toISOString();
+        return {
+          url: `/bookings/${id}`,
+          method: "PUT",
+          body: {
+            ...data,
+            ...(data.startDate && { startDate: safeDate(data.startDate) }),
+            ...(data.endDate && { endDate: safeDate(data.endDate) }),
+          },
+        };
+      },
       invalidatesTags: (result, error, { id }) => [
         { type: "Booking", id },
         "Booking",
