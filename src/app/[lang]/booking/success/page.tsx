@@ -131,6 +131,7 @@ function SuccessContent({ lang }: { lang: string }) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     if (roomId) {
       setLoadingRoom(true);
@@ -207,7 +208,7 @@ function SuccessContent({ lang }: { lang: string }) {
   }
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center px-4 py-16 overflow-hidden selection:bg-teal-500/30">
+    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center px-4 pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden selection:bg-teal-500/30">
       {/* Background Animated Blobs */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <BackgroundBubbles count={20} deepCount={10} />
