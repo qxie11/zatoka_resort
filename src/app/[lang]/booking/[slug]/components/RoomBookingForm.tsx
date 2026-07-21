@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { Users, Mail, Phone, User, Eye, Minus, Plus, Zap } from "lucide-react";
+import { Users, Mail, Phone, User, Eye, Minus, Plus, Zap, Moon } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { useState } from "react";
 
@@ -544,20 +544,23 @@ export default function RoomBookingForm({
               <div>
                 {form.watch("dateRange")?.from &&
                   form.watch("dateRange")?.to && (
-                    <div className="text-sm bg-slate-950/80 border border-teal-500/20 rounded-2xl p-4 shadow-[0_0_15px_rgba(20,184,166,0.15)] animate-fade-in-up">
-                      <p className="text-slate-400 flex justify-between gap-4">
-                        <span>{t("nightsCount")}</span>
-                        <span className="font-bold text-white">
+                    <div className="text-sm w-full sm:min-w-[280px] bg-slate-950/60 border border-white/10 rounded-2xl p-4 shadow-[0_10px_30px_rgba(0,0,0,0.3)] backdrop-blur-sm animate-fade-in-up">
+                      <div className="text-slate-450 flex justify-between items-center gap-4">
+                        <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                          <Moon className="h-3.5 w-3.5 text-teal-400" />
+                          {t("nightsCount")}
+                        </span>
+                        <span className="font-bold text-white text-base">
                           {Math.ceil(
                             (form.watch("dateRange").to!.getTime() -
                               form.watch("dateRange").from!.getTime()) /
                             (1000 * 60 * 60 * 24)
                           )}
                         </span>
-                      </p>
+                      </div>
                       {discount > 0 ? (
-                        <div className="mt-2 pt-2 border-t border-white/5 space-y-1">
-                          <p className="text-xs text-slate-500 line-through flex justify-between gap-4">
+                        <div className="mt-3 pt-3 border-t border-white/5 space-y-2">
+                          <div className="text-xs text-slate-500 line-through flex justify-between gap-4">
                             <span>{t("totalWithoutDiscount")}</span>
                             <span>
                               {Math.ceil(
@@ -567,15 +570,15 @@ export default function RoomBookingForm({
                               ) * room.price}{" "}
                               {t("currency")}
                             </span>
-                          </p>
+                          </div>
                           <div className="flex justify-between items-center gap-4">
-                            <span className="text-teal-300 font-extrabold flex items-center gap-1.5">
+                            <span className="text-slate-200 font-bold flex items-center gap-1.5">
                               {t("totalLabel")}
-                              <span className="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold rounded-lg px-1.5 py-0.5 animate-pulse">
+                              <span className="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold rounded-lg px-1.5 py-0.5">
                                 -{discount}%
                               </span>
                             </span>
-                            <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-sky-300 drop-shadow-sm">
+                            <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-350 to-teal-400 drop-shadow-sm">
                               {Math.round(
                                 Math.ceil(
                                   (form.watch("dateRange").to!.getTime() -
@@ -588,9 +591,9 @@ export default function RoomBookingForm({
                           </div>
                         </div>
                       ) : (
-                        <div className="mt-2 pt-2 border-t border-white/5 flex justify-between items-center gap-4">
-                          <span className="text-slate-300 font-semibold">{t("totalLabel")}</span>
-                          <span className="text-xl font-black text-teal-300">
+                        <div className="mt-3 pt-3 border-t border-white/5 flex justify-between items-center gap-4">
+                          <span className="text-slate-200 font-bold flex items-center gap-1.5">{t("totalLabel")}</span>
+                          <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-350 to-teal-400 drop-shadow-sm">
                             {Math.ceil(
                               (form.watch("dateRange").to!.getTime() -
                                 form.watch("dateRange").from!.getTime()) /
