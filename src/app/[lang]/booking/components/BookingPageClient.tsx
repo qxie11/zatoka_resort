@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import BookingForm from "./BookingForm";
 import RoomsList from '@/components/rooms/RoomsList';
 import { WavyUnderline } from "@/components/ui/wavy-underline";
@@ -16,10 +17,18 @@ interface BookingPageClientProps {
 export default function BookingPageClient({ rooms, bookings }: BookingPageClientProps) {
   const [filteredRooms, setFilteredRooms] = useState<Room[] | null>(null);
   const [showComparison, setShowComparison] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const displayRooms = filteredRooms !== null ? filteredRooms : rooms;
   const { t } = useTranslation();
 
+  // Gather all unique amenities across all rooms
+  const allAmenityNames = Array.from(
+    new Set(rooms.flatMap((room) => room.amenities))
+  );
+
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
     if (filteredRooms !== null) {
       const element = document.getElementById("available-rooms");
       if (element) {
@@ -62,9 +71,9 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
         </div>
       </div>
 
-      {/* Comparison Modal */}
-      {showComparison && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+      {/* Comparison Modal (rendered via Portal) */}
+      {showComparison && mounted && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           {/* Backdrop */}
           <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onClick={() => setShowComparison(false)} />
           
@@ -105,41 +114,24 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
                       <td key={room.id} className="p-4 text-center text-slate-200">{room.capacity} гостей</td>
                     ))}
                   </tr>
-                  <tr>
-                    <td className="p-4 text-slate-300 font-medium">Кондиционер</td>
-                    {rooms.map((room) => (
-                      <td key={room.id} className="p-4 text-center text-slate-200">
-                        {room.amenities.some(a => a.toLowerCase().includes("кондиционер") || a.toLowerCase().includes("ac")) ? (
-                          <Check className="h-5 w-5 text-emerald-400 mx-auto" />
-                        ) : "—"}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="p-4 text-slate-300 font-medium">Собственный балкон</td>
-                    {rooms.map((room) => (
-                      <td key={room.id} className="p-4 text-center text-slate-200">
-                        {room.amenities.some(a => a.toLowerCase().includes("балкон")) ? (
-                          <Check className="h-5 w-5 text-emerald-400 mx-auto" />
-                        ) : "—"}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="p-4 text-slate-300 font-medium">Спутниковое ТВ</td>
-                    {rooms.map((room) => (
-                      <td key={room.id} className="p-4 text-center text-slate-200">
-                        {room.amenities.some(a => a.toLowerCase().includes("тв") || a.toLowerCase().includes("телевизор")) ? (
-                          <Check className="h-5 w-5 text-emerald-400 mx-auto" />
-                        ) : "—"}
-                      </td>
-                    ))}
-                  </tr>
+                  {allAmenityNames.map((amenity) => (
+                    <tr key={amenity}>
+                      <td className="p-4 text-slate-300 font-medium">{amenity}</td>
+                      {rooms.map((room) => (
+                        <td key={room.id} className="p-4 text-center text-slate-200">
+                          {room.amenities.includes(amenity) ? (
+                            <Check className="h-5 w-5 text-emerald-400 mx-auto" />
+                          ) : "—"}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       <section id="available-rooms" className="py-16 lg:py-24 bg-slate-950 scroll-mt-20">

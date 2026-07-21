@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getRoomBySlugOrId } from '@/lib/db';
+import { getRoomBySlugOrId, getRooms } from '@/lib/db';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { BedDouble, MapPin, Waves, Compass, Navigation, Ship, Star, ArrowRight } from 'lucide-react';
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import GoogleMapComponent from '@/app/[lang]/booking/components/GoogleMapComponent';
 import RoomGallery from '@/components/rooms/RoomGallery';
 import Link from 'next/link';
+import RoomComparisonButton from '@/components/rooms/RoomComparisonButton';
 
 interface PageProps {
   params: Promise<{ lang: string; slug: string }>;
@@ -42,6 +43,8 @@ export default async function RoomDetailsPage({ params }: PageProps) {
   const room = await getRoomBySlugOrId(slug);
 
   if (!room) notFound();
+
+  const allRooms = await getRooms();
 
   const t = {
     home: { ru: "Главная", uk: "Головна", en: "Home" },
@@ -115,12 +118,16 @@ export default async function RoomDetailsPage({ params }: PageProps) {
               </span>
             </div>
 
-            <Button asChild size="lg" className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/25 rounded-2xl px-8 hover:scale-[1.03] active:scale-95 transition-all">
-              <Link href={`/${lang}/booking/${room.slug}`} className="flex items-center gap-2">
-                {t.booking[lang as keyof typeof t.booking]}
-                <ArrowRight className="h-5 w-5 text-slate-950" />
-              </Link>
-            </Button>
+            <div className="flex flex-wrap gap-3 items-center w-full sm:w-auto">
+              <RoomComparisonButton rooms={allRooms} currentRoomId={room.id} />
+              
+              <Button asChild size="lg" className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/25 rounded-2xl px-8 hover:scale-[1.03] active:scale-95 transition-all flex-grow sm:flex-grow-0">
+                <Link href={`/${lang}/booking/${room.slug}`} className="flex items-center gap-2 justify-center">
+                  {t.booking[lang as keyof typeof t.booking]}
+                  <ArrowRight className="h-5 w-5 text-slate-950" />
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
