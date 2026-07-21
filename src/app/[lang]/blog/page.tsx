@@ -164,39 +164,41 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
   return (
     <div className="bg-slate-950 text-slate-100 min-h-screen pb-20">
       {/* Hero Header */}
-      <section className="relative py-20 lg:py-28 overflow-hidden bg-slate-900 text-white">
-        <div className="absolute inset-0 z-0">
+      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-end justify-center overflow-hidden bg-slate-950 text-white text-center border-b border-white/5">
+        {/* Immersive Background Image */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <Image
-            src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200"
+            src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=2000"
             alt="Beach background"
             fill
-            className="object-cover scale-105 animate-float-slow opacity-65 brightness-[0.6]"
+            className="object-cover scale-105 animate-float-slow opacity-60 brightness-[0.4]"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/60 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40" />
+          {/* Smooth editorial gradient overlay for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/40 to-slate-950" />
         </div>
 
-        {/* Waves decoration */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none z-0">
-          <div className="absolute top-1/4 left-10 animate-float">
-            <Waves className="h-24 w-24 text-teal-300" />
-          </div>
-          <div className="absolute bottom-1/4 right-10 animate-float-slow" style={{ animationDelay: "3s" }}>
-            <Waves className="h-20 w-20 text-sky-300" />
-          </div>
-        </div>
+        <div className="relative container mx-auto px-4 z-10 flex flex-col items-center pt-40 pb-20 md:pb-28 h-full justify-end">
+          
+          <div className="flex flex-col items-center text-center max-w-5xl animate-fade-in-up">
+            {/* Minimal Badge */}
+            <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full border border-white/30 text-xs font-semibold text-white uppercase tracking-[0.2em] mb-6 backdrop-blur-sm">
+              <Compass className="h-4 w-4 opacity-80" />
+              <span>{translations.blogTitle}</span>
+            </div>
 
-        <div className="relative container mx-auto px-4 text-center z-10 flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card-dark text-xs font-semibold text-teal-300 uppercase tracking-widest animate-fade-in mb-6">
-            <Compass className="h-4 w-4 animate-spin-slow" />
-            <span>{translations.blogTitle}</span>
+            {/* Editorial Heading */}
+            <h1 className="text-5xl md:text-7xl lg:text-[6.5rem] leading-[1.05] font-semibold tracking-tight text-white mb-10 [text-shadow:_0_4px_30px_rgb(0_0_0_/_50%)]">
+              {translations.blogTitle}
+            </h1>
+            
+            <WavyUnderline colorClassName="text-teal-400" />
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md py-2 px-1">
-            {translations.blogTitle}
-          </h1>
-          <WavyUnderline colorClassName="text-teal-300" />
+          {/* Minimal Scroll Indicator */}
+          <div className="absolute bottom-8 animate-bounce opacity-60 hover:opacity-100 cursor-pointer">
+            <div className="w-px h-16 bg-gradient-to-b from-transparent via-white to-transparent" />
+          </div>
         </div>
       </section>
 

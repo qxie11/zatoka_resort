@@ -23,8 +23,10 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
   const [, setLangUpdate] = useState(i18n.language);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const handleLangChange = (lng: string) => {
+       
       setLangUpdate(lng);
     };
     i18n.on("languageChanged", handleLangChange);
@@ -49,35 +51,41 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-teal-500/30">
       {/* BUBBLE HERO SECTION */}
-      <section className="relative py-20 lg:py-28 overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white text-center border-b border-white/5">
-        {/* Floating Bubbles & Luxury Gridlines */}
-        <div className="absolute inset-0 pointer-events-none z-0">
-          <BackgroundBubbles count={15} deepCount={8} />
-          <BackgroundFishes />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-25" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] rounded-full bg-teal-500/10 blur-[130px] animate-pulse" />
-          <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-amber-500/5 blur-[100px] animate-pulse" style={{ animationDelay: "2s" }} />
-          
-          <div className="absolute top-1/4 left-10 opacity-10 animate-float">
-            <Waves className="h-24 w-24 text-teal-300" />
-          </div>
-          <div className="absolute bottom-1/4 right-10 opacity-10 animate-float-slow" style={{ animationDelay: "3s" }}>
-            <Waves className="h-20 w-20 text-sky-300" />
-          </div>
+      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-end justify-center overflow-hidden bg-slate-950 text-white text-center border-b border-white/5">
+        {/* Immersive Background Image */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <Image
+            src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&q=80&w=2000"
+            alt="Luxury Hotel Room"
+            fill
+            className="object-cover scale-105 animate-float-slow opacity-60 brightness-[0.4]"
+            priority
+          />
+          {/* Smooth editorial gradient overlay for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/40 to-slate-950" />
         </div>
 
-        <div className="relative container mx-auto px-4 z-10 flex flex-col items-center">
-          {/* Compass Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card-dark text-xs font-semibold text-teal-300 uppercase tracking-widest animate-fade-in mb-6">
-            <Compass className="h-4 w-4 animate-spin-slow" />
-            <span>{translate("bookingService", "Бронирование комнат")}</span>
+        <div className="relative container mx-auto px-4 z-10 flex flex-col items-center pt-40 pb-20 md:pb-28 h-full justify-end">
+          
+          <div className="flex flex-col items-center text-center max-w-5xl animate-fade-in-up">
+            {/* Minimal Badge */}
+            <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full border border-white/30 text-xs font-semibold text-white uppercase tracking-[0.2em] mb-6 backdrop-blur-sm">
+              <Compass className="h-4 w-4 opacity-80" />
+              <span>{translate("bookingService", "Бронирование комнат")}</span>
+            </div>
+
+            {/* Editorial Heading */}
+            <h1 className="text-5xl md:text-7xl lg:text-[6.5rem] leading-[1.05] font-semibold tracking-tight text-white mb-10 [text-shadow:_0_4px_30px_rgb(0_0_0_/_50%)]">
+              {translate("bookingTitle", "Забронируйте ваш отдых")}
+            </h1>
+            
+            <WavyUnderline colorClassName="text-teal-400" />
           </div>
 
-          {/* Heading */}
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 drop-shadow-md py-2 px-1">
-            {translate("bookingTitle", "Забронируйте ваш отдых")}
-          </h1>
-          <WavyUnderline colorClassName="text-teal-300" />
+          {/* Minimal Scroll Indicator */}
+          <div className="absolute bottom-8 animate-bounce opacity-60 hover:opacity-100 cursor-pointer" onClick={scrollToBooking}>
+            <div className="w-px h-16 bg-gradient-to-b from-transparent via-white to-transparent" />
+          </div>
         </div>
 
         {/* Elegant Wave transition */}
