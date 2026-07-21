@@ -232,7 +232,7 @@ export default function BookingForm({
                 <FormItem className="space-y-1.5">
                   <FormLabel className="font-semibold text-slate-300">Номер</FormLabel>
                   <Select
-                    value={field.value}
+                    value={field.value || undefined}
                     onValueChange={field.onChange}
                   >
                     <FormControl>
@@ -294,7 +294,7 @@ export default function BookingForm({
                     <FormItem className="space-y-1.5">
                       <FormLabel className="font-semibold text-slate-300">Юнит (подномерок)</FormLabel>
                       <Select
-                        value={field.value}
+                        value={field.value || undefined}
                         onValueChange={(val) => {
                           field.onChange(val);
                           // Reset dates if the newly selected unit is not available on current dates

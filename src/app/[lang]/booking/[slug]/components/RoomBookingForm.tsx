@@ -251,7 +251,7 @@ export default function RoomBookingForm({
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      unitId: room?.units && room.units.length > 0 ? room.units[0].id : "",
+      unitId: isSingleUnit && room.units ? room.units[0].id : "",
       guests: 1,
       name: "",
       phone: "",
@@ -346,7 +346,7 @@ export default function RoomBookingForm({
                   <FormItem className="space-y-1.5">
                     <FormLabel className="font-semibold text-slate-300">{t("roomUnitLabel")}</FormLabel>
                     <Select
-                      value={field.value}
+                      value={field.value || undefined}
                       onValueChange={(val) => {
                         field.onChange(val);
                         // Reset dates if the newly selected unit is not available on current dates
