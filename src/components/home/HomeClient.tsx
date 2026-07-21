@@ -151,102 +151,105 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
           <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full pt-8 pb-32 lg:pt-0 lg:pb-20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               
-              {/* LEFT COLUMN: Premium Copy & Streamlined CTAs */}
+              {/* LEFT COLUMN: Family Copy & Streamlined CTAs */}
               <div className="lg:col-span-7 flex flex-col items-start text-left text-white space-y-8">
                 
-                {/* Premium Micro-Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/20 text-[10px] font-bold text-teal-300 uppercase tracking-widest animate-fade-in shadow-[0_0_15px_rgba(20,184,166,0.1)]">
-                  <Compass className="h-3.5 w-3.5 text-teal-400 animate-spin-slow" />
-                  <span>{translate("premiumBadge", "Премиум-отель рядом с морем")}</span>
+                {/* Family Micro-Badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-xs font-bold text-amber-300 uppercase tracking-widest animate-fade-in shadow-[0_0_15px_rgba(245,158,11,0.15)]">
+                  <Sun className="h-4 w-4 text-amber-400 animate-pulse" />
+                  <span>{translate("familyBadge", "Уютный семейный гостевой дом")}</span>
                 </div>
  
                 {/* Heading */}
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.2] animate-fade-in-up drop-shadow-2xl font-heading pb-2">
-                  {translate("heroTitle1", "Погрузитесь в роскошь")} <br />
-                  <span className="inline-block py-1 px-1 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 animate-ocean-shimmer font-black">
-                    {translate("heroTitle2", "черноморского побережья")}
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] animate-fade-in-up drop-shadow-2xl font-heading pb-2">
+                  {translate("heroTitle1", "Уютный летний отдых")} <br />
+                  <span className="inline-block py-1 px-1 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-400 to-rose-400 animate-ocean-shimmer font-black">
+                    {translate("heroTitle2", "для всей вашей семьи")}
                   </span>
                 </h1>
  
                 {/* Description */}
-                <p className="max-w-xl text-base md:text-lg text-slate-300 font-light leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards] drop-shadow-lg">
-                  {translate("heroDescription", "Отель премиум-класса. Комфортные номера с кондиционером, песчаный пляж в 5 минутах ходьбы и безупречный сервис для вашего абсолютного расслабления.")}
+                <p className="max-w-xl text-base md:text-xl text-slate-200 font-normal leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards] drop-shadow-lg">
+                  {translate("heroDescription", "Семейный отель «Отдых в Затоке». Зеленый двор с мангалами, детская игровая зона, общая кухня, кондиционеры, Wi-Fi и бесплатная парковка. Всего 5 минут ходьбы до песчаного пляжа.")}
                 </p>
  
                 {/* Clean Horizontal Action Capsule */}
-                <div className="flex flex-col sm:flex-row gap-4 w-full pt-2 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards]">
-                  <Button asChild size="lg" className="h-14 px-8 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-[0_0_30px_rgba(45,212,191,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl uppercase tracking-wider text-xs animate-gentle-nudge">
+                <div className="flex flex-col sm:flex-row gap-4 w-full pt-4 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards]">
+                  <Button asChild size="lg" className="h-14 px-8 bg-gradient-to-r from-amber-400 via-orange-400 to-orange-500 hover:from-amber-300 hover:via-orange-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-[0_0_30px_rgba(245,158,11,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl uppercase tracking-wider text-sm animate-gentle-nudge">
                     <Link href="/booking" className="flex items-center justify-center">
                       {translate("bookStay", "Забронировать отдых")}
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                      <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>
                   <Link
-                    href="/booking"
-                    className="inline-flex items-center justify-center h-14 px-8 border border-white/10 bg-white/5 text-white hover:bg-white/10 hover:!text-white hover:border-white/20 transition-all duration-300 rounded-xl uppercase tracking-wider text-xs font-semibold"
+                    href="#rooms"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.getElementById("rooms")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="inline-flex items-center justify-center h-14 px-8 bg-white/5 backdrop-blur-md border border-white/10 text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 rounded-xl uppercase tracking-wider text-sm font-semibold shadow-lg"
                   >
-                    {translate("learnMore", "Исследовать номера")}
+                    {translate("learnMore", "Исследовать комнаты")}
                   </Link>
                 </div>
  
                 {/* Minimalist Trust Features */}
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-4 animate-fade-in-up [animation-delay:0.5s] opacity-0 [animation-fill-mode:forwards] text-xs font-semibold uppercase tracking-wider text-slate-400">
-                  <div className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-teal-400 shadow-[0_0_8px_#2dd4bf]" />
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-6 animate-fade-in-up [animation-delay:0.5s] opacity-0 [animation-fill-mode:forwards] text-xs font-bold uppercase tracking-wider text-slate-300">
+                  <div className="flex items-center gap-2 bg-slate-900/40 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-white/5">
+                    <XCircle className="h-4 w-4 text-emerald-400" />
                     <span>{translate("trustBadge1", "Отмена за 7 дней")}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]" />
+                  <div className="flex items-center gap-2 bg-slate-900/40 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-white/5">
+                    <CreditCard className="h-4 w-4 text-amber-400" />
                     <span>{translate("trustBadge2", "Оплата при заезде")}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]" />
+                  <div className="flex items-center gap-2 bg-slate-900/40 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-white/5">
+                    <Star className="h-4 w-4 text-sky-400" />
                     <span>{translate("trustBadge3", "Цена ниже рынка")}</span>
                   </div>
                 </div>
  
               </div>
  
-              {/* RIGHT COLUMN: Premium Float Image */}
-              <div className="lg:col-span-5 relative hidden lg:flex items-center justify-center animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards] select-none">
-                <div 
-                  className="relative w-full max-w-[380px] aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(20,184,166,0.15)] group hover:border-teal-400/40 transition-all duration-700 hover:shadow-[0_0_60px_rgba(20,184,166,0.25)] bg-slate-950"
-                  style={{ aspectRatio: "4/5" }}
-                >
+              {/* RIGHT COLUMN: Redesigned Family Float Image */}
+              <div className="lg:col-span-5 relative hidden lg:flex items-center justify-center animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards] select-none mt-8 lg:mt-0">
+                {/* Main Image Container */}
+                <div className="relative w-full max-w-[420px] aspect-[4/5] rounded-[2rem] overflow-hidden border-[6px] border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group hover:border-white/20 transition-all duration-700 bg-slate-900 -rotate-2 hover:rotate-0">
                   <Image
                     src="/hero-beach.png"
-                    alt="Beautiful Black Sea Beach"
+                    alt="Family Beach Holiday"
                     fill
                     priority
-                    sizes="(max-width: 768px) 100vw, 380px"
-                    className="object-cover transition-all duration-[10s] group-hover:scale-110 brightness-95"
+                    sizes="(max-width: 768px) 100vw, 420px"
+                    className="object-cover transition-all duration-[10s] group-hover:scale-110 brightness-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/20 to-transparent" />
                   
-                  {/* Floating Premium Rating Badge */}
-                  <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-slate-950/80 backdrop-blur-md text-white border border-white/10 shadow-2xl transition-all duration-500 group-hover:translate-y-[-4px] group-hover:bg-slate-950/90">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{translate("guestRating", "Рейтинг гостей")}</p>
-                        <p className="text-sm font-extrabold text-white mt-0.5">{translate("excellent", "Превосходно")}</p>
+                  {/* Floating Family Badge */}
+                  <div className="absolute bottom-6 left-6 right-6 p-5 rounded-2xl bg-white/10 backdrop-blur-xl text-white border border-white/20 shadow-2xl transition-all duration-500 group-hover:-translate-y-1">
+                    <div className="flex items-center gap-4">
+                      <div className="flex -space-x-3">
+                        <div className="w-10 h-10 rounded-full border-2 border-slate-900 bg-rose-400 flex items-center justify-center shadow-lg"><Baby className="w-5 h-5 text-white" /></div>
+                        <div className="w-10 h-10 rounded-full border-2 border-slate-900 bg-teal-400 flex items-center justify-center shadow-lg"><Sun className="w-5 h-5 text-white" /></div>
+                        <div className="w-10 h-10 rounded-full border-2 border-slate-900 bg-amber-400 flex items-center justify-center shadow-lg"><UtensilsCrossed className="w-5 h-5 text-white" /></div>
                       </div>
-                      <div className="flex items-center gap-1 bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1.5 rounded-xl text-slate-950 font-extrabold text-xs shadow-lg shadow-amber-500/20">
-                        <Star className="h-3.5 w-3.5 fill-slate-950 text-slate-950" />
-                        <span>4.9</span>
+                      <div>
+                        <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">{translate("idealForFamily", "Идеально для семей")}</p>
+                        <p className="text-sm font-bold text-white mt-0.5">{translate("kidsFriendly", "Детская зона и двор")}</p>
                       </div>
                     </div>
                   </div>
                 </div>
  
-                {/* Floating Temperature Badge */}
-                <div className="absolute -top-4 -right-4 p-4 rounded-2xl bg-slate-950/85 backdrop-blur-md text-white border border-white/10 shadow-2xl animate-float hidden sm:block">
+                {/* Floating Distance Badge */}
+                <div className="absolute -top-6 -right-2 p-4 rounded-2xl bg-white/10 backdrop-blur-xl text-white border border-white/20 shadow-2xl animate-float hidden sm:block rotate-3">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl bg-teal-400/10 border border-teal-500/25 flex items-center justify-center">
-                      <Waves className="h-5 w-5 text-teal-300" />
+                    <div className="h-12 w-12 rounded-full bg-sky-400/20 border border-sky-300/30 flex items-center justify-center">
+                      <MapPin className="h-6 w-6 text-sky-300" />
                     </div>
                     <div>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-widest">{translate("waterTemp", "Температура воды")}</p>
-                      <p className="text-sm font-extrabold text-teal-300 mt-0.5">+24°C</p>
+                      <p className="text-[11px] text-slate-300 uppercase tracking-widest font-bold">{translate("distanceToSea", "До моря")}</p>
+                      <p className="text-base font-black text-white mt-0.5">5 минут</p>
                     </div>
                   </div>
                 </div>
@@ -426,7 +429,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
         </section>
 
         {/* FEATURED ROOMS SECTION */}
-        <section className="py-24 bg-slate-950 relative overflow-hidden">
+        <section id="rooms" className="py-24 bg-slate-950 relative overflow-hidden">
           <BackgroundBubbles count={12} deepCount={6} />
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-60">
             <svg
