@@ -261,7 +261,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
 
             <div className="order-2 lg:order-1 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/25 text-teal-300 text-xs font-mono">
-                <Sparkles className="h-3.5 w-3.5" /> Наследие и традиции
+                <Sparkles className="h-3.5 w-3.5" /> {translate("heritage", "Наследие и традиции")}
               </div>
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 {translate("ourStory", "Наша история")}
