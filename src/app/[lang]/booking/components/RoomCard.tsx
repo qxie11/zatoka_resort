@@ -79,7 +79,7 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
               <BedDouble className="h-3.5 w-3.5 text-teal-400" />
               <span>{t.upTo} {room.capacity} {t.guests}</span>
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-sky-500/20 backdrop-blur-md border border-sky-500/30 text-sky-100 text-xs font-medium">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/70 backdrop-blur-md border border-sky-500/30 text-white text-xs font-medium">
               <Waves className="h-3.5 w-3.5 text-sky-400" />
               <span>{t.beach}</span>
             </div>

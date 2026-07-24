@@ -16,6 +16,7 @@ import {
   Thermometer,
   Sunset
 } from "lucide-react";
+import { FaViber, FaTelegramPlane } from "react-icons/fa";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -112,23 +113,24 @@ export default function Footer() {
                 : "Your exclusive oasis of luxury and peace on the picturesque Black Sea coast."}
             </p>
             
-            {/* Social Icons with Glowing Backdrops */}
+            {/* Social & Messenger Icons */}
             <div className="flex items-center gap-3 pt-2">
-              {[
-                { icon: Twitter, href: "#", label: "Twitter" },
-                { icon: Facebook, href: "#", label: "Facebook" },
-                { icon: Instagram, href: "#", label: "Instagram" }
-              ].map((social, idx) => (
-                <Link
-                  key={idx}
-                  href={social.href}
-                  aria-label={social.label}
-                  className="group relative flex items-center justify-center h-10 w-10 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-teal-300 transition-all duration-300 hover:-translate-y-1 hover:border-teal-500/30 hover:shadow-[0_0_15px_rgba(45,212,191,0.25)]"
-                >
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-teal-500/10 to-sky-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <social.icon className="h-4.5 w-4.5 z-10 transition-transform duration-300 group-hover:scale-110" />
-                </Link>
-              ))}
+              <a
+                href="viber://chat?number=%2B380669212275"
+                aria-label="Viber"
+                className="group relative flex items-center justify-center h-10 w-10 rounded-xl bg-white/5 border border-white/10 text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:text-[#7360F2] hover:border-[#7360F2]/40 hover:shadow-[0_0_15px_rgba(115,96,242,0.3)]"
+              >
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-[#7360F2]/10 to-[#7360F2]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <FaViber className="h-5 w-5 z-10 transition-transform duration-300 group-hover:scale-110" />
+              </a>
+              <a
+                href="https://t.me/+380669212275"
+                aria-label="Telegram"
+                className="group relative flex items-center justify-center h-10 w-10 rounded-xl bg-white/5 border border-white/10 text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:text-[#2AABEE] hover:border-[#2AABEE]/40 hover:shadow-[0_0_15px_rgba(42,171,238,0.3)]"
+              >
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-[#2AABEE]/10 to-[#2AABEE]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <FaTelegramPlane className="h-5 w-5 z-10 transition-transform duration-300 group-hover:scale-110 -ml-0.5" />
+              </a>
             </div>
           </div>
 
@@ -181,8 +183,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-4.5 w-4.5 text-amber-400/80 shrink-0" />
-                <a href="tel:+380482000000" className="hover:text-teal-300 transition-colors">
-                  +380 (48) 200-00-00
+                <a href="tel:+380669212275" className="hover:text-teal-300 transition-colors font-medium">
+                  +380 66 921 22 75
                 </a>
               </li>
             </ul>
