@@ -44,6 +44,14 @@ export const roomsApi = createApi({
         "Room",
       ],
     }),
+    reorderRooms: builder.mutation<void, { id: string; order: number }[]>({
+      query: (data) => ({
+        url: "/rooms/reorder",
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Room"],
+    }),
     deleteRoom: builder.mutation<void, string>({
       query: (id) => ({
         url: `/rooms/${id}`,
@@ -186,6 +194,7 @@ export const {
   useCreateRoomMutation,
   useUpdateRoomMutation,
   useDeleteRoomMutation,
+  useReorderRoomsMutation,
 } = roomsApi;
 
 export const {

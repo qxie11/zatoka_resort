@@ -7,6 +7,7 @@ import {
   useCreateRoomMutation,
   useUpdateRoomMutation,
   useDeleteRoomMutation,
+  useReorderRoomsMutation,
 } from "@/lib/api";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
@@ -33,6 +34,24 @@ export default function RoomsAdminClient({ initialData }: RoomsAdminClientProps)
   const [createRoom, { isLoading: isCreating }] = useCreateRoomMutation();
   const [updateRoom, { isLoading: isUpdating }] = useUpdateRoomMutation();
   const [deleteRoom] = useDeleteRoomMutation();
+  const [reorderRooms] = useReorderRoomsMutation();
+
+  const handleReorder = async (items: Room[]) => {
+    try {
+      const orderData = items.map((item, index) => ({ id: item.id, order: index }));
+      await reorderRooms(orderData).unwrap();
+      toast({
+        title: "Успешно",
+        description: "Порядок номеров сохранен",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Ошибка",
+        description: error?.data?.error || error?.message || "Не удалось сохранить порядок номеров",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleAddNew = () => {
     setSelectedRoom(null);
@@ -178,6 +197,7 @@ export default function RoomsAdminClient({ initialData }: RoomsAdminClientProps)
         columns={columns({ onEdit: handleEdit, onDelete: handleDelete })} 
         data={visibleRooms} 
         onDeleteSelected={handleBulkDelete}
+        onReorder={handleReorder}
       />
       <RoomForm
         isOpen={sheetOpen}

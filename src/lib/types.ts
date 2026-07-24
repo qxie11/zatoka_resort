@@ -15,6 +15,7 @@ export type Room = {
   imageUrl: string;
   imageUrls: string[];
   imageHint: string;
+  order?: number;
   units?: RoomUnit[];
 };
 

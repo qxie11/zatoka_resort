@@ -20,6 +20,7 @@ model Room {
   imageHint   String     @default("")
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  order       Int        @default(0)
   slug        String     @unique @default("")
   bookings    Booking[]
   reviews     Review[]

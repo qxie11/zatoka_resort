@@ -4,7 +4,7 @@ import type { Room, Booking, BlogPost, Review } from './types';
 // Rooms CRUD
 export const getRooms = async (): Promise<Room[]> => {
   const rooms = await prisma.room.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
     include: { units: true },
   });
   
@@ -19,6 +19,7 @@ export const getRooms = async (): Promise<Room[]> => {
     imageUrl: room.imageUrl,
     imageUrls: room.imageUrls || [],
     imageHint: room.imageHint,
+    order: room.order,
     units: room.units,
   }));
 };
@@ -42,6 +43,7 @@ export const getRoomById = async (id: string): Promise<Room | null> => {
     imageUrl: room.imageUrl,
     imageUrls: room.imageUrls || [],
     imageHint: room.imageHint,
+    order: room.order,
     units: room.units,
   };
 };
@@ -72,6 +74,7 @@ export const getRoomBySlugOrId = async (slugOrId: string): Promise<Room | null> 
     imageUrl: room.imageUrl,
     imageUrls: room.imageUrls || [],
     imageHint: room.imageHint,
+    order: room.order,
     units: room.units,
   };
 };
@@ -106,6 +109,7 @@ export const createRoom = async (room: Omit<Room, 'id' | 'slug'> & { slug?: stri
     imageUrl: newRoom.imageUrl,
     imageUrls: newRoom.imageUrls || [],
     imageHint: newRoom.imageHint,
+    order: newRoom.order,
     units: newRoom.units,
   };
 };
@@ -155,6 +159,7 @@ export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id' | 'sl
         imageUrl: existingRoom.imageUrl,
         imageUrls: existingRoom.imageUrls || [],
         imageHint: existingRoom.imageHint,
+        order: existingRoom.order,
         units: existingRoom.units,
       };
     }
@@ -176,6 +181,7 @@ export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id' | 'sl
       imageUrl: updatedRoom.imageUrl,
       imageUrls: updatedRoom.imageUrls || [],
       imageHint: updatedRoom.imageHint,
+      order: updatedRoom.order,
       units: updatedRoom.units,
     };
   } catch (error: any) {
