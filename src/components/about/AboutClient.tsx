@@ -97,50 +97,115 @@ export default function AboutClient({ lang }: AboutClientProps) {
     }
   };
 
+  const heroTranslations = {
+    ru: {
+      badge: "О нас",
+      title1: "Создавая",
+      title2: "незабываемый отдых",
+      desc: "Узнайте историю нашего гостеприимства и философию идеального отпуска у моря, где каждая деталь имеет значение.",
+      card1Title: "С любовью",
+      card1Desc: "к каждому гостю",
+      card2Title: "Идеальный климат",
+    },
+    uk: {
+      badge: "Про нас",
+      title1: "Створюючи",
+      title2: "незабутній відпочинок",
+      desc: "Дізнайтеся історію нашої гостинності та філософію ідеальної відпустки біля моря, де кожна деталь має значення.",
+      card1Title: "З любов'ю",
+      card1Desc: "до кожного гостя",
+      card2Title: "Ідеальний клімат",
+    },
+    en: {
+      badge: "About Us",
+      title1: "Crafting",
+      title2: "unforgettable stays",
+      desc: "Discover the story of our hospitality and the philosophy of a perfect seaside vacation, where every detail matters.",
+      card1Title: "With Love",
+      card1Desc: "to every guest",
+      card2Title: "Perfect Climate",
+    }
+  };
+  const langKey = (lang || "ru") as "ru" | "uk" | "en";
+  const tHero = heroTranslations[langKey] || heroTranslations.ru;
+
   return (
     <div className="bg-slate-950 text-slate-100 min-h-screen overflow-x-hidden">
 
-      {/* --- BUBBLE HERO HEADER --- */}
-      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-end justify-center overflow-hidden bg-slate-950 text-white text-center border-b border-white/5">
-        {/* Immersive Background Image */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* --- PREMIUM SPLIT HERO HEADER --- */}
+      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-center overflow-hidden bg-slate-950 pt-20">
+        <BackgroundBubbles count={15} />
+        {/* Background Image & Gradients */}
+        <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&q=80&w=2000"
             alt="Resort background"
             fill
-            className="object-cover scale-105 animate-float-slow opacity-60 brightness-[0.4]"
+            className="object-cover scale-105 animate-float-slow opacity-50"
             priority
           />
-          {/* Smooth editorial gradient overlay for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/40 to-slate-950" />
+          {/* Gradient fade to right to allow text on left */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
         </div>
 
-        <div className="relative container mx-auto px-4 z-10 flex flex-col items-center pt-40 pb-20 md:pb-28 h-full justify-end">
+        <div className="container relative z-10 mx-auto px-4 lg:px-8 grid lg:grid-cols-2 gap-12 items-center h-full pt-10 pb-20">
           
-          <div className="flex flex-col items-center text-center max-w-5xl animate-fade-in-up">
+          <div className="flex flex-col items-start text-left animate-fade-in-up space-y-8 max-w-xl">
             {/* Minimal Badge */}
-            <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full border border-white/30 text-xs font-semibold text-white uppercase tracking-[0.2em] mb-6 backdrop-blur-sm">
-              <Compass className="h-4 w-4 opacity-80" />
-              <span>{translate("ourStory", "О нас")}</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs md:text-sm font-bold tracking-widest uppercase shadow-[0_0_30px_rgba(45,212,191,0.15)] backdrop-blur-md">
+              <Compass className="h-4 w-4" />
+              <span>{tHero.badge}</span>
             </div>
 
             {/* Editorial Heading */}
-            <h1 className="text-5xl md:text-7xl lg:text-[6.5rem] leading-[1.05] font-semibold tracking-tight text-white mb-10 [text-shadow:_0_4px_30px_rgb(0_0_0_/_50%)]">
-              {translate("aboutTitle", "Создавая незабываемый отдых")}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight [text-shadow:_0_10px_40px_rgb(0_0_0_/_80%)]">
+              <span className="block mb-2">{tHero.title1}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-sky-400 drop-shadow-sm">
+                {tHero.title2}
+              </span>
             </h1>
             
-            <WavyUnderline colorClassName="text-teal-400" />
+            <p className="text-slate-300 text-lg md:text-xl font-light leading-relaxed">
+              {tHero.desc}
+            </p>
           </div>
-
-          {/* Minimal Scroll Indicator */}
-          <div className="absolute bottom-8 animate-bounce opacity-60 hover:opacity-100 cursor-pointer" onClick={handleScrollDown}>
-            <div className="w-px h-16 bg-gradient-to-b from-transparent via-white to-transparent" />
+          
+          {/* Decorative Right Area */}
+          <div className="hidden lg:flex flex-col justify-center items-end gap-6 relative h-full">
+             <div className="glass-card-dark p-6 rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-float-slow max-w-sm w-full backdrop-blur-xl">
+                <div className="flex items-center gap-4 mb-2">
+                  <div className="h-12 w-12 rounded-full bg-teal-500/20 flex items-center justify-center">
+                    <HeartPulse className="h-6 w-6 text-teal-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-bold text-lg">{tHero.card1Title}</h3>
+                    <p className="text-slate-400 text-sm">{tHero.card1Desc}</p>
+                  </div>
+                </div>
+             </div>
+             
+             <div className="glass-card-dark p-6 rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-float max-w-[250px] w-full backdrop-blur-xl mr-12 delay-150">
+                <div className="flex items-center gap-4">
+                  <div className="h-10 w-10 rounded-full bg-amber-500/20 flex items-center justify-center">
+                    <Sun className="h-5 w-5 text-amber-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-bold text-sm">{tHero.card2Title}</h3>
+                  </div>
+                </div>
+             </div>
           </div>
         </div>
 
+        {/* Minimal Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-60 hover:opacity-100 cursor-pointer z-30" onClick={handleScrollDown}>
+          <div className="w-px h-16 bg-gradient-to-b from-transparent via-white to-transparent" />
+        </div>
+
         {/* Elegant Wave transition */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20 fill-slate-950 scale-x-[-1]">
+        <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none translate-y-px">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-24 fill-slate-950 scale-x-[-1]">
             <path d="M0,60 C300,20 600,100 900,60 C1050,40 1125,50 1200,60 L1200,120 L0,120 Z" className="opacity-30 fill-teal-200/10" />
             <path d="M0,80 C300,40 600,120 900,80 C1050,60 1125,70 1200,80 L1200,120 L0,120 Z" />
           </svg>
