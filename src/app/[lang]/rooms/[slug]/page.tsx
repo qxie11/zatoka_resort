@@ -81,7 +81,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
     : room.imageUrls || [];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-20">
+    <div className="min-h-screen bg-slate-950 text-slate-100 pb-28 lg:pb-20">
 
       {/* --- HERO HEADER --- */}
       <section className="relative h-[65vh] min-h-[460px] flex items-end justify-start overflow-hidden bg-slate-900 text-white">
@@ -216,33 +216,44 @@ export default async function RoomDetailsPage({ params }: PageProps) {
             <RoomReviews roomId={room.id} roomName={room.name} lang={lang} />
           </div>
 
-          {/* Right Sidebar: Sticky Info panel */}
-          <div className="lg:col-span-1 lg:sticky lg:top-24 space-y-6">
-            <div className="glass-card-dark border border-teal-500/20 rounded-3xl p-6 shadow-2xl bg-slate-900/80 backdrop-blur-md relative overflow-hidden">
-              <div className="absolute -right-12 -top-12 w-24 h-24 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
+          {/* Right Sidebar: Sticky Info panel (Fixed at bottom on mobile) */}
+          <div className="lg:col-span-1 lg:sticky lg:top-24">
+            <div className="fixed bottom-0 left-0 right-0 z-50 p-4 border-t border-teal-500/20 bg-slate-900/95 backdrop-blur-xl lg:relative lg:p-6 lg:rounded-3xl lg:border lg:shadow-2xl lg:bg-slate-900/80 lg:bottom-auto lg:left-auto lg:right-auto lg:z-auto lg:overflow-hidden">
+              <div className="hidden lg:block absolute -right-12 -top-12 w-24 h-24 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
 
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-slate-400 text-sm">{t.priceLabel[lang as keyof typeof t.priceLabel]}</span>
-                <span className="text-2xl font-extrabold text-teal-300">{room.price} грн</span>
-              </div>
-
-              <div className="space-y-4 pt-4 border-t border-white/5">
-                <div className="flex items-center justify-between text-sm text-slate-300">
-                  <span className="flex items-center gap-1.5"><BedDouble className="h-4 w-4 text-teal-500/80" /> {t.capacityLabel[lang as keyof typeof t.capacityLabel]}</span>
-                  <span>{t.capacityDesc[lang as keyof typeof t.capacityDesc]} {room.capacity} {t.guests[lang as keyof typeof t.guests]}</span>
+              <div className="flex items-center justify-between lg:block">
+                
+                {/* Mobile Price */}
+                <div className="flex flex-col lg:hidden">
+                  <span className="text-slate-400 text-xs uppercase font-medium tracking-wider mb-0.5">{t.priceLabel[lang as keyof typeof t.priceLabel]}</span>
+                  <span className="text-xl font-extrabold text-teal-300 leading-none">{room.price} <span className="text-sm font-normal text-slate-400">грн</span></span>
                 </div>
-                <div className="flex items-center justify-between text-sm text-slate-300">
-                  <span className="flex items-center gap-1.5"><Ship className="h-4 w-4 text-teal-500/80" /> {t.beachline[lang as keyof typeof t.beachline]}</span>
-                  <span>{t.seaDist[lang as keyof typeof t.seaDist]}</span>
+                
+                {/* Desktop Price */}
+                <div className="hidden lg:flex items-center justify-between mb-4">
+                  <span className="text-slate-400 text-sm">{t.priceLabel[lang as keyof typeof t.priceLabel]}</span>
+                  <span className="text-2xl font-extrabold text-teal-300">{room.price} грн</span>
                 </div>
-              </div>
 
-              <Button asChild size="lg" className="w-full mt-6 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl transition-all">
-                <Link href={`/${lang}/booking/${room.slug}`} className="flex items-center justify-center gap-2">
-                  {t.goToBooking[lang as keyof typeof t.goToBooking]}
-                  <ArrowRight className="h-4 w-4 text-slate-950" />
-                </Link>
-              </Button>
+                {/* Details (Desktop only) */}
+                <div className="hidden lg:block space-y-4 pt-4 border-t border-white/5">
+                  <div className="flex items-center justify-between text-sm text-slate-300">
+                    <span className="flex items-center gap-1.5"><BedDouble className="h-4 w-4 text-teal-500/80" /> {t.capacityLabel[lang as keyof typeof t.capacityLabel]}</span>
+                    <span>{t.capacityDesc[lang as keyof typeof t.capacityDesc]} {room.capacity} {t.guests[lang as keyof typeof t.guests]}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm text-slate-300">
+                    <span className="flex items-center gap-1.5"><Ship className="h-4 w-4 text-teal-500/80" /> {t.beachline[lang as keyof typeof t.beachline]}</span>
+                    <span>{t.seaDist[lang as keyof typeof t.seaDist]}</span>
+                  </div>
+                </div>
+
+                <Button asChild size="lg" className="w-auto px-6 ml-4 lg:ml-0 lg:w-full lg:mt-6 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl transition-all h-12 lg:h-12 flex-shrink-0">
+                  <Link href={`/${lang}/booking/${room.slug}`} className="flex items-center justify-center gap-2">
+                    {t.goToBooking[lang as keyof typeof t.goToBooking]}
+                    <ArrowRight className="h-4 w-4 text-slate-950 hidden sm:block" />
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
 

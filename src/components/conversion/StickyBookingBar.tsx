@@ -37,10 +37,11 @@ export function StickyBookingBar({ minPrice = 1500 }: StickyBookingBarProps) {
   }, []);
 
   if (
-    dismissed || 
-    !visible || 
-    pathname.includes("/booking") || 
-    pathname.startsWith("/admin") || 
+    dismissed ||
+    !visible ||
+    pathname.includes("/booking") ||
+    pathname.match(/\/rooms\/.+/) ||
+    pathname.startsWith("/admin") ||
     pathname.includes("/login")
   ) {
     return null;
@@ -86,7 +87,7 @@ export function StickyBookingBar({ minPrice = 1500 }: StickyBookingBarProps) {
 
           {/* DESKTOP: Full version */}
           <div className="hidden sm:flex items-center justify-between gap-4">
-            
+
             {/* Left: Rating + label */}
             <div className="flex items-center gap-3 shrink-0">
               <div className="flex items-center gap-1">
