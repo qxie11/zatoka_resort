@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
+import ImageGallery from "./ImageGallery";
 
 interface RoomGalleryProps {
   images: string[];
@@ -154,47 +155,13 @@ export default function RoomGallery({ images, roomName }: RoomGalleryProps) {
       )}
 
       {/* --- LIGHTBOX DIALOG MODAL --- */}
-      <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
-        <DialogContent className="max-w-[95vw] md:max-w-5xl bg-slate-950/95 border border-slate-800 p-4 overflow-hidden rounded-3xl shadow-2xl z-50">
-          <DialogTitle className="sr-only">Просмотр галереи {roomName}</DialogTitle>
-          
-          <div className="relative w-full h-[70vh] flex items-center justify-center bg-slate-950/40 rounded-xl overflow-hidden">
-            <img 
-              src={validImages[activeIndex]} 
-              alt={`${roomName} full view`} 
-              className="max-w-full max-h-full object-contain rounded-xl shadow-2xl" 
-            />
-
-            {/* Modal Controls */}
-            {validImages.length > 1 && (
-              <>
-                <button
-                  onClick={handlePrev}
-                  type="button"
-                  className="absolute left-4 top-1/2 -translate-y-1/2 h-12 w-12 flex items-center justify-center rounded-full bg-slate-900/85 hover:bg-teal-400 hover:text-slate-950 text-white shadow-xl transition-all"
-                  aria-label="Previous photo"
-                >
-                  <ChevronLeft className="h-7 w-7" />
-                </button>
-                <button
-                  onClick={handleNext}
-                  type="button"
-                  className="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 flex items-center justify-center rounded-full bg-slate-900/85 hover:bg-teal-400 hover:text-slate-950 text-white shadow-xl transition-all"
-                  aria-label="Next photo"
-                >
-                  <ChevronRight className="h-7 w-7" />
-                </button>
-              </>
-            )}
-
-            {/* Photo Counter */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur-md px-4 py-1.5 rounded-full text-sm text-slate-200 border border-white/10 font-mono">
-              {activeIndex + 1} / {validImages.length}
-            </div>
-          </div>
-
-        </DialogContent>
-      </Dialog>
+      <ImageGallery 
+        images={validImages}
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        roomName={roomName}
+        initialSlide={activeIndex}
+      />
 
     </div>
   );
