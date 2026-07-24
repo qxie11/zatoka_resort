@@ -37,7 +37,7 @@ type SupportedLanguage = "ru" | "uk" | "en";
 interface BookingFormProps {
   rooms: Room[];
   bookings: Booking[];
-  onFilterChange: (filteredRooms: Room[]) => void;
+  onFilterChange: (filteredRooms: Room[], guests: number) => void;
 }
 
 export default function BookingForm({
@@ -108,14 +108,18 @@ export default function BookingForm({
       });
 
       if (from && to && !isNaN(from.getTime()) && !isNaN(to.getTime())) {
+        const maxCapacity = rooms.length > 0 ? Math.max(...rooms.map(r => r.capacity)) : 4;
+
         const filteredRooms = rooms.filter((room) => {
-          if (room.capacity < validGuests) {
-            return false;
+          if (validGuests <= maxCapacity) {
+            if (room.capacity < validGuests) {
+              return false;
+            }
           }
           return isRoomAvailable(room, from, to);
         });
          
-        onFilterChange(filteredRooms);
+        onFilterChange(filteredRooms, validGuests);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -152,15 +156,19 @@ export default function BookingForm({
   }
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    const maxCapacity = rooms.length > 0 ? Math.max(...rooms.map(r => r.capacity)) : 4;
+
     const filteredRooms = rooms.filter((room) => {
-      if (room.capacity < data.guests) {
-        return false;
+      if (data.guests <= maxCapacity) {
+        if (room.capacity < data.guests) {
+          return false;
+        }
       }
 
       return isRoomAvailable(room, data.dateRange.from!, data.dateRange.to!);
     });
 
-    onFilterChange(filteredRooms);
+    onFilterChange(filteredRooms, data.guests);
 
     if (filteredRooms.length === 0) {
       toast({

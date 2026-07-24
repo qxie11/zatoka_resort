@@ -7,6 +7,7 @@ import RoomsList from '@/components/rooms/RoomsList';
 import { WavyUnderline } from "@/components/ui/wavy-underline";
 import type { Room, Booking } from "@/lib/types";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "next/navigation";
 import { ShieldCheck, Check, HelpCircle } from "lucide-react";
 
 interface BookingPageClientProps {
@@ -18,8 +19,61 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
   const [filteredRooms, setFilteredRooms] = useState<Room[] | null>(null);
   const [showComparison, setShowComparison] = useState(false);
   const [mounted, setMounted] = useState(false);
+  
+  const searchParams = useSearchParams();
+  const guestsParam = searchParams.get("guests");
+  const initialGuests = guestsParam ? parseInt(guestsParam, 10) : 1;
+  const [searchedGuests, setSearchedGuests] = useState<number>(initialGuests);
+
   const displayRooms = filteredRooms !== null ? filteredRooms : rooms;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  
+  const maxCapacity = rooms.length > 0 ? Math.max(...rooms.map(r => r.capacity)) : 4;
+  const needsMultipleRooms = searchedGuests > maxCapacity && filteredRooms !== null;
+
+  const localTranslations = {
+    ru: {
+      directBookingTitle: "Гарантия прямого бронирования",
+      directBookingDesc: "Вы бронируете напрямую у владельца гостевого дома. Никаких наценок систем бронирования (Booking.com), скрытых сборов и переплат агентам.",
+      commission: "Комиссия",
+      here: "Здесь",
+      compareTitle: "Сравнение характеристик номеров",
+      characteristic: "Характеристика",
+      price: "Стоимость",
+      perNight: "грн / ночь",
+      capacity: "Вместимость",
+      guestsStr: "гостей",
+      multipleRooms: (g: number, m: number) => `Для компании из ${g} гостей у нас нет одного общего номера (наш самый большой вмещает ${m}). Однако вы можете забронировать несколько номеров рядом! Пожалуйста, выберите подходящие варианты ниже и оформите их по отдельности.`
+    },
+    uk: {
+      directBookingTitle: "Гарантія прямого бронювання",
+      directBookingDesc: "Ви бронюєте безпосередньо у власника гостьового будинку. Жодних націнок систем бронювання (Booking.com), прихованих зборів та переплат агентам.",
+      commission: "Комісія",
+      here: "Тут",
+      compareTitle: "Порівняння характеристик номерів",
+      characteristic: "Характеристика",
+      price: "Вартість",
+      perNight: "грн / ніч",
+      capacity: "Місткість",
+      guestsStr: "гостей",
+      multipleRooms: (g: number, m: number) => `Для компанії з ${g} гостей у нас немає одного спільного номера (наш найбільший вміщує ${m}). Однак ви можете забронювати кілька номерів поруч! Будь ласка, виберіть відповідні варіанти нижче і оформіть їх окремо.`
+    },
+    en: {
+      directBookingTitle: "Direct Booking Guarantee",
+      directBookingDesc: "You are booking directly with the guest house owner. No booking system markups (Booking.com), hidden fees, or agent overpayments.",
+      commission: "Commission",
+      here: "Here",
+      compareTitle: "Room Features Comparison",
+      characteristic: "Characteristic",
+      price: "Price",
+      perNight: "UAH / night",
+      capacity: "Capacity",
+      guestsStr: "guests",
+      multipleRooms: (g: number, m: number) => `For a group of ${g} guests, we don't have a single shared room (our largest accommodates ${m}). However, you can book several rooms next to each other! Please select suitable options below and book them separately.`
+    }
+  };
+  const langKey = (i18n.language || "ru").slice(0, 2) as "ru" | "uk" | "en";
+  const tLocal = localTranslations[langKey] || localTranslations.ru;
 
   // Gather all unique amenities across all rooms
   const allAmenityNames = Array.from(
@@ -45,7 +99,10 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
       <BookingForm
         rooms={rooms}
         bookings={bookings}
-        onFilterChange={setFilteredRooms}
+        onFilterChange={(rooms, guests) => {
+          setFilteredRooms(rooms);
+          setSearchedGuests(guests);
+        }}
       />
 
       {/* Direct Booking Trust Banner */}
@@ -55,17 +112,17 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
             <ShieldCheck className="h-6 w-6" />
           </div>
           <div>
-            <h4 className="text-lg font-bold text-white">Гарантия прямого бронирования</h4>
-            <p className="text-sm text-slate-300 mt-1">Вы бронируете напрямую у владельца гостевого дома. Никаких наценок систем бронирования (Booking.com), скрытых сборов и переплат агентам.</p>
+            <h4 className="text-lg font-bold text-white">{tLocal.directBookingTitle}</h4>
+            <p className="text-sm text-slate-300 mt-1">{tLocal.directBookingDesc}</p>
           </div>
         </div>
         <div className="flex gap-4 items-center shrink-0">
           <div className="text-center bg-slate-900/50 px-4 py-2 rounded-xl border border-white/5">
-            <span className="text-xs text-slate-400 block font-medium">Комиссия</span>
+            <span className="text-xs text-slate-400 block font-medium">{tLocal.commission}</span>
             <span className="text-base font-extrabold text-rose-400 line-through">15%</span>
           </div>
           <div className="text-center bg-teal-500/10 px-4 py-2 rounded-xl border border-teal-500/20">
-            <span className="text-xs text-teal-300 block font-bold">Здесь</span>
+            <span className="text-xs text-teal-300 block font-bold">{tLocal.here}</span>
             <span className="text-base font-extrabold text-teal-300">0%</span>
           </div>
         </div>
@@ -81,7 +138,7 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
           <div className="relative max-w-4xl w-full max-h-[90vh] overflow-y-auto bg-slate-950 border border-white/10 rounded-[2.5rem] p-6 md:p-10 shadow-2xl z-10 animate-scale-in">
             {/* Header */}
             <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
-              <h3 className="text-2xl font-extrabold text-white">Сравнение характеристик номеров</h3>
+              <h3 className="text-2xl font-extrabold text-white">{tLocal.compareTitle}</h3>
               <button
                 onClick={() => setShowComparison(false)}
                 className="h-10 w-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-colors"
@@ -95,7 +152,7 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
               <table className="w-full text-left border-collapse text-sm">
                 <thead>
                   <tr className="border-b border-white/10 bg-slate-900/80">
-                    <th className="p-4 text-slate-400 font-semibold w-1/4">Характеристика</th>
+                    <th className="p-4 text-slate-400 font-semibold w-1/4">{tLocal.characteristic}</th>
                     {rooms.map((room) => (
                       <th key={room.id} className="p-4 font-bold text-white text-center">{room.name}</th>
                     ))}
@@ -103,15 +160,15 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
                 </thead>
                 <tbody className="divide-y divide-white/5">
                   <tr>
-                    <td className="p-4 text-slate-300 font-medium">Стоимость</td>
+                    <td className="p-4 text-slate-300 font-medium">{tLocal.price}</td>
                     {rooms.map((room) => (
-                      <td key={room.id} className="p-4 text-center text-teal-300 font-bold">{room.price} грн / ночь</td>
+                      <td key={room.id} className="p-4 text-center text-teal-300 font-bold">{room.price} {tLocal.perNight}</td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="p-4 text-slate-300 font-medium">Вместимость</td>
+                    <td className="p-4 text-slate-300 font-medium">{tLocal.capacity}</td>
                     {rooms.map((room) => (
-                      <td key={room.id} className="p-4 text-center text-slate-200">{room.capacity} гостей</td>
+                      <td key={room.id} className="p-4 text-center text-slate-200">{room.capacity} {tLocal.guestsStr}</td>
                     ))}
                   </tr>
                   {allAmenityNames.map((amenity) => (
@@ -146,6 +203,14 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
                 ? t("roomsFound", { count: filteredRooms.length })
                 : t("findPerfectSpace")}
             </p>
+            {needsMultipleRooms && (
+              <div className="mt-6 p-4 bg-teal-500/10 border border-teal-500/30 rounded-2xl max-w-2xl mx-auto flex items-start text-left gap-4 animate-fade-in-up">
+                <HelpCircle className="h-6 w-6 text-teal-400 shrink-0 mt-0.5" />
+                <p className="text-sm md:text-base text-teal-50 leading-relaxed font-medium">
+                  {tLocal.multipleRooms(searchedGuests, maxCapacity)}
+                </p>
+              </div>
+            )}
           </div>
           <RoomsList rooms={displayRooms} onCompareClick={() => setShowComparison(true)} />
         </div>
