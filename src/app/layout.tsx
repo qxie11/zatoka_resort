@@ -94,7 +94,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <div className="relative flex min-h-dvh flex-col bg-slate-950 text-slate-100">
             <CursorTrail />
             <GlobalMarineBackground />
-            <main className="relative flex-1 z-10">{children}</main>
+            <div className="relative flex-1 z-10">{children}</div>
           </div>
           <Toaster />
         </StoreProvider>

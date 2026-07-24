@@ -228,10 +228,10 @@ export default function BookingForm({
                 name="guests"
                 render={({ field }) => (
                   <FormItem className="flex flex-col relative">
-                    <FormLabel className="text-teal-300 font-bold mb-2.5 flex items-center gap-2 tracking-wide text-xs uppercase">
+                    <div className="text-sm font-medium leading-none text-teal-300 font-bold mb-2.5 flex items-center gap-2 tracking-wide text-xs uppercase">
                       <Users className="h-4 w-4 text-teal-400" />
                       {translate("guests", "Гости")}
-                    </FormLabel>
+                    </div>
                     <FormControl>
                       <div className="flex items-center justify-between bg-slate-950/80 border border-white/[0.06] hover:border-white/15 focus-within:border-teal-500/50 rounded-xl h-12 px-3 w-full transition-all duration-300 shadow-inner">
                         <button

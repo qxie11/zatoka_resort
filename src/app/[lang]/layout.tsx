@@ -86,7 +86,7 @@ export default async function RootLayout({
       <LanguageSync lang={lang} />
       <Header />
 
-      <main className="min-h-screen">
+      <main className="min-h-screen flex flex-col">
         {children}
       </main>
 

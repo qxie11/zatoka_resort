@@ -429,10 +429,10 @@ export default function RoomBookingForm({
               name="guests"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="text-teal-300 font-bold mb-2.5 flex items-center gap-1.5">
+                  <div className="text-sm font-medium leading-none text-teal-300 font-bold mb-2.5 flex items-center gap-1.5">
                     <Users className="h-4 w-4 text-teal-400" />
                     {t("guestCountLabel")}
-                  </FormLabel>
+                  </div>
                   <FormControl>
                     <div className="flex items-center justify-between bg-slate-950/40 border border-white/10 rounded-xl h-11 px-2.5 w-full max-w-[200px]">
                       <button

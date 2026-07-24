@@ -171,10 +171,10 @@ export function DateRangePicker({
 
   return (
     <FormItem className={cn("flex flex-col relative", popoverOpen ? "z-50" : "z-10", className)}>
-      <FormLabel className="text-teal-300 font-bold mb-2.5 flex items-center gap-2 tracking-wide text-xs uppercase">
+      <div className="text-sm font-medium leading-none text-teal-300 font-bold mb-2.5 flex items-center gap-2 tracking-wide text-xs uppercase">
         <CalendarIcon className="h-4 w-4 text-teal-400" />
         {activeLabel}
-      </FormLabel>
+      </div>
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger asChild>
           <FormControl>
