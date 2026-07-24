@@ -51,7 +51,7 @@ export default function BookingForm({
   const [currentLang, setCurrentLang] = useState<SupportedLanguage>("ru");
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setMounted(true);
     const lang = (i18nInstance.language || "ru").slice(0, 2) as SupportedLanguage;
      
@@ -263,7 +263,8 @@ export default function BookingForm({
               <div className="relative">
                 <Button 
                   type="submit" 
-                  className="w-full h-12 bg-gradient-to-r from-teal-400 via-sky-400 to-amber-300 hover:from-teal-300 hover:via-sky-300 hover:to-amber-200 text-slate-950 font-black border-0 shadow-lg shadow-teal-500/10 hover:shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs"
+                  disabled={!form.watch("dateRange")?.from || !form.watch("dateRange")?.to}
+                  className="w-full h-12 bg-gradient-to-r from-teal-400 via-sky-400 to-amber-300 hover:from-teal-300 hover:via-sky-300 hover:to-amber-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100 text-slate-950 font-black border-0 shadow-lg shadow-teal-500/10 hover:shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs"
                 >
                   <Search className="h-4 w-4 text-slate-950 stroke-[2.5]" />
                   {translate("checkAvailability", "Проверить наличие")}
