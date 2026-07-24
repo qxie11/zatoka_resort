@@ -230,14 +230,14 @@ export default function BookingForm({
               name="roomId"
               render={({ field }) => (
                 <FormItem className="space-y-1.5">
-                  <FormLabel className="font-semibold text-slate-300">Номер</FormLabel>
+                  <FormLabel className="font-semibold text-slate-300">Домик / Номер</FormLabel>
                   <Select
                     value={field.value || undefined}
                     onValueChange={field.onChange}
                   >
                     <FormControl>
                       <SelectTrigger className="w-full bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11">
-                        <SelectValue placeholder="Выберите номер" />
+                        <SelectValue placeholder="Выберите домик / номер" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-md">
@@ -345,7 +345,7 @@ export default function BookingForm({
               />
             )}
 
-            {form.watch("unitId") && (
+            {form.watch("roomId") && (!selectedRoom?.units || selectedRoom.units.length === 0 || form.watch("unitId")) && (
               <FormField
                 control={form.control}
                 name="dateRange"

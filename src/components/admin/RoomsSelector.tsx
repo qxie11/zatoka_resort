@@ -28,13 +28,13 @@ export default function RoomsSelector({ rooms, selectedRoom, onRoomChange }: Roo
         <CardTitle className="text-xl font-extrabold text-white">Номера</CardTitle>
       </CardHeader>
       <CardContent className="p-5 sm:p-6">
-        <p className="text-slate-300 text-sm font-light leading-relaxed mb-4">Выберите номер, чтобы увидеть его текущие бронирования на календаре.</p>
+        <p className="text-slate-300 text-sm font-light leading-relaxed mb-4">Выберите домик / номер, чтобы увидеть его текущие бронирования на календаре.</p>
         <Select 
           onValueChange={handleRoomChange} 
           value={selectedRoom?.id || undefined}
         >
           <SelectTrigger className="w-full bg-slate-950/40 border-white/10 text-white rounded-xl focus:ring-teal-400/50 shadow-sm h-11">
-            <SelectValue placeholder="Выберите номер" />
+            <SelectValue placeholder="Выберите домик / номер" />
           </SelectTrigger>
           <SelectContent className="bg-slate-950 border-white/10 text-white rounded-xl shadow-2xl">
             {rooms.map((room) => (

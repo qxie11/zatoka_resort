@@ -400,29 +400,31 @@ export default function RoomBookingForm({
               />
             )}
 
-            <FormField
-              control={form.control}
-              name="dateRange"
-              render={({ field }) => {
-                const selectedUnitId = form.watch("unitId");
-                const filteredBookings = existingBookings.filter(b => {
-                  if (selectedUnitId) {
-                    return b.unitId === selectedUnitId || !b.unitId;
-                  }
-                  return true;
-                });
+            {(!room.units || room.units.length === 0 || form.watch("unitId")) && (
+              <FormField
+                control={form.control}
+                name="dateRange"
+                render={({ field }) => {
+                  const selectedUnitId = form.watch("unitId");
+                  const filteredBookings = existingBookings.filter(b => {
+                    if (selectedUnitId) {
+                      return b.unitId === selectedUnitId || !b.unitId;
+                    }
+                    return true;
+                  });
 
-                return (
-                  <DateRangePicker
-                    value={field.value}
-                    onChange={field.onChange}
-                    existingBookings={filteredBookings}
-                    totalUnitsCount={1}
-                    showBookingInstructions={!isSingleUnit}
-                  />
-                );
-              }}
-            />
+                  return (
+                    <DateRangePicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      existingBookings={filteredBookings}
+                      totalUnitsCount={1}
+                      showBookingInstructions={!isSingleUnit}
+                    />
+                  );
+                }}
+              />
+            )}
 
             <FormField
               control={form.control}

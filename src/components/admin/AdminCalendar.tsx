@@ -27,9 +27,7 @@ interface UnitCalendarData {
 }
 
 export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarProps) {
-  const [unitCalendars, setUnitCalendars] = useState<UnitCalendarData[]>([]);
-
-  useEffect(() => {
+  const unitCalendars = useMemo<UnitCalendarData[]>(() => {
     if (selectedRoom) {
       const today = startOfDay(new Date());
       
@@ -76,10 +74,9 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
         result.push(computeDataForBookings(roomBookings, null, "Общий календарь"));
       }
 
-      setUnitCalendars(result);
-    } else {
-      setUnitCalendars([]);
+      return result;
     }
+    return [];
   }, [bookings, selectedRoom]);
 
   const stats = useMemo(() => {
@@ -107,7 +104,7 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
                   </span>
                 </div>
               ) : (
-                'Выберите номер для просмотра бронирований'
+                'Выберите домик / номер для просмотра бронирований'
               )}
             </div>
           </div>
@@ -178,7 +175,7 @@ export default function AdminCalendar({ selectedRoom, bookings }: AdminCalendarP
           <div className="flex items-center justify-center h-64 text-slate-400 bg-slate-900/20 rounded-2xl border border-dashed border-white/10">
             <div className="text-center p-6">
               <p className="text-lg font-light mb-1">Ожидание выбора</p>
-              <p className="text-xs font-light">Выберите номер в панели слева для просмотра календаря бронирований</p>
+              <p className="text-xs font-light">Выберите домик / номер в панели слева для просмотра календаря бронирований</p>
             </div>
           </div>
         )}
