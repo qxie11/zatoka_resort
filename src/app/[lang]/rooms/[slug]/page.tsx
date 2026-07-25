@@ -81,7 +81,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
     : room.imageUrls || [];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-28 lg:pb-20">
+    <div className="min-h-screen bg-slate-950 text-slate-100 pb-16">
 
       {/* --- HERO HEADER --- */}
       <section className="relative h-[65vh] min-h-[460px] flex items-end justify-start overflow-hidden bg-slate-900 text-white">

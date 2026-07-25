@@ -173,8 +173,8 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
             </div>
           </div>
 
-          <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full pt-28 pb-16 lg:pt-32 lg:pb-20">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full pt-24 pb-16 lg:pt-32 lg:pb-20">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               
               {/* LEFT COLUMN: Family Copy & Streamlined CTAs */}
               <div className="lg:col-span-7 flex flex-col items-start text-left text-white space-y-8">
@@ -346,7 +346,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
         </section>
 
         {/* WELCOME SECTION */}
-        <section className="py-24 relative overflow-hidden bg-slate-950">
+        <section className="py-12 md:py-16 relative overflow-hidden bg-slate-950">
           {/* Bubbles */}
           <BackgroundBubbles count={12} deepCount={8} />
 
@@ -365,7 +365,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
           </div>
           
           <div className="container mx-auto px-4 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-7 text-left space-y-6">
                 <ScrollReveal variant="fade-up">
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 text-xs font-semibold text-teal-300 uppercase tracking-widest mb-2">
@@ -402,7 +402,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
         </section>
 
         {/* WHY CHOOSE US SECTION */}
-        <section className="py-24 bg-slate-950 relative overflow-hidden">
+        <section className="py-12 md:py-16 bg-slate-950 relative overflow-hidden">
           <BackgroundBubbles count={10} deepCount={5} />
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
@@ -499,7 +499,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
         </section>
 
         {/* FEATURED ROOMS SECTION */}
-        <section id="rooms" className="py-24 bg-slate-950 relative overflow-hidden">
+        <section id="rooms" className="py-12 md:py-16 bg-slate-950 relative overflow-hidden">
           <BackgroundBubbles count={12} deepCount={6} />
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-60">
             <svg
@@ -547,7 +547,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
         </section>
 
         {/* HOTEL AMENITIES */}
-        <section className="py-24 bg-slate-950 relative overflow-hidden">
+        <section className="py-12 md:py-16 bg-slate-950 relative overflow-hidden">
           <div className="absolute top-10 right-10 w-64 h-64 rounded-full bg-teal-500/5 animate-jellyfish pointer-events-none" />
           <div className="absolute bottom-20 left-5 w-40 h-40 rounded-full bg-sky-500/5 animate-jellyfish pointer-events-none" style={{ animationDelay: '3s' }} />
           <div className="absolute top-1/3 right-12 animate-current opacity-10 pointer-events-none" style={{ animationDelay: '1s' }}>
@@ -619,7 +619,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
         <GuestImpressions />
 
         {/* BOTTOM CTA */}
-        <section className="py-24 lg:py-32 bg-slate-950 text-white relative overflow-hidden">
+        <section className="py-12 md:py-16 bg-slate-950 text-white relative overflow-hidden">
           <div className="absolute inset-0 opacity-40 z-0">
             <Image
               src="https://images.unsplash.com/photo-1683459285195-2bff6b201b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200"

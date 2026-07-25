@@ -71,7 +71,7 @@ export default function NotFound() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 w-full flex flex-col lg:flex-row items-center justify-center container mx-auto px-6 py-12 gap-12 z-10">
+      <div className="flex-1 w-full flex flex-col lg:flex-row items-center justify-center container mx-auto px-6 py-12 gap-8 z-10">
         
         {/* Left: Lighthouse CSS Illustration */}
         <div className="relative w-64 h-96 flex items-end justify-center select-none animate-fade-in">

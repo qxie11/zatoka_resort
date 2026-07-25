@@ -64,7 +64,7 @@ export default function AdminLayout({
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="grid flex-1 w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] texture-sand pt-24">
+      <div className="grid flex-1 w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] texture-sand pt-16">
         <div className="hidden border-r border-white/10 glass-card-dark md:block shadow-2xl bg-slate-900/60 sticky top-[96px] h-[calc(100vh-96px)] overflow-y-auto">
           <div className="flex h-full flex-col gap-2">
             <div className="flex h-14 items-center border-b border-white/10 px-4 lg:h-[60px] lg:px-6">

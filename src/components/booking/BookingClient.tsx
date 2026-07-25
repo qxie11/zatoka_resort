@@ -88,7 +88,7 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-teal-500/30">
       {/* BUBBLE HERO SECTION */}
-      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-center overflow-hidden bg-slate-950 pt-20">
+      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-center overflow-hidden bg-slate-950 pt-16">
         <BackgroundBubbles count={15} />
         {/* Background Image & Gradients */}
         <div className="absolute inset-0 z-0">
@@ -104,7 +104,7 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
         </div>
 
-        <div className="container relative z-10 mx-auto px-4 lg:px-8 grid lg:grid-cols-2 gap-12 items-center h-full pt-10 pb-20">
+        <div className="container relative z-10 mx-auto px-4 lg:px-8 grid lg:grid-cols-2 gap-8 items-center h-full pt-10 pb-12">
           
           <div className="flex flex-col items-start text-left animate-fade-in-up space-y-8 max-w-xl">
             {/* Minimal Premium Badge */}
@@ -177,7 +177,7 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
           <Suspense fallback={null}>
             <SuccessMessage />
           </Suspense>
-          <Suspense fallback={<div className="text-center py-20 text-slate-400">Загрузка формы бронирования...</div>}>
+          <Suspense fallback={<div className="text-center py-12 md:py-16 text-slate-400">Загрузка формы бронирования...</div>}>
             <BookingPageClient rooms={rooms} bookings={bookings} />
           </Suspense>
         </div>

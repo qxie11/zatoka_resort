@@ -133,7 +133,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
     <div className="bg-slate-950 text-slate-100 min-h-screen overflow-x-hidden">
 
       {/* --- PREMIUM SPLIT HERO HEADER --- */}
-      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-center overflow-hidden bg-slate-950 pt-20">
+      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-center overflow-hidden bg-slate-950 pt-16">
         <BackgroundBubbles count={15} />
         {/* Background Image & Gradients */}
         <div className="absolute inset-0 z-0">
@@ -149,7 +149,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
         </div>
 
-        <div className="container relative z-10 mx-auto px-4 lg:px-8 grid lg:grid-cols-2 gap-12 items-center h-full pt-10 pb-20">
+        <div className="container relative z-10 mx-auto px-4 lg:px-8 grid lg:grid-cols-2 gap-8 items-center h-full pt-10 pb-12">
           
           <div className="flex flex-col items-start text-left animate-fade-in-up space-y-8 max-w-xl">
             {/* Minimal Badge */}
@@ -254,10 +254,10 @@ export default function AboutClient({ lang }: AboutClientProps) {
       </section>
 
       {/* --- STORY SECTION --- */}
-      <section className="py-24 lg:py-32 relative bg-slate-950 overflow-hidden">
+      <section className="py-12 md:py-16 relative bg-slate-950 overflow-hidden">
         <BackgroundBubbles count={10} deepCount={4} />
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8 items-center">
 
             <div className="order-2 lg:order-1 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/25 text-teal-300 text-xs font-mono">
@@ -301,7 +301,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
       </section>
 
       {/* --- TIMELINE HISTORY --- */}
-      <section className="py-24 bg-slate-950 relative overflow-hidden">
+      <section className="py-12 md:py-16 bg-slate-950 relative overflow-hidden">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-extrabold tracking-tight text-white flex items-center justify-center gap-2.5">
@@ -343,10 +343,10 @@ export default function AboutClient({ lang }: AboutClientProps) {
       </section>
 
       {/* --- MISSION & VALUES --- */}
-      <section className="py-20 lg:py-28 bg-slate-950 relative overflow-hidden">
+      <section className="py-12 md:py-16 bg-slate-950 relative overflow-hidden">
         <BackgroundBubbles count={8} deepCount={4} />
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-8">
 
             <div className="p-8 md:p-10 rounded-3xl glass-card-dark shadow-2xl border border-white/10 space-y-4 hover-lift transition-smooth hover:border-teal-400/40 relative overflow-hidden">
               <div className="absolute top-0 right-0 h-24 w-24 bg-teal-500/5 rounded-full blur-2xl pointer-events-none" />
@@ -394,7 +394,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
       </section>
 
       {/* --- TEAM SECTION --- */}
-      <section className="py-20 lg:py-28 bg-slate-950 relative overflow-hidden">
+      <section className="py-12 md:py-16 bg-slate-950 relative overflow-hidden">
         <BackgroundBubbles count={10} deepCount={5} />
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -445,7 +445,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
       </section>
 
       {/* --- AMENITIES SECTION --- */}
-      <section className="py-24 lg:py-32 bg-slate-950 relative overflow-hidden">
+      <section className="py-12 md:py-16 bg-slate-950 relative overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white">
@@ -489,7 +489,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
       </section>
 
       {/* --- ATTRACTIONS MAP SECTION --- */}
-      <section className="py-24 lg:py-32 bg-slate-950/40 relative overflow-hidden border-t border-white/5">
+      <section className="py-12 md:py-16 bg-slate-950/40 relative overflow-hidden border-t border-white/5">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white font-heading">

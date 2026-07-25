@@ -222,7 +222,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <div className="bg-slate-950 text-slate-100 min-h-screen pb-20">
+      <div className="bg-slate-950 text-slate-100 min-h-screen pb-12">
         <section className="relative h-[60vh] min-h-[400px] flex items-end justify-start overflow-hidden bg-slate-900 text-white">
           <div className="absolute inset-0 z-0">
             <Image

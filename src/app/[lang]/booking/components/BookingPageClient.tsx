@@ -191,7 +191,7 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
         document.body
       )}
 
-      <section id="available-rooms" className="py-16 lg:py-24 bg-slate-950 scroll-mt-20">
+      <section id="available-rooms" className="py-16 lg:py-12 md:py-16 bg-slate-950 scroll-mt-20">
         <div className="container mx-auto px-0">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white animate-fade-in">

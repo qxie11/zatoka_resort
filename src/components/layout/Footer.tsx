@@ -93,7 +93,7 @@ export default function Footer() {
       <div className="container mx-auto max-w-7xl px-6 relative z-10">
         
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-12 border-b border-white/5">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-12 border-b border-white/5">
           
           {/* Brand & Description Column */}
           <div className="lg:col-span-4 flex flex-col items-start space-y-5">

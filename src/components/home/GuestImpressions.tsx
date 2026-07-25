@@ -140,7 +140,7 @@ export default function GuestImpressions() {
   const current = reviews[currentIndex];
 
   return (
-    <section className="py-24 bg-slate-950 relative overflow-hidden">
+    <section className="py-12 md:py-16 bg-slate-950 relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-teal-500/[0.03] blur-3xl pointer-events-none" />
 

@@ -50,7 +50,7 @@ export default async function RoomBookingPage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-20">
+    <div className="min-h-screen bg-slate-950 text-slate-100 pb-12">
       <section className="relative h-[55vh] min-h-[330px] lg:min-h-[600px] flex items-end justify-start overflow-hidden bg-slate-900 text-white">
         <div className="absolute inset-0 z-0">
           <Image src={room.imageUrl} alt={room.name} fill className="object-cover scale-105 opacity-65 brightness-[0.45]" priority />

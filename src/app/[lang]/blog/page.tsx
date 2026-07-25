@@ -187,9 +187,9 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
   };
 
   return (
-    <div className="bg-slate-950 text-slate-100 min-h-screen pb-20">
+    <div className="bg-slate-950 text-slate-100 min-h-screen pb-12">
       {/* --- PREMIUM SPLIT HERO HEADER --- */}
-      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-center overflow-hidden bg-slate-950 pt-20">
+      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-center overflow-hidden bg-slate-950 pt-16">
         <BackgroundBubbles count={15} />
         {/* Background Image & Gradients */}
         <div className="absolute inset-0 z-0">
@@ -205,7 +205,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
         </div>
 
-        <div className="container relative z-10 mx-auto px-4 lg:px-8 grid lg:grid-cols-2 gap-12 items-center h-full pt-10 pb-20">
+        <div className="container relative z-10 mx-auto px-4 lg:px-8 grid lg:grid-cols-2 gap-8 items-center h-full pt-10 pb-12">
           
           <div className="flex flex-col items-start text-left animate-fade-in-up space-y-8 max-w-xl">
             {/* Minimal Badge */}
@@ -411,7 +411,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
             )}
           </div>
         ) : (
-          <div className="text-center py-20 glass-card-dark border border-white/5 rounded-3xl">
+          <div className="text-center py-12 md:py-16 glass-card-dark border border-white/5 rounded-3xl">
             <Compass className="h-12 w-12 text-slate-500 mx-auto mb-4 animate-pulse" />
             <p className="text-slate-400 text-lg">
               {translations.noArticles}

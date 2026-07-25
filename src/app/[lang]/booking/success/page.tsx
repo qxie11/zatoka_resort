@@ -334,7 +334,7 @@ function SuccessContent({ lang }: { lang: string }) {
             {/* Slider Content */}
             <div className="flex-1 flex flex-col justify-center">
               {loadingRoom ? (
-                <div className="flex flex-col items-center justify-center py-20 text-slate-400 gap-3">
+                <div className="flex flex-col items-center justify-center py-12 md:py-16 text-slate-400 gap-3">
                   <div className="h-8 w-8 rounded-full border-2 border-sky-400 border-t-transparent animate-spin" />
                   <span className="text-sm">{t.loadingGallery}</span>
                 </div>
@@ -403,7 +403,7 @@ function SuccessContent({ lang }: { lang: string }) {
                   )}
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center py-20 text-slate-500 gap-2">
+                <div className="flex flex-col items-center justify-center py-12 md:py-16 text-slate-500 gap-2">
                   <ImageIcon className="h-10 w-10 text-slate-600 animate-pulse" />
                   <span className="text-sm font-medium">{t.noImages}</span>
                 </div>
