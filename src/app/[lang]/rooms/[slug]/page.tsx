@@ -85,7 +85,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
     <div className="min-h-screen bg-slate-950 text-slate-100 pb-16">
 
       {/* --- HERO HEADER --- */}
-      <section className="relative w-full aspect-[4/3] md:aspect-video min-h-[420px] flex items-end justify-start overflow-hidden bg-slate-900 text-white">
+      <section className="relative w-full aspect-[4/3] md:aspect-video min-h-[520px] md:min-h-[600px] pt-28 flex items-end justify-start overflow-hidden bg-slate-900 text-white">
         <div className="absolute inset-0 z-0">
           <Image src={room.imageUrl} alt={room.name} fill className="object-cover opacity-70 brightness-[0.35]" priority />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
