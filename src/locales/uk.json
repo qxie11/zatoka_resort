@@ -226,5 +226,6 @@
   "bookingSuccessDesc": "Ваше бронювання на {{start}} - {{end}} підтверджено.",
   "errorTitle": "Помилка",
   "bookingCreateError": "Помилка при створенні бронювання",
-  "bookingCreateFail": "Не вдалося створити бронювання. Спробуйте ще раз."
+  "bookingCreateFail": "Не вдалося створити бронювання. Спробуйте ще раз.",
+  "fiveMinutes": "5 хвилин"
 }

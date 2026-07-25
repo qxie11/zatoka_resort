@@ -297,7 +297,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/20 to-transparent" />
                   
                   {/* Floating Family Badge */}
-                  <div className="absolute bottom-6 left-6 right-6 p-5 rounded-2xl bg-white/10 backdrop-blur-xl text-white border border-white/20 shadow-2xl transition-all duration-500 group-hover:-translate-y-1">
+                  <div className="absolute bottom-6 left-6 right-6 p-4 md:p-5 rounded-2xl bg-slate-900/85 backdrop-blur-md text-white border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.6)] transition-all duration-500 group-hover:-translate-y-1">
                     <div className="flex items-center gap-4">
                       <div className="flex -space-x-3">
                         <div className="w-10 h-10 rounded-full border-2 border-slate-900 bg-rose-400 flex items-center justify-center shadow-lg"><Baby className="w-5 h-5 text-white" /></div>
@@ -313,14 +313,14 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 </div>
  
                 {/* Floating Distance Badge */}
-                <div className="absolute -top-6 -right-2 p-4 rounded-2xl bg-white/10 backdrop-blur-xl text-white border border-white/20 shadow-2xl animate-float hidden sm:block rotate-3">
+                <div className="absolute -top-6 -right-4 p-4 rounded-2xl bg-slate-900/60 backdrop-blur-md text-white border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.5)] animate-float hidden sm:block rotate-3">
                   <div className="flex items-center gap-3">
                     <div className="h-12 w-12 rounded-full bg-sky-400/20 border border-sky-300/30 flex items-center justify-center">
                       <MapPin className="h-6 w-6 text-sky-300" />
                     </div>
                     <div>
                       <p className="text-[11px] text-slate-300 uppercase tracking-widest font-bold">{translate("distanceToSea", "До моря")}</p>
-                      <p className="text-base font-black text-white mt-0.5">5 минут</p>
+                      <p className="text-base font-black text-white mt-0.5">{translate("fiveMinutes", "5 минут")}</p>
                     </div>
                   </div>
                 </div>

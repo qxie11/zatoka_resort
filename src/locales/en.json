@@ -226,5 +226,6 @@
   "bookingSuccessDesc": "Your booking for {{start}} - {{end}} has been confirmed.",
   "errorTitle": "Error",
   "bookingCreateError": "Error creating booking",
-  "bookingCreateFail": "Failed to create booking. Please try again."
+  "bookingCreateFail": "Failed to create booking. Please try again.",
+  "fiveMinutes": "5 mins"
 }
