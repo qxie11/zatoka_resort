@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { LogOut, Home, Bed, LayoutDashboard, CalendarDays, PhoneCall, BookOpen, MessageSquare, Menu, Tag, Waves } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import Header from "@/components/layout/Header";
 
 const navLinks = [
   { href: "/admin", label: "Обзор", icon: LayoutDashboard },
@@ -62,10 +61,9 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <div className="grid flex-1 w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] texture-sand pt-16">
-        <div className="hidden border-r border-white/10 glass-card-dark md:block shadow-2xl bg-slate-900/60 sticky top-[96px] h-[calc(100vh-96px)] overflow-y-auto">
+    <div className="flex flex-col min-h-screen bg-slate-950">
+      <div className="grid flex-1 w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] texture-sand">
+        <div className="hidden border-r border-white/10 glass-card-dark md:block shadow-2xl bg-slate-900/60 sticky top-0 h-screen overflow-y-auto">
           <div className="flex h-full flex-col gap-2">
             <div className="flex h-14 items-center border-b border-white/10 px-4 lg:h-[60px] lg:px-6">
               <Link href="/" className="flex items-center gap-2 font-extrabold text-white">
@@ -114,7 +112,7 @@ export default function AdminLayout({
         </div>
         <div className="flex flex-col min-w-0">
           {/* Header Bar */}
-          <header className="flex h-14 items-center justify-between border-b border-white/10 bg-slate-900/60 px-4 md:px-6 backdrop-blur-md sticky top-[96px] z-30">
+          <header className="flex h-14 items-center justify-between border-b border-white/10 bg-slate-900/60 px-4 md:px-6 backdrop-blur-md sticky top-0 z-30">
           <div className="flex items-center gap-4">
             {/* Mobile Logo & Brand (hidden on desktop) */}
             <Link href="/" className="flex items-center gap-2 font-extrabold text-white md:hidden">
