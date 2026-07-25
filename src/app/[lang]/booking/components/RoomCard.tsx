@@ -60,8 +60,8 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
       <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-teal-500/5 rounded-full blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
       {/* Image Section (Apple-style inner padding) */}
-      <div className="relative w-full lg:w-2/5 p-4 md:p-5 shrink-0 z-10">
-        <div className="relative w-full h-full min-h-[260px] md:min-h-[320px] rounded-[1.75rem] overflow-hidden shadow-2xl">
+      <div className="relative w-full lg:w-2/5 p-3 sm:p-4 md:p-5 shrink-0 z-10">
+        <div className="relative w-full h-full min-h-[180px] sm:min-h-[240px] md:min-h-[320px] rounded-[1.5rem] md:rounded-[1.75rem] overflow-hidden shadow-2xl">
           <Image
             src={room.imageUrl}
             alt={room.name}
@@ -88,7 +88,7 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
       </div>
 
       {/* Content Section */}
-      <div className="relative flex flex-col justify-between w-full lg:w-3/5 p-6 md:p-8 lg:p-10 lg:pl-4 z-10">
+      <div className="relative flex flex-col justify-between w-full lg:w-3/5 p-4 sm:p-6 md:p-8 lg:p-10 lg:pl-4 z-10">
         <div>
           <div className="flex items-start justify-between gap-4">
             <h3 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight group-hover:text-teal-300 transition-colors duration-300">
@@ -113,21 +113,21 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div className="flex flex-col">
+        <div className="mt-4 sm:mt-8 pt-4 sm:pt-6 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
+          <div className="flex flex-row sm:flex-col items-baseline sm:items-start gap-2 sm:gap-0">
             <span className="text-3xl md:text-4xl font-black text-white group-hover:text-amber-400 transition-colors duration-300 tracking-tight">
               {room.price} <span className="text-xl font-bold">{t.pricePerNight}</span>
             </span>
             <span className="text-sm text-slate-500 font-medium">{t.perNight}</span>
           </div>
 
-          <div className="flex flex-wrap sm:flex-nowrap gap-3 w-full sm:w-auto">
+          <div className="grid grid-cols-[auto_1fr] sm:flex sm:flex-nowrap gap-2 sm:gap-3 w-full sm:w-auto">
             {onCompareClick && (
               <Button 
                 onClick={onCompareClick} 
                 variant="ghost" 
                 size="icon"
-                className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-300 hidden sm:flex shrink-0"
+                className="h-12 w-12 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-300 flex shrink-0"
                 title={t.compare}
               >
                 <Scale className="h-5 w-5" />
@@ -137,35 +137,23 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
             <Button 
               asChild 
               variant="outline" 
-              className="h-12 px-6 rounded-2xl bg-white/5 border-white/10 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 w-full sm:w-auto text-base font-semibold"
+              className="h-12 px-4 sm:px-6 rounded-xl sm:rounded-2xl bg-white/5 border-white/10 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 w-full sm:w-auto text-sm sm:text-base font-semibold"
             >
               <Link href={`/${langKey}/rooms/${room.slug}`}>
-                <Eye className="mr-2 h-4 w-4 text-teal-400" />
-                {t.view}
+                <Eye className="mr-2 h-4 w-4 text-teal-400 shrink-0" />
+                <span className="truncate">{t.view}</span>
               </Link>
             </Button>
 
             <Button 
               asChild 
-              className="h-12 px-8 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-black border-0 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 w-full sm:w-auto text-base uppercase tracking-wider"
+              className="col-span-2 sm:col-span-1 h-12 px-4 sm:px-8 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-black border-0 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 w-full sm:w-auto text-sm sm:text-base uppercase tracking-wider mt-1 sm:mt-0"
             >
               <Link href={`/${langKey}/booking/${room.slug}`}>
-                {t.book}
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <span className="truncate">{t.book}</span>
+                <ArrowRight className="ml-2 h-4 w-4 shrink-0" />
               </Link>
             </Button>
-            
-            {/* Mobile compare button */}
-            {onCompareClick && (
-              <Button 
-                onClick={onCompareClick} 
-                variant="outline" 
-                className="h-12 w-full rounded-2xl bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 transition-all duration-300 sm:hidden font-semibold"
-              >
-                <Scale className="mr-2 h-4 w-4" />
-                {t.compare}
-              </Button>
-            )}
           </div>
         </div>
       </div>
