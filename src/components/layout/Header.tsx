@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { SeasonBanner } from "@/components/conversion/SeasonBanner";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
@@ -366,7 +365,6 @@ export default function Header() {
           </Sheet>
         </div>
       </div>
-      <SeasonBanner />
     </header>
   );
 }

@@ -40,6 +40,7 @@ import type { LucideProps } from "lucide-react";
 import type { Room } from "@/lib/types";
 import { amenities } from "@/lib/data";
 import i18n from "@/lib/i18n";
+import SeasideStatusWidget from "@/components/conversion/SeasideStatusWidget";
 import RoomFinderQuiz from "@/components/conversion/RoomFinderQuiz";
 import BackgroundBubbles from "@/components/decorative/BackgroundBubbles";
 
@@ -381,6 +382,12 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                   <p className="mt-6 text-slate-300 text-lg font-light leading-relaxed">
                     {translate("welcomeDesc", 'Расположенный на безмятежном побережье Черного моря, "Отдых в Затоке" предлагает идеальное сочетание роскоши, комфорта и природной красоты. Ищете ли вы романтический уик-энд или семейное приключение, наш отель — ваше идеальное место для незабываемого отдыха.')}
                   </p>
+                </ScrollReveal>
+              </div>
+              
+              <div className="lg:col-span-5 w-full">
+                <ScrollReveal variant="scale-in" delay={300}>
+                  <SeasideStatusWidget lang={i18n.language} />
                 </ScrollReveal>
               </div>
             </div>
