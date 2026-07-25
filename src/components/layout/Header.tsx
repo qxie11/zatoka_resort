@@ -308,83 +308,92 @@ export default function Header() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="bg-slate-950/98 backdrop-blur-2xl text-white border-l border-white/10 w-[280px] p-6 shadow-2xl"
+                className="bg-slate-950/95 backdrop-blur-3xl text-white border-none w-full sm:w-[400px] p-0 shadow-2xl flex flex-col"
               >
-                <SheetHeader>
+                <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 via-transparent to-sky-500/10 pointer-events-none" />
+                <SheetHeader className="p-6 border-b border-white/5 relative z-10">
                   <VisuallyHidden>
                     <SheetTitle>{t("navMenu")}</SheetTitle>
                   </VisuallyHidden>
-                </SheetHeader>
-                
-                <div className="flex flex-col gap-6 h-full pt-6">
                   <Link
                     href={getLocalizedHref("/")}
-                    className="flex items-center gap-3 mb-2 pb-5 border-b border-white/5"
+                    className="flex items-center gap-3"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <Waves className="h-7 w-7 text-teal-400" />
-                    <span className="text-lg font-black tracking-[0.15em] uppercase bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500">
+                    <Waves className="h-8 w-8 text-teal-400" />
+                    <span className="text-xl font-black tracking-[0.15em] uppercase bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500">
                       {t("brandName")}
                     </span>
                   </Link>
-  
-                  <div className="flex flex-col gap-3">
-                    {navLinks.map((link) => {
-                      const localizedHref = getLocalizedHref(link.href);
-                      return (
-                        <Link
-                          key={link.href}
-                          href={localizedHref}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className={cn(
-                            "text-xs uppercase tracking-widest font-bold py-3 px-4 rounded-xl transition-all duration-300",
-                            pathname === localizedHref
-                              ? "text-teal-300 bg-teal-500/10"
-                              : "text-slate-400 hover:text-white hover:bg-white/5"
-                          )}
-                        >
-                          {link.label}
-                        </Link>
-                      );
-                    })}
-                    {mounted && isAuthenticated && (
+                </SheetHeader>
+                
+                <div className="flex-1 overflow-y-auto relative z-10 px-8 py-12 flex flex-col justify-center gap-8">
+                  {navLinks.map((link, index) => {
+                    const localizedHref = getLocalizedHref(link.href);
+                    const isActive = pathname === localizedHref;
+                    return (
                       <Link
-                        href="/admin"
+                        key={link.href}
+                        href={localizedHref}
                         onClick={() => setIsMobileMenuOpen(false)}
                         className={cn(
-                          "text-xs uppercase tracking-widest font-bold py-3 px-4 rounded-xl transition-all duration-300",
-                          pathname === "/admin"
-                            ? "text-teal-300 bg-teal-500/10"
-                            : "text-slate-400 hover:text-white hover:bg-white/5"
+                          "group flex items-center gap-4 transition-all duration-500",
+                          isActive ? "text-teal-300" : "text-slate-400 hover:text-white"
                         )}
                       >
-                        {t("admin")}
+                        <span className={cn(
+                          "h-px transition-all duration-500 bg-gradient-to-r from-teal-400 to-sky-400",
+                          isActive ? "w-8 opacity-100" : "w-0 opacity-0 group-hover:w-4 group-hover:opacity-100"
+                        )} />
+                        <span className="text-2xl sm:text-3xl uppercase tracking-widest font-black">
+                          {link.label}
+                        </span>
                       </Link>
-                    )}
-                  </div>
-  
-                  <div className="mt-auto pt-6 border-t border-white/5 flex flex-col gap-3">
-                    {mounted && isAuthenticated ? (
+                    );
+                  })}
+                  {mounted && isAuthenticated && (
+                    <Link
+                      href="/admin"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={cn(
+                        "group flex items-center gap-4 transition-all duration-500",
+                        pathname === "/admin" ? "text-teal-300" : "text-slate-400 hover:text-white"
+                      )}
+                    >
+                      <span className={cn(
+                        "h-px transition-all duration-500 bg-gradient-to-r from-teal-400 to-sky-400",
+                        pathname === "/admin" ? "w-8 opacity-100" : "w-0 opacity-0 group-hover:w-4 group-hover:opacity-100"
+                      )} />
+                      <span className="text-2xl sm:text-3xl uppercase tracking-widest font-black">
+                        {t("admin")}
+                      </span>
+                    </Link>
+                  )}
+                </div>
+
+                <div className="p-6 border-t border-white/5 bg-slate-900/50 relative z-10 flex flex-col gap-4">
+                  {mounted && isAuthenticated ? (
+                    <Button
+                      onClick={() => {
+                        handleSignOut();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full bg-slate-950 border border-white/10 text-white hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/20 rounded-2xl py-7 text-sm font-bold uppercase tracking-wider transition-all"
+                    >
+                      <LogOut className="mr-2 h-5 w-5 text-rose-400" /> {t("logout")}
+                    </Button>
+                  ) : (
+                    !pathname.includes("/booking") && (
                       <Button
-                        onClick={() => {
-                          handleSignOut();
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="bg-slate-900 border border-white/10 text-white hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/20 rounded-xl py-6 text-xs font-bold uppercase tracking-wider"
+                        asChild
+                        className="w-full bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-black border-0 shadow-[0_0_30px_rgba(245,158,11,0.25)] rounded-2xl py-7 text-sm sm:text-base uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all"
                       >
-                        <LogOut className="mr-2 h-4 w-4 text-rose-400" /> {t("logout")}
+                        <Link href={getLocalizedHref("/booking")} onClick={() => setIsMobileMenuOpen(false)}>
+                          {t("booking")}
+                        </Link>
                       </Button>
-                    ) : (
-                      !pathname.includes("/booking") && (
-                        <Button
-                          asChild
-                          className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-black border-0 shadow-lg shadow-teal-500/20 rounded-xl py-6 text-xs uppercase tracking-widest"
-                        >
-                          <Link href={getLocalizedHref("/booking")} onClick={() => setIsMobileMenuOpen(false)}>{t("booking")}</Link>
-                        </Button>
-                      )
-                    )}
-                  </div>
+                    )
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
