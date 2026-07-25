@@ -10,6 +10,7 @@ import GoogleMapComponent from '@/app/[lang]/booking/components/GoogleMapCompone
 import RoomGallery from '@/components/rooms/RoomGallery';
 import Link from 'next/link';
 import RoomComparisonButton from '@/components/rooms/RoomComparisonButton';
+import TrustBadges from "@/components/rooms/TrustBadges";
 
 interface PageProps {
   params: Promise<{ lang: string; slug: string }>;
@@ -253,6 +254,11 @@ export default async function RoomDetailsPage({ params }: PageProps) {
                     <ArrowRight className="h-4 w-4 text-slate-950 hidden sm:block" />
                   </Link>
                 </Button>
+                
+                {/* Trust Badges - Desktop Only */}
+                <div className="hidden lg:block">
+                  <TrustBadges lang={lang} />
+                </div>
               </div>
             </div>
           </div>

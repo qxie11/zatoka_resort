@@ -43,6 +43,7 @@ import i18n from "@/lib/i18n";
 import SeasideStatusWidget from "@/components/conversion/SeasideStatusWidget";
 import RoomFinderQuiz from "@/components/conversion/RoomFinderQuiz";
 import BackgroundBubbles from "@/components/decorative/BackgroundBubbles";
+import HomeFAQ from "@/components/home/HomeFAQ";
 
 const iconMap: { [key: string]: React.FC<LucideProps> } = {
   Waves,
@@ -617,6 +618,9 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
 
         {/* GUEST IMPRESSIONS */}
         <GuestImpressions />
+
+        {/* FAQ SECTION */}
+        <HomeFAQ lang={i18n.language} />
 
         {/* BOTTOM CTA */}
         <section className="py-12 md:py-16 bg-slate-950 text-white relative overflow-hidden">
