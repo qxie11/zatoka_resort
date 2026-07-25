@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
-import { Menu, Waves, LogOut, ChevronDown, Globe } from "lucide-react";
+import { Menu, Waves, LogOut, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
@@ -20,6 +20,7 @@ export default function Header() {
   const { t } = useTranslation();
   const [currentLang, setCurrentLang] = useState("ru");
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -31,7 +32,6 @@ export default function Header() {
         setCurrentLang(lng);
       }, 0);
     };
-
     i18n.on("languageChanged", handleLangChange);
 
     const checkAuth = () => {
@@ -40,18 +40,25 @@ export default function Header() {
     };
     checkAuth();
 
-    // Close language dropdown on outside click
     const handleOutsideClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (!target.closest(".lang-select-container")) {
         setIsLangOpen(false);
       }
     };
+    
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 30);
+    };
 
+    window.addEventListener("scroll", handleScroll);
     window.addEventListener("storage", checkAuth);
     document.addEventListener("click", handleOutsideClick);
+    
+    handleScroll(); // Check initial scroll
 
     return () => {
+      window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("storage", checkAuth);
       document.removeEventListener("click", handleOutsideClick);
       i18n.off("languageChanged", handleLangChange);
@@ -92,7 +99,12 @@ export default function Header() {
     <div className="relative lang-select-container">
       <button
         onClick={() => setIsLangOpen(!isLangOpen)}
-        className="flex items-center gap-2 bg-slate-900/80 hover:bg-slate-800/80 border border-white/10 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-200 hover:text-white transition-all duration-300 backdrop-blur-xl shadow-lg focus:outline-none"
+        className={cn(
+          "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all duration-300 focus:outline-none backdrop-blur-md",
+          scrolled 
+            ? "bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 text-slate-200 hover:text-white shadow-lg" 
+            : "bg-black/30 hover:bg-black/50 border border-white/20 text-white"
+        )}
       >
         {langNames[currentLang.startsWith("uk") ? "uk" : currentLang]?.flag && (
           <span className="text-sm leading-none">
@@ -104,14 +116,15 @@ export default function Header() {
         </span>
         <ChevronDown
           className={cn(
-            "h-3.5 w-3.5 text-slate-400 transition-transform duration-300",
-            isLangOpen && "transform rotate-180 text-teal-400"
+            "h-3 w-3 transition-transform duration-300",
+            scrolled ? "text-slate-400" : "text-white/70",
+            isLangOpen && "transform rotate-180"
           )}
         />
       </button>
 
       {isLangOpen && (
-        <div className="absolute right-0 mt-2 w-28 rounded-2xl bg-slate-950/95 border border-white/10 p-1.5 backdrop-blur-2xl shadow-[0_15px_30px_rgba(0,0,0,0.5)] z-50 animate-fade-in origin-top-right">
+        <div className="absolute right-0 mt-3 w-28 rounded-2xl bg-slate-950/95 border border-white/10 p-1.5 backdrop-blur-2xl shadow-[0_15px_30px_rgba(0,0,0,0.5)] z-50 animate-fade-in origin-top-right">
           {(["uk", "ru", "en"] as const).map((lang) => (
             <Link
               key={lang}
@@ -149,40 +162,50 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full container px-2 lg:px-4 transition-all duration-500">
-      <div className="relative w-full h-14 rounded-2xl border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-teal-500/20 hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)] group/header flex items-center justify-between px-6">
-        {/* Background & Effects Wrapper (handles clipping of absolute elements without clipping dropdowns) */}
-        <div className="absolute inset-0 rounded-2xl overflow-hidden -z-10">
-          {/* Premium Glassmorphism and Backdrop Blur Background */}
-          <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-xl" />
-          
-          {/* Elegant Sea-Glow Bottom Border with Pulse Effect */}
-          <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-teal-400/40 to-transparent group-hover/header:via-teal-400 transition-all duration-700" />
-          
-          {/* Light shimmer line effect */}
-          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-sky-400/20 to-transparent" />
-        </div>
+    <header className={cn(
+      "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-700 flex justify-center pointer-events-none",
+      scrolled ? "pt-4" : "pt-6 lg:pt-8"
+    )}>
+      <div className={cn(
+        "relative flex items-center justify-between transition-all duration-700 pointer-events-auto",
+        scrolled 
+          ? "w-full max-w-6xl mx-4 lg:mx-auto h-16 rounded-full border border-white/10 bg-slate-950/60 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] px-4 lg:px-6"
+          : "w-full container px-4 lg:px-8 h-16 border-transparent bg-transparent"
+      )}>
+        
         {/* Brand / Logo */}
         <Link
           href={getLocalizedHref("/")}
-          className="flex items-center gap-3 group"
+          className="flex items-center gap-2.5 group"
           onClick={() => setIsMobileMenuOpen(false)}
         >
-          <div className="relative flex items-center justify-center p-1.5 rounded-xl bg-teal-500/10 border border-teal-500/20 group-hover:bg-teal-500/20 group-hover:border-teal-500/30 transition-all duration-300 shadow-[0_0_15px_rgba(20,184,166,0.1)]">
-            <Waves className="h-5 w-5 text-teal-400 group-hover:animate-coral-sway glow-teal" />
-          </div>
-          <div className="flex flex-col text-left">
-            <span className="text-sm font-black tracking-[0.15em] uppercase bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 group-hover:animate-ocean-shimmer">
+          <Waves className={cn(
+            "h-7 w-7 transition-colors duration-500 group-hover:scale-105",
+            scrolled ? "text-teal-400 group-hover:text-cyan-300" : "text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+          )} />
+          <div className="flex flex-col text-left hidden sm:flex">
+            <span className={cn(
+              "text-[13px] font-black tracking-[0.25em] uppercase transition-colors duration-500",
+              scrolled 
+                ? "bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-sky-400 group-hover:from-teal-300 group-hover:to-sky-300" 
+                : "text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+            )}>
               {t("brandName")}
             </span>
-            <span className="text-[7px] font-bold tracking-[0.35em] text-teal-400/80 uppercase -mt-0.5">
+            <span className={cn(
+              "text-[7px] font-bold tracking-[0.45em] uppercase -mt-0.5 transition-colors duration-500",
+              scrolled ? "text-slate-400" : "text-white/80 drop-shadow-[0_2px_2px_rgba(0,0,0,0.4)]"
+            )}>
               Seaside Family Hotel
             </span>
           </div>
         </Link>
  
         {/* Desktop Navigation Capsule */}
-        <nav className="hidden lg:flex items-center gap-1 bg-slate-950/40 border border-white/5 px-4 py-1.5 rounded-full backdrop-blur-xl shadow-lg">
+        <nav className={cn(
+          "hidden lg:flex items-center gap-1 p-1 rounded-full transition-all duration-700",
+          scrolled ? "bg-white/5 border border-white/5 shadow-inner" : "bg-black/20 backdrop-blur-md border border-white/10"
+        )}>
           {navLinks.map((link) => {
             const localizedHref = getLocalizedHref(link.href);
             const isActive = pathname === localizedHref;
@@ -191,19 +214,17 @@ export default function Header() {
                 key={link.href}
                 href={localizedHref}
                 className={cn(
-                  "text-[10px] uppercase tracking-widest font-semibold transition-colors duration-300 px-4 py-2 relative group/link",
+                  "text-[11px] uppercase tracking-[0.15em] font-bold transition-all duration-300 px-4 py-2 rounded-full relative overflow-hidden group/link",
                   isActive
-                    ? "text-teal-300 font-bold"
-                    : "text-slate-350 hover:text-white"
+                    ? (scrolled ? "bg-white/10 text-white shadow-sm" : "bg-white text-slate-950 shadow-lg")
+                    : (scrolled ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-white/90 hover:text-white hover:bg-white/20")
                 )}
               >
-                <span>{link.label}</span>
-                <span
-                  className={cn(
-                    "absolute bottom-1.5 left-4 right-4 h-0.5 bg-gradient-to-r from-teal-400 to-sky-400 transform origin-left transition-transform duration-350 ease-out rounded-full",
-                    isActive ? "scale-x-100 shadow-[0_0_8px_rgba(20,184,166,0.5)]" : "scale-x-0 group-hover/link:scale-x-100"
-                  )}
-                />
+                <span className="relative z-10">{link.label}</span>
+                {/* Glow effect on hover */}
+                {!isActive && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-teal-500/0 via-teal-400/20 to-sky-500/0 opacity-0 group-hover/link:opacity-100 transition-opacity duration-500" />
+                )}
               </Link>
             );
           })}
@@ -211,30 +232,27 @@ export default function Header() {
             <Link
               href="/admin"
               className={cn(
-                "text-[10px] uppercase tracking-widest font-semibold transition-colors duration-300 px-4 py-2 relative group/link",
+                "text-[11px] uppercase tracking-[0.15em] font-bold transition-all duration-300 px-4 py-2 rounded-full",
                 pathname === "/admin"
-                  ? "text-teal-300 font-bold"
-                  : "text-slate-350 hover:text-white"
+                  ? (scrolled ? "bg-white/10 text-white shadow-sm" : "bg-white text-slate-950 shadow-lg")
+                  : (scrolled ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-white/90 hover:text-white hover:bg-white/20")
               )}
             >
-              <span>{t("admin")}</span>
-              <span
-                className={cn(
-                  "absolute bottom-1.5 left-4 right-4 h-0.5 bg-gradient-to-r from-teal-400 to-sky-400 transform origin-left transition-transform duration-350 ease-out rounded-full",
-                  pathname === "/admin" ? "scale-x-100 shadow-[0_0_8px_rgba(20,184,166,0.5)]" : "scale-x-0 group-hover/link:scale-x-100"
-                )}
-              />
+              {t("admin")}
             </Link>
           )}
         </nav>
  
-        {/* Desktop Right Actions */}
-        <div className="hidden lg:flex items-center gap-4">
+        {/* Right Actions */}
+        <div className="flex items-center gap-3 sm:gap-4">
           {mounted && renderLanguageSelector()}
  
           {mounted && isAuthenticated ? (
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-semibold tracking-wider text-slate-300 hidden lg:inline bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
+            <div className="hidden lg:flex items-center gap-3">
+              <span className={cn(
+                "text-[10px] font-bold tracking-widest px-3 py-1.5 rounded-full border transition-colors",
+                scrolled ? "bg-white/5 border-white/5 text-slate-300" : "bg-black/30 border-white/10 text-white backdrop-blur-sm"
+              )}>
                 {t("welcomeAdmin")}
               </span>
               <Button
@@ -242,7 +260,12 @@ export default function Header() {
                 size="icon"
                 onClick={handleSignOut}
                 aria-label={t("logout")}
-                className="text-slate-300 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 rounded-xl transition-all duration-300 h-9 w-9"
+                className={cn(
+                  "rounded-full transition-all duration-300 h-9 w-9",
+                  scrolled 
+                    ? "text-slate-400 hover:text-rose-400 hover:bg-rose-500/10" 
+                    : "text-white hover:text-rose-400 hover:bg-black/40 backdrop-blur-md"
+                )}
               >
                 <LogOut className="h-4 w-4" />
               </Button>
@@ -251,118 +274,121 @@ export default function Header() {
             !pathname.includes("/booking") && (
               <Button
                 asChild
-                className="relative overflow-hidden bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-[0_0_20px_rgba(45,212,191,0.3)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 rounded-xl px-5 h-9 text-[10px] uppercase tracking-wider flex items-center gap-1.5"
+                className={cn(
+                  "relative overflow-hidden font-bold border-0 transition-all duration-500 rounded-full text-[10px] sm:text-xs uppercase tracking-wider flex items-center gap-2 h-9 sm:h-10 px-5 sm:px-6 shadow-lg hover:scale-105 active:scale-95",
+                  scrolled 
+                    ? "bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 shadow-teal-500/20" 
+                    : "bg-white text-slate-950 hover:bg-white/90 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                )}
               >
                 <Link href={getLocalizedHref("/booking")}>
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-950 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-slate-950"></span>
-                  </span>
                   {t("booking")}
                 </Link>
               </Button>
             )
           )}
-        </div>
-
-        {/* Mobile Actions and Hamburger */}
-        <div className="lg:hidden flex items-center gap-3">
-          {mounted && renderLanguageSelector()}
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="border-white/10 bg-slate-900/60 text-white hover:bg-slate-800/80 rounded-xl h-9 w-9 backdrop-blur-md transition-all"
-              >
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">{t("openMenu")}</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="bg-slate-950/98 backdrop-blur-2xl text-white border-l border-white/10 w-[280px] p-6 shadow-2xl"
-            >
-              <SheetHeader>
-                <VisuallyHidden>
-                  <SheetTitle>{t("navMenu")}</SheetTitle>
-                </VisuallyHidden>
-              </SheetHeader>
-              
-              <div className="flex flex-col gap-6 h-full pt-6">
-                <Link
-                  href={getLocalizedHref("/")}
-                  className="flex items-center gap-2.5 mb-2 pb-4 border-b border-white/5"
-                  onClick={() => setIsMobileMenuOpen(false)}
+          
+          {/* Mobile Actions and Hamburger */}
+          <div className="lg:hidden flex items-center">
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={cn(
+                    "rounded-full h-9 w-9 transition-all backdrop-blur-md border",
+                    scrolled
+                      ? "border-white/10 bg-white/5 text-white hover:bg-white/10"
+                      : "border-white/20 bg-black/30 text-white hover:bg-black/50"
+                  )}
                 >
-                  <div className="p-1.5 rounded-lg bg-teal-500/10 border border-teal-500/20">
-                    <Waves className="h-5 w-5 text-teal-400" />
-                  </div>
-                  <span className="text-lg font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500">
-                    {t("brandName")}
-                  </span>
-                </Link>
-
-                <div className="flex flex-col gap-4">
-                  {navLinks.map((link) => {
-                    const localizedHref = getLocalizedHref(link.href);
-                    return (
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">{t("openMenu")}</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="bg-slate-950/98 backdrop-blur-2xl text-white border-l border-white/10 w-[280px] p-6 shadow-2xl"
+              >
+                <SheetHeader>
+                  <VisuallyHidden>
+                    <SheetTitle>{t("navMenu")}</SheetTitle>
+                  </VisuallyHidden>
+                </SheetHeader>
+                
+                <div className="flex flex-col gap-6 h-full pt-6">
+                  <Link
+                    href={getLocalizedHref("/")}
+                    className="flex items-center gap-3 mb-2 pb-5 border-b border-white/5"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Waves className="h-7 w-7 text-teal-400" />
+                    <span className="text-lg font-black tracking-[0.15em] uppercase bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500">
+                      {t("brandName")}
+                    </span>
+                  </Link>
+  
+                  <div className="flex flex-col gap-3">
+                    {navLinks.map((link) => {
+                      const localizedHref = getLocalizedHref(link.href);
+                      return (
+                        <Link
+                          key={link.href}
+                          href={localizedHref}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={cn(
+                            "text-xs uppercase tracking-widest font-bold py-3 px-4 rounded-xl transition-all duration-300",
+                            pathname === localizedHref
+                              ? "text-teal-300 bg-teal-500/10"
+                              : "text-slate-400 hover:text-white hover:bg-white/5"
+                          )}
+                        >
+                          {link.label}
+                        </Link>
+                      );
+                    })}
+                    {mounted && isAuthenticated && (
                       <Link
-                        key={link.href}
-                        href={localizedHref}
+                        href="/admin"
                         onClick={() => setIsMobileMenuOpen(false)}
                         className={cn(
-                          "text-xs uppercase tracking-widest font-bold py-2 px-3 rounded-xl transition-all duration-300 border border-transparent",
-                          pathname === localizedHref
-                            ? "text-teal-300 bg-teal-500/5 border-teal-500/10"
+                          "text-xs uppercase tracking-widest font-bold py-3 px-4 rounded-xl transition-all duration-300",
+                          pathname === "/admin"
+                            ? "text-teal-300 bg-teal-500/10"
                             : "text-slate-400 hover:text-white hover:bg-white/5"
                         )}
                       >
-                        {link.label}
+                        {t("admin")}
                       </Link>
-                    );
-                  })}
-                  {mounted && isAuthenticated && (
-                    <Link
-                      href="/admin"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={cn(
-                        "text-xs uppercase tracking-widest font-bold py-2 px-3 rounded-xl transition-all duration-300 border border-transparent",
-                        pathname === "/admin"
-                          ? "text-teal-300 bg-teal-500/5 border-teal-500/10"
-                          : "text-slate-400 hover:text-white hover:bg-white/5"
-                      )}
-                    >
-                      {t("admin")}
-                    </Link>
-                  )}
-                </div>
-
-                <div className="mt-auto pt-6 border-t border-white/5 flex flex-col gap-3">
-                  {mounted && isAuthenticated ? (
-                    <Button
-                      onClick={() => {
-                        handleSignOut();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="bg-slate-900 border border-white/10 text-white hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/20 rounded-xl py-5 text-xs font-bold uppercase tracking-wider"
-                    >
-                      <LogOut className="mr-2 h-4 w-4 text-rose-400" /> {t("logout")}
-                    </Button>
-                  ) : (
-                    !pathname.includes("/booking") && (
+                    )}
+                  </div>
+  
+                  <div className="mt-auto pt-6 border-t border-white/5 flex flex-col gap-3">
+                    {mounted && isAuthenticated ? (
                       <Button
-                        asChild
-                        className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl py-5 text-xs uppercase tracking-widest animate-gentle-nudge"
+                        onClick={() => {
+                          handleSignOut();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="bg-slate-900 border border-white/10 text-white hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/20 rounded-xl py-6 text-xs font-bold uppercase tracking-wider"
                       >
-                        <Link href={getLocalizedHref("/booking")} onClick={() => setIsMobileMenuOpen(false)}>{t("booking")}</Link>
+                        <LogOut className="mr-2 h-4 w-4 text-rose-400" /> {t("logout")}
                       </Button>
-                    )
-                  )}
+                    ) : (
+                      !pathname.includes("/booking") && (
+                        <Button
+                          asChild
+                          className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-black border-0 shadow-lg shadow-teal-500/20 rounded-xl py-6 text-xs uppercase tracking-widest"
+                        >
+                          <Link href={getLocalizedHref("/booking")} onClick={() => setIsMobileMenuOpen(false)}>{t("booking")}</Link>
+                        </Button>
+                      )
+                    )}
+                  </div>
                 </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </header>
