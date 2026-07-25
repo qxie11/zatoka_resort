@@ -58,6 +58,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchSubscribersCount();
   }, []);
 
@@ -412,7 +413,7 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
       )}
 
       {promos.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-12 border border-dashed border-white/10 rounded-3xl bg-slate-900/40 text-center space-y-4">
+        <div className="flex flex-col items-center justify-center p-6 md:p-8 border border-dashed border-white/10 rounded-3xl bg-slate-900/40 text-center space-y-4">
           <div className="p-4 rounded-full bg-teal-500/10 text-teal-400">
             <Tag className="h-10 w-10" />
           </div>

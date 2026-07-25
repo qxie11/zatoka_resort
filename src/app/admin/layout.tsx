@@ -50,7 +50,7 @@ export default function AdminLayout({
         <div className="container mx-auto py-10 min-h-screen flex flex-col justify-center items-center">
             <div className="w-full max-w-5xl space-y-4">
                 <Skeleton className="h-8 w-1/4 bg-slate-800" />
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
                     <Skeleton className="h-48 w-full bg-slate-800" />
                     <div className="md:col-span-2">
                         <Skeleton className="h-96 w-full bg-slate-800" />
@@ -226,7 +226,7 @@ export default function AdminLayout({
           </div>
         </header>
  
-        <main className="flex flex-1 flex-col gap-6 p-6 lg:gap-8 lg:p-8 min-w-0 overflow-x-hidden">
+        <main className="flex flex-1 flex-col gap-6 p-6 md:p-8 lg:p-10 min-w-0 overflow-x-hidden">
           {children}
         </main>
       </div>

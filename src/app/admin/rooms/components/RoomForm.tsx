@@ -445,7 +445,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                           }}
                           className="w-full text-left px-3 py-2 rounded-lg text-sm text-teal-400 hover:text-teal-300 hover:bg-teal-500/5 transition-colors font-medium border-t border-white/5 mt-1"
                         >
-                          + Добавить "{amenityInput.trim()}"
+                          + Добавить &quot;{amenityInput.trim()}&quot;
                         </button>
                       )}
                     </div>
@@ -479,7 +479,7 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                  <Label className="font-semibold text-slate-300">Галерея изображений</Label>
                  
                  {images.length === 0 ? (
-                   <div className="flex flex-col items-center justify-center border border-dashed border-white/10 rounded-xl p-8 text-slate-500">
+                   <div className="flex flex-col items-center justify-center border border-dashed border-white/10 rounded-xl p-4 md:p-6 text-slate-500">
                      <ImageIcon className="h-10 w-10 mb-2 stroke-[1.5]" />
                      <p className="text-sm">Нет изображений. Загрузите файлы или добавьте по ссылке.</p>
                    </div>
