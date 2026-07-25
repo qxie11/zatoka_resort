@@ -119,10 +119,10 @@ export default function ImageGallery({
 
         {/* ── ROW 3: Thumbnails ── */}
         {validImages.length > 1 && (
-          <div className="bg-gradient-to-t from-black/90 to-transparent px-2 py-4 md:py-5 flex justify-center flex-shrink-0">
+          <div className="bg-gradient-to-t from-black/90 to-transparent px-2 py-2 flex justify-center flex-shrink-0">
             <div
               ref={thumbsRef}
-              className="flex gap-2 md:gap-3 overflow-x-auto max-w-full [&::-webkit-scrollbar]:hidden snap-x items-center px-2"
+              className="flex gap-2 md:gap-3 overflow-x-auto overflow-y-visible max-w-full [&::-webkit-scrollbar]:hidden snap-x items-center px-2 py-4"
             >
               {validImages.map((imageUrl, index) => (
                 <button

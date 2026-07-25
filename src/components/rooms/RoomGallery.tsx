@@ -4,11 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Images, Maximize2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import ImageGallery from "./ImageGallery";
 
 interface RoomGalleryProps {
@@ -52,7 +47,7 @@ export default function RoomGallery({ images, roomName }: RoomGalleryProps) {
 
   return (
     <div className="glass-card-dark border border-white/10 rounded-3xl p-4 md:p-6 shadow-2xl bg-slate-900/40 backdrop-blur-sm relative overflow-hidden space-y-6">
-      
+
       {/* Title & Stats */}
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-bold text-white flex items-center gap-2">
@@ -65,16 +60,16 @@ export default function RoomGallery({ images, roomName }: RoomGalleryProps) {
       </div>
 
       {/* Main Image Box */}
-      <div 
+      <div
         onClick={() => setIsLightboxOpen(true)}
         className="relative aspect-[16/10] md:aspect-[16/9] w-full rounded-2xl overflow-hidden bg-slate-950/80 border border-white/5 group shadow-inner cursor-zoom-in"
       >
-        
+
         {/* Ambient Blur Background */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-          <div 
+          <div
             className="absolute inset-[-10%] blur-3xl opacity-40 transition-all duration-700 ease-in-out scale-110"
-            style={{ 
+            style={{
               backgroundImage: `url(${validImages[activeIndex]})`,
               backgroundSize: "cover",
               backgroundPosition: "center"
@@ -155,7 +150,7 @@ export default function RoomGallery({ images, roomName }: RoomGalleryProps) {
       )}
 
       {/* --- LIGHTBOX DIALOG MODAL --- */}
-      <ImageGallery 
+      <ImageGallery
         images={validImages}
         isOpen={isLightboxOpen}
         onClose={() => setIsLightboxOpen(false)}
