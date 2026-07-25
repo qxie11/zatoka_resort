@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
@@ -20,6 +21,8 @@ export default function ImageGallery({
   roomName,
   initialSlide = 0,
 }: ImageGalleryProps) {
+  const { t } = useTranslation();
+
   const [current, setCurrent] = React.useState(initialSlide);
   const thumbsRef = React.useRef<HTMLDivElement>(null);
 
@@ -57,7 +60,9 @@ export default function ImageGallery({
         className="max-w-none w-screen h-[100dvh] bg-black/95 border-none p-0 rounded-none z-[100] [&>button]:hidden overflow-hidden grid"
         style={{ gridTemplateRows: "auto 1fr auto" }}
       >
-        <DialogTitle className="sr-only">Галерея фотографий {roomName}</DialogTitle>
+        <DialogTitle className="sr-only">
+          {t("galleryOf")?.replace("{{name}}", roomName) || `Галерея фотографий ${roomName}`}
+        </DialogTitle>
 
         {/* ── ROW 1: Header ── */}
         <div className="flex justify-between items-start px-4 py-4 md:px-8 md:py-6 bg-gradient-to-b from-black/80 to-transparent pointer-events-none relative z-10">
@@ -66,7 +71,7 @@ export default function ImageGallery({
               {roomName}
             </h2>
             <span className="mt-1.5 inline-block px-2 py-0.5 rounded-md bg-white/10 backdrop-blur-md border border-white/10 text-white/70 text-sm font-medium">
-              {current + 1} из {validImages.length}
+              {t("photoOf")?.replace("{{current}}", (current + 1).toString()).replace("{{total}}", validImages.length.toString()) || `${current + 1} из ${validImages.length}`}
             </span>
           </div>
           <button
@@ -102,14 +107,14 @@ export default function ImageGallery({
               <button
                 onClick={prev}
                 className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 md:h-14 md:w-14 rounded-full bg-black/40 hover:bg-black/70 text-white border border-white/10 backdrop-blur-md flex items-center justify-center transition-all hover:scale-110 active:scale-90 shadow-2xl"
-                aria-label="Предыдущее фото"
+                aria-label={t("prevPhoto") || "Предыдущее фото"}
               >
                 <ChevronLeft className="w-6 h-6 md:w-7 md:h-7" />
               </button>
               <button
                 onClick={next}
                 className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 md:h-14 md:w-14 rounded-full bg-black/40 hover:bg-black/70 text-white border border-white/10 backdrop-blur-md flex items-center justify-center transition-all hover:scale-110 active:scale-90 shadow-2xl"
-                aria-label="Следующее фото"
+                aria-label={t("nextPhoto") || "Следующее фото"}
               >
                 <ChevronRight className="w-6 h-6 md:w-7 md:h-7" />
               </button>

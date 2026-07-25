@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Waves, Fish, Droplets } from "lucide-react";
 
 const BUBBLES = [
@@ -17,6 +18,8 @@ interface CuteFishPreloaderProps {
 }
 
 export function CuteFishPreloader({ fadeOut = false }: CuteFishPreloaderProps) {
+  const { t } = useTranslation();
+
   return (
     <div
       className={`absolute inset-0 z-[15] bg-[#020617] flex flex-col items-center justify-center transition-opacity duration-1000 select-none ${fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
@@ -105,12 +108,12 @@ export function CuteFishPreloader({ fadeOut = false }: CuteFishPreloaderProps) {
         {/* Text */}
         <div className="mt-10 flex flex-col items-center gap-2">
           <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 via-cyan-300 to-sky-200 font-extrabold tracking-[0.2em] uppercase text-sm animate-pulse text-center drop-shadow-[0_0_15px_rgba(6,182,212,0.5)]">
-            Загрузка моря...
+            {t("loadingSea") || "Загрузка моря..."}
           </h2>
           <div className="flex items-center gap-2 opacity-60">
             <span className="w-8 h-px bg-gradient-to-r from-transparent to-sky-400" />
             <p className="text-sky-100 text-[10px] uppercase tracking-widest font-medium">
-              Погружение в отдых
+              {t("divingIn") || "Погружение в отдых"}
             </p>
             <span className="w-8 h-px bg-gradient-to-l from-transparent to-sky-400" />
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Waves } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
 interface WaveLoaderProps {
@@ -9,6 +10,8 @@ interface WaveLoaderProps {
 }
 
 export function WaveLoader({ className, size = "md" }: WaveLoaderProps) {
+  const { t } = useTranslation();
+
   const sizeClasses = {
     sm: "h-8 w-8",
     md: "h-12 w-12",
@@ -31,11 +34,13 @@ export function WaveLoader({ className, size = "md" }: WaveLoaderProps) {
 }
 
 export function FullPageLoader() {
+  const { t } = useTranslation();
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
       <div className="text-center space-y-4">
         <WaveLoader size="lg" />
-        <p className="text-muted-foreground animate-pulse">Загрузка...</p>
+        <p className="text-muted-foreground animate-pulse">{t("loading") || "Загрузка..."}</p>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Images, Maximize2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -12,6 +13,8 @@ interface RoomGalleryProps {
 }
 
 export default function RoomGallery({ images, roomName }: RoomGalleryProps) {
+  const { t } = useTranslation();
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -52,7 +55,7 @@ export default function RoomGallery({ images, roomName }: RoomGalleryProps) {
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-bold text-white flex items-center gap-2">
           <Images className="h-5 w-5 text-teal-400" />
-          Галерея номера
+          {t("roomGallery") || "Галерея номера"}
         </h3>
         <span className="text-slate-400 text-xs font-mono bg-slate-950/60 border border-white/5 px-2.5 py-1 rounded-full">
           {activeIndex + 1} / {validImages.length}

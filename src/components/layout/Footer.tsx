@@ -106,11 +106,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-slate-300/80 text-sm font-light leading-relaxed max-w-sm">
-              {currentLang === "ru" 
-                ? "Ваш эксклюзивный оазис комфорта и спокойствия на живописном побережье Черного моря."
-                : currentLang === "uk"
-                ? "Ваш ексклюзивний оазис комфорту та спокою на мальовничому узбережжі Чорного моря."
-                : "Your exclusive oasis of luxury and peace on the picturesque Black Sea coast."}
+              {t("footerDesc")}
             </p>
             
             {/* Social & Messenger Icons */}
@@ -137,7 +133,7 @@ export default function Footer() {
           {/* Navigation Links Column */}
           <div className="lg:col-span-2 space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-teal-400">
-              {currentLang === "ru" ? "Навигация" : currentLang === "uk" ? "Навігація" : "Navigation"}
+              {t("navigation")}
             </h3>
             <ul className="space-y-3">
               {[
@@ -162,16 +158,16 @@ export default function Footer() {
           {/* Contacts Column */}
           <div className="lg:col-span-3 space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-sky-400">
-              {currentLang === "ru" ? "Контакты" : currentLang === "uk" ? "Контакти" : "Contacts"}
+              {t("contacts")}
             </h3>
             <ul className="space-y-3.5 text-sm text-slate-300 font-light">
               <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 text-teal-400/80 shrink-0 mt-0.5" />
                 <span>
-                  {currentLang === "en" ? "1835 Sadovaya St, Limanskaya Station, Zatoka" : "ул. Садовая, 1835, станция Лиманская, Затока"}
+                  {t("address")}
                   <br />
                   <span className="text-xs text-slate-400">
-                    {currentLang === "en" ? "Odesa region, Ukraine" : "Одесская область, Украина"}
+                    {t("region")}
                   </span>
                 </span>
               </li>
@@ -193,46 +189,42 @@ export default function Footer() {
           {/* Live Sea & Weather Status Column */}
           <div className="lg:col-span-3 space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-teal-400">
-              {currentLang === "ru" ? "Черное море сейчас" : currentLang === "uk" ? "Чорне море зараз" : "Black Sea Live"}
+              {t("blackSeaLive")}
             </h3>
             
             <ul className="space-y-3.5 text-sm text-slate-300 font-light">
               <li className="flex items-center gap-3">
                 <Sun className="h-4.5 w-4.5 text-amber-400/80 shrink-0" />
                 <span>
-                  {currentLang === "ru" ? "Воздух" : currentLang === "uk" ? "Повітря" : "Air"}:{" "}
+                  {t("airTemp")}:{" "}
                   <strong className="text-white font-medium">+{weather.temp}°C</strong>
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Thermometer className="h-4.5 w-4.5 text-teal-400/80 shrink-0" />
                 <span>
-                  {currentLang === "ru" ? "Вода в море" : currentLang === "uk" ? "Вода в морі" : "Sea Temp"}:{" "}
+                  {t("seaTemp")}:{" "}
                   <strong className="text-teal-300 font-medium">+{weather.seaTemp}°C</strong>
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Waves className="h-4.5 w-4.5 text-sky-400/80 shrink-0" />
                 <span>
-                  {currentLang === "ru" ? "Высота волны" : currentLang === "uk" ? "Висота хвилі" : "Waves"}:{" "}
+                  {t("wavesHeight")}:{" "}
                   <strong className="text-white font-medium">{weather.waveHeight}</strong>
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Sunset className="h-4.5 w-4.5 text-purple-400/80 shrink-0" />
                 <span>
-                  {currentLang === "ru" ? "Закат" : currentLang === "uk" ? "Захід" : "Sunset"}:{" "}
+                  {t("sunset")}:{" "}
                   <strong className="text-purple-300 font-medium">20:46</strong>
                 </span>
               </li>
             </ul>
 
             <p className="text-xs text-slate-400/80 font-light leading-relaxed italic border-t border-white/5 pt-3">
-              {currentLang === "ru" 
-                ? "Рекомендация дня: идеальная температура для вечернего купания и сапбордов."
-                : currentLang === "uk"
-                ? "Рекомендація дня: ідеальна температура для вечірнього купання та сапбордів."
-                : "Today's Tip: perfect water temperature for evening swimming & paddleboarding."}
+              {t("tipOfDay")}
             </p>
           </div>
 
@@ -241,7 +233,7 @@ export default function Footer() {
         {/* Footer Bottom / Copyright */}
         <div className="mt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-slate-400 font-light tracking-wider text-center md:text-left">
-            &copy; {new Date().getFullYear()} {t("brandName")}. {currentLang === "ru" ? "Все права защищены." : currentLang === "uk" ? "Всі права захищені." : "All rights reserved."}
+            &copy; {new Date().getFullYear()} {t("brandName")}. {t("allRightsReserved")}
           </p>
           
           {/* Decorative Wave Indicators */}
