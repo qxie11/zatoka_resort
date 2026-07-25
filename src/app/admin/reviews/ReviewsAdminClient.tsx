@@ -417,7 +417,7 @@ export default function ReviewsAdminClient({ initialReviews, rooms }: ReviewsAdm
 
       {/* Edit Review Dialog */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="glass-card-dark border-white/10 text-white max-w-md rounded-3xl">
+        <DialogContent aria-describedby={undefined} className="glass-card-dark border-white/10 text-white max-w-md rounded-3xl">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-white flex items-center gap-2">
               <Edit2 className="h-5 w-5 text-teal-400 animate-pulse" />

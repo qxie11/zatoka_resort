@@ -97,7 +97,7 @@ export function ExitIntentPopup() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl p-8 shadow-2xl backdrop-blur-xl overflow-hidden text-white sm:rounded-3xl focus:outline-none">
+      <DialogContent aria-describedby={undefined} className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl p-8 shadow-2xl backdrop-blur-xl overflow-hidden text-white sm:rounded-3xl focus:outline-none">
         <DialogTitle className="sr-only">Подбор подходящего номера</DialogTitle>
         {/* Top accent */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-400 via-sky-400 to-amber-400" />

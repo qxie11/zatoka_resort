@@ -56,7 +56,7 @@ export function CallbackForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Clean name validation
     const trimmedName = name.trim();
     if (trimmedName.length < 2) {
@@ -91,7 +91,7 @@ export function CallbackForm() {
       setName("");
       setPhone("");
       setMessage("");
-      
+
       setTimeout(() => {
         setSuccess(false);
         setIsOpen(false);
@@ -106,13 +106,13 @@ export function CallbackForm() {
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="w-full max-w-sm bg-slate-950 border border-white/10 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-2xl p-0 text-white sm:rounded-3xl focus:outline-none">
+        <DialogContent aria-describedby={undefined} className="w-full max-w-sm bg-slate-950 border border-white/10 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-2xl p-0 text-white sm:rounded-3xl focus:outline-none">
           <DialogTitle className="sr-only">Заказать обратный звонок</DialogTitle>
-          
+
           {/* Header Card Band */}
           <div className="bg-gradient-to-r from-teal-900/60 via-slate-900 to-sky-950/60 p-5 border-b border-white/10 relative">
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-teal-400 via-sky-400 to-teal-500" />
-            
+
             {/* Personalized Concierge Profile */}
             <div className="flex items-center gap-3 pr-6">
               <div className="relative">
@@ -241,7 +241,7 @@ export function CallbackForm() {
           {!isOpen && (
             <span className="absolute -inset-1 rounded-full bg-gradient-to-r from-teal-500 to-sky-500 opacity-40 blur-sm animate-pulse z-0" />
           )}
-          
+
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="h-14 w-14 rounded-full bg-gradient-to-r from-teal-400 to-sky-500 text-slate-950 flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 relative group overflow-hidden z-10"

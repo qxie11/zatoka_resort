@@ -635,7 +635,7 @@ export default function RoomBookingForm({
                       {qbt.btn}
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="bg-slate-900 border border-white/10 text-white rounded-2xl max-w-md shadow-2xl p-6">
+                  <DialogContent aria-describedby={undefined} className="bg-slate-900 border border-white/10 text-white rounded-2xl max-w-md shadow-2xl p-6">
                     <DialogHeader>
                       <DialogTitle className="text-xl font-extrabold flex items-center gap-2 text-teal-300">
                         <Zap className="h-5 w-5 fill-teal-300/30 text-teal-400" />

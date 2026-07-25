@@ -202,7 +202,7 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
 
       {/* Modal */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl overflow-hidden space-y-6 text-white sm:rounded-3xl focus:outline-none">
+        <DialogContent aria-describedby={undefined} className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl overflow-hidden space-y-6 text-white sm:rounded-3xl focus:outline-none">
           <DialogTitle className="sr-only">Сотрите защитный слой для получения скидки</DialogTitle>
           {/* Glowing accents */}
           <div className="absolute -top-10 -left-10 w-24 h-24 bg-teal-400/10 rounded-full blur-2xl pointer-events-none" />
