@@ -176,16 +176,16 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
 
           <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full pt-24 pb-16 lg:pt-32 lg:pb-20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              
+
               {/* LEFT COLUMN: Family Copy & Streamlined CTAs */}
               <div className="lg:col-span-7 flex flex-col items-start text-left text-white space-y-8">
-                
+
                 {/* Family Micro-Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/20 text-xs font-bold text-teal-300 uppercase tracking-widest animate-fade-in shadow-[0_0_15px_rgba(20,184,166,0.15)]">
                   <Sun className="h-4 w-4 text-teal-400 animate-pulse" />
                   <span>{translate("familyBadge", "Уютный семейный гостевой дом")}</span>
                 </div>
- 
+
                 {/* Heading */}
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] animate-fade-in-up drop-shadow-2xl font-heading pb-2">
                   {translate("heroTitle1", "Уютный летний отдых")} <br />
@@ -193,12 +193,12 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                     {translate("heroTitle2", "для всей вашей семьи")}
                   </span>
                 </h1>
- 
+
                 {/* Description */}
                 <p className="max-w-xl text-base md:text-xl text-slate-200 font-normal leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards] drop-shadow-lg">
                   {translate("heroDescription", "Семейный отель «Отдых в Затоке». Зеленый двор с мангалами, детская игровая зона, общая кухня, кондиционеры, Wi-Fi и бесплатная парковка. Всего 5 минут ходьбы до песчаного пляжа.")}
                 </p>
- 
+
                 {/* Horizontal Booking Widget */}
                 <div className="w-full pt-4 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards] z-20 relative">
                   <Form {...widgetForm}>
@@ -263,7 +263,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                     </form>
                   </Form>
                 </div>
- 
+
                 {/* Minimalist Trust Features */}
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-6 animate-fade-in-up [animation-delay:0.5s] opacity-0 [animation-fill-mode:forwards] text-xs font-bold uppercase tracking-wider text-slate-300">
                   <div className="flex items-center gap-2 bg-slate-900/40 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-white/5">
@@ -279,9 +279,9 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                     <span>{translate("trustBadge3", "Цена ниже рынка")}</span>
                   </div>
                 </div>
- 
+
               </div>
- 
+
               {/* RIGHT COLUMN: Redesigned Family Float Image */}
               <div className="lg:col-span-5 relative hidden lg:flex items-center justify-center animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards] select-none mt-8 lg:mt-0">
                 {/* Main Image Container */}
@@ -295,7 +295,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                     className="object-cover transition-all duration-[10s] group-hover:scale-110 brightness-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/20 to-transparent" />
-                  
+
                   {/* Floating Family Badge */}
                   <div className="absolute bottom-6 left-6 right-6 p-4 md:p-5 rounded-2xl bg-slate-900/85 backdrop-blur-md text-white border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.6)] transition-all duration-500 group-hover:-translate-y-1">
                     <div className="flex items-center gap-4">
@@ -311,7 +311,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                     </div>
                   </div>
                 </div>
- 
+
                 {/* Floating Distance Badge */}
                 <div className="absolute -top-6 -right-4 p-4 rounded-2xl bg-slate-900/60 backdrop-blur-md text-white border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.5)] animate-float hidden sm:block rotate-3">
                   <div className="flex items-center gap-3">
@@ -325,7 +325,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                   </div>
                 </div>
               </div>
- 
+
             </div>
           </div>
 
@@ -364,7 +364,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
               <Anchor className="h-20 w-20 text-teal-300/30" />
             </div>
           </div>
-          
+
           <div className="container mx-auto px-4 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-7 text-left space-y-6">
@@ -385,7 +385,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                   </p>
                 </ScrollReveal>
               </div>
-              
+
               <div className="lg:col-span-5 w-full">
                 <ScrollReveal variant="scale-in" delay={300}>
                   <SeasideStatusWidget lang={i18n.language} />
@@ -573,7 +573,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
                   {translate("hotelAmenities", "Удобства отеля")}
                 </h2>
-                <WavyUnderline colorClassName='text-teal-300'/>
+                <WavyUnderline colorClassName='text-teal-300' />
               </ScrollReveal>
               <ScrollReveal variant="fade-up" delay={200}>
                 <p className="mt-4 max-w-2xl mx-auto text-slate-300 text-lg font-light">
@@ -581,7 +581,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 </p>
               </ScrollReveal>
             </div>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-center stagger-children">
               {amenities.map((amenity, index) => {
                 const Icon = iconMap[amenity.icon];
@@ -640,7 +640,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
           </div>
 
           <BackgroundBubbles count={12} deepCount={6} />
-          
+
           <div className="container mx-auto px-4 text-center relative z-10 space-y-6">
             <ScrollReveal variant="tide-in">
               <h2 className="text-3xl md:text-6xl font-extrabold tracking-tight leading-tight">

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useParams } from 'next/navigation';
 import type { Room } from '@/lib/types';
-import { ArrowRight, BedDouble } from 'lucide-react';
+import { ArrowRight, BedDouble, Waves } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 interface FeaturedRoomsProps {
@@ -44,6 +44,21 @@ export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
                         animation: 'ocean-shimmer 4s ease-in-out infinite',
                       }}
                     />
+                    {/* Distance to sea badge */}
+                    {(() => {
+                      const seaAmenity = room.amenities.find((a) => 
+                        /до моря|до пляжа|до пляжу|Береговая линия|Перша лінія|Beach/i.test(a)
+                      );
+                      
+                      if (!seaAmenity) return null;
+                      
+                      return (
+                        <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/70 backdrop-blur-md border border-sky-500/30 text-white text-xs font-medium z-10 shadow-lg">
+                          <Waves className="h-3.5 w-3.5 text-sky-400" />
+                          <span>{seaAmenity}</span>
+                        </div>
+                      );
+                    })()}
                  </div>
               </CardHeader>
               <CardContent className="p-5 sm:p-6 flex-grow">

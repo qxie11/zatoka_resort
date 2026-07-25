@@ -16,7 +16,8 @@ const translations = {
   ru: {
     upTo: "До",
     guests: "гостей",
-    beach: "5 мин до пляжа",
+    beach: "5 мин до моря",
+    beachPromenade: "Береговая линия",
     compare: "Сравнить",
     view: "Подробнее",
     book: "Забронировать",
@@ -26,7 +27,8 @@ const translations = {
   uk: {
     upTo: "До",
     guests: "гостей",
-    beach: "5 хв до пляжу",
+    beach: "5 хв до моря",
+    beachPromenade: "Перша лінія",
     compare: "Порівняти",
     view: "Детальніше",
     book: "Забронювати",
@@ -36,7 +38,8 @@ const translations = {
   en: {
     upTo: "Up to",
     guests: "guests",
-    beach: "5 min to beach",
+    beach: "5 min to sea",
+    beachPromenade: "Beachfront",
     compare: "Compare",
     view: "Details",
     book: "Book Now",
@@ -79,10 +82,20 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
               <BedDouble className="h-3.5 w-3.5 text-teal-400" />
               <span>{t.upTo} {room.capacity} {t.guests}</span>
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/70 backdrop-blur-md border border-sky-500/30 text-white text-xs font-medium">
-              <Waves className="h-3.5 w-3.5 text-sky-400" />
-              <span>{t.beach}</span>
-            </div>
+            {(() => {
+              const seaAmenity = room.amenities.find((a) => 
+                /до моря|до пляжа|до пляжу|Береговая линия|Перша лінія|Beach/i.test(a)
+              );
+              
+              if (!seaAmenity) return null;
+              
+              return (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/70 backdrop-blur-md border border-sky-500/30 text-white text-xs font-medium">
+                  <Waves className="h-3.5 w-3.5 text-sky-400" />
+                  <span>{seaAmenity}</span>
+                </div>
+              );
+            })()}
           </div>
         </div>
       </div>
@@ -101,7 +114,9 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
           </p>
 
           <div className="mt-6 flex flex-wrap gap-2">
-            {room.amenities.map((amenity) => (
+            {room.amenities
+              .filter(a => !/до моря|до пляжа|до пляжу|Береговая линия|Перша лінія|Beach/i.test(a))
+              .map((amenity) => (
               <span 
                 key={amenity} 
                 className="inline-flex items-center gap-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 px-3.5 py-1.5 rounded-xl text-sm font-medium transition-colors"

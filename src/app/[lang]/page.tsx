@@ -27,7 +27,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function Home({ params }: PageProps) {
   const { lang } = await params;
-  const [rooms, reviews] = await Promise.all([getRooms(), getReviews()]);
+  const [rooms, reviews] = await Promise.all([
+    getRooms(), 
+    getReviews()
+  ]);
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
 

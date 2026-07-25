@@ -48,6 +48,7 @@ export function DateRangePicker({
   showBookingInstructions = false,
 }: DateRangePickerProps) {
   const { t, i18n } = useTranslation();
+  const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [popoverOpen, setPopoverOpen] = useState(false);
 
@@ -56,6 +57,8 @@ export function DateRangePicker({
   const activeLabel = label || t("checkInOut", "Даты заезда и выезда");
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
     const handleResize = () => {
       setIsMobile(window.innerWidth < 640);
     };
@@ -186,19 +189,23 @@ export function DateRangePicker({
                 !value?.from && "text-slate-400 font-normal"
               )}
             >
-              {value?.from ? (
-                value.to ? (
-                  <span className="text-sm text-slate-200 tracking-wide font-bold">
-                    {format(value.from, "dd MMM yyyy", { locale: activeLocale })} —{" "}
-                    {format(value.to, "dd MMM yyyy", { locale: activeLocale })}
-                  </span>
+              {mounted ? (
+                value?.from ? (
+                  value.to ? (
+                    <span className="text-sm text-slate-200 tracking-wide font-bold">
+                      {format(value.from, "dd MMM yyyy", { locale: activeLocale })} —{" "}
+                      {format(value.to, "dd MMM yyyy", { locale: activeLocale })}
+                    </span>
+                  ) : (
+                    <span className="text-sm text-slate-200 tracking-wide font-bold">
+                      {format(value.from, "dd MMM yyyy", { locale: activeLocale })}
+                    </span>
+                  )
                 ) : (
-                  <span className="text-sm text-slate-200 tracking-wide font-bold">
-                    {format(value.from, "dd MMM yyyy", { locale: activeLocale })}
-                  </span>
+                  <span className="text-sm text-slate-400">{t("selectDateRange")}</span>
                 )
               ) : (
-                <span className="text-sm text-slate-400">{t("selectDateRange")}</span>
+                <span className="text-sm text-slate-400 opacity-0">Loading...</span>
               )}
             </Button>
           </FormControl>
