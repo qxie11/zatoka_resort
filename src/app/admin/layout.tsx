@@ -224,7 +224,7 @@ export default function AdminLayout({
           </div>
         </header>
  
-        <main className="flex flex-1 flex-col gap-6 p-6 md:p-8 lg:p-10 min-w-0 overflow-x-hidden">
+        <main className="flex flex-1 flex-col gap-4 p-4 md:p-8 lg:p-10 md:gap-6 min-w-0 overflow-x-hidden">
           {children}
         </main>
       </div>
