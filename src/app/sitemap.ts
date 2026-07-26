@@ -45,7 +45,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Failed to generate sitemap for rooms:', error);
   }
 
-  // TODO: Add dynamic blog posts if they are stored in DB later
+  // Add dynamic blog posts
+  try {
+    const { getBlogPosts } = await import('@/lib/db');
+    const posts = await getBlogPosts();
+    posts.forEach((post) => {
+      langs.forEach((lang) => {
+        sitemapEntries.push({
+          url: `${baseUrl}/${lang}/blog/${post.slug}`,
+          lastModified: new Date(post.updatedAt || post.date),
+          changeFrequency: 'weekly',
+          priority: 0.7,
+        });
+      });
+    });
+  } catch (error) {
+    console.error('Failed to generate sitemap for blog posts:', error);
+  }
 
   return sitemapEntries;
 }
