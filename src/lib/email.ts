@@ -15,6 +15,11 @@ export async function sendCallbackNotification(data: {
   phone: string;
   message?: string;
 }) {
+  if (process.env.NODE_ENV === "development") {
+    console.log("[Resend] Skipping callback email in development mode.");
+    return;
+  }
+
   try {
     const result = await resend.emails.send({
       from: SENDER_FROM,
@@ -132,6 +137,11 @@ export async function sendBookingNotification(data: {
   discountApplied?: number;
   adminComment?: string;
 }) {
+  if (process.env.NODE_ENV === "development") {
+    console.log("[Resend] Skipping booking email in development mode.");
+    return;
+  }
+
   const start = new Date(data.startDate);
   const end = new Date(data.endDate);
   const nights = Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
@@ -315,6 +325,11 @@ export async function sendPromoNewsletter(data: {
   customSubject?: string;
   customBody?: string;
 }) {
+  if (process.env.NODE_ENV === "development") {
+    console.log("[Resend] Skipping promo newsletter email in development mode.");
+    return { successCount: 0, errorCount: 0 };
+  }
+
   const subject = data.customSubject || `🎁 Эксклюзивный подарок для Вас от Затока Resort`;
   const bodyText = data.customBody || `Мы приготовили для Вас особое предложение для идеального отдыха на побережье.`;
 
