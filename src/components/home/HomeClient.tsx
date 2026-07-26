@@ -296,7 +296,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                     fill
                     priority
                     sizes="(max-width: 768px) 100vw, 420px"
-                    className="object-cover transition-all duration-[10s] group-hover:scale-110 brightness-105"
+                    className="object-cover transition-all [transition-duration:10s] group-hover:scale-110 brightness-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/20 to-transparent" />
 
