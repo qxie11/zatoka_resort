@@ -81,8 +81,34 @@ export default async function RootLayout({
     console.error("Failed to fetch rooms in RootLayout:", err);
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Hotel",
+    "name": "Zatoka Resort",
+    "description": "Premium family hotel in Zatoka, Ukraine.",
+    "url": "https://zatoka-hotel.com",
+    "telephone": "+380123456789",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Sadovaya St, 1835, Limanskaya Station",
+      "addressLocality": "Zatoka",
+      "addressRegion": "Odesa region",
+      "postalCode": "67772",
+      "addressCountry": "UA"
+    },
+    "starRating": {
+      "@type": "Rating",
+      "ratingValue": "4"
+    },
+    "priceRange": "$$"
+  };
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <LanguageSync lang={lang} />
       <Header />
 

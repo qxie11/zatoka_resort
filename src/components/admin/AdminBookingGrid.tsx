@@ -1,0 +1,114 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import type { Booking, Room } from "@/lib/types";
+import { format, addDays, startOfWeek, isSameDay } from "date-fns";
+import { ru } from "date-fns/locale";
+
+interface AdminBookingGridProps {
+  bookings: Booking[];
+  rooms: Room[];
+}
+
+export default function AdminBookingGrid({ bookings, rooms }: AdminBookingGridProps) {
+  const [startDate, setStartDate] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const daysToShow = 14; // View 2 weeks at a time
+  
+  const dates = useMemo(() => {
+    return Array.from({ length: daysToShow }).map((_, i) => addDays(startDate, i));
+  }, [startDate, daysToShow]);
+
+  // Navigate dates
+  const goPrev = () => setStartDate(prev => addDays(prev, -7));
+  const goNext = () => setStartDate(prev => addDays(prev, 7));
+  const goToday = () => setStartDate(startOfWeek(new Date(), { weekStartsOn: 1 }));
+
+  return (
+    <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm flex flex-col">
+      <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+        <h3 className="text-xl font-bold">Шахматка бронирований</h3>
+        <div className="flex gap-2">
+          <button onClick={goPrev} className="px-3 py-1 bg-slate-800 hover:bg-slate-700 rounded-md text-sm font-medium">Пред. неделя</button>
+          <button onClick={goToday} className="px-3 py-1 bg-teal-500/20 text-teal-400 hover:bg-teal-500/30 rounded-md text-sm font-bold">Сегодня</button>
+          <button onClick={goNext} className="px-3 py-1 bg-slate-800 hover:bg-slate-700 rounded-md text-sm font-medium">След. неделя</button>
+        </div>
+      </div>
+      
+      <div className="overflow-x-auto">
+        <div className="min-w-[800px]">
+          {/* Header row */}
+          <div className="flex border-b border-slate-800">
+            <div className="w-48 shrink-0 border-r border-slate-800 p-3 font-semibold text-slate-400">
+              Номера / Даты
+            </div>
+            <div className="flex flex-1">
+              {dates.map((date, i) => (
+                <div key={i} className="flex-1 min-w-[50px] border-r border-slate-800/50 p-2 text-center flex flex-col items-center justify-center">
+                  <span className="text-xs text-slate-500 uppercase">{format(date, 'E', { locale: ru })}</span>
+                  <span className={`text-sm font-bold ${isSameDay(date, new Date()) ? 'text-teal-400' : 'text-slate-300'}`}>
+                    {format(date, 'd')}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Room rows */}
+          <div className="flex flex-col">
+            {rooms.map(room => (
+              <div key={room.id} className="flex border-b border-slate-800/50 hover:bg-slate-800/30">
+                <div className="w-48 shrink-0 border-r border-slate-800 p-3 flex flex-col justify-center">
+                  <span className="font-bold text-sm text-slate-200 truncate" title={room.name}>{room.name}</span>
+                  <span className="text-xs text-slate-500">{room.price} грн</span>
+                </div>
+                <div className="flex flex-1 relative">
+                  {/* Grid columns background */}
+                  {dates.map((date, i) => (
+                    <div key={i} className={`flex-1 min-w-[50px] border-r border-slate-800/30 ${isSameDay(date, new Date()) ? 'bg-teal-500/5' : ''}`}></div>
+                  ))}
+                  
+                  {/* Render Bookings Overlays */}
+                  {bookings.filter(b => b.roomId === room.id).map(booking => {
+                    const bStart = new Date(booking.startDate);
+                    const bEnd = new Date(booking.endDate);
+                    
+                    // Check if booking overlaps with current view
+                    const viewStart = dates[0];
+                    const viewEnd = addDays(dates[dates.length - 1], 1);
+                    
+                    if (bEnd <= viewStart || bStart >= viewEnd) return null;
+                    
+                    // Calculate positions
+                    // We assume each cell represents 1 day
+                    const startIndex = Math.max(0, Math.floor((bStart.getTime() - viewStart.getTime()) / (1000 * 3600 * 24)));
+                    const endIndex = Math.min(daysToShow, Math.ceil((bEnd.getTime() - viewStart.getTime()) / (1000 * 3600 * 24)));
+                    
+                    const span = endIndex - startIndex;
+                    if (span <= 0) return null;
+                    
+                    // Determine color based on status
+                    let colorClass = "bg-teal-500/20 border-teal-500/50 text-teal-300";
+
+                    return (
+                      <div 
+                        key={booking.id}
+                        className={`absolute top-1 bottom-1 rounded-md border ${colorClass} px-2 py-1 shadow-sm overflow-hidden text-xs font-medium flex items-center cursor-pointer hover:brightness-110 z-10 transition-all`}
+                        style={{
+                          left: `calc(${(startIndex / daysToShow) * 100}%)`,
+                          width: `calc(${(span / daysToShow) * 100}%)`
+                        }}
+                        title={`${booking.name}`}
+                      >
+                        <span className="truncate">{booking.name}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

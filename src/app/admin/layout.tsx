@@ -11,8 +11,9 @@ import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/co
 
 const navLinks = [
   { href: "/admin", label: "Обзор", icon: LayoutDashboard },
+  { href: "/admin/calendar", label: "Шахматка", icon: CalendarDays },
   { href: "/admin/rooms", label: "Номера", icon: Bed },
-  { href: "/admin/bookings", label: "Бронирования", icon: CalendarDays },
+  { href: "/admin/bookings", label: "Бронирования (Список)", icon: CalendarDays },
   { href: "/admin/callbacks", label: "Заявки", icon: PhoneCall },
   { href: "/admin/blog", label: "Блог", icon: BookOpen },
   { href: "/admin/reviews", label: "Отзывы", icon: MessageSquare },

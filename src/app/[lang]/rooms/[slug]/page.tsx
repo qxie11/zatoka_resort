@@ -25,9 +25,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = `${room.name} | Zatoka Resort`;
   const canonicalUrl = `${baseUrl}/${lang}/rooms/${room.slug}`;
+  const description = room.description || `Забронируйте ${room.name} в Zatoka Resort. Комфортный отдых у моря.`;
 
   return {
     title,
+    description,
     alternates: {
       canonical: canonicalUrl,
       languages: {
@@ -35,6 +37,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         uk: `${baseUrl}/uk/rooms/${room.slug}`,
         en: `${baseUrl}/en/rooms/${room.slug}`,
       },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      images: [
+        {
+          url: room.imageUrl,
+          width: 1200,
+          height: 630,
+          alt: room.name,
+        }
+      ],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [room.imageUrl],
     },
   };
 }
@@ -81,9 +103,35 @@ export default async function RoomDetailsPage({ params }: PageProps) {
     ? [room.imageUrl, ...(room.imageUrls || [])]
     : room.imageUrls || [];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": ["HotelRoom", "Product"],
+    "name": room.name,
+    "description": room.description,
+    "image": allImages,
+    "offers": {
+      "@type": "Offer",
+      "price": room.price,
+      "priceCurrency": "UAH",
+      "availability": "https://schema.org/InStock"
+    },
+    "bed": {
+      "@type": "BedDetails",
+      "numberOfBeds": 1,
+      "typeOfBed": "Double"
+    },
+    "occupancy": {
+      "@type": "QuantitativeValue",
+      "value": room.capacity
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 pb-16">
-
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* --- HERO HEADER --- */}
       <section className="relative w-full aspect-[4/3] md:aspect-video min-h-[520px] md:min-h-[600px] pt-28 flex items-end justify-start overflow-hidden bg-slate-900 text-white">
         <div className="absolute inset-0 z-0">
