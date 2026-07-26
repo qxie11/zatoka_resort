@@ -52,90 +52,77 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-teal-950/40 via-slate-950 to-slate-950 text-slate-100 overflow-hidden border-t border-white/5 pt-16 pb-8">
+    <footer className="relative overflow-hidden pt-20 pb-8 mt-10">
       
-      {/* Multi-layered Wave Transition on Top */}
-      <div className="absolute top-0 left-0 right-0 pointer-events-none overflow-hidden h-10 z-10 select-none">
+      {/* ── Background & Ambient Glows ── */}
+      <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-2xl z-0 border-t border-white/5" />
+      <div className="absolute bottom-0 left-[-10%] w-[50%] h-[80%] bg-teal-600/10 rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="absolute top-0 right-[-10%] w-[40%] h-[60%] bg-sky-500/10 rounded-full blur-[100px] pointer-events-none z-0" />
+      
+      {/* Multi-layered Wave Transition on Top (Optional subtle hint) */}
+      <div className="absolute top-0 left-0 right-0 pointer-events-none overflow-hidden h-12 z-10 select-none opacity-40">
         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full fill-slate-950">
-          <path d="M0,50 C300,10 600,90 900,50 C1050,30 1125,40 1200,50 L1200,120 L0,120 Z" className="opacity-25 fill-teal-400" />
-          <path d="M0,70 C300,30 600,110 900,70 C1050,50 1125,60 1200,70 L1200,120 L0,120 Z" className="opacity-15 fill-sky-300" />
+          <path d="M0,50 C300,10 600,90 900,50 C1050,30 1125,40 1200,50 L1200,120 L0,120 Z" className="opacity-30 fill-teal-500" />
+          <path d="M0,70 C300,30 600,110 900,70 C1050,50 1125,60 1200,70 L1200,120 L0,120 Z" className="opacity-20 fill-sky-400" />
         </svg>
       </div>
 
       {/* Floating Maritime Background Elements */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-[0.03]">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-[0.02]">
         <div className="absolute bottom-[20%] left-[8%] animate-float">
-          <Anchor className="h-24 w-24 text-teal-400 stroke-[0.5]" />
+          <Anchor className="h-32 w-32 text-white stroke-[0.5]" />
         </div>
         <div className="absolute top-[25%] right-[10%] animate-float-slow" style={{ animationDelay: "3s" }}>
-          <Compass className="h-28 w-28 text-sky-400 stroke-[0.3]" />
+          <Compass className="h-40 w-40 text-white stroke-[0.3]" />
         </div>
-      </div>
-
-      {/* Background Bubble Particles */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        {[...Array(8)].map((_, i) => (
-          <span
-            key={i}
-            className="bubble-particle"
-            style={{
-              left: `${i * 12 + 6}%`,
-              width: `${3 + (i % 3) * 3}px`,
-              height: `${3 + (i % 3) * 3}px`,
-              '--bubble-duration': `${12 + i * 2.5}s`,
-              '--bubble-delay': `${i * 1.5}s`,
-              '--bubble-drift': `${(i % 2 === 0 ? 1 : -1) * 30}px`,
-            } as React.CSSProperties}
-          />
-        ))}
       </div>
 
       <div className="container mx-auto max-w-7xl px-6 relative z-10">
         
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-12 border-b border-white/5">
+        {/* ── Main Footer Content ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12 pb-14 border-b border-white/10">
           
           {/* Brand & Description Column */}
-          <div className="lg:col-span-4 flex flex-col items-start space-y-5">
-            <Link href={getLocalizedHref("/")} className="flex items-center gap-2 group">
-              <div className="p-2 rounded-xl bg-white/5 border border-white/10 group-hover:border-teal-500/30 group-hover:bg-teal-500/10 transition-all duration-500 shadow-inner">
-                <Waves className="h-6 w-6 text-teal-400 group-hover:animate-coral-sway transition-transform duration-500" />
+          <div className="lg:col-span-4 flex flex-col items-start space-y-6">
+            <Link href={getLocalizedHref("/")} className="flex items-center gap-3 group">
+              <div className="p-2.5 rounded-2xl bg-white/5 border border-white/10 group-hover:border-teal-400/40 group-hover:bg-teal-400/10 group-hover:shadow-[0_0_20px_rgba(45,212,191,0.2)] transition-all duration-500">
+                <Waves className="h-6 w-6 text-teal-400 group-hover:text-teal-300 transition-colors duration-500" />
               </div>
-              <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 tracking-wide drop-shadow-[0_2px_10px_rgba(45,212,191,0.15)]">
+              <span className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white via-teal-100 to-teal-400 tracking-tight drop-shadow-sm">
                 {t("brandName")}
               </span>
             </Link>
-            <p className="text-slate-300/80 text-sm font-light leading-relaxed max-w-sm">
+            <p className="text-slate-400/90 text-sm font-light leading-relaxed max-w-sm">
               {t("footerDesc")}
             </p>
             
             {/* Social & Messenger Icons */}
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex items-center gap-3 pt-4">
               <a
                 href="viber://chat?number=%2B380669212275"
                 aria-label="Viber"
-                className="group relative flex items-center justify-center h-10 w-10 rounded-xl bg-white/5 border border-white/10 text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:text-[#7360F2] hover:border-[#7360F2]/40 hover:shadow-[0_0_15px_rgba(115,96,242,0.3)]"
+                className="group relative flex items-center justify-center h-12 w-12 rounded-2xl bg-white/5 border border-white/10 text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:text-[#7360F2] hover:border-[#7360F2]/40 hover:shadow-[0_8px_20px_rgba(115,96,242,0.25)]"
               >
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-[#7360F2]/10 to-[#7360F2]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-[#7360F2]/10 to-[#7360F2]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <FaViber className="h-5 w-5 z-10 transition-transform duration-300 group-hover:scale-110" />
               </a>
               <a
                 href="https://t.me/+380669212275"
                 aria-label="Telegram"
-                className="group relative flex items-center justify-center h-10 w-10 rounded-xl bg-white/5 border border-white/10 text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:text-[#2AABEE] hover:border-[#2AABEE]/40 hover:shadow-[0_0_15px_rgba(42,171,238,0.3)]"
+                className="group relative flex items-center justify-center h-12 w-12 rounded-2xl bg-white/5 border border-white/10 text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:text-[#2AABEE] hover:border-[#2AABEE]/40 hover:shadow-[0_8px_20px_rgba(42,171,238,0.25)]"
               >
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-[#2AABEE]/10 to-[#2AABEE]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-[#2AABEE]/10 to-[#2AABEE]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <FaTelegramPlane className="h-5 w-5 z-10 transition-transform duration-300 group-hover:scale-110 -ml-0.5" />
               </a>
             </div>
           </div>
 
           {/* Navigation Links Column */}
-          <div className="lg:col-span-2 space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-teal-400">
+          <div className="lg:col-span-2 space-y-6">
+            <h3 className="text-xs font-bold uppercase tracking-[0.25em] text-white">
               {t("navigation")}
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {[
                 { name: t("home"), href: "/" },
                 { name: t("about"), href: "/about" },
@@ -145,10 +132,14 @@ export default function Footer() {
                 <li key={idx}>
                   <Link 
                     href={getLocalizedHref(link.href)} 
-                    className="group flex items-center text-sm text-slate-300 hover:text-white transition-colors duration-300 font-light"
+                    className="group flex items-center text-sm text-slate-400 hover:text-white transition-colors duration-300 font-medium"
                   >
-                    <ChevronRight className="h-3 w-3 text-teal-400/0 -ml-3 group-hover:text-teal-400/100 group-hover:ml-0 transition-all duration-300" />
-                    <span>{link.name}</span>
+                    <span className="w-0 overflow-hidden group-hover:w-4 transition-all duration-300 ease-out flex items-center">
+                      <ChevronRight className="h-3 w-3 text-teal-400" />
+                    </span>
+                    <span className="group-hover:translate-x-1 transition-transform duration-300 ease-out">
+                      {link.name}
+                    </span>
                   </Link>
                 </li>
               ))}
@@ -156,93 +147,107 @@ export default function Footer() {
           </div>
 
           {/* Contacts Column */}
-          <div className="lg:col-span-3 space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-sky-400">
+          <div className="lg:col-span-3 space-y-6">
+            <h3 className="text-xs font-bold uppercase tracking-[0.25em] text-white">
               {t("contacts")}
             </h3>
-            <ul className="space-y-3.5 text-sm text-slate-300 font-light">
-              <li className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-teal-400/80 shrink-0 mt-0.5" />
-                <span>
-                  {t("address")}
-                  <br />
-                  <span className="text-xs text-slate-400">
-                    {t("region")}
-                  </span>
-                </span>
+            <ul className="space-y-5 text-sm text-slate-400 font-light">
+              <li className="flex items-start gap-4">
+                <div className="p-2 rounded-xl bg-white/5 border border-white/5 shrink-0">
+                  <MapPin className="h-4 w-4 text-teal-400" />
+                </div>
+                <div className="flex flex-col mt-0.5">
+                  <span className="text-slate-200">{t("address")}</span>
+                  <span className="text-xs text-slate-500 mt-1">{t("region")}</span>
+                </div>
               </li>
-              <li className="flex items-center gap-3">
-                <Mail className="h-4.5 w-4.5 text-sky-400/80 shrink-0" />
-                <a href="mailto:zatokahotelresort@gmail.com" className="hover:text-teal-300 transition-colors">
+              <li className="flex items-center gap-4 group cursor-pointer">
+                <div className="p-2 rounded-xl bg-white/5 border border-white/5 shrink-0 group-hover:bg-white/10 transition-colors">
+                  <Mail className="h-4 w-4 text-sky-400" />
+                </div>
+                <a href="mailto:zatokahotelresort@gmail.com" className="text-slate-300 group-hover:text-white transition-colors">
                   zatokahotelresort@gmail.com
                 </a>
               </li>
-              <li className="flex items-center gap-3">
-                <Phone className="h-4.5 w-4.5 text-amber-400/80 shrink-0" />
-                <a href="tel:+380669212275" className="hover:text-teal-300 transition-colors font-medium">
+              <li className="flex items-center gap-4 group cursor-pointer">
+                <div className="p-2 rounded-xl bg-white/5 border border-white/5 shrink-0 group-hover:bg-white/10 transition-colors">
+                  <Phone className="h-4 w-4 text-amber-400" />
+                </div>
+                <a href="tel:+380669212275" className="text-slate-300 group-hover:text-white transition-colors font-medium">
                   +380 66 921 22 75
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Live Sea & Weather Status Column */}
-          <div className="lg:col-span-3 space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-teal-400">
+          {/* Live Sea & Weather Widget */}
+          <div className="lg:col-span-3 space-y-6">
+            <h3 className="text-xs font-bold uppercase tracking-[0.25em] text-white flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
+              </span>
               {t("blackSeaLive")}
             </h3>
             
-            <ul className="space-y-3.5 text-sm text-slate-300 font-light">
-              <li className="flex items-center gap-3">
-                <Sun className="h-4.5 w-4.5 text-amber-400/80 shrink-0" />
-                <span>
-                  {t("airTemp")}:{" "}
-                  <strong className="text-white font-medium">+{weather.temp}°C</strong>
-                </span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Thermometer className="h-4.5 w-4.5 text-teal-400/80 shrink-0" />
-                <span>
-                  {t("seaTemp")}:{" "}
-                  <strong className="text-teal-300 font-medium">+{weather.seaTemp}°C</strong>
-                </span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Waves className="h-4.5 w-4.5 text-sky-400/80 shrink-0" />
-                <span>
-                  {t("wavesHeight")}:{" "}
-                  <strong className="text-white font-medium">{weather.waveHeight}</strong>
-                </span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Sunset className="h-4.5 w-4.5 text-purple-400/80 shrink-0" />
-                <span>
-                  {t("sunset")}:{" "}
-                  <strong className="text-purple-300 font-medium">20:46</strong>
-                </span>
-              </li>
-            </ul>
-
-            <p className="text-xs text-slate-400/80 font-light leading-relaxed italic border-t border-white/5 pt-3">
-              {t("tipOfDay")}
-            </p>
+            {/* Premium Glassmorphic Weather Widget */}
+            <div className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-5 shadow-2xl relative overflow-hidden group hover:border-white/20 transition-colors duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-sky-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <ul className="space-y-4 text-sm relative z-10">
+                <li className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 text-slate-300 font-medium">
+                    <Sun className="h-4.5 w-4.5 text-amber-400" />
+                    <span>{t("airTemp")}</span>
+                  </div>
+                  <strong className="text-white font-bold text-base">+{weather.temp}°C</strong>
+                </li>
+                <li className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 text-slate-300 font-medium">
+                    <Thermometer className="h-4.5 w-4.5 text-teal-400" />
+                    <span>{t("seaTemp")}</span>
+                  </div>
+                  <strong className="text-teal-300 font-bold text-base">+{weather.seaTemp}°C</strong>
+                </li>
+                <li className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 text-slate-300 font-medium">
+                    <Waves className="h-4.5 w-4.5 text-sky-400" />
+                    <span>{t("wavesHeight")}</span>
+                  </div>
+                  <strong className="text-white font-bold">{weather.waveHeight}</strong>
+                </li>
+                <li className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 text-slate-300 font-medium">
+                    <Sunset className="h-4.5 w-4.5 text-purple-400" />
+                    <span>{t("sunset")}</span>
+                  </div>
+                  <strong className="text-purple-300 font-bold">20:46</strong>
+                </li>
+              </ul>
+              
+              <div className="mt-4 pt-4 border-t border-white/10">
+                <p className="text-[11px] text-teal-200/80 font-medium leading-relaxed italic">
+                  &quot;{t("tipOfDay")}&quot;
+                </p>
+              </div>
+            </div>
           </div>
 
         </div>
 
-        {/* Footer Bottom / Copyright */}
-        <div className="mt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-slate-400 font-light tracking-wider text-center md:text-left">
+        {/* ── Footer Bottom / Copyright ── */}
+        <div className="mt-10 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-slate-500 font-medium tracking-wide text-center md:text-left">
             &copy; {new Date().getFullYear()} {t("brandName")}. {t("allRightsReserved")}
           </p>
           
           {/* Decorative Wave Indicators */}
-          <div className="flex items-center gap-1.5 opacity-25 select-none">
-            {[...Array(6)].map((_, i) => (
+          <div className="flex items-center gap-2 opacity-30 select-none">
+            {[...Array(5)].map((_, i) => (
               <Waves
                 key={i}
-                className="h-3 w-3 text-teal-400 animate-float"
-                style={{ animationDelay: `${i * 0.3}s` }}
+                className="h-3.5 w-3.5 text-teal-400 animate-pulse"
+                style={{ animationDelay: `${i * 0.2}s` }}
               />
             ))}
           </div>
