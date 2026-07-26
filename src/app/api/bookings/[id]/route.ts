@@ -78,7 +78,7 @@ export async function PUT(
         email === "" ||
         (typeof email === "string" && email.trim() === "")
       ) {
-        updates.email = undefined;
+        updates.email = null;
       } else {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email.trim())) {
