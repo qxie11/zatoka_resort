@@ -11,6 +11,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/co
 
 const navLinks = [
   { href: "/admin", label: "Обзор", icon: LayoutDashboard },
+  { href: "/admin/analytics", label: "Аналитика", icon: LayoutDashboard },
   { href: "/admin/calendar", label: "Шахматка", icon: CalendarDays },
   { href: "/admin/rooms", label: "Номера", icon: Bed },
   { href: "/admin/bookings", label: "Бронирования (Список)", icon: CalendarDays },
@@ -137,6 +138,8 @@ export default function AdminLayout({
                       if (seg === "callbacks") return "Заявки";
                       if (seg === "blog") return "Блог";
                       if (seg === "reviews") return "Отзывы";
+                      if (seg === "analytics") return "Аналитика";
+                      if (seg === "calendar") return "Шахматка";
                       if (seg === "promo") return "Промокоды";
                       return seg;
                     }).join(" / ")}
