@@ -84,6 +84,9 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
     },
   });
 
+  const dateRange = widgetForm.watch("dateRange");
+  const isFormValid = dateRange?.from && dateRange?.to;
+
   const onWidgetSubmit = (data: any) => {
     const params = new URLSearchParams();
     if (data.dateRange?.from) {
@@ -97,7 +100,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setMounted(true);
     const handleLangChange = (lng: string) => {
       setLangUpdate(lng);
@@ -256,7 +259,8 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
 
                       <Button
                         type="submit"
-                        className="w-full md:w-auto h-12 px-8 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap"
+                        disabled={!isFormValid}
+                        className="w-full md:w-auto h-12 px-8 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 disabled:opacity-50 disabled:pointer-events-none text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap"
                       >
                         {translate("checkAvailability", "Найти номера")}
                       </Button>
