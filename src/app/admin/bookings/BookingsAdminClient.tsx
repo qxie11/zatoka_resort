@@ -183,12 +183,35 @@ export default function BookingsAdminClient({
     }
   };
 
+  const [dateFilter, setDateFilter] = React.useState<"all" | "todayCheckin" | "todayCheckout">("all");
+
+  const handlePrintTodayList = () => {
+    window.print();
+  };
+
   const filteredBookings = React.useMemo(() => {
-    const active = bookings.filter((b) => !deletingIds.includes(b.id));
-    return selectedRoomId
-      ? active.filter(booking => booking.roomId === selectedRoomId)
-      : active;
-  }, [bookings, deletingIds, selectedRoomId]);
+    let active = bookings.filter((b) => !deletingIds.includes(b.id));
+
+    if (selectedRoomId) {
+      active = active.filter(booking => booking.roomId === selectedRoomId);
+    }
+
+    const todayStr = new Date().toISOString().split("T")[0];
+
+    if (dateFilter === "todayCheckin") {
+      active = active.filter(b => {
+        const startStr = new Date(b.startDate).toISOString().split("T")[0];
+        return startStr === todayStr;
+      });
+    } else if (dateFilter === "todayCheckout") {
+      active = active.filter(b => {
+        const endStr = new Date(b.endDate).toISOString().split("T")[0];
+        return endStr === todayStr;
+      });
+    }
+
+    return active;
+  }, [bookings, deletingIds, selectedRoomId, dateFilter]);
 
   const bookingsWithRoomNames = filteredBookings.map(booking => {
     const room = rooms.find(r => r.id === booking.roomId);
@@ -215,17 +238,63 @@ export default function BookingsAdminClient({
 
   return (
     <div className="w-full max-w-full overflow-hidden text-white">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 print:hidden">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Управление бронированиями</h1>
-        <Button onClick={handleAddNew} disabled={isCreating || isUpdating} className="w-full sm:w-auto bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Добавить бронирование
-        </Button>
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+          <Button onClick={handlePrintTodayList} variant="outline" className="bg-slate-800 hover:bg-slate-700 border-white/10 text-white rounded-xl h-11">
+            🖨 Печать списка
+          </Button>
+          <Button onClick={handleAddNew} disabled={isCreating || isUpdating} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 rounded-xl px-5 h-11">
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Добавить бронирование
+          </Button>
+        </div>
       </div>
 
-      <Card className="mb-6 glass-card-dark border border-white/10 bg-slate-900/60 text-white rounded-3xl overflow-hidden shadow-2xl">
-        <CardHeader className="border-b border-white/5 bg-slate-950/20 p-5">
-          <CardTitle className="text-lg font-extrabold text-white">Фильтр по номеру</CardTitle>
+      {/* Printable Header for print mode */}
+      <div className="hidden print:block mb-6 text-black">
+        <h1 className="text-2xl font-bold">Zatoka Resort — Список бронирований</h1>
+        <p className="text-sm text-gray-600">Дата распечатки: {new Date().toLocaleDateString("ru-RU")}</p>
+      </div>
+
+      <Card className="mb-6 glass-card-dark border border-white/10 bg-slate-900/60 text-white rounded-3xl overflow-hidden shadow-2xl print:hidden">
+        <CardHeader className="border-b border-white/5 bg-slate-950/20 p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <CardTitle className="text-lg font-extrabold text-white">Фильтры списка</CardTitle>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setDateFilter("all")}
+              className={`px-4 py-2 text-xs font-semibold rounded-xl transition-all duration-200 ${
+                dateFilter === "all"
+                  ? "bg-teal-500 text-slate-950 shadow-lg shadow-teal-500/20 font-bold"
+                  : "bg-slate-950/60 text-slate-300 hover:text-white border border-white/10 hover:border-white/20"
+              }`}
+            >
+              Все
+            </button>
+            <button
+              type="button"
+              onClick={() => setDateFilter("todayCheckin")}
+              className={`px-4 py-2 text-xs font-semibold rounded-xl transition-all duration-200 flex items-center gap-1.5 ${
+                dateFilter === "todayCheckin"
+                  ? "bg-teal-500 text-slate-950 shadow-lg shadow-teal-500/20 font-bold"
+                  : "bg-slate-950/60 text-slate-300 hover:text-white border border-white/10 hover:border-white/20"
+              }`}
+            >
+              <span>🔑</span> Заезды сегодня
+            </button>
+            <button
+              type="button"
+              onClick={() => setDateFilter("todayCheckout")}
+              className={`px-4 py-2 text-xs font-semibold rounded-xl transition-all duration-200 flex items-center gap-1.5 ${
+                dateFilter === "todayCheckout"
+                  ? "bg-teal-500 text-slate-950 shadow-lg shadow-teal-500/20 font-bold"
+                  : "bg-slate-950/60 text-slate-300 hover:text-white border border-white/10 hover:border-white/20"
+              }`}
+            >
+              <span>🚪</span> Выезды сегодня
+            </button>
+          </div>
         </CardHeader>
         <CardContent className="p-5">
           <Select

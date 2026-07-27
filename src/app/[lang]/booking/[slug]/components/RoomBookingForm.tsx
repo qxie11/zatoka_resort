@@ -11,6 +11,7 @@ import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import { PhoneInput } from "@/components/ui/phone-input";
 import ImageGallery from "@/components/rooms/ImageGallery";
 import {
   Form,
@@ -514,16 +515,13 @@ export default function RoomBookingForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-teal-300 font-bold mb-2">{t("phoneLabel")}</FormLabel>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-teal-400" />
-                      <FormControl>
-                        <Input
-                          placeholder="+380501234567"
-                          className="pl-10 bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
-                          {...field}
-                        />
-                      </FormControl>
-                    </div>
+                    <FormControl>
+                      <PhoneInput
+                        value={field.value}
+                        onChange={(val) => field.onChange(val || "")}
+                        placeholder="+380 66 123 4567"
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
