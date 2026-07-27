@@ -209,38 +209,38 @@ export function DataTable<TData, TValue>({
         )}
       </div>
       <div className="overflow-x-auto w-full">
-        <Table>
-          <TableHeader className="bg-slate-950/40">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="border-b border-white/5 hover:bg-transparent">
-                {headerGroup.headers.map((header, index) => {
-                  const isFirst = index === 0;
-                  const isSecond = index === 1 && onDeleteSelected;
-                  return (
-                    <React.Fragment key={header.id}>
-                      {index === 0 && <TableHead className="w-8"></TableHead>}
-                      <TableHead
-                        className={cn(
-                        "whitespace-nowrap font-bold text-teal-300 py-2 px-2 sm:py-4 sm:px-6 text-xs sm:text-sm",
-                        isFirst && "sticky left-0 bg-[#070b13] z-20 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)]",
-                        isSecond && ""
-                      )}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                      </TableHead>
-                    </React.Fragment>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <Table>
+            <TableHeader className="bg-slate-950/40">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} className="border-b border-white/5 hover:bg-transparent">
+                  {headerGroup.headers.map((header, index) => {
+                    const isFirst = index === 0;
+                    const isSecond = index === 1 && onDeleteSelected;
+                    return (
+                      <React.Fragment key={header.id}>
+                        {index === 0 && <TableHead className="w-8"></TableHead>}
+                        <TableHead
+                          className={cn(
+                          "whitespace-nowrap font-bold text-teal-300 py-2 px-2 sm:py-4 sm:px-6 text-xs sm:text-sm",
+                          isFirst && "sticky left-0 bg-[#070b13] z-20 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)]",
+                          isSecond && ""
+                        )}
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                        </TableHead>
+                      </React.Fragment>
+                    )
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
               <SortableContext items={data.map((item: any) => item.id)} strategy={verticalListSortingStrategy}>
                 {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
@@ -275,9 +275,9 @@ export function DataTable<TData, TValue>({
               </TableRow>
             )}
               </SortableContext>
-            </DndContext>
-          </TableBody>
-        </Table>
+            </TableBody>
+          </Table>
+        </DndContext>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4 px-6 border-t border-white/5 bg-slate-950/20">
         <Button
