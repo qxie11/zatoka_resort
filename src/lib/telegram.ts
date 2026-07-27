@@ -1,6 +1,6 @@
 export const sendTelegramNotification = async (message: string) => {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
+  const token = process.env.TELEGRAM_BOT_TOKEN || "8779062587:AAGxIcFMD-yPsJIuMqhHi8RKkwgZTrHiHBg";
+  const chatId = process.env.TELEGRAM_CHAT_ID || "495881827";
 
   if (!token || !chatId) {
     console.warn("Telegram token or chatId is missing. Skipping admin notification.");
@@ -33,7 +33,7 @@ export const sendTelegramNotification = async (message: string) => {
 };
 
 export const sendTelegramMessageToChat = async (chatId: string | number, message: string) => {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const token = process.env.TELEGRAM_BOT_TOKEN || "8779062587:AAGxIcFMD-yPsJIuMqhHi8RKkwgZTrHiHBg";
 
   if (!token || !chatId) {
     return false;
