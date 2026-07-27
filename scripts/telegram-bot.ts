@@ -4,6 +4,11 @@ const prisma = new PrismaClient();
 const token = process.env.TELEGRAM_BOT_TOKEN || "8779062587:AAGxIcFMD-yPsJIuMqhHi8RKkwgZTrHiHBg";
 
 async function sendTelegramMessage(chatId: number | string, text: string, replyMarkup?: any) {
+  if (process.env.NODE_ENV === "development" && process.env.ENABLE_TELEGRAM_IN_DEV !== "true") {
+    console.log(`[Telegram Bot] Skipping message sending to chatId ${chatId} in development mode.`);
+    return true; // Return true so DB state (reminderSent) updates in dev test if needed
+  }
+
   try {
     const body: any = {
       chat_id: chatId,

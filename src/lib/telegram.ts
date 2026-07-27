@@ -1,4 +1,9 @@
 export const sendTelegramNotification = async (message: string) => {
+  if (process.env.NODE_ENV === "development" && process.env.ENABLE_TELEGRAM_IN_DEV !== "true") {
+    console.log("[Telegram] Skipping admin notification in development mode.");
+    return false;
+  }
+
   const token = process.env.TELEGRAM_BOT_TOKEN || "8779062587:AAGxIcFMD-yPsJIuMqhHi8RKkwgZTrHiHBg";
   const chatId = process.env.TELEGRAM_CHAT_ID || "495881827";
 
@@ -33,6 +38,11 @@ export const sendTelegramNotification = async (message: string) => {
 };
 
 export const sendTelegramMessageToChat = async (chatId: string | number, message: string) => {
+  if (process.env.NODE_ENV === "development" && process.env.ENABLE_TELEGRAM_IN_DEV !== "true") {
+    console.log("[Telegram] Skipping user message in development mode to chatId:", chatId);
+    return false;
+  }
+
   const token = process.env.TELEGRAM_BOT_TOKEN || "8779062587:AAGxIcFMD-yPsJIuMqhHi8RKkwgZTrHiHBg";
 
   if (!token || !chatId) {
