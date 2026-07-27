@@ -305,6 +305,7 @@ export default function RoomBookingForm({
       });
 
       const searchParams = new URLSearchParams({
+        bookingId: booking.id,
         roomId: room.id,
         roomName: room.name,
         name: data.name,

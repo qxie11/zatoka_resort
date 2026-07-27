@@ -21,14 +21,14 @@ export async function POST(request: NextRequest) {
         continue;
       }
 
-      let fileBuffer = Buffer.from(await file.arrayBuffer());
+      let fileBuffer: Uint8Array = Buffer.from(await file.arrayBuffer());
       let contentType = file.type;
       let fileName = file.name;
 
       // Skip animated GIFs to avoid losing frames
       if (file.type !== "image/gif") {
         try {
-          const image = await Jimp.read(fileBuffer);
+          const image = await Jimp.read(fileBuffer as Buffer);
           const width = image.width;
           const height = image.height;
 
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Upload file directly to Vercel Blob storage
-      const blob = await put(fileName, fileBuffer, {
+      const blob = await put(fileName, fileBuffer as any, {
         access: "public",
         addRandomSuffix: true,
         contentType: contentType,

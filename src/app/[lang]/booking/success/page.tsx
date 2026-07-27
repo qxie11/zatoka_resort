@@ -116,6 +116,7 @@ const translations = {
 function SuccessContent({ lang }: { lang: string }) {
   const searchParams = useSearchParams();
 
+  const bookingId = searchParams.get("bookingId") || "";
   const roomId = searchParams.get("roomId") || "";
   const roomName = searchParams.get("roomName") || "";
   const name = searchParams.get("name") || "";
@@ -414,9 +415,21 @@ function SuccessContent({ lang }: { lang: string }) {
 
         {/* Global Control Buttons */}
         <div
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up"
+          className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center items-center animate-fade-in-up"
           style={{ animationDelay: "0.4s" }}
         >
+          <a
+            href={`https://t.me/zatoka_resort_booking_bot?start=${bookingId ? `booking_${bookingId}` : 'start'}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-extrabold shadow-[0_10px_25px_rgba(14,165,233,0.4)] hover:shadow-[0_15px_30px_rgba(14,165,233,0.6)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 group"
+          >
+            <svg className="w-5 h-5 fill-current text-white group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.03-1.99 1.27-5.62 3.72-.53.36-1.01.54-1.44.53-.47-.01-1.38-.27-2.05-.49-.83-.27-1.49-.42-1.43-.89.03-.25.38-.51 1.07-.78 4.18-1.82 6.97-3.02 8.37-3.61 3.98-1.66 4.81-1.95 5.35-1.96.12 0 .38.03.55.17.14.12.18.28.2.45-.02.07-.02.16-.04.24z"/>
+            </svg>
+            <span>Получить ваучер в Telegram</span>
+          </a>
+
           <Link href={`/${lang}`} className="w-full sm:w-auto">
             <button className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-teal-500 via-sky-500 to-teal-600 text-white font-extrabold shadow-[0_10px_25px_rgba(20,184,166,0.3)] hover:shadow-[0_15px_30px_rgba(20,184,166,0.5)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
               <Home className="h-4 w-4" />

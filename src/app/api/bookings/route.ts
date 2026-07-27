@@ -122,6 +122,25 @@ export async function POST(request: NextRequest) {
       adminComment: adminComment && typeof adminComment === 'string' ? adminComment.trim() : undefined,
     });
 
+    // Send Telegram Notification to Owner (non-blocking)
+    try {
+      const { sendTelegramNotification } = await import('@/lib/telegram');
+      const startStr = start.toLocaleDateString('ru-RU');
+      const endStr = end.toLocaleDateString('ru-RU');
+      
+      const tgMsg = `🔔 <b>Новое бронирование №${newBooking.id}</b>\n\n` +
+        `👤 <b>Гость:</b> ${name.trim()}\n` +
+        `📞 <b>Телефон:</b> ${phone.trim()}\n` +
+        (email?.trim() ? `✉️ <b>Email:</b> ${email.trim()}\n` : '') +
+        `🏨 <b>Номер ID:</b> ${roomId}\n` +
+        `📅 <b>Даты:</b> ${startStr} — ${endStr}\n` +
+        (pricePaid ? `💰 <b>Сумма:</b> ${pricePaid} грн\n` : '');
+      
+      sendTelegramNotification(tgMsg).catch(err => console.error("Failed to send telegram notification:", err));
+    } catch (notifyError) {
+      console.error("Failed to send telegram notification", notifyError);
+    }
+
     return NextResponse.json(newBooking, { status: 201 });
   } catch (error) {
     return NextResponse.json(
