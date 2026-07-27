@@ -84,11 +84,12 @@ export async function POST(request: NextRequest) {
       }
 
       // 2. Fetch all overlapping bookings for this room inside transaction
+      // A booking overlaps if: existing.startDate < new.endDate AND existing.endDate > new.startDate
       const roomBookings = await tx.booking.findMany({
         where: {
           roomId,
-          startDate: { lt: endDay },
-          endDate: { gt: startDay },
+          startDate: { lt: end },
+          endDate: { gt: start },
         },
       });
 
