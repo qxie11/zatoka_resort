@@ -15,6 +15,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import type { Booking } from "@/lib/types"
 
 type BookingWithRoomName = Booking & { roomName: string };
@@ -23,9 +30,10 @@ type ColumnsProps = {
   onEdit: (booking: Booking) => void;
   onDelete: (bookingId: string) => void;
   onView: (booking: Booking) => void;
+  onStatusChange?: (bookingId: string, newStatus: string) => void;
 };
 
-export const columns = ({ onEdit, onDelete, onView }: ColumnsProps): ColumnDef<BookingWithRoomName>[] => [
+export const columns = ({ onEdit, onDelete, onView, onStatusChange }: ColumnsProps): ColumnDef<BookingWithRoomName>[] => [
   {
     accessorKey: "roomName",
     header: ({ column }) => {
@@ -50,8 +58,42 @@ export const columns = ({ onEdit, onDelete, onView }: ColumnsProps): ColumnDef<B
     header: "Имя гостя",
   },
   {
-    accessorKey: "phone",
-    header: "Телефон",
+    accessorKey: "status",
+    header: "Статус",
+    cell: ({ row }) => {
+      const status = (row.original.status || "PENDING") as string;
+      const statusColors: Record<string, string> = {
+        PENDING: "bg-amber-500/10 text-amber-400 border-amber-500/30",
+        CONFIRMED: "bg-teal-500/10 text-teal-300 border-teal-500/30",
+        CHECKED_IN: "bg-sky-500/10 text-sky-300 border-sky-500/30",
+        CHECKED_OUT: "bg-emerald-500/10 text-emerald-300 border-emerald-500/30",
+      };
+
+      return (
+        <Select
+          value={status}
+          onValueChange={(val) => onStatusChange?.(row.original.id, val)}
+        >
+          <SelectTrigger className={`text-xs font-bold h-8 border rounded-xl shadow-none focus:ring-0 whitespace-nowrap ${statusColors[status] || statusColors.PENDING}`}>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-2xl z-[9999]">
+            <SelectItem value="PENDING" className="text-amber-400 focus:bg-white/10 focus:text-amber-300 rounded-lg cursor-pointer">
+              ⏳ Ожидает
+            </SelectItem>
+            <SelectItem value="CONFIRMED" className="text-teal-300 focus:bg-white/10 focus:text-teal-200 rounded-lg cursor-pointer">
+              ✅ Подтверждено
+            </SelectItem>
+            <SelectItem value="CHECKED_IN" className="text-sky-300 focus:bg-white/10 focus:text-sky-200 rounded-lg cursor-pointer">
+              🏨 Проживает
+            </SelectItem>
+            <SelectItem value="CHECKED_OUT" className="text-emerald-300 focus:bg-white/10 focus:text-emerald-200 rounded-lg cursor-pointer">
+              🏁 Выехал
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      );
+    },
   },
   {
     accessorKey: "email",

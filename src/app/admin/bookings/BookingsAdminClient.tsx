@@ -183,17 +183,39 @@ export default function BookingsAdminClient({
     }
   };
 
+  const handleStatusChange = async (bookingId: string, newStatus: string) => {
+    try {
+      await updateBooking({ id: bookingId, data: { status: newStatus } }).unwrap();
+      toast({
+        title: "Статус обновлен",
+        description: "Статус бронирования успешно изменен",
+      });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: error?.data?.error || error?.message || "Не удалось обновить статус",
+      });
+    }
+  };
+
   const [dateFilter, setDateFilter] = React.useState<"all" | "todayCheckin" | "todayCheckout">("all");
 
   const handlePrintTodayList = () => {
     window.print();
   };
 
+  const [statusFilter, setStatusFilter] = React.useState<string>("ALL");
+
   const filteredBookings = React.useMemo(() => {
     let active = bookings.filter((b) => !deletingIds.includes(b.id));
 
     if (selectedRoomId) {
       active = active.filter(booking => booking.roomId === selectedRoomId);
+    }
+
+    if (statusFilter !== "ALL") {
+      active = active.filter(b => (b.status || "PENDING") === statusFilter);
     }
 
     const todayStr = new Date().toISOString().split("T")[0];
@@ -211,7 +233,7 @@ export default function BookingsAdminClient({
     }
 
     return active;
-  }, [bookings, deletingIds, selectedRoomId, dateFilter]);
+  }, [bookings, deletingIds, selectedRoomId, dateFilter, statusFilter]);
 
   const bookingsWithRoomNames = filteredBookings.map(booking => {
     const room = rooms.find(r => r.id === booking.roomId);
@@ -318,7 +340,7 @@ export default function BookingsAdminClient({
 
       <div className="w-full overflow-x-auto">
         <DataTable
-          columns={columns({ onEdit: handleEdit, onDelete: handleDelete, onView: handleView })}
+          columns={columns({ onEdit: handleEdit, onDelete: handleDelete, onView: handleView, onStatusChange: handleStatusChange })}
           data={bookingsWithRoomNames}
           onDeleteSelected={handleBulkDelete}
         />

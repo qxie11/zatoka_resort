@@ -13,12 +13,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CallbackRequest {
   id: string;
   name: string;
   phone: string;
   message: string | null;
+  adminComment?: string | null;
+  status?: string;
   createdAt: string;
 }
 
@@ -29,6 +38,9 @@ interface CallbacksAdminClientProps {
 export default function CallbacksAdminClient({ initialData }: CallbacksAdminClientProps) {
   const [requests, setRequests] = useState<CallbackRequest[]>(initialData);
   const [loading, setLoading] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [commentInput, setCommentInput] = useState<string>("");
+  const [isSavingComment, setIsSavingComment] = useState(false);
   const { toast } = useToast();
 
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -39,6 +51,64 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
   // States for viewing callback request details
   const [viewRequest, setViewRequest] = useState<CallbackRequest | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  const handleUpdateStatus = async (id: string, newStatus: string) => {
+    const oldRequests = [...requests];
+    setRequests(prev => prev.map(r => r.id === id ? { ...r, status: newStatus } : r));
+    try {
+      const res = await fetch(`/api/callbacks/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        console.error("PATCH /api/callbacks/[id] failed:", res.status, errData);
+        throw new Error(errData.message || errData.error || `HTTP ${res.status}`);
+      }
+      toast({
+        title: "Статус обновлен",
+        description: `Заявка переведена в статус ${newStatus === "COMPLETED" ? "«Выполнено»" : newStatus === "IN_PROGRESS" ? "«В работе»" : "«Новая»"}`,
+      });
+    } catch (err: any) {
+      console.error(err);
+      setRequests(oldRequests);
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: `Не удалось обновить статус: ${err.message || "Неизвестная ошибка"}`,
+      });
+    }
+  };
+
+  const handleSaveComment = async (id: string, comment: string) => {
+    setIsSavingComment(true);
+    try {
+      const res = await fetch(`/api/callbacks/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ adminComment: comment }),
+      });
+      if (!res.ok) throw new Error("Failed to save note");
+      setRequests(prev => prev.map(r => r.id === id ? { ...r, adminComment: comment } : r));
+      if (viewRequest && viewRequest.id === id) {
+        setViewRequest(prev => prev ? { ...prev, adminComment: comment } : null);
+      }
+      toast({
+        title: "Примечание сохранено",
+        description: "Примечание администратора успешно обновлено",
+      });
+    } catch (err) {
+      console.error(err);
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: "Не удалось сохранить примечание",
+      });
+    } finally {
+      setIsSavingComment(false);
+    }
+  };
 
   const handleCopy = (text: string, fieldName: string) => {
     navigator.clipboard.writeText(text);
@@ -153,6 +223,11 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
     setBulkDeleteConfirmOpen(false);
   };
 
+  const filteredRequests = requests.filter((r) => {
+    if (statusFilter === "ALL") return true;
+    return (r.status || "NEW") === statusFilter;
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -162,7 +237,7 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
             Заявки на обратный звонок
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Просматривайте запросы гостей на обратную связь и звонки
+            Просматривайте запросы гостей на обратную связь и меняйте их статус
           </p>
         </div>
 
@@ -177,7 +252,35 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
         )}
       </div>
 
-      {requests.length === 0 ? (
+      {/* Status Filter Tabs */}
+      <div className="flex flex-wrap gap-2 p-1.5 bg-slate-900/60 border border-white/10 rounded-2xl w-fit">
+        {[
+          { id: "ALL", label: "Все заявки", count: requests.length },
+          { id: "NEW", label: "🔴 Новые", count: requests.filter(r => (r.status || "NEW") === "NEW").length },
+          { id: "IN_PROGRESS", label: "🟡 В работе", count: requests.filter(r => r.status === "IN_PROGRESS").length },
+          { id: "COMPLETED", label: "🟢 Перезвонили", count: requests.filter(r => r.status === "COMPLETED").length },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            onClick={() => setStatusFilter(tab.id)}
+            className={`px-4 py-2 text-xs font-semibold rounded-xl transition-all duration-200 flex items-center gap-2 ${
+              statusFilter === tab.id
+                ? "bg-teal-500 text-slate-950 shadow-lg shadow-teal-500/20 font-bold"
+                : "text-slate-300 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <span>{tab.label}</span>
+            <span className={`px-1.5 py-0.5 rounded-md text-[10px] font-bold ${
+              statusFilter === tab.id ? "bg-slate-950/20 text-slate-950" : "bg-white/10 text-slate-300"
+            }`}>
+              {tab.count}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {filteredRequests.length === 0 ? (
         <div className="flex flex-col items-center justify-center p-6 md:p-8 border border-dashed border-white/10 rounded-3xl bg-slate-900/40 text-center space-y-4">
           <div className="p-4 rounded-full bg-teal-500/10 text-teal-400">
             <PhoneCall className="h-10 w-10" />
@@ -198,12 +301,12 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
                   <th className="p-2 sm:p-4 pl-3 sm:pl-6 sticky left-0 bg-slate-950/90 z-20 border-r border-white/5 shadow-[2px_0_5px_rgba(0,0,0,0.3)] w-8 sm:w-12">
                     <Checkbox
                       checked={
-                        requests.length > 0 &&
-                        selectedIds.length === requests.length
+                        filteredRequests.length > 0 &&
+                        selectedIds.length === filteredRequests.length
                       }
                       onCheckedChange={(value) => {
                         if (value) {
-                          setSelectedIds(requests.map((r) => r.id));
+                          setSelectedIds(filteredRequests.map((r) => r.id));
                         } else {
                           setSelectedIds([]);
                         }
@@ -214,12 +317,13 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
                   <th className="p-2 sm:p-4">Дата</th>
                   <th className="p-2 sm:p-4">Имя</th>
                   <th className="p-2 sm:p-4 hidden sm:table-cell">Телефон</th>
+                  <th className="p-2 sm:p-4">Статус</th>
                   <th className="p-2 sm:p-4 hidden md:table-cell">Сообщение</th>
                   <th className="p-2 sm:p-4 pr-3 sm:pr-6 text-right">Действия</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5 text-slate-200">
-                {requests.map((request) => (
+                {filteredRequests.map((request) => (
                   <tr
                     key={request.id}
                     id={`row-${request.id}`}
@@ -266,7 +370,37 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
                       </span>
                     </td>
                     <td className="p-2 sm:p-4 font-mono text-teal-300 hidden sm:table-cell whitespace-nowrap">
-                      {request.phone}
+                      <a href={`tel:${request.phone}`} className="hover:underline flex items-center gap-1.5 text-teal-300 hover:text-teal-200">
+                        <PhoneCall className="h-3.5 w-3.5" />
+                        {request.phone}
+                      </a>
+                    </td>
+                    <td className="p-2 sm:p-4 whitespace-nowrap">
+                      <Select
+                        value={request.status || "NEW"}
+                        onValueChange={(val) => handleUpdateStatus(request.id, val)}
+                      >
+                        <SelectTrigger className={`text-xs font-bold h-8 border rounded-xl shadow-none focus:ring-0 ${
+                          (request.status || "NEW") === "NEW"
+                            ? "bg-rose-500/10 text-rose-400 border-rose-500/30"
+                            : request.status === "IN_PROGRESS"
+                            ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
+                            : "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
+                        }`}>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-2xl">
+                          <SelectItem value="NEW" className="text-rose-400 focus:bg-white/10 focus:text-rose-300 rounded-lg cursor-pointer">
+                            🔴 Новая
+                          </SelectItem>
+                          <SelectItem value="IN_PROGRESS" className="text-amber-400 focus:bg-white/10 focus:text-amber-300 rounded-lg cursor-pointer">
+                            🟡 В работе
+                          </SelectItem>
+                          <SelectItem value="COMPLETED" className="text-emerald-400 focus:bg-white/10 focus:text-emerald-300 rounded-lg cursor-pointer">
+                            🟢 Перезвонили
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                     </td>
                     <td className="p-2 sm:p-4 max-w-xs truncate text-slate-300 hidden md:table-cell">
                       {request.message ? (
@@ -384,7 +518,7 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
                 onClick={() => handleCopy(viewRequest.message || "", "Сообщение")}
                 className="group/item flex flex-col p-2.5 rounded-xl bg-slate-950/40 border border-white/5 hover:border-teal-500/30 hover:bg-teal-500/5 cursor-pointer transition-all duration-200"
               >
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Сообщение / Комментарий</span>
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Сообщение клиента</span>
                 <span className="text-sm font-medium mt-0.5 text-white flex justify-between items-start">
                   <span className="break-words max-w-[90%] whitespace-pre-wrap">{viewRequest.message || "—"}</span>
                   {copiedField === "Сообщение" ? (
@@ -393,6 +527,28 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
                     <Copy className="h-3.5 w-3.5 text-slate-500 group-hover/item:text-teal-400 opacity-0 group-hover/item:opacity-100 transition-opacity shrink-0" />
                   )}
                 </span>
+              </div>
+
+              {/* Editable Admin Comment Note */}
+              <div className="flex flex-col p-3 rounded-xl bg-slate-950/60 border border-amber-500/20 space-y-2">
+                <span className="text-[10px] uppercase tracking-wider text-amber-300 font-bold">Примечание администратора</span>
+                <textarea
+                  defaultValue={viewRequest.adminComment || ""}
+                  placeholder="Добавьте внутреннюю заметку (например: Договорились о заезде 15 июля)..."
+                  className="w-full bg-slate-900 border border-white/10 rounded-lg p-2.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400/50 min-h-[70px] resize-y"
+                  id="admin-comment-textarea"
+                />
+                <Button
+                  size="sm"
+                  disabled={isSavingComment}
+                  onClick={() => {
+                    const el = document.getElementById("admin-comment-textarea") as HTMLTextAreaElement;
+                    if (el) handleSaveComment(viewRequest.id, el.value);
+                  }}
+                  className="self-end bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-lg px-3 h-8"
+                >
+                  {isSavingComment ? "Сохранение..." : "Сохранить примечание"}
+                </Button>
               </div>
             </div>
           )}

@@ -123,6 +123,7 @@ export async function POST(request: NextRequest) {
           pricePaid: pricePaid ? parseInt(pricePaid) : null,
           promoCode: promoCode || null,
           discountApplied: discountApplied ? parseInt(discountApplied) : null,
+          status: body.status || "PENDING",
           adminComment: adminComment && typeof adminComment === "string" ? adminComment.trim() : null,
         },
       });

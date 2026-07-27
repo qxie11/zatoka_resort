@@ -225,6 +225,7 @@ export const getBookings = async (): Promise<Booking[]> => {
     promoCode: booking.promoCode || undefined,
     discountApplied: booking.discountApplied || undefined,
     adminComment: booking.adminComment || undefined,
+    status: booking.status || "CONFIRMED",
   }));
 };
 
@@ -357,6 +358,7 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
     if (booking.promoCode !== undefined) updateData.promoCode = booking.promoCode;
     if (booking.discountApplied !== undefined) updateData.discountApplied = booking.discountApplied;
     if ((booking as any).adminComment !== undefined) updateData.adminComment = (booking as any).adminComment || null;
+    if (booking.status !== undefined) updateData.status = booking.status;
     
     const updatedBooking = await prisma.booking.update({
       where: { id },
@@ -381,7 +383,8 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
       pricePaid: updatedBooking.pricePaid ?? undefined,
       promoCode: updatedBooking.promoCode ?? undefined,
       discountApplied: updatedBooking.discountApplied ?? undefined,
-      adminComment: updatedBooking.adminComment ?? undefined,
+      adminComment: (updatedBooking as any).adminComment ?? undefined,
+      status: (updatedBooking as any).status || "PENDING",
     };
   } catch (error) {
     return null;

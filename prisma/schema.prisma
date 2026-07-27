@@ -53,7 +53,8 @@ model Booking {
   discountApplied Int?
   pricePaid       Int?
   promoCode       String?
-  adminComment    String?
+  adminComment          String?
+  status                String    @default("PENDING") // "PENDING", "CONFIRMED", "CHECKED_IN", "CHECKED_OUT", "CANCELLED"
   telegramChatId        String?
   reminderSent          Boolean   @default(false)
   checkoutReminderSent  Boolean   @default(false)
@@ -64,12 +65,14 @@ model Booking {
 }
 
 model ContactRequest {
-  id        String   @id @default(uuid())
-  name      String
-  phone     String
-  message   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(uuid())
+  name         String
+  phone        String
+  message      String?
+  adminComment String?
+  status       String   @default("NEW") // "NEW", "IN_PROGRESS", "COMPLETED", "REJECTED"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@map("contact_requests")
 }
