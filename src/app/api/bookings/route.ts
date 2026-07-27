@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getBookings, createBooking, getRoomById, getBookingsByRoomId } from "@/lib/db";
+import { getBookings } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
 import { startOfDay } from "date-fns";
 import { sendBookingNotification } from "@/lib/email";
 
@@ -66,47 +67,67 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let finalUnitId = body.unitId;
+    let newBooking;
+    
+    // Perform double-booking prevention check inside an atomic Prisma Transaction
+    const result = await prisma.$transaction(async (tx) => {
+      let unitIdToAssign = body.unitId;
 
-    if (!finalUnitId) {
-      const room = await getRoomById(roomId);
-      if (!room || !room.units || room.units.length === 0) {
-         // No units or room not found, proceed without unitId or handle error?
-         // Since we just migrated, some might have no units, but we should allow it as fallback.
-      } else {
-         const roomBookings = await getBookingsByRoomId(roomId);
-         const overlappingBookings = roomBookings.filter(b => {
-           const bStart = new Date(b.startDate);
-           const bEnd = new Date(b.endDate);
-           return startDay < bEnd && bStart < endDay;
-         });
-         
-         const bookedUnitIds = new Set(overlappingBookings.map(b => b.unitId).filter(Boolean));
-         const availableUnit = room.units.find(u => !bookedUnitIds.has(u.id));
-         
-         if (!availableUnit) {
-           return NextResponse.json(
-             { error: "Нет доступных номеров на выбранные даты" },
-             { status: 400 }
-           );
-         }
-         finalUnitId = availableUnit.id;
+      // 1. Fetch room with units inside transaction
+      const room = await tx.room.findUnique({
+        where: { id: roomId },
+        include: { units: true },
+      });
+
+      if (!room) {
+        throw new Error("ROOM_NOT_FOUND");
       }
-    }
 
-    const newBooking = await createBooking({
-      roomId,
-      unitId: finalUnitId,
-      startDate: start,
-      endDate: end,
-      name: name.trim(),
-      phone: phone.trim(),
-      email: email?.trim() || undefined,
-      pricePaid: pricePaid ? parseInt(pricePaid) : undefined,
-      promoCode: promoCode || undefined,
-      discountApplied: discountApplied ? parseInt(discountApplied) : undefined,
-      adminComment: adminComment && typeof adminComment === 'string' ? adminComment.trim() : undefined,
+      // 2. Fetch all overlapping bookings for this room inside transaction
+      const roomBookings = await tx.booking.findMany({
+        where: {
+          roomId,
+          startDate: { lt: endDay },
+          endDate: { gt: startDay },
+        },
+      });
+
+      if (unitIdToAssign) {
+        // If a specific unit was selected, verify it is not already booked for these dates
+        const isOccupied = roomBookings.some((b) => b.unitId === unitIdToAssign);
+        if (isOccupied) {
+          throw new Error("UNIT_OCCUPIED");
+        }
+      } else if (room.units && room.units.length > 0) {
+        // Automatically find first available unit for this room category
+        const bookedUnitIds = new Set(roomBookings.map((b) => b.unitId).filter(Boolean));
+        const availableUnit = room.units.find((u) => !bookedUnitIds.has(u.id));
+
+        if (!availableUnit) {
+          throw new Error("NO_AVAILABLE_UNITS");
+        }
+        unitIdToAssign = availableUnit.id;
+      }
+
+      // 3. Atomically create the booking record inside the transaction
+      return await tx.booking.create({
+        data: {
+          roomId,
+          unitId: unitIdToAssign || null,
+          startDate: start,
+          endDate: end,
+          name: name.trim(),
+          phone: phone.trim(),
+          email: email?.trim() || null,
+          pricePaid: pricePaid ? parseInt(pricePaid) : null,
+          promoCode: promoCode || null,
+          discountApplied: discountApplied ? parseInt(discountApplied) : null,
+          adminComment: adminComment && typeof adminComment === "string" ? adminComment.trim() : null,
+        },
+      });
     });
+
+    newBooking = result;
 
     // Send email notification (non-blocking)
     await sendBookingNotification({
@@ -142,7 +163,14 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(newBooking, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.message === "UNIT_OCCUPIED" || error?.message === "NO_AVAILABLE_UNITS") {
+      return NextResponse.json(
+        { error: "К сожалению, этот номер уже забронирован на выбранные даты." },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
       { error: "Ошибка при создании бронирования" },
       { status: 500 }
