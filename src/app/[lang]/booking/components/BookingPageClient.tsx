@@ -105,25 +105,50 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
         }}
       />
 
-      {/* Direct Booking Trust Banner */}
-      <div className="max-w-4xl mx-auto mb-12 p-6 rounded-3xl bg-teal-950/20 border border-teal-500/20 flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="flex items-center gap-4 text-left">
-          <div className="h-12 w-12 rounded-2xl bg-teal-500/10 flex items-center justify-center text-teal-400 shrink-0">
-            <ShieldCheck className="h-6 w-6" />
+      {/* Direct Booking & Long Stay Discount Banner */}
+      <div className="max-w-4xl mx-auto mb-12 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Banner 1: Direct booking */}
+        <div className="p-6 rounded-3xl bg-teal-950/20 border border-teal-500/20 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4 text-left">
+            <div className="h-12 w-12 rounded-2xl bg-teal-500/10 flex items-center justify-center text-teal-400 shrink-0">
+              <ShieldCheck className="h-6 w-6" />
+            </div>
+            <div>
+              <h4 className="text-base font-bold text-white">{tLocal.directBookingTitle}</h4>
+              <p className="text-xs text-slate-300 mt-1">{tLocal.directBookingDesc}</p>
+            </div>
           </div>
-          <div>
-            <h4 className="text-lg font-bold text-white">{tLocal.directBookingTitle}</h4>
-            <p className="text-sm text-slate-300 mt-1">{tLocal.directBookingDesc}</p>
+          <div className="flex gap-2 items-center shrink-0">
+            <div className="text-center bg-teal-500/10 px-3 py-1.5 rounded-xl border border-teal-500/20">
+              <span className="text-[10px] text-teal-300 block font-bold">{tLocal.here}</span>
+              <span className="text-sm font-extrabold text-teal-300">0%</span>
+            </div>
           </div>
         </div>
-        <div className="flex gap-4 items-center shrink-0">
-          <div className="text-center bg-slate-900/50 px-4 py-2 rounded-xl border border-white/5">
-            <span className="text-xs text-slate-400 block font-medium">{tLocal.commission}</span>
-            <span className="text-base font-extrabold text-rose-400 line-through">15%</span>
+
+        {/* Banner 2: Auto Long Stay Discount */}
+        <div className="p-6 rounded-3xl bg-gradient-to-r from-amber-500/10 via-teal-500/10 to-emerald-500/10 border border-amber-500/20 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4 text-left">
+            <div className="h-12 w-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-400 shrink-0 text-xl">
+              🎁
+            </div>
+            <div>
+              <h4 className="text-base font-bold text-white">
+                {langKey === "uk" ? "Скидки за тривале проживание" : langKey === "en" ? "Long Stay Discounts" : "Скидки за длительное проживание"}
+              </h4>
+              <p className="text-xs text-slate-300 mt-1">
+                {langKey === "uk" 
+                  ? "Автоматично: від 7 ночей — скидка 5%, від 10 ночей — скидка 10%!"
+                  : langKey === "en"
+                  ? "Automatic: 7+ nights = 5% off, 10+ nights = 10% off!"
+                  : "Автоматически: от 7 ночей — скидка 5%, от 10 ночей — скидка 10%!"}
+              </p>
+            </div>
           </div>
-          <div className="text-center bg-teal-500/10 px-4 py-2 rounded-xl border border-teal-500/20">
-            <span className="text-xs text-teal-300 block font-bold">{tLocal.here}</span>
-            <span className="text-base font-extrabold text-teal-300">0%</span>
+          <div className="flex flex-col gap-1 items-end shrink-0">
+            <span className="text-xs font-black text-amber-300 bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 rounded-xl">
+              до -10%
+            </span>
           </div>
         </div>
       </div>

@@ -267,8 +267,10 @@ export default function RoomBookingForm({
         (data.dateRange.to.getTime() - data.dateRange.from.getTime()) /
         (1000 * 60 * 60 * 24)
       );
+      const longStayDiscount = nights >= 10 ? 10 : nights >= 7 ? 5 : 0;
+      const totalDiscount = Math.min(100, discount + longStayDiscount);
       const originalPrice = nights * room.price;
-      const pricePaid = Math.round(originalPrice * (1 - discount / 100));
+      const pricePaid = Math.round(originalPrice * (1 - totalDiscount / 100));
 
       const response = await fetch("/api/bookings", {
         method: "POST",
@@ -285,7 +287,7 @@ export default function RoomBookingForm({
           email: data.email || undefined,
           pricePaid,
           promoCode: appliedPromo || undefined,
-          discountApplied: discount || undefined,
+          discountApplied: totalDiscount || undefined,
         }),
       });
 
@@ -337,6 +339,23 @@ export default function RoomBookingForm({
         <div className="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-teal-500/20 to-transparent" />
       </CardHeader>
       <CardContent className="pt-6">
+        {/* Long stay discount hint badge */}
+        <div className="mb-6 p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-teal-500/10 to-emerald-500/10 border border-amber-500/20 flex items-center gap-3 text-xs text-slate-200">
+          <div className="text-xl shrink-0">🎁</div>
+          <div>
+            <span className="font-bold text-amber-300 block mb-0.5">
+              {lang === "uk" ? "Скидка за тривале проживання:" : lang === "en" ? "Long Stay Discount:" : "Скидка за длительное проживание:"}
+            </span>
+            <span className="text-slate-300">
+              {lang === "uk" 
+                ? "Забронюйте від 7 ночей (-5%) або від 10 ночей (-10%) — скидка застосується автоматично!"
+                : lang === "en"
+                ? "Book 7+ nights (-5%) or 10+ nights (-10%) — discount applies automatically!"
+                : "Забронируйте от 7 ночей (-5%) или от 10 ночей (-10%) — скидка применится автоматически!"}
+            </span>
+          </div>
+        </div>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {room.units && room.units.length > 0 && (
@@ -575,51 +594,62 @@ export default function RoomBookingForm({
                           )}
                         </span>
                       </div>
-                      {discount > 0 ? (
-                        <div className="mt-3 pt-3 border-t border-white/5 space-y-2">
-                          <div className="text-xs text-slate-500 line-through flex justify-between gap-4">
-                            <span>{t("totalWithoutDiscount")}</span>
-                            <span>
-                              {Math.ceil(
-                                (form.watch("dateRange").to!.getTime() -
-                                  form.watch("dateRange").from!.getTime()) /
-                                (1000 * 60 * 60 * 24)
-                              ) * room.price}{" "}
-                              {t("currency")}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center gap-4">
-                            <span className="text-slate-200 font-bold flex items-center gap-1.5">
-                              {t("totalLabel")}
-                              <span className="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold rounded-lg px-1.5 py-0.5">
-                                -{discount}%
-                              </span>
-                            </span>
-                            <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-350 to-teal-400 drop-shadow-sm">
-                              {Math.round(
-                                Math.ceil(
-                                  (form.watch("dateRange").to!.getTime() -
-                                    form.watch("dateRange").from!.getTime()) /
-                                  (1000 * 60 * 60 * 24)
-                                ) * room.price * (1 - discount / 100)
-                              )}{" "}
-                              {t("currency")}
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="mt-3 pt-3 border-t border-white/5 flex justify-between items-center gap-4">
-                          <span className="text-slate-200 font-bold flex items-center gap-1.5">{t("totalLabel")}</span>
-                          <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-350 to-teal-400 drop-shadow-sm">
-                            {Math.ceil(
-                              (form.watch("dateRange").to!.getTime() -
-                                form.watch("dateRange").from!.getTime()) /
-                              (1000 * 60 * 60 * 24)
-                            ) * room.price}{" "}
-                            {t("currency")}
-                          </span>
-                        </div>
-                      )}
+                      {(() => {
+                        const nights = Math.ceil(
+                          (form.watch("dateRange").to!.getTime() -
+                            form.watch("dateRange").from!.getTime()) /
+                          (1000 * 60 * 60 * 24)
+                        );
+                        // Auto-discount for long stay: 7+ nights = 5%, 10+ nights = 10%
+                        const longStayDiscount = nights >= 10 ? 10 : nights >= 7 ? 5 : 0;
+                        const totalDiscountPercent = Math.min(100, discount + longStayDiscount);
+                        const originalPrice = nights * room.price;
+                        const finalPrice = Math.round(originalPrice * (1 - totalDiscountPercent / 100));
+
+                        return (
+                          <>
+                            {longStayDiscount > 0 && (
+                              <div className="mt-2.5 px-3 py-1.5 rounded-xl bg-teal-500/10 border border-teal-500/25 flex items-center justify-between text-xs text-teal-300">
+                                <span>
+                                  🎁 {lang === "uk"
+                                    ? `Скидка ${longStayDiscount}% за проживання від ${nights >= 10 ? 10 : 7} ночей!`
+                                    : lang === "en"
+                                    ? `${longStayDiscount}% discount for staying ${nights >= 10 ? 10 : 7}+ nights!`
+                                    : `Скидка ${longStayDiscount}% за проживание от ${nights >= 10 ? 10 : 7} ночей!`}
+                                </span>
+                              </div>
+                            )}
+                            {totalDiscountPercent > 0 ? (
+                              <div className="mt-3 pt-3 border-t border-white/5 space-y-2">
+                                <div className="text-xs text-slate-500 line-through flex justify-between gap-4">
+                                  <span>{t("totalWithoutDiscount")}</span>
+                                  <span>
+                                    {originalPrice} {t("currency")}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between items-center gap-4">
+                                  <span className="text-slate-200 font-bold flex items-center gap-1.5">
+                                    {t("totalLabel")}
+                                    <span className="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold rounded-lg px-1.5 py-0.5">
+                                      -{totalDiscountPercent}%
+                                    </span>
+                                  </span>
+                                  <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-350 to-teal-400 drop-shadow-sm">
+                                    {finalPrice} {t("currency")}
+                                  </span>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="mt-3 pt-3 border-t border-white/5 flex justify-between items-center gap-4">
+                                <span className="text-slate-200 font-bold flex items-center gap-1.5">{t("totalLabel")}</span>
+                                <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-350 to-teal-400 drop-shadow-sm">
+                                  {originalPrice} {t("currency")}
+                                </span>
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
                     </div>
                   )}
               </div>

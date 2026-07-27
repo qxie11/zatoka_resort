@@ -54,8 +54,9 @@ model Booking {
   pricePaid       Int?
   promoCode       String?
   adminComment    String?
-  telegramChatId  String?
-  reminderSent    Boolean   @default(false)
+  telegramChatId        String?
+  reminderSent          Boolean   @default(false)
+  checkoutReminderSent  Boolean   @default(false)
   room            Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
   unit            RoomUnit? @relation(fields: [unitId], references: [id], onDelete: SetNull)
 

@@ -86,6 +86,62 @@ async function checkAndSend24hReminders() {
   }
 }
 
+async function checkAndSendCheckoutReminders() {
+  try {
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+
+    // Find all bookings ending today that have a registered telegramChatId and checkout reminder not yet sent
+    const checkoutBookings = await prisma.booking.findMany({
+      where: {
+        telegramChatId: { not: null },
+        checkoutReminderSent: false,
+        endDate: {
+          gte: startOfToday,
+          lte: endOfToday,
+        },
+      },
+      include: { room: true },
+    });
+
+    for (const booking of checkoutBookings) {
+      if (!booking.telegramChatId) continue;
+
+      const roomName = booking.room?.name || "Номер в Zatoka Resort";
+
+      const checkoutMsg =
+        `🌅 <b>Доброго утра в Zatoka Resort!</b>\n\n` +
+        `Уважаемый(ая) <b>${booking.name}</b>! 👋\n` +
+        `Напоминаем, что сегодня день выезда из категории <b>${roomName}</b>.\n\n` +
+        `⏰ <b>Расчетный час выезда:</b> до 12:00\n` +
+        `🔑 Пожалуйста, не забудьте сдать ключи администратору перед отъездом.\n\n` +
+        `Мы были очень рады видеть вас в гостях! Надеемся, ваш отдых был незабываемым. 🌊☀️\n\n` +
+        `Будем искренне благодарны, если вы поделитесь своими впечатлениями о нас! 👇`;
+
+      const inlineKeyboard = {
+        inline_keyboard: [
+          [
+            { text: "⭐ Оставить отзыв", url: "https://zatokaresort.com/#reviews" },
+            { text: "🔵 Связь с админом", url: "https://t.me/+380669212275" },
+          ],
+        ],
+      };
+
+      const sent = await sendTelegramMessage(booking.telegramChatId, checkoutMsg, inlineKeyboard);
+      if (sent) {
+        await prisma.booking.update({
+          where: { id: booking.id },
+          data: { checkoutReminderSent: true },
+        });
+        console.log(`[Telegram Bot] Checkout reminder sent successfully to ${booking.name} (chatId: ${booking.telegramChatId})`);
+      }
+    }
+  } catch (err) {
+    console.error("[Telegram Bot] Error checking checkout reminders:", err);
+  }
+}
+
 async function processUpdate(update: any) {
   const message = update?.message;
   if (!message || !message.chat || !message.text) return;
@@ -186,11 +242,12 @@ async function startPolling() {
 
   while (true) {
     try {
-      // Check 24h reminders every 60 seconds
+      // Check 24h reminders and checkout reminders every 60 seconds
       const now = Date.now();
       if (now - lastReminderCheck > 60 * 1000) {
         lastReminderCheck = now;
         await checkAndSend24hReminders();
+        await checkAndSendCheckoutReminders();
       }
 
       const res = await fetch(
