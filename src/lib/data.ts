@@ -24,16 +24,36 @@ export const rooms: Room[] = [
     imageHint: getImage('standard-room').imageHint,
   },
   {
-    id: 'triple',
-    slug: 'triple-room',
-    name: 'Улучшенный 3-местный номер',
-    description: 'Прекрасный вариант для небольшой семьи. Номер оборудован двуспальной и односпальной кроватями, кондиционером, холодильником и телевизором.',
-    price: 1200,
+    id: 'triple-1',
+    slug: 'triple-1',
+    name: 'Трехместный номер 1',
+    description: 'Просторный трехместный номер для семьи или небольшой компании.',
+    price: 1800,
     capacity: 3,
-    amenities: ['Wi-Fi', 'Кондиционер', 'ТВ', 'Холодильник', 'Балкон'],
+    amenities: ['Wi-Fi', 'Кондиционер', 'ТВ', 'Душ', 'Балкон', '5 мин до моря'],
     imageUrl: getImage('deluxe-room').imageUrl,
     imageUrls: [],
     imageHint: getImage('deluxe-room').imageHint,
+    units: [
+      { id: 'u23', name: '23', roomId: 'triple-1' },
+      { id: 'u33', name: '33', roomId: 'triple-1' }
+    ]
+  },
+  {
+    id: 'triple-2',
+    slug: 'triple-2',
+    name: 'Трехместный номер 2',
+    description: 'Просторный трехместный номер для семьи или небольшой компании.',
+    price: 1800,
+    capacity: 3,
+    amenities: ['Wi-Fi', 'Кондиционер', 'ТВ', 'Душ', 'Балкон', '5 мин до моря'],
+    imageUrl: getImage('deluxe-room').imageUrl,
+    imageUrls: [],
+    imageHint: getImage('deluxe-room').imageHint,
+    units: [
+      { id: 'u21', name: '21', roomId: 'triple-2' },
+      { id: 'u31', name: '31', roomId: 'triple-2' }
+    ]
   },
   {
     id: 'family',
