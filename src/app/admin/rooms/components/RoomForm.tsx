@@ -22,6 +22,51 @@ import {
   SheetClose
 } from "@/components/ui/sheet";
 import type { Room } from "@/lib/types";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  horizontalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { GripVertical } from "lucide-react";
+
+function SortableUnitItem({ unit, onRemove }: { unit: { id?: string; name: string }; onRemove: () => void }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id: unit.id! });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} className="flex items-center gap-1.5 bg-sky-500/10 text-sky-300 px-2 py-1.5 rounded-full border border-sky-500/20 text-sm">
+      <div {...attributes} {...listeners} className="cursor-grab hover:text-white touch-none flex items-center">
+        <GripVertical className="h-3.5 w-3.5 opacity-60" />
+      </div>
+      <span className="px-1">{unit.name}</span>
+      <button type="button" onClick={onRemove} className="hover:text-rose-400 focus:outline-none ml-1 opacity-70 hover:opacity-100 transition-opacity">
+        <X className="h-3 w-3" />
+      </button>
+    </div>
+  );
+}
 
 const roomSchema = z.object({
   name: z.string().min(1, "Название обязательно"),
@@ -213,6 +258,19 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
 
   const removeUnit = (index: number) => {
     setUnits(units.filter((_, i) => i !== index));
+  };
+
+  const handleUnitDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setUnits((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
   };
 
   const handleFormSubmit = form.handleSubmit(async (data) => {
@@ -468,16 +526,25 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                   placeholder="Домик 1, 1а..."
                   className="bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 mb-2 h-11"
                 />
-                <div className="flex flex-wrap gap-2">
-                  {units.map((unit, index) => (
-                    <div key={index} className="flex items-center gap-1.5 bg-sky-500/10 text-sky-300 px-3 py-1.5 rounded-full border border-sky-500/20 text-sm">
-                      {unit.name}
-                      <button type="button" onClick={() => removeUnit(index)} className="hover:text-rose-400 focus:outline-none ml-1 opacity-70 hover:opacity-100 transition-opacity">
-                        <X className="h-3 w-3" />
-                      </button>
+                <DndContext 
+                  sensors={useSensors(
+                    useSensor(PointerSensor),
+                    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+                  )}
+                  collisionDetection={closestCenter} 
+                  onDragEnd={handleUnitDragEnd}
+                >
+                  <SortableContext 
+                    items={units.map(u => u.id!)}
+                    strategy={horizontalListSortingStrategy}
+                  >
+                    <div className="flex flex-wrap gap-2">
+                      {units.map((unit, index) => (
+                        <SortableUnitItem key={unit.id} unit={unit} onRemove={() => removeUnit(index)} />
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </SortableContext>
+                </DndContext>
              </div>
 
              <div className="grid gap-2 border border-white/5 rounded-2xl p-5 bg-white/[0.02]">
