@@ -40,6 +40,20 @@ export async function POST(request: NextRequest) {
     // Send email notification (non-blocking)
     await sendCallbackNotification({ name, phone, message });
 
+    // Send Telegram Notification (non-blocking)
+    try {
+      const { sendTelegramNotification } = await import("@/lib/telegram");
+      const tgMsg = `📞 *НОВАЯ ЗАЯВКА НА ЗВОНОК*\n\n` +
+        `👤 *Имя:* ${name}\n` +
+        `📱 *Телефон:* ${phone}\n` +
+        (message ? `💬 *Сообщение:* ${message}\n` : '') +
+        `\nСвяжитесь с клиентом как можно скорее!`;
+      
+      sendTelegramNotification(tgMsg).catch(err => console.error("Failed to send telegram notification:", err));
+    } catch (notifyError) {
+      console.error("Failed to send telegram notification", notifyError);
+    }
+
     return NextResponse.json(contactRequest, { status: 201 });
   } catch (error: any) {
     console.error("Failed to create contact request:", error);
