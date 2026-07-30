@@ -2,6 +2,7 @@ export type RoomUnit = {
   id: string;
   name: string;
   roomId: string;
+  order?: number;
 };
 
 export type Room = {

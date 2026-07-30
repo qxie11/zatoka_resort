@@ -5,7 +5,11 @@ import type { Room, Booking, BlogPost, Review } from './types';
 export const getRooms = async (): Promise<Room[]> => {
   const rooms = await prisma.room.findMany({
     orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
-    include: { units: true },
+    include: {
+      units: {
+        orderBy: { order: 'asc' }
+      }
+    },
   });
   
   return rooms.map(room => ({
@@ -27,7 +31,11 @@ export const getRooms = async (): Promise<Room[]> => {
 export const getRoomById = async (id: string): Promise<Room | null> => {
   const room = await prisma.room.findUnique({
     where: { id },
-    include: { units: true },
+    include: {
+      units: {
+        orderBy: { order: 'asc' }
+      }
+    }
   });
   
   if (!room) return null;
@@ -51,13 +59,21 @@ export const getRoomById = async (id: string): Promise<Room | null> => {
 export const getRoomBySlugOrId = async (slugOrId: string): Promise<Room | null> => {
   let room = await prisma.room.findUnique({
     where: { slug: slugOrId },
-    include: { units: true },
+    include: {
+      units: {
+        orderBy: { order: 'asc' }
+      }
+    },
   });
   
   if (!room) {
     room = await prisma.room.findUnique({
       where: { id: slugOrId },
-      include: { units: true },
+      include: {
+        units: {
+          orderBy: { order: 'asc' }
+        }
+      },
     });
   }
   
@@ -129,18 +145,19 @@ export const updateRoom = async (id: string, room: Partial<Omit<Room, 'id' | 'sl
     if (room.imageHint !== undefined) updateData.imageHint = room.imageHint;
 
     if (room.units !== undefined) {
-      const unitsToUpdate = room.units.filter(u => u.id && !u.id.startsWith('new-'));
-      const unitsToCreate = room.units.filter(u => !u.id || u.id.startsWith('new-'));
+      const unitsWithOrder = room.units.map((u, index) => ({ ...u, order: index }));
+      const unitsToUpdate = unitsWithOrder.filter(u => u.id && !u.id.startsWith('new-'));
+      const unitsToCreate = unitsWithOrder.filter(u => !u.id || u.id.startsWith('new-'));
 
       updateData.units = {
         deleteMany: {
-          id: { notIn: unitsToUpdate.map(u => u.id) }
+          id: { notIn: unitsToUpdate.map(u => u.id!) }
         },
         update: unitsToUpdate.map(u => ({
-          where: { id: u.id },
-          data: { name: u.name }
+          where: { id: u.id! },
+          data: { name: u.name, order: u.order }
         })),
-        create: unitsToCreate.map(u => ({ name: u.name }))
+        create: unitsToCreate.map(u => ({ name: u.name, order: u.order }))
       };
     }
 

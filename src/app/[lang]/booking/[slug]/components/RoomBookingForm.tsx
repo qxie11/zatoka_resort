@@ -243,11 +243,17 @@ export default function RoomBookingForm({
     }
   };
 
-  // Сортируем номера (Домик 1, Домик 2 и т.д.), чтобы они шли по порядку,
-  // и "первый" всегда был логически первым.
+  // Используем порядок из базы данных (dnd из админки),
+  // а если order одинаковый (например, 0), то сортируем по имени
   const sortedUnits = useMemo(() => {
-    return room.units ? [...room.units].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })) : undefined;
-  }, [room.units]);
+    if (!room?.units) return undefined;
+    return [...room.units].sort((a, b) => {
+      const orderA = a.order ?? 0;
+      const orderB = b.order ?? 0;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.name.localeCompare(b.name, 'ru', { numeric: true });
+    });
+  }, [room?.units]);
 
   const isSingleUnit = sortedUnits && sortedUnits.length === 1;
 
