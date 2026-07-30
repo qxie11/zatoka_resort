@@ -16,6 +16,7 @@ import { PlusCircle } from "lucide-react";
 import RoomForm from "./components/RoomForm";
 import { useToast } from "@/hooks/use-toast";
 import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
+import ImageGallery from "@/components/rooms/ImageGallery";
 
 interface RoomsAdminClientProps {
   initialData: Room[];
@@ -27,6 +28,11 @@ export default function RoomsAdminClient({ initialData }: RoomsAdminClientProps)
   const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
   const [roomIdToDelete, setRoomIdToDelete] = React.useState<string | null>(null);
   const [deletingIds, setDeletingIds] = React.useState<string[]>([]);
+  const [galleryState, setGalleryState] = React.useState<{ isOpen: boolean; images: string[]; title: string }>({
+    isOpen: false,
+    images: [],
+    title: "",
+  });
   const { toast } = useToast();
 
   // RTK Query hooks with initial data
@@ -66,6 +72,10 @@ export default function RoomsAdminClient({ initialData }: RoomsAdminClientProps)
   const handleDelete = (roomId: string) => {
     setRoomIdToDelete(roomId);
     setDeleteConfirmOpen(true);
+  };
+
+  const handleOpenGallery = (images: string[], title: string) => {
+    setGalleryState({ isOpen: true, images, title });
   };
 
   const handleDeleteConfirm = async () => {
@@ -194,7 +204,7 @@ export default function RoomsAdminClient({ initialData }: RoomsAdminClientProps)
         </Button>
       </div>
       <DataTable 
-        columns={columns({ onEdit: handleEdit, onDelete: handleDelete })} 
+        columns={columns({ onEdit: handleEdit, onDelete: handleDelete, onOpenGallery: handleOpenGallery })} 
         data={visibleRooms} 
         onDeleteSelected={handleBulkDelete}
         onReorder={handleReorder}
@@ -211,6 +221,12 @@ export default function RoomsAdminClient({ initialData }: RoomsAdminClientProps)
         onConfirm={handleDeleteConfirm}
         title="Удалить номер?"
         description="Вы уверены, что хотите удалить этот номер? Все связанные данные будут потеряны."
+      />
+      <ImageGallery
+        images={galleryState.images}
+        isOpen={galleryState.isOpen}
+        onClose={() => setGalleryState((prev) => ({ ...prev, isOpen: false }))}
+        roomName={galleryState.title || "Галерея номера"}
       />
     </>
   );

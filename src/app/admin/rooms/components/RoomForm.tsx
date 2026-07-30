@@ -7,10 +7,11 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Minus, Plus, ArrowLeft, ArrowRight, Trash2, Upload, Link as LinkIcon, Image as ImageIcon, X } from "lucide-react";
+import { Minus, Plus, ArrowLeft, ArrowRight, Trash2, Upload, Link as LinkIcon, Image as ImageIcon, X, Maximize2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import ImageGallery from "@/components/rooms/ImageGallery";
 import {
   Sheet,
   SheetContent,
@@ -68,6 +69,9 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [amenityInput, setAmenityInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const [units, setUnits] = useState<{ id?: string; name: string }[]>([]);
   const [unitInput, setUnitInput] = useState('');
@@ -278,7 +282,8 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
   });
 
   return (
-    <Sheet open={isOpen} onOpenChange={onOpenChange}>
+    <>
+      <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent className="sm:max-w-[525px] overflow-y-auto bg-slate-950 border-l border-white/10 shadow-2xl text-slate-100">
         <SheetHeader className="pb-4 border-b border-white/10">
           <SheetTitle className="text-2xl font-bold text-white">
@@ -487,19 +492,30 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
                    <div className="grid grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-1">
                      {images.map((img, idx) => (
                        <div key={img.id} className="group relative flex flex-col bg-slate-950 border border-white/10 rounded-xl overflow-hidden shadow-md">
-                         <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
+                         <div 
+                           className="relative aspect-video w-full overflow-hidden bg-slate-900 cursor-pointer"
+                           onClick={() => {
+                             setLightboxIndex(idx);
+                             setLightboxOpen(true);
+                           }}
+                           title="Нажмите, чтобы открыть картинку на весь экран"
+                         >
                            <img 
                              src={img.url} 
                              alt={`Preview ${idx + 1}`}
                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                            />
+                           <div className="absolute inset-0 bg-slate-950/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1 backdrop-blur-[2px]">
+                             <Maximize2 className="h-6 w-6 text-white drop-shadow-md" />
+                             <span className="text-[11px] text-white font-medium drop-shadow-md">На весь экран</span>
+                           </div>
                            {idx === 0 && (
-                             <span className="absolute top-2 left-2 bg-teal-500 text-slate-950 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                             <span className="absolute top-2 left-2 z-10 bg-teal-500 text-slate-950 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm pointer-events-none">
                                Основное
                              </span>
                            )}
                            {img.file && (
-                             <span className="absolute top-2 right-2 bg-sky-500/80 backdrop-blur-md text-white text-[10px] px-2 py-0.5 rounded-full shadow-sm">
+                             <span className="absolute top-2 right-2 z-10 bg-sky-500/80 backdrop-blur-md text-white text-[10px] px-2 py-0.5 rounded-full shadow-sm pointer-events-none">
                                Файл
                              </span>
                            )}
@@ -604,5 +620,14 @@ export default function RoomForm({ isOpen, onOpenChange, onSubmit, room }: RoomF
           </form>
         </SheetContent>
       </Sheet>
+
+      <ImageGallery
+         images={images.map((img) => img.url)}
+         isOpen={lightboxOpen}
+         onClose={() => setLightboxOpen(false)}
+         roomName={form.watch("name") || "Галерея номера"}
+         initialSlide={lightboxIndex}
+       />
+    </>
    );
 }
