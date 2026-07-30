@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { Users, Mail, Phone, User, Eye, Minus, Plus, Zap, Moon } from "lucide-react";
+import { Users, Mail, Phone, User, Eye, Minus, Plus, Zap, Moon, ShieldCheck, CheckCircle2, Flame, BellRing } from "lucide-react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 
@@ -258,9 +258,9 @@ export default function RoomBookingForm({
   const isSingleUnit = sortedUnits && sortedUnits.length === 1;
 
   const { t } = useTranslation();
-  
+
   const FormSchema = getFormSchema(t);
-  
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -376,11 +376,11 @@ export default function RoomBookingForm({
       }, 0);
       toast({
         title: lang === "uk" ? "Номер недоступний" : lang === "en" ? "Room unavailable" : "Номер недоступен",
-        description: lang === "uk" 
+        description: lang === "uk"
           ? "Обраний номер недоступний на вказані дати. Будь ласка, оберіть інші дати."
           : lang === "en"
-          ? "The selected room is not available for the requested dates. Please choose other dates."
-          : "Выбранный номер недоступен на указанные даты. Пожалуйста, выберите другие даты.",
+            ? "The selected room is not available for the requested dates. Please choose other dates."
+            : "Выбранный номер недоступен на указанные даты. Пожалуйста, выберите другие даты.",
         variant: "destructive",
       });
     }
@@ -474,11 +474,11 @@ export default function RoomBookingForm({
               {lang === "uk" ? "Скидка за тривале проживання:" : lang === "en" ? "Long Stay Discount:" : "Скидка за длительное проживание:"}
             </span>
             <span className="text-slate-300">
-              {lang === "uk" 
+              {lang === "uk"
                 ? "Забронюйте від 7 ночей (-5%) або від 10 ночей (-10%) — скидка застосується автоматично!"
                 : lang === "en"
-                ? "Book 7+ nights (-5%) or 10+ nights (-10%) — discount applies automatically!"
-                : "Забронируйте от 7 ночей (-5%) или от 10 ночей (-10%) — скидка применится автоматически!"}
+                  ? "Book 7+ nights (-5%) or 10+ nights (-10%) — discount applies automatically!"
+                  : "Забронируйте от 7 ночей (-5%) или от 10 ночей (-10%) — скидка применится автоматически!"}
             </span>
           </div>
         </div>
@@ -738,8 +738,8 @@ export default function RoomBookingForm({
                                   🎁 {lang === "uk"
                                     ? `Скидка ${longStayDiscount}% за проживання від ${nights >= 10 ? 10 : 7} ночей!`
                                     : lang === "en"
-                                    ? `${longStayDiscount}% discount for staying ${nights >= 10 ? 10 : 7}+ nights!`
-                                    : `Скидка ${longStayDiscount}% за проживание от ${nights >= 10 ? 10 : 7} ночей!`}
+                                      ? `${longStayDiscount}% discount for staying ${nights >= 10 ? 10 : 7}+ nights!`
+                                      : `Скидка ${longStayDiscount}% за проживание от ${nights >= 10 ? 10 : 7} ночей!`}
                                 </span>
                               </div>
                             )}
@@ -777,70 +777,76 @@ export default function RoomBookingForm({
                     </div>
                   )}
               </div>
-              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-center">
-                <Dialog open={isQuickBookOpen} onOpenChange={setIsQuickBookOpen}>
-                  <DialogTrigger asChild>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="lg"
-                      className="w-full sm:w-auto border-teal-500/30 bg-teal-500/5 text-teal-300 hover:bg-teal-500/10 hover:border-teal-500/50 transition-all duration-300 rounded-xl flex items-center justify-center gap-1.5"
-                    >
-                      <Zap className="h-4 w-4 fill-teal-300/20 animate-pulse text-teal-400" />
-                      {qbt.btn}
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent aria-describedby={undefined} className="bg-slate-900 border border-white/10 text-white rounded-2xl max-w-md shadow-2xl p-6">
-                    <DialogHeader>
-                      <DialogTitle className="text-xl font-extrabold flex items-center gap-2 text-teal-300">
-                        <Zap className="h-5 w-5 fill-teal-300/30 text-teal-400" />
-                        {qbt.title}
-                      </DialogTitle>
-                      <DialogDescription className="text-slate-350 text-sm mt-2 leading-relaxed">
-                        {qbt.desc}
-                      </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={handleQuickBook} className="space-y-4 mt-4">
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-400">{qbt.nameLabel}</label>
-                        <Input
-                          placeholder={qbt.namePlaceholder}
-                          value={quickName}
-                          onChange={(e) => setQuickName(e.target.value)}
-                          required
-                          className="bg-slate-950/60 border-white/10 text-white rounded-xl h-11"
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-400">{qbt.phoneLabel}</label>
-                        <Input
-                          type="tel"
-                          placeholder="+380..."
-                          value={quickPhone}
-                          onChange={(e) => setQuickPhone(e.target.value)}
-                          required
-                          className="bg-slate-950/60 border-white/10 text-white rounded-xl h-11"
-                        />
-                      </div>
+              <div className="flex flex-col gap-4 w-full sm:w-auto sm:items-end">
+                <div className="flex items-center justify-center sm:justify-end gap-5 text-[11px] sm:text-xs text-slate-400 font-medium pb-1 w-full opacity-80">
+                  <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-teal-400" /> {lang === "uk" ? "Безпечна бронь" : lang === "en" ? "Secure Booking" : "Безопасная бронь"}</span>
+                  <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-teal-400" /> {lang === "uk" ? "Без комісій" : lang === "en" ? "No Fees" : "Без предоплат"}</span>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-center">
+                  <Dialog open={isQuickBookOpen} onOpenChange={setIsQuickBookOpen}>
+                    <DialogTrigger asChild>
                       <Button
-                        type="submit"
-                        disabled={isQuickSubmitting}
-                        className="w-full h-11 mt-2 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-black border-0 shadow-lg shadow-teal-500/20 rounded-xl"
+                        type="button"
+                        variant="outline"
+                        size="lg"
+                        className="w-full sm:w-auto border-teal-500/30 bg-teal-500/5 text-teal-300 hover:bg-teal-500/10 hover:border-teal-500/50 transition-all duration-300 rounded-xl flex items-center justify-center gap-1.5"
                       >
-                        {isQuickSubmitting ? qbt.submitting : qbt.submitBtn}
+                        <Zap className="h-4 w-4 fill-teal-300/20 animate-pulse text-teal-400" />
+                        {qbt.btn}
                       </Button>
-                    </form>
-                  </DialogContent>
-                </Dialog>
+                    </DialogTrigger>
+                    <DialogContent aria-describedby={undefined} className="bg-slate-900 border border-white/10 text-white rounded-2xl max-w-md shadow-2xl p-6">
+                      <DialogHeader>
+                        <DialogTitle className="text-xl font-extrabold flex items-center gap-2 text-teal-300">
+                          <Zap className="h-5 w-5 fill-teal-300/30 text-teal-400" />
+                          {qbt.title}
+                        </DialogTitle>
+                        <DialogDescription className="text-slate-350 text-sm mt-2 leading-relaxed">
+                          {qbt.desc}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <form onSubmit={handleQuickBook} className="space-y-4 mt-4">
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-bold uppercase tracking-wider text-slate-400">{qbt.nameLabel}</label>
+                          <Input
+                            placeholder={qbt.namePlaceholder}
+                            value={quickName}
+                            onChange={(e) => setQuickName(e.target.value)}
+                            required
+                            className="bg-slate-950/60 border-white/10 text-white rounded-xl h-11"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-bold uppercase tracking-wider text-slate-400">{qbt.phoneLabel}</label>
+                          <Input
+                            type="tel"
+                            placeholder="+380..."
+                            value={quickPhone}
+                            onChange={(e) => setQuickPhone(e.target.value)}
+                            required
+                            className="bg-slate-950/60 border-white/10 text-white rounded-xl h-11"
+                          />
+                        </div>
+                        <Button
+                          type="submit"
+                          disabled={isQuickSubmitting}
+                          className="w-full h-11 mt-2 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-black border-0 shadow-lg shadow-teal-500/20 rounded-xl"
+                        >
+                          {isQuickSubmitting ? qbt.submitting : qbt.submitBtn}
+                        </Button>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
 
-                <Button
-                  type="submit"
-                  size="lg"
-                  loading={isSubmitting}
-                  className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl"
-                >
-                  {t("bookBtn")}
-                </Button>
+                  <Button
+                    type="submit"
+                    size="lg"
+                    loading={isSubmitting}
+                    className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl"
+                  >
+                    {t("bookBtn")}
+                  </Button>
+                </div>
               </div>
             </div>
           </form>

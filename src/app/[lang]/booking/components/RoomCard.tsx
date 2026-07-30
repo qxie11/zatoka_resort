@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { Room } from "@/lib/types";
-import { BedDouble, Eye, Waves, Sparkles, ArrowRight, Scale } from "lucide-react";
+import { BedDouble, ArrowRight, Eye, Scale, Waves, Sparkles } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 interface RoomCardProps {
@@ -82,7 +82,7 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
           <div className="absolute inset-0 bg-teal-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
           
           {/* Floating Badges on Image */}
-          <div className="absolute top-4 left-4 flex flex-col gap-2">
+          <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/60 backdrop-blur-md border border-white/10 text-white text-xs font-medium">
               <BedDouble className="h-3.5 w-3.5 text-teal-400" />
               <span>{t.upTo} {room.capacity} {t.guests}</span>
