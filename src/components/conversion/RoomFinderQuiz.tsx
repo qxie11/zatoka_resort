@@ -145,8 +145,10 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
       filtered = filtered.filter(r => r.capacity >= 3);
     } else if (finalAnswers.company === "friends") {
       filtered = filtered.filter(r => r.capacity >= 4);
-    } else if (finalAnswers.company === "solo" || finalAnswers.company === "romantic") {
-      filtered = filtered.filter(r => r.capacity <= 3);
+    } else if (finalAnswers.company === "romantic") {
+      filtered = filtered.filter(r => r.capacity >= 2 && r.capacity <= 3);
+    } else if (finalAnswers.company === "solo") {
+      filtered = filtered.filter(r => r.capacity >= 1 && r.capacity <= 2);
     }
 
     // If we filtered out too many, fall back to all rooms
@@ -154,28 +156,50 @@ export default function RoomFinderQuiz({ rooms, lang }: RoomFinderQuizProps) {
 
     // 2. Preferences filter
     if (finalAnswers.preference === "yard") {
-      const yardRooms = filtered.filter(r => 
-        r.description.toLowerCase().includes("террас") || 
-        r.description.toLowerCase().includes("балкон") ||
-        r.description.toLowerCase().includes("terrace") ||
-        r.description.toLowerCase().includes("balcony")
-      );
+      const yardKeywords = ["террас", "балкон", "terrace", "balcony", "беседк", "двор", "зелен"];
+      const yardRooms = filtered.filter(r => {
+        const descMatch = yardKeywords.some(k => (r.description || "").toLowerCase().includes(k));
+        const amenityMatch = (r.amenities || []).some(a => yardKeywords.some(k => a.toLowerCase().includes(k)));
+        return descMatch || amenityMatch;
+      });
       if (yardRooms.length > 0) filtered = yardRooms;
     } else if (finalAnswers.preference === "kitchen") {
-      const kitchenRooms = filtered.filter(r => 
-        r.description.toLowerCase().includes("кухн") || 
-        r.description.toLowerCase().includes("kitchen")
-      );
-      if (kitchenRooms.length > 0) filtered = kitchenRooms;
+      const kitchenKeywords = ["своя кухня", "private kitchen", "окрема кухня", "полноценная кухня"];
+      const kitchenRooms = filtered.filter(r => {
+        const descMatch = kitchenKeywords.some(k => (r.description || "").toLowerCase().includes(k));
+        const amenityMatch = (r.amenities || []).some(a => kitchenKeywords.some(k => a.toLowerCase().includes(k)));
+        return descMatch || amenityMatch;
+      });
+      // Fallback if none have "Своя кухня", though we know Promenad and Domik do
+      if (kitchenRooms.length > 0) {
+        filtered = kitchenRooms;
+      } else {
+        const fallbackKeywords = ["кухн", "kitchen"];
+        const fallbackRooms = filtered.filter(r => {
+          return fallbackKeywords.some(k => (r.description || "").toLowerCase().includes(k)) ||
+                 (r.amenities || []).some(a => fallbackKeywords.some(k => a.toLowerCase().includes(k)));
+        });
+        if (fallbackRooms.length > 0) filtered = fallbackRooms;
+      }
     } else if (finalAnswers.preference === "budget") {
       // Sort by price ascending
       filtered.sort((a, b) => a.price - b.price);
     } else if (finalAnswers.preference === "space") {
-      // Sort by capacity descending
+      // Sort by capacity descending, then by size if available (or just capacity)
       filtered.sort((a, b) => b.capacity - a.capacity);
     }
 
     // Select the first recommended room
+    // If preference wasn't a sorting preference (like budget/space), maybe sort by closest capacity match
+    if (finalAnswers.preference === "yard" || finalAnswers.preference === "kitchen") {
+       let targetCapacity = 2;
+       if (finalAnswers.company === "family") targetCapacity = 3;
+       if (finalAnswers.company === "friends") targetCapacity = 4;
+       if (finalAnswers.company === "solo") targetCapacity = 1;
+       
+       filtered.sort((a, b) => Math.abs(a.capacity - targetCapacity) - Math.abs(b.capacity - targetCapacity));
+    }
+
     setRecommendation(filtered[0] || rooms[0]);
     setStep("result");
   };
