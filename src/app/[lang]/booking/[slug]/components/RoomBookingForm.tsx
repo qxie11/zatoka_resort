@@ -6,8 +6,8 @@ import { z } from "zod";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import { Users, Mail, Phone, User, Eye, Minus, Plus, Zap, Moon } from "lucide-react";
-import { useRouter, useParams } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
+import { useState, useEffect, useMemo } from "react";
 
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -243,7 +243,13 @@ export default function RoomBookingForm({
     }
   };
 
-  const isSingleUnit = room.units && room.units.length === 1;
+  // Сортируем номера (Домик 1, Домик 2 и т.д.), чтобы они шли по порядку,
+  // и "первый" всегда был логически первым.
+  const sortedUnits = useMemo(() => {
+    return room.units ? [...room.units].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })) : undefined;
+  }, [room.units]);
+
+  const isSingleUnit = sortedUnits && sortedUnits.length === 1;
 
   const { t } = useTranslation();
   
@@ -252,13 +258,127 @@ export default function RoomBookingForm({
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      unitId: isSingleUnit && room.units ? room.units[0].id : "",
+      unitId: isSingleUnit && sortedUnits ? sortedUnits[0].id! : "",
       guests: 1,
       name: "",
       phone: "",
       email: "",
     },
   });
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const checkinParam =
+      searchParams.get("checkin") ||
+      searchParams.get("checkIn") ||
+      searchParams.get("from") ||
+      searchParams.get("startDate");
+    const checkoutParam =
+      searchParams.get("checkout") ||
+      searchParams.get("checkOut") ||
+      searchParams.get("to") ||
+      searchParams.get("endDate");
+    const guestsParam = searchParams.get("guests");
+
+    if (!checkinParam || !checkoutParam) return;
+
+    const parseDateString = (str: string): Date | null => {
+      if (!str) return null;
+      const d = new Date(str);
+      if (isNaN(d.getTime())) return null;
+
+      // If string contains ISO timestamp with T / time component
+      if (str.includes("T")) {
+        return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      }
+
+      // Plain YYYY-MM-DD string
+      const clean = str.split("T")[0];
+      const parts = clean.split("-").map(Number);
+      if (parts.length === 3 && !parts.some(isNaN)) {
+        return new Date(parts[0], parts[1] - 1, parts[2]);
+      }
+      return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    };
+
+    const from = parseDateString(checkinParam);
+    const to = parseDateString(checkoutParam);
+
+    if (!from || !to || from >= to) return;
+
+    const parsedGuests = guestsParam ? parseInt(guestsParam, 10) : NaN;
+    const validGuests = !isNaN(parsedGuests) && parsedGuests > 0 ? parsedGuests : 1;
+
+    const parseUTCAsLocal = (dInput: Date | string) => {
+      const d = new Date(dInput);
+      if (isNaN(d.getTime())) return new Date();
+      // Using UTC methods ensures that a booking created at 12:00 UTC remains on the same calendar day 
+      // regardless of whether the user is in America (UTC-4) or Asia (UTC+9).
+      return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+    };
+
+    const datesOverlap = (s1: Date, e1: Date, s2: Date, e2: Date): boolean => {
+      return s1 < e2 && e1 > s2;
+    };
+
+    let availableUnitId: string | null = null;
+
+    if (sortedUnits && sortedUnits.length > 0) {
+      for (const unit of sortedUnits) {
+        const isBooked = existingBookings.some((b) => {
+          if (b.unitId && b.unitId !== unit.id) return false;
+          const bStart = parseUTCAsLocal(b.startDate);
+          const bEnd = parseUTCAsLocal(b.endDate);
+          return datesOverlap(from, to, bStart, bEnd);
+        });
+
+        if (!isBooked) {
+          availableUnitId = unit.id!;
+          break;
+        }
+      }
+    } else {
+      const isBooked = existingBookings.some((b) => {
+        const bStart = parseUTCAsLocal(b.startDate);
+        const bEnd = parseUTCAsLocal(b.endDate);
+        return datesOverlap(from, to, bStart, bEnd);
+      });
+
+      if (!isBooked) {
+        availableUnitId = "default";
+      }
+    }
+
+    if (availableUnitId) {
+      if (sortedUnits && sortedUnits.length > 0 && availableUnitId !== "default") {
+        setTimeout(() => form.setValue("unitId", availableUnitId, { shouldValidate: true, shouldDirty: true, shouldTouch: true }), 0);
+      }
+      setTimeout(() => form.setValue("dateRange", { from, to }, { shouldValidate: true, shouldDirty: true, shouldTouch: true }), 0);
+      if (validGuests > 0) {
+        setTimeout(() => form.setValue("guests", validGuests, { shouldValidate: true, shouldDirty: true, shouldTouch: true }), 0);
+      }
+    } else {
+      // Room or units NOT available -> treat as if nothing was passed
+      setTimeout(() => {
+        form.setValue("dateRange", { from: undefined as any, to: undefined as any }, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+        if (isSingleUnit && sortedUnits) {
+          form.setValue("unitId", sortedUnits[0].id!, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+        } else {
+          form.setValue("unitId", "", { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+        }
+      }, 0);
+      toast({
+        title: lang === "uk" ? "Номер недоступний" : lang === "en" ? "Room unavailable" : "Номер недоступен",
+        description: lang === "uk" 
+          ? "Обраний номер недоступний на вказані дати. Будь ласка, оберіть інші дати."
+          : lang === "en"
+          ? "The selected room is not available for the requested dates. Please choose other dates."
+          : "Выбранный номер недоступен на указанные даты. Пожалуйста, выберите другие даты.",
+        variant: "destructive",
+      });
+    }
+  }, [searchParams, room, existingBookings, form, lang, sortedUnits, isSingleUnit, toast]);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsSubmitting(true);
@@ -359,7 +479,7 @@ export default function RoomBookingForm({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {room.units && room.units.length > 0 && (
+            {sortedUnits && sortedUnits.length > 0 && (
               <FormField
                 control={form.control}
                 name="unitId"
@@ -404,11 +524,11 @@ export default function RoomBookingForm({
                     >
                       <FormControl>
                         <SelectTrigger className="w-full bg-slate-900 border-white/10 text-white rounded-xl focus:ring-teal-500 shadow-sm h-11">
-                          <SelectValue placeholder={isSingleUnit ? room.units?.[0].name : t("roomUnitPlaceholder")} />
+                          <SelectValue placeholder={isSingleUnit ? sortedUnits?.[0].name : t("roomUnitPlaceholder")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-md">
-                        {room.units!.map((unit) => (
+                        {sortedUnits!.map((unit) => (
                           <SelectItem key={unit.id} value={unit.id!} className="focus:bg-teal-500/20 focus:text-teal-300 rounded-lg py-2">
                             {unit.name}
                           </SelectItem>
@@ -421,7 +541,7 @@ export default function RoomBookingForm({
               />
             )}
 
-            {(!room.units || room.units.length === 0 || form.watch("unitId")) && (
+            {(!sortedUnits || sortedUnits.length === 0 || form.watch("unitId")) && (
               <FormField
                 control={form.control}
                 name="dateRange"

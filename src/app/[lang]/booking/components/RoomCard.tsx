@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { Room } from "@/lib/types";
 import { BedDouble, Eye, Waves, Sparkles, ArrowRight, Scale } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 interface RoomCardProps {
   room: Room;
@@ -50,9 +50,14 @@ const translations = {
 
 export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const segments = pathname?.split("/") || [];
   const langKey = (["ru", "uk", "en"].includes(segments[1]) ? segments[1] : "ru") as "ru" | "uk" | "en";
   const t = translations[langKey];
+
+  const queryString = searchParams?.toString();
+  const detailsHref = `/${langKey}/rooms/${room.slug}${queryString ? `?${queryString}` : ""}`;
+  const bookingHref = `/${langKey}/booking/${room.slug}${queryString ? `?${queryString}` : ""}`;
 
   return (
     <div
@@ -154,7 +159,7 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
               variant="outline" 
               className="h-12 px-4 sm:px-6 rounded-xl sm:rounded-2xl bg-white/5 border-white/10 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 w-full sm:w-auto text-sm sm:text-base font-semibold"
             >
-              <Link href={`/${langKey}/rooms/${room.slug}`}>
+              <Link href={detailsHref}>
                 <Eye className="mr-2 h-4 w-4 text-teal-400 shrink-0" />
                 <span className="truncate">{t.view}</span>
               </Link>
@@ -164,7 +169,7 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
               asChild 
               className="col-span-2 sm:col-span-1 h-12 px-4 sm:px-8 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-black border-0 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 w-full sm:w-auto text-sm sm:text-base uppercase tracking-wider mt-1 sm:mt-0"
             >
-              <Link href={`/${langKey}/booking/${room.slug}`}>
+              <Link href={bookingHref}>
                 <span className="truncate">{t.book}</span>
                 <ArrowRight className="ml-2 h-4 w-4 shrink-0" />
               </Link>

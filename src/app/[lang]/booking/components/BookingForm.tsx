@@ -24,7 +24,7 @@ import type { Room, Booking } from "@/lib/types";
 import i18n from "@/lib/i18n";
 import { DateRangePicker } from "@/components/booking/DateRangePicker";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 const dateFnsLocales = {
   ru,
@@ -47,6 +47,8 @@ export default function BookingForm({
 }: BookingFormProps) {
   const { t, i18n: i18nInstance } = useTranslation();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [currentLang, setCurrentLang] = useState<SupportedLanguage>("ru");
 
@@ -91,17 +93,29 @@ export default function BookingForm({
 
   useEffect(() => {
     if (!mounted) return;
-    const checkin = searchParams.get("checkin");
-    const checkout = searchParams.get("checkout");
+
+    const parseDateString = (str?: string | null): Date | undefined => {
+      if (!str) return undefined;
+      const clean = str.split("T")[0];
+      const parts = clean.split("-").map(Number);
+      if (parts.length === 3 && !parts.some(isNaN)) {
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
+        if (!isNaN(d.getTime())) return d;
+      }
+      const d = new Date(str);
+      return isNaN(d.getTime()) ? undefined : d;
+    };
+
+    const checkin = searchParams.get("checkin") || searchParams.get("checkIn");
+    const checkout = searchParams.get("checkout") || searchParams.get("checkOut");
     const guests = searchParams.get("guests");
 
     if (checkin || checkout || guests) {
-      const from = checkin ? new Date(checkin) : undefined;
-      const to = checkout ? new Date(checkout) : undefined;
+      const from = parseDateString(checkin);
+      const to = parseDateString(checkout);
       const parsedGuests = guests ? parseInt(guests, 10) : 1;
       const validGuests = isNaN(parsedGuests) ? 1 : parsedGuests;
 
-       
       form.reset({
         dateRange: { from, to },
         guests: validGuests,
@@ -169,6 +183,19 @@ export default function BookingForm({
     });
 
     onFilterChange(filteredRooms, data.guests);
+
+    // Update query parameters in URL
+    if (data.dateRange.from && data.dateRange.to) {
+      const fromStr = `${data.dateRange.from.getFullYear()}-${String(data.dateRange.from.getMonth() + 1).padStart(2, "0")}-${String(data.dateRange.from.getDate()).padStart(2, "0")}`;
+      const toStr = `${data.dateRange.to.getFullYear()}-${String(data.dateRange.to.getMonth() + 1).padStart(2, "0")}-${String(data.dateRange.to.getDate()).padStart(2, "0")}`;
+      
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("checkin", fromStr);
+      params.set("checkout", toStr);
+      params.set("guests", data.guests.toString());
+
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    }
 
     if (filteredRooms.length === 0) {
       toast({

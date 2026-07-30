@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import type { Room } from '@/lib/types';
 import { ArrowRight, BedDouble, Waves } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
@@ -18,6 +18,8 @@ export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
   const { t } = useTranslation();
 
   const params = useParams();
+  const searchParams = useSearchParams();
+  const queryString = searchParams?.toString();
   const lang = params?.lang || 'ru';
   const featuredRooms = rooms.slice(0, 3);
 
@@ -76,12 +78,12 @@ export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
                 <p className="text-xl font-extrabold text-teal-300 mr-auto">{room.price} {t("currency") || "грн"} <span className="text-xs text-slate-400 font-normal">/ {t("perNight") || "ночь"}</span></p>
                 <div className="flex flex-col sm:flex-row gap-3 w-full">
                   <Button asChild variant="outline" className="w-full sm:flex-1 border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 rounded-xl">
-                    <Link href={`/${lang}/rooms/${room.slug}`} className="flex items-center justify-center">
+                    <Link href={`/${lang}/rooms/${room.slug}${queryString ? `?${queryString}` : ""}`} className="flex items-center justify-center">
                       {t("moreDetails") || "Подробнее"} <ArrowRight className="ml-1.5 h-4 w-4 text-teal-400" />
                     </Link>
                   </Button>
                   <Button asChild className="w-full sm:flex-1 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl water-reflection">
-                    <Link href={`/${lang}/booking/${room.slug}`}>
+                    <Link href={`/${lang}/booking/${room.slug}${queryString ? `?${queryString}` : ""}`}>
                       {t("book") || "Забронировать"}
                     </Link>
                   </Button>
