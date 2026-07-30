@@ -131,6 +131,13 @@ export default function BookingForm({
             }
           }
           return isRoomAvailable(room, from, to);
+        }).sort((a, b) => {
+          const diffA = Math.abs(a.capacity - validGuests);
+          const diffB = Math.abs(b.capacity - validGuests);
+          if (diffA === diffB) {
+            return a.price - b.price;
+          }
+          return diffA - diffB;
         });
          
         onFilterChange(filteredRooms, validGuests);
@@ -180,6 +187,15 @@ export default function BookingForm({
       }
 
       return isRoomAvailable(room, data.dateRange.from!, data.dateRange.to!);
+    }).sort((a, b) => {
+      // Sort by capacity closest to requested guests first
+      const diffA = Math.abs(a.capacity - data.guests);
+      const diffB = Math.abs(b.capacity - data.guests);
+      if (diffA === diffB) {
+        // If capacities are equidistant, sort by price (cheaper first)
+        return a.price - b.price;
+      }
+      return diffA - diffB;
     });
 
     onFilterChange(filteredRooms, data.guests);
