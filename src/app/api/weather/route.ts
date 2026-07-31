@@ -16,7 +16,7 @@ export async function GET() {
 
     // 2. Fetch fresh data from Open-Meteo
     const res = await fetch(
-      "https://api.open-meteo.com/v1/forecast?latitude=46.158222&longitude=30.541194&current=temperature_2m,relative_humidity_2m,wind_speed_10m",
+      "https://api.open-meteo.com/v1/forecast?latitude=46.13355&longitude=30.51818&current=temperature_2m,relative_humidity_2m,wind_speed_10m",
       { next: { revalidate: 0 } } // Disable next built-in fetch cache to manage it ourselves
     );
 

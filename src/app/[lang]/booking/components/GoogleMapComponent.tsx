@@ -9,8 +9,8 @@ const containerStyle = {
 };
 
 const center = {
-  lat: 46.158222,
-  lng: 30.541194,
+  lat: 46.13355,
+  lng: 30.51818,
 };
 
 // Custom dark map styling matching the premium dark theme of Zatoka Resort
@@ -74,8 +74,8 @@ const ATTRACTIONS: Attraction[] = [
     id: "hotel",
     name: { ru: "Zatoka Resort (Отель)", uk: "Zatoka Resort (Готель)", en: "Zatoka Resort (Hotel)" },
     desc: { ru: "Наш отель — отправная точка вашего отдыха у моря.", uk: "Наш готель — стартова точка вашого відпочинку біля моря.", en: "Our hotel — the starting point of your seaside vacation." },
-    lat: 46.158222,
-    lng: 30.541194,
+    lat: 46.13355,
+    lng: 30.51818,
     distance: { ru: "0 км", uk: "0 км", en: "0 km" }
   },
   {

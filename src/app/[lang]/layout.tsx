@@ -156,8 +156,8 @@ export default async function RootLayout({
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": "46.0653",
-      "longitude": "30.4578"
+      "latitude": "46.13355",
+      "longitude": "30.51818"
     },
     "starRating": {
       "@type": "Rating",
