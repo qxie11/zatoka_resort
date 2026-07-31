@@ -123,13 +123,16 @@ export default async function RootLayout({
 }) {
   const { lang } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
-  
-  // Fetch rooms on the Server Side to get the lowest price
-  let minPrice = 1500;
+
+  // Fetch rooms on the Server Side to get min and max prices
+  let minPrice = 400;
+  let maxPrice = 2200;
   try {
     const rooms = await getRooms();
     if (rooms && rooms.length) {
-      minPrice = Math.min(...rooms.map((r) => r.price));
+      const prices = rooms.map((r) => r.price);
+      minPrice = Math.min(...prices);
+      maxPrice = Math.max(...prices);
     }
   } catch (err) {
     console.error("Failed to fetch rooms in RootLayout:", err);
@@ -141,8 +144,8 @@ export default async function RootLayout({
     "name": "Zatoka Resort",
     "description": "Premium family hotel in Zatoka, Odesa Region, 5 minutes walk to the Black Sea beach.",
     "url": `${baseUrl}/${lang}`,
-    "telephone": "+380671234567",
-    "priceRange": `${minPrice} - 5000 UAH`,
+    "telephone": "+380669212275",
+    "priceRange": `${minPrice} - ${maxPrice} UAH`,
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Sadovaya St, 1835, Limanskaya Station",
