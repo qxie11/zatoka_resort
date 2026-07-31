@@ -27,9 +27,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const meta = data[lang as keyof typeof data] || data.ru;
   const canonicalUrl = `${baseUrl}/${lang}/quiz`;
 
+  const keywords = {
+    ru: ["квиз затока", "тест затока", "знаешь ли ты затоку", "отдых в затоке игра"],
+    uk: ["квіз затока", "тест затока", "чи знаєш ти затоку", "відпочинок в затоці гра"],
+    en: ["zatoka quiz", "zatoka trivia", "zatoka vacation quiz"]
+  };
+
   return {
     title: meta.title,
     description: meta.desc,
+    keywords: keywords[lang as keyof typeof keywords] || keywords.ru,
     alternates: {
       canonical: canonicalUrl,
       languages: {

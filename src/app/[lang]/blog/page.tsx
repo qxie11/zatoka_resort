@@ -38,9 +38,16 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
   const title = titles[lang as keyof typeof titles] || titles.ru;
   const description = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
 
+  const keywords = {
+    ru: ["блог затока", "новости затоки", "советы туристам затока", "отдых в затоке статьи", "гид по затоке"],
+    uk: ["блог затока", "новини затоки", "поради туристам затока", "відпочинок в затоці статті", "гід по затоці"],
+    en: ["zatoka blog", "zatoka travel guide", "black sea vacation tips", "zatoka resort news"]
+  };
+
   return {
     title,
     description,
+    keywords: keywords[lang as keyof typeof keywords] || keywords.ru,
     alternates: {
       canonical: canonicalPath,
       languages: {

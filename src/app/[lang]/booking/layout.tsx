@@ -22,9 +22,16 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const title = titles[lang as keyof typeof titles] || titles.ru;
   const description = descriptions[lang as keyof typeof descriptions] || descriptions.ru;
 
+  const keywords = {
+    ru: ["забронировать отель затока", "бронирование номеров затока", "снять номер затока цены", "затока отдых бронь"],
+    uk: ["забронювати готель затока", "бронювання номерів затока", "зняти номер затока ціни", "затока відпочинок бронь"],
+    en: ["book hotel zatoka", "zatoka room booking", "zatoka beach hotel rates"]
+  };
+
   return {
     title,
     description,
+    keywords: keywords[lang as keyof typeof keywords] || keywords.ru,
     alternates: {
       canonical: canonicalUrl,
       languages: {
