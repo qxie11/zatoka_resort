@@ -18,6 +18,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: 'weekly',
         priority: route === '' ? 1.0 : 0.8,
+        alternates: {
+          languages: {
+            ru: `${baseUrl}/ru${route}`,
+            uk: `${baseUrl}/uk${route}`,
+            en: `${baseUrl}/en${route}`,
+          },
+        },
       });
     });
   });
@@ -32,12 +39,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           lastModified: new Date(),
           changeFrequency: 'monthly',
           priority: 0.9,
+          alternates: {
+            languages: {
+              ru: `${baseUrl}/ru/rooms/${room.slug}`,
+              uk: `${baseUrl}/uk/rooms/${room.slug}`,
+              en: `${baseUrl}/en/rooms/${room.slug}`,
+            },
+          },
         });
         sitemapEntries.push({
           url: `${baseUrl}/${lang}/booking/${room.slug}`,
           lastModified: new Date(),
           changeFrequency: 'monthly',
           priority: 0.9,
+          alternates: {
+            languages: {
+              ru: `${baseUrl}/ru/booking/${room.slug}`,
+              uk: `${baseUrl}/uk/booking/${room.slug}`,
+              en: `${baseUrl}/en/booking/${room.slug}`,
+            },
+          },
         });
       });
     });
@@ -56,6 +77,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           lastModified: new Date(post.updatedAt || post.date),
           changeFrequency: 'weekly',
           priority: 0.7,
+          alternates: {
+            languages: {
+              ru: `${baseUrl}/ru/blog/${post.slug}`,
+              uk: `${baseUrl}/uk/blog/${post.slug}`,
+              en: `${baseUrl}/en/blog/${post.slug}`,
+            },
+          },
         });
       });
     });

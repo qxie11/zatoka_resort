@@ -18,11 +18,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!room) return { title: "Not Found" };
 
-  const title = `${room.name} | Zatoka Resort`;
+  const currentYear = new Date().getFullYear();
+  const title = lang === 'uk'
+    ? `Бронювання номера ${room.name} | Zatoka Resort`
+    : lang === 'en'
+    ? `Book ${room.name} Online | Zatoka Resort`
+    : `Бронирование номера ${room.name} | Zatoka Resort`;
+
+  const description = lang === 'uk'
+    ? `Онлайн-бронювання номера ${room.name} в Zatoka Resort. Ціна від ${room.price} грн/ніч. Гарантія кращої ціни, миттєве підтвердження.`
+    : lang === 'en'
+    ? `Online booking for ${room.name} at Zatoka Resort. Rates from ${room.price} UAH/night. Best rate guarantee, instant confirmation.`
+    : `Онлайн-бронирование номера ${room.name} в Zatoka Resort. Цена от ${room.price} грн/ночь. Гарантия лучшей цены, мгновенное подтверждение.`;
+
+  const keywords = [
+    `бронирование ${room.name}`,
+    `забронировать ${room.name} затока`,
+    `затока бронь номера ${currentYear}`,
+    `отель затока онлайн бронирование`
+  ];
+
   const canonicalUrl = `${baseUrl}/${lang}/booking/${room.slug}`;
 
   return {
     title,
+    description,
+    keywords,
     alternates: {
       canonical: canonicalUrl,
       languages: {
@@ -30,6 +51,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         uk: `${baseUrl}/uk/booking/${room.slug}`,
         en: `${baseUrl}/en/booking/${room.slug}`,
       },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "Zatoka Resort",
+      images: [
+        {
+          url: room.imageUrl,
+          width: 1200,
+          height: 630,
+          alt: room.name,
+        }
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [room.imageUrl],
     },
   };
 }

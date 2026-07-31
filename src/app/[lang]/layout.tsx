@@ -20,12 +20,54 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const currentYear = new Date().getFullYear();
 
   const i18n = {
-    ru: { title: "Отдых в Затоке | Zatoka Resort", desc: `Семейный отель в Затоке в 5 минутах от моря. Кондиционеры, комфортные номера, цены ${currentYear}.` },
-    uk: { title: "Відпочинок в Затоці | Zatoka Resort", desc: `Сімейний готель в Затоці в 5 хвилинах від моря. Кондиціонери, комфортні номери, ціни ${currentYear}.` },
-    en: { title: "Zatoka Resort | Seaside Hotel", desc: `Family hotel in Zatoka, just a 5-minute walk to the beach. Air conditioning, comfortable rooms, best rates ${currentYear}.` },
+    ru: {
+      title: "Отдых в Затоке 2026 | Отель Zatoka Resort у моря",
+      desc: `Официальный сайт отеля Zatoka Resort в Затоке (Лиманская). Комфортабельные номера с кондиционером в 5 минутах от моря. Цены ${currentYear}, скидки и бронирование без комиссии.`,
+      keywords: [
+        "отдых в затоке",
+        "отель в затоке",
+        "гостиница затока 2026",
+        "снять номер в затоке",
+        "затока отель у моря",
+        "отель с кондиционером затока",
+        "лиманская затока отели",
+        "затока бронирование номеров",
+        "отдых в затоке цены",
+        "семейный отель затока"
+      ]
+    },
+    uk: {
+      title: "Відпочинок в Затоці 2026 | Готель Zatoka Resort біля моря",
+      desc: `Офіційний сайт готелю Zatoka Resort в Затоці (Лиманська). Комфортні номери з кондиціонером за 5 хвилин від моря. Ціни ${currentYear}, знижки та бронювання без комісії.`,
+      keywords: [
+        "відпочинок в затоці",
+        "готель в затоці",
+        "готель затока 2026",
+        "зняти номер в затоці",
+        "затока готель біля моря",
+        "готель з кондиціонером затока",
+        "лиманська затока готелі",
+        "затока бронювання номерів",
+        "відпочинок в затоці ціни",
+        "сімейний готель затока"
+      ]
+    },
+    en: {
+      title: "Zatoka Resort 2026 | Family Beachfront Hotel in Zatoka",
+      desc: `Official website of Zatoka Resort in Zatoka, Ukraine. Comfortable air-conditioned rooms 5 minutes from the beach. Best rates ${currentYear}, direct booking with no fees.`,
+      keywords: [
+        "zatoka hotel",
+        "resort in zatoka",
+        "zatoka beach accommodation",
+        "zatoka hotel room booking",
+        "seaside hotel zatoka ukraine",
+        "black sea resorts zatoka"
+      ]
+    },
   };
 
-  const { title, desc } = i18n[lang as keyof typeof i18n] || i18n.ru;
+  const { title, desc, keywords } = i18n[lang as keyof typeof i18n] || i18n.ru;
+  const ogImageUrl = `${baseUrl}/hero-bg.jpg`;
 
   return {
     metadataBase: new URL(baseUrl),
@@ -37,6 +79,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       template: "%s | Zatoka Resort",
     },
     description: desc,
+    keywords,
     alternates: {
       canonical: `${baseUrl}/${lang}`,
       languages: {
@@ -49,14 +92,24 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     openGraph: {
       type: "website",
       locale: lang,
+      url: `${baseUrl}/${lang}`,
       siteName: "Zatoka Resort",
       title,
       description: desc,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: "Zatoka Resort - Seaside Hotel",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description: desc,
+      images: [ogImageUrl],
     },
   };
 }
@@ -69,6 +122,7 @@ export default async function RootLayout({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
   
   // Fetch rooms on the Server Side to get the lowest price
   let minPrice = 1500;
@@ -85,9 +139,10 @@ export default async function RootLayout({
     "@context": "https://schema.org",
     "@type": "Hotel",
     "name": "Zatoka Resort",
-    "description": "Premium family hotel in Zatoka, Ukraine.",
-    "url": "https://zatoka-hotel.com",
-    "telephone": "+380123456789",
+    "description": "Premium family hotel in Zatoka, Odesa Region, 5 minutes walk to the Black Sea beach.",
+    "url": `${baseUrl}/${lang}`,
+    "telephone": "+380671234567",
+    "priceRange": `${minPrice} - 5000 UAH`,
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Sadovaya St, 1835, Limanskaya Station",
@@ -96,11 +151,22 @@ export default async function RootLayout({
       "postalCode": "67772",
       "addressCountry": "UA"
     },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "46.0653",
+      "longitude": "30.4578"
+    },
     "starRating": {
       "@type": "Rating",
-      "ratingValue": "4"
+      "ratingValue": "4.9"
     },
-    "priceRange": "$$"
+    "amenityFeature": [
+      { "@type": "LocationFeatureSpecification", "name": "Free Wi-Fi", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Air Conditioning", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Free Parking", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Beachfront Access", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Barbecue Zone", "value": true }
+    ]
   };
 
   return (

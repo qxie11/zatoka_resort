@@ -23,13 +23,36 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!room) return { title: "Not Found" };
 
-  const title = `${room.name} | Zatoka Resort`;
+  const currentYear = new Date().getFullYear();
+  const title = lang === 'uk'
+    ? `${room.name} — Зняти Номер у Затоці ${currentYear} | Zatoka Resort`
+    : lang === 'en'
+    ? `${room.name} — Book Beachfront Room in Zatoka | Zatoka Resort`
+    : `${room.name} — Снять Номер в Затоке ${currentYear} | Zatoka Resort`;
+
+  const description = room.description || (
+    lang === 'uk'
+      ? `Зняти номер ${room.name} в готелі Zatoka Resort. До ${room.capacity} гостей, ціна від ${room.price} грн/ніч. Забронювати відпочинок біля моря.`
+      : lang === 'en'
+      ? `Book ${room.name} at Zatoka Resort. Up to ${room.capacity} guests, rates from ${room.price} UAH/night. Air conditioning, Wi-Fi, near beach.`
+      : `Снять номер ${room.name} в отеле Zatoka Resort. До ${room.capacity} гостей, цена от ${room.price} грн/ночь. Забронировать отдых у моря.`
+  );
+
+  const keywords = [
+    room.name,
+    `${room.name} затока`,
+    `снять ${room.name} затока`,
+    `номер на ${room.capacity} человек затока`,
+    `отдых в затоке цены ${currentYear}`,
+    `отель затока забронировать`
+  ];
+
   const canonicalUrl = `${baseUrl}/${lang}/rooms/${room.slug}`;
-  const description = room.description || `Забронируйте ${room.name} в Zatoka Resort. Комфортный отдых у моря.`;
 
   return {
     title,
     description,
+    keywords,
     alternates: {
       canonical: canonicalUrl,
       languages: {
@@ -42,6 +65,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       url: canonicalUrl,
+      siteName: "Zatoka Resort",
       images: [
         {
           url: room.imageUrl,
@@ -50,7 +74,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           alt: room.name,
         }
       ],
-      type: "article",
+      type: "website",
     },
     twitter: {
       card: "summary_large_image",

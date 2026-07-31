@@ -13,25 +13,45 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const data = {
     ru: {
-      title: "О нас | Отдых в Затоке",
-      desc: `Узнайте больше о семейном отеле Zatoka Resort в Затоке: в 5 минутах от моря, уютные номера и лучший сервис. Бронируйте напрямую по ценам ${currentYear}!`,
+      title: "О Нас — Семейный Отель Zatoka Resort в Затоке",
+      desc: `Узнайте больше о семейном отеле Zatoka Resort в Затоке: 5 минут до пляжа, мангалы, детская зона, Wi-Fi. Прямое бронирование по ценам ${currentYear}.`,
+      keywords: [
+        "о нас затока ресорт",
+        "отель в затоке информация",
+        "гостиница затока лиманская",
+        "отдых в затоке отель"
+      ]
     },
     uk: {
-      title: "Про нас | Відпочинок в Затоці",
-      desc: `Дізнайтеся більше про сімейний готель Zatoka Resort у Затоці: в 5 хвилинах від моря, затишні номери та найкращий сервіс. Бронюйте напряму за цінами ${currentYear}!`,
+      title: "Про Нас — Сімейний Готель Zatoka Resort у Затоці",
+      desc: `Дізнайтеся більше про сімейний готель Zatoka Resort у Затоці: 5 хвилин до пляжу, мангали, дитяча зона, Wi-Fi. Пряме бронювання за цінами ${currentYear}.`,
+      keywords: [
+        "про нас затока ресорт",
+        "готель в затоці інформація",
+        "готель затока лиманська",
+        "відпочинок в затоці готель"
+      ]
     },
     en: {
-      title: "About Us | Zatoka Resort",
-      desc: `Discover more about Zatoka Resort: peaceful location just a 5-minute walk to the sea, cozy rooms, and top-tier hospitality. Direct booking ${currentYear} at best rates.`,
+      title: "About Us — Family Hotel Zatoka Resort in Ukraine",
+      desc: `Learn more about Zatoka Resort: peaceful seaside location 5 minutes walk to the Black Sea, cozy air-conditioned rooms, barbecue area, best rates ${currentYear}.`,
+      keywords: [
+        "about zatoka resort",
+        "zatoka hotel info",
+        "seaside hotel ukraine",
+        "zatoka accommodation overview"
+      ]
     },
   };
 
   const meta = data[lang as keyof typeof data] || data.ru;
   const canonicalUrl = `${baseUrl}/${lang}/about`;
+  const ogImageUrl = `${baseUrl}/hero-bg.jpg`;
 
   return {
     title: meta.title,
     description: meta.desc,
+    keywords: meta.keywords,
     alternates: {
       canonical: canonicalUrl,
       languages: {
@@ -48,6 +68,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       siteName: "Zatoka Resort",
       locale: lang,
       type: "website",
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: meta.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.title,
+      description: meta.desc,
+      images: [ogImageUrl],
     },
   };
 }

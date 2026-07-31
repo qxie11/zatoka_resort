@@ -8,20 +8,79 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang } = await params;
-
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
   const currentYear = new Date().getFullYear();
 
   const data = {
-    ru: { title: "Отдых в Затоке | Zatoka Resort", desc: `Премиум-отель в Затоке в 5 минутах от моря. Все удобства, комфорт ${currentYear}.` },
-    uk: { title: "Відпочинок в Затоці | Zatoka Resort", desc: `Преміум-готель в Затоці в 5 хвилинах від моря. Всі зручності, комфорт ${currentYear}.` },
-    en: { title: "Zatoka Resort | Seaside Hotel", desc: `Premium hotel in Zatoka just a 5-minute walk to the sea. Best rates, full comfort ${currentYear}.` },
+    ru: {
+      title: "Отдых в Затоке 2026 — Семейный Отель Zatoka Resort у Моря",
+      desc: `Снять номер в Затоке у моря на станции Лиманская. Комфортные номера, детская площадка, мангальная зона, Wi-Fi, цены ${currentYear}. Забронируйте отдых напрямую!`,
+      keywords: [
+        "отдых в затоке 2026",
+        "снять номер в затоке у моря",
+        "отель затока лиманская",
+        "семейный отдых затока",
+        "затока гостиница цены",
+        "отель в затоке первая линия",
+        "бронирование затока"
+      ]
+    },
+    uk: {
+      title: "Відпочинок в Затоці 2026 — Сімейний Готель Zatoka Resort біля Моря",
+      desc: `Зняти номер в Затоці біля моря на станції Лиманська. Комфортні номери, дитячий майданчик, мангальна зона, Wi-Fi, ціни ${currentYear}. Забронюйте відпочинок напряму!`,
+      keywords: [
+        "відпочинок в затоці 2026",
+        "зняти номер в затоці біля моря",
+        "готель затока лиманська",
+        "сімейний відпочинок затока",
+        "затока готель ціни",
+        "бронювання затока"
+      ]
+    },
+    en: {
+      title: "Zatoka Resort 2026 — Family Hotel near the Black Sea Beach",
+      desc: `Book a hotel room in Zatoka, Ukraine. Comfortable air-conditioned rooms, barbecue area, Wi-Fi, playground, best rates ${currentYear}. Direct online booking.`,
+      keywords: [
+        "zatoka resort 2026",
+        "book room zatoka beach",
+        "zatoka hotel limanskaya",
+        "family vacation zatoka ukraine",
+        "zatoka seaside hotel"
+      ]
+    },
   };
 
   const meta = data[lang as keyof typeof data] || data.ru;
+  const canonicalUrl = `${baseUrl}/${lang}`;
+  const ogImageUrl = `${baseUrl}/hero-bg.jpg`;
 
   return {
     title: meta.title,
     description: meta.desc,
+    keywords: meta.keywords,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        ru: `${baseUrl}/ru`,
+        uk: `${baseUrl}/uk`,
+        en: `${baseUrl}/en`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      locale: lang,
+      url: canonicalUrl,
+      title: meta.title,
+      description: meta.desc,
+      siteName: "Zatoka Resort",
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: meta.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.title,
+      description: meta.desc,
+      images: [ogImageUrl],
+    },
   };
 }
 

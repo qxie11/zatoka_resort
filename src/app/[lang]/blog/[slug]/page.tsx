@@ -58,9 +58,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const canonicalUrl = `${baseUrl}/${lang}/blog/${slug}`;
   const absoluteImageUrl = post.imageUrl.startsWith("http") ? post.imageUrl : `${baseUrl}${post.imageUrl}`;
 
-  return {
+  const keywords = [
     title,
+    "блог затока",
+    "отдых в затоке статьи",
+    "затока море гид",
+    "zatoka resort blog"
+  ];
+
+  return {
+    title: `${title} | Блог Zatoka Resort`,
     description: cleanTruncate(excerpt, 155),
+    keywords,
     alternates: {
       canonical: canonicalUrl,
       languages: {
@@ -75,9 +84,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: cleanTruncate(excerpt, 155),
       type: "article",
       url: canonicalUrl,
+      siteName: "Zatoka Resort",
       images: [
         {
           url: absoluteImageUrl,
+          width: 1200,
+          height: 630,
           alt: title,
         },
       ],
