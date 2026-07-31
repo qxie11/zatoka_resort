@@ -185,24 +185,29 @@ export function DateRangePicker({
               type="button"
               variant={"outline"}
               className={cn(
-                "w-full justify-start text-left font-semibold bg-slate-950/80 border border-white/[0.06] hover:border-white/15 focus:border-teal-500/50 text-white hover:bg-slate-900/50 hover:text-white transition-all duration-300 rounded-xl h-12 shadow-inner px-4",
-                !value?.from && "text-slate-400 font-normal"
+                "w-full justify-start text-left font-semibold bg-slate-950/90 border border-teal-500/30 hover:border-teal-400/60 focus:border-teal-400 text-white hover:bg-slate-900/80 transition-all duration-300 rounded-xl h-12 shadow-inner px-4 group/btn",
+                !value?.from && "text-slate-300"
               )}
             >
               {mounted ? (
                 value?.from ? (
                   value.to ? (
-                    <span className="text-sm text-slate-200 tracking-wide font-bold">
+                    <span className="text-sm text-teal-300 tracking-wide font-bold flex items-center gap-2">
+                      <CalendarIcon className="h-4 w-4 text-teal-400 shrink-0" />
                       {format(value.from, "dd MMM yyyy", { locale: activeLocale })} —{" "}
                       {format(value.to, "dd MMM yyyy", { locale: activeLocale })}
                     </span>
                   ) : (
-                    <span className="text-sm text-slate-200 tracking-wide font-bold">
+                    <span className="text-sm text-teal-300 tracking-wide font-bold flex items-center gap-2">
+                      <CalendarIcon className="h-4 w-4 text-teal-400 shrink-0" />
                       {format(value.from, "dd MMM yyyy", { locale: activeLocale })}
                     </span>
                   )
                 ) : (
-                  <span className="text-sm text-slate-400">{t("selectDateRange")}</span>
+                  <span className="text-sm text-slate-300 group-hover/btn:text-teal-300 transition-colors flex items-center gap-2 font-medium">
+                    <CalendarIcon className="h-4 w-4 text-teal-400 shrink-0" />
+                    {t("selectDateRange", "Выберите даты проживания")}
+                  </span>
                 )
               ) : (
                 <span className="text-sm text-slate-400 opacity-0">Loading...</span>

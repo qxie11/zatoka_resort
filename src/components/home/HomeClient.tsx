@@ -212,9 +212,9 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                   <Form {...widgetForm}>
                     <form
                       onSubmit={widgetForm.handleSubmit(onWidgetSubmit)}
-                      className="flex flex-col md:flex-row gap-4 p-5 sm:p-6 rounded-3xl bg-slate-900/90 backdrop-blur-2xl border border-teal-500/40 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8),0_0_30px_rgba(20,184,166,0.15)] hover:border-teal-400/50 transition-all duration-500 items-stretch md:items-end w-full group/bar"
+                      className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 sm:gap-4 p-4 sm:p-6 rounded-3xl bg-slate-900/90 backdrop-blur-2xl border border-teal-500/40 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8),0_0_30px_rgba(20,184,166,0.15)] hover:border-teal-400/50 transition-all duration-500 items-end w-full group/bar"
                     >
-                      <div className="w-full md:flex-1 relative group/field">
+                      <div className="sm:col-span-6 lg:col-span-5 relative group/field">
                         <FormField
                           control={widgetForm.control}
                           name="dateRange"
@@ -228,48 +228,54 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                         />
                       </div>
 
-                      <FormField
-                        control={widgetForm.control}
-                        name="guests"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-col relative w-full md:w-36">
-                            <div className="text-teal-300 font-bold mb-2 flex items-center gap-2 tracking-wide text-xs uppercase">
-                              <Users className="h-3.5 w-3.5 text-teal-400" />
-                              {translate("guests", "Гости")}
-                            </div>
-                            <FormControl>
-                              <div className="flex items-center justify-between bg-slate-950/90 border border-white/15 hover:border-teal-400/40 focus-within:border-teal-400 rounded-xl h-12 px-3.5 w-full transition-all duration-300 shadow-inner">
-                                <button
-                                  type="button"
-                                  onClick={() => field.onChange(Math.max(1, field.value - 1))}
-                                  className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition-all duration-300 active:scale-90"
-                                >
-                                  <Minus className="h-3.5 w-3.5" />
-                                </button>
-                                <span className="text-lg font-black select-none text-white tracking-widest min-w-[20px] text-center">
-                                  {field.value}
-                                </span>
-                                <button
-                                  type="button"
-                                  onClick={() => field.onChange(Math.min(10, field.value + 1))}
-                                  className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition-all duration-300 active:scale-90"
-                                >
-                                  <Plus className="h-3.5 w-3.5" />
-                                </button>
-                              </div>
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
+                      <div className="grid grid-cols-12 gap-3 sm:contents">
+                        <div className="col-span-5 sm:col-span-6 lg:col-span-3">
+                          <FormField
+                            control={widgetForm.control}
+                            name="guests"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-col relative w-full">
+                                <div className="text-teal-300 font-bold mb-2 flex items-center gap-1.5 tracking-wide text-xs uppercase">
+                                  <Users className="h-3.5 w-3.5 text-teal-400" />
+                                  {translate("guests", "Гости")}
+                                </div>
+                                <FormControl>
+                                  <div className="flex items-center justify-between bg-slate-950/90 border border-white/15 hover:border-teal-400/40 focus-within:border-teal-400 rounded-xl h-12 px-2.5 sm:px-3.5 w-full transition-all duration-300 shadow-inner">
+                                    <button
+                                      type="button"
+                                      onClick={() => field.onChange(Math.max(1, field.value - 1))}
+                                      className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition-all duration-300 active:scale-90"
+                                    >
+                                      <Minus className="h-3.5 w-3.5" />
+                                    </button>
+                                    <span className="text-lg font-black select-none text-white tracking-widest min-w-[18px] text-center">
+                                      {field.value}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => field.onChange(Math.min(10, field.value + 1))}
+                                      className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition-all duration-300 active:scale-90"
+                                    >
+                                      <Plus className="h-3.5 w-3.5" />
+                                    </button>
+                                  </div>
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
 
-                      <Button
-                        type="submit"
-                        disabled={!isFormValid}
-                        className="w-full md:w-auto h-12 px-8 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 disabled:opacity-50 disabled:pointer-events-none text-slate-950 font-black border-0 shadow-lg shadow-orange-500/25 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap"
-                      >
-                        <Sun className="h-4 w-4 fill-slate-950" />
-                        {translate("checkAvailability", "Найти номера")}
-                      </Button>
+                        <div className="col-span-7 sm:col-span-12 lg:col-span-4 flex items-end">
+                          <Button
+                            type="submit"
+                            disabled={!isFormValid}
+                            className="w-full h-12 px-4 sm:px-8 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 disabled:opacity-50 disabled:pointer-events-none text-slate-950 font-black border-0 shadow-lg shadow-orange-500/25 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap"
+                          >
+                            <Sun className="h-4 w-4 fill-slate-950 shrink-0" />
+                            <span>{translate("checkAvailability", "Найти номера")}</span>
+                          </Button>
+                        </div>
+                      </div>
                     </form>
                   </Form>
                 </div>
