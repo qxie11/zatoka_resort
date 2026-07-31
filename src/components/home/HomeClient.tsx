@@ -163,60 +163,56 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
             </svg>
           </div>
 
-          <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full pt-28 pb-20 lg:pt-36 lg:pb-24">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full pt-24 pb-12 sm:pt-28 sm:pb-20 lg:pt-36 lg:pb-24">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
 
               {/* LEFT COLUMN: Hero Copy & Command Booking Bar */}
-              <div className="lg:col-span-7 flex flex-col items-start text-left text-white space-y-7">
+              <div className="lg:col-span-7 flex flex-col items-start text-left text-white space-y-4 sm:space-y-6 lg:space-y-7">
 
                 {/* Live Status Glass Pill */}
-                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/80 backdrop-blur-xl border border-teal-500/40 text-xs font-extrabold text-teal-300 tracking-wider shadow-[0_0_25px_rgba(20,184,166,0.25)] animate-fade-in">
-                  <span className="relative flex h-2.5 w-2.5">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-xl border border-teal-500/40 text-[11px] sm:text-xs font-extrabold text-teal-300 tracking-wider shadow-[0_0_25px_rgba(20,184,166,0.25)] animate-fade-in">
+                  <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-400"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-400"></span>
                   </span>
                   <span className="uppercase">{translate("familyBadge", "Сезон 2026 • 5 минут до Чёрного Моря")}</span>
                 </div>
 
                 {/* Heading */}
-                <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] animate-fade-in-up drop-shadow-2xl font-heading pb-2">
-                  {translate("heroTitle1", "Уютный летний отдых")} <br />
-                  <span className="inline-block py-1 px-1 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 animate-ocean-shimmer font-black">
+                <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.12] sm:leading-[1.1] animate-fade-in-up drop-shadow-2xl font-heading">
+                  {translate("heroTitle1", "Уютный летний отдых")}{" "}
+                  <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 animate-ocean-shimmer font-black">
                     {translate("heroTitle2", "для всей вашей семьи")}
                   </span>
                 </h1>
 
-                {/* Glassmorphic Luxury Description Box */}
-                <div className="max-w-xl animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards]">
-                  <div className="p-4 sm:p-5 rounded-2xl rounded-tl-sm bg-slate-900/60 backdrop-blur-xl border border-white/10 border-l-4 border-l-teal-400 shadow-xl">
-                    <p className="text-base sm:text-lg text-slate-100 font-medium leading-relaxed">
-                      {translate("heroDescription", "Семейный отель «Отдых в Затоке». Зеленый двор с мангалами, детская игровая зона, общая кухня, кондиционеры, Wi-Fi и бесплатная парковка. Всего 5 минут ходьбы до песчаного пляжа.")}
-                    </p>
-                  </div>
-                </div>
+                {/* Subtitle / Description */}
+                <p className="text-sm sm:text-base md:text-lg text-slate-200/90 font-medium leading-relaxed max-w-xl animate-fade-in-up [animation-delay:0.15s] opacity-0 [animation-fill-mode:forwards]">
+                  {translate("heroDescription", "Семейный отель «Отдых в Затоке». Зеленый двор с мангалами, детская игровая зона, общая кухня, кондиционеры, Wi-Fi и бесплатная парковка. Всего 5 минут ходьбы до песчаного пляжа.")}
+                </p>
 
                 {/* Feature Micro-Pills */}
-                <div className="flex flex-wrap items-center gap-2 pt-1 animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards]">
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900/60 border border-white/10 text-xs font-semibold text-teal-300 backdrop-blur-md shadow-sm">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-0.5 animate-fade-in-up [animation-delay:0.25s] opacity-0 [animation-fill-mode:forwards]">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-900/70 border border-white/10 text-[11px] sm:text-xs font-semibold text-teal-300 backdrop-blur-md shadow-sm">
                     🌴 Зелёный двор
                   </span>
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900/60 border border-white/10 text-xs font-semibold text-amber-300 backdrop-blur-md shadow-sm">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-900/70 border border-white/10 text-[11px] sm:text-xs font-semibold text-amber-300 backdrop-blur-md shadow-sm">
                     🔥 Мангальная зона
                   </span>
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900/60 border border-white/10 text-xs font-semibold text-rose-300 backdrop-blur-md shadow-sm">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-900/70 border border-white/10 text-[11px] sm:text-xs font-semibold text-rose-300 backdrop-blur-md shadow-sm">
                     🧸 Детская площадка
                   </span>
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900/60 border border-white/10 text-xs font-semibold text-sky-300 backdrop-blur-md shadow-sm">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-900/70 border border-white/10 text-[11px] sm:text-xs font-semibold text-sky-300 backdrop-blur-md shadow-sm">
                     ❄️ Кондиционеры
                   </span>
                 </div>
 
                 {/* Floating Command Glass Booking Bar */}
-                <div className="w-full pt-3 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards] z-20 relative">
+                <div className="w-full pt-2 sm:pt-4 animate-fade-in-up [animation-delay:0.35s] opacity-0 [animation-fill-mode:forwards] z-20 relative">
                   <Form {...widgetForm}>
                     <form
                       onSubmit={widgetForm.handleSubmit(onWidgetSubmit)}
-                      className="flex flex-col md:flex-row gap-4 p-5 rounded-3xl bg-slate-900/80 backdrop-blur-2xl border border-teal-500/30 shadow-[0_20px_60px_rgba(0,0,0,0.6)] hover:border-teal-400/50 transition-all duration-500 items-end w-full group/bar"
+                      className="flex flex-col md:flex-row gap-3.5 sm:gap-4 p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-slate-900/85 backdrop-blur-2xl border border-teal-500/35 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8),0_0_30px_rgba(20,184,166,0.15)] hover:border-teal-400/50 transition-all duration-500 items-stretch md:items-end w-full group/bar"
                     >
                       <div className="w-full md:flex-1 relative group/field">
                         <FormField
@@ -237,12 +233,12 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                         name="guests"
                         render={({ field }) => (
                           <FormItem className="flex flex-col relative w-full md:w-36">
-                            <div className="text-sm font-medium leading-none text-teal-300 font-bold mb-2.5 flex items-center gap-2 tracking-wide text-xs uppercase">
-                              <Users className="h-4 w-4 text-teal-400" />
+                            <div className="text-teal-300 font-bold mb-2 flex items-center gap-2 tracking-wide text-xs uppercase">
+                              <Users className="h-3.5 w-3.5 text-teal-400" />
                               {translate("guests", "Гости")}
                             </div>
                             <FormControl>
-                              <div className="flex items-center justify-between bg-slate-950/90 border border-white/10 hover:border-teal-400/40 focus-within:border-teal-400 rounded-xl h-12 px-3 w-full transition-all duration-300 shadow-inner">
+                              <div className="flex items-center justify-between bg-slate-950/90 border border-white/15 hover:border-teal-400/40 focus-within:border-teal-400 rounded-xl h-12 px-3 w-full transition-all duration-300 shadow-inner">
                                 <button
                                   type="button"
                                   onClick={() => field.onChange(Math.max(1, field.value - 1))}
@@ -269,7 +265,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                       <Button
                         type="submit"
                         disabled={!isFormValid}
-                        className="w-full md:w-auto h-12 px-8 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 disabled:opacity-50 disabled:pointer-events-none text-slate-950 font-black border-0 shadow-lg shadow-orange-500/25 hover:scale-[1.03] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap"
+                        className="w-full md:w-auto h-12 px-8 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 disabled:opacity-50 disabled:pointer-events-none text-slate-950 font-black border-0 shadow-lg shadow-orange-500/25 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap"
                       >
                         <Sun className="h-4 w-4 fill-slate-950" />
                         {translate("checkAvailability", "Найти номера")}
@@ -279,17 +275,17 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 </div>
 
                 {/* Trust Guarantees */}
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-2 animate-fade-in-up [animation-delay:0.5s] opacity-0 [animation-fill-mode:forwards] text-xs font-bold uppercase tracking-wider text-slate-300">
-                  <div className="flex items-center gap-2 bg-slate-900/60 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shadow-sm">
-                    <ShieldCheck className="h-4 w-4 text-teal-400" />
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 pt-1 animate-fade-in-up [animation-delay:0.45s] opacity-0 [animation-fill-mode:forwards] text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-300">
+                  <div className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-sm">
+                    <ShieldCheck className="h-3.5 w-3.5 text-teal-400" />
                     <span>{translate("trustBadge1", "Отмена за 7 дней")}</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-slate-900/60 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shadow-sm">
-                    <CreditCard className="h-4 w-4 text-amber-400" />
+                  <div className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-sm">
+                    <CreditCard className="h-3.5 w-3.5 text-amber-400" />
                     <span>{translate("trustBadge2", "Оплата при заезде")}</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-slate-900/60 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shadow-sm">
-                    <Star className="h-4 w-4 text-sky-400" />
+                  <div className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-sm">
+                    <Star className="h-3.5 w-3.5 text-sky-400" />
                     <span>{translate("trustBadge3", "Гарантия лучшей цены")}</span>
                   </div>
                 </div>
