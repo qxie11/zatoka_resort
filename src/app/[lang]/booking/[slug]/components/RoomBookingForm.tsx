@@ -10,6 +10,7 @@ import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 
 import { useTranslation } from "react-i18next";
+import { trackGoogleAdsConversion } from "@/lib/gtag";
 import { Button } from "@/components/ui/button";
 import { PhoneInput } from "@/components/ui/phone-input";
 import ImageGallery from "@/components/rooms/ImageGallery";
@@ -428,6 +429,9 @@ export default function RoomBookingForm({
       }
 
       const booking = await response.json();
+
+      // Send conversion event to Google Ads
+      trackGoogleAdsConversion();
 
       toast({
         title: t("bookingSuccessTitle"),
