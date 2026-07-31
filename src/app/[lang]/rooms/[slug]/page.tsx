@@ -14,6 +14,7 @@ import TrustBadges from "@/components/rooms/TrustBadges";
 
 interface PageProps {
   params: Promise<{ lang: string; slug: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -85,13 +86,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function RoomDetailsPage({ params }: PageProps) {
+export default async function RoomDetailsPage({ params, searchParams }: PageProps) {
   const { slug, lang } = await params;
+  const sParams = searchParams ? await searchParams : {};
   const room = await getRoomBySlugOrId(slug);
 
   if (!room) notFound();
 
   const allRooms = await getRooms();
+
+  // Preserve query parameters (checkin, checkout, guests, from, to)
+  const query = new URLSearchParams();
+  if (sParams.checkin) query.set("checkin", Array.isArray(sParams.checkin) ? sParams.checkin[0] : sParams.checkin);
+  if (sParams.checkout) query.set("checkout", Array.isArray(sParams.checkout) ? sParams.checkout[0] : sParams.checkout);
+  if (sParams.from) query.set("from", Array.isArray(sParams.from) ? sParams.from[0] : sParams.from);
+  if (sParams.to) query.set("to", Array.isArray(sParams.to) ? sParams.to[0] : sParams.to);
+  if (sParams.guests) query.set("guests", Array.isArray(sParams.guests) ? sParams.guests[0] : sParams.guests);
+
+  const queryString = query.toString();
+  const bookingHref = `/${lang}/booking/${room.slug}${queryString ? `?${queryString}` : ""}`;
 
   const t = {
     home: { ru: "Главная", uk: "Головна", en: "Home" },
@@ -195,7 +208,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
               <RoomComparisonButton rooms={allRooms} currentRoomId={room.id} />
               
               <Button asChild size="lg" className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/25 rounded-2xl px-8 hover:scale-[1.03] active:scale-95 transition-all flex-grow sm:flex-grow-0">
-                <Link href={`/${lang}/booking/${room.slug}`} className="flex items-center gap-2 justify-center">
+                <Link href={bookingHref} className="flex items-center gap-2 justify-center">
                   {t.booking[lang as keyof typeof t.booking]}
                   <ArrowRight className="h-5 w-5 text-slate-950" />
                 </Link>
@@ -321,7 +334,7 @@ export default async function RoomDetailsPage({ params }: PageProps) {
                 </div>
 
                 <Button asChild size="lg" className="w-auto px-6 ml-4 lg:ml-0 lg:w-full lg:mt-6 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl transition-all h-12 lg:h-12 flex-shrink-0">
-                  <Link href={`/${lang}/booking/${room.slug}`} className="flex items-center justify-center gap-2">
+                  <Link href={bookingHref} className="flex items-center justify-center gap-2">
                     {t.goToBooking[lang as keyof typeof t.goToBooking]}
                     <ArrowRight className="h-4 w-4 text-slate-950 hidden sm:block" />
                   </Link>
