@@ -131,37 +131,43 @@ export async function POST(request: NextRequest) {
 
     newBooking = result;
 
-    // Send email notification (non-blocking)
-    await sendBookingNotification({
-      name: name.trim(),
-      phone: phone.trim(),
-      email: email?.trim(),
-      roomId,
-      startDate: start,
-      endDate: end,
-      pricePaid: pricePaid ? parseInt(pricePaid) : undefined,
-      promoCode: promoCode || undefined,
-      discountApplied: discountApplied ? parseInt(discountApplied) : undefined,
-      adminComment: adminComment && typeof adminComment === 'string' ? adminComment.trim() : undefined,
-    });
+    // Check if booking was created via admin panel or admin session
+    const adminSession = request.cookies.get("admin_session")?.value;
+    const isAdminBooking = !!adminSession || body.isAdmin === true || body.source === "admin";
 
-    // Send Telegram Notification to Owner (non-blocking)
-    try {
-      const { sendTelegramNotification } = await import('@/lib/telegram');
-      const startStr = start.toLocaleDateString('ru-RU');
-      const endStr = end.toLocaleDateString('ru-RU');
-      
-      const tgMsg = `🔔 <b>Новое бронирование №${newBooking.id}</b>\n\n` +
-        `👤 <b>Гость:</b> ${name.trim()}\n` +
-        `📞 <b>Телефон:</b> ${phone.trim()}\n` +
-        (email?.trim() ? `✉️ <b>Email:</b> ${email.trim()}\n` : '') +
-        `🏨 <b>Номер ID:</b> ${roomId}\n` +
-        `📅 <b>Даты:</b> ${startStr} — ${endStr}\n` +
-        (pricePaid ? `💰 <b>Сумма:</b> ${pricePaid} грн\n` : '');
-      
-      sendTelegramNotification(tgMsg).catch(err => console.error("Failed to send telegram notification:", err));
-    } catch (notifyError) {
-      console.error("Failed to send telegram notification", notifyError);
+    if (!isAdminBooking) {
+      // Send email notification (non-blocking)
+      await sendBookingNotification({
+        name: name.trim(),
+        phone: phone.trim(),
+        email: email?.trim(),
+        roomId,
+        startDate: start,
+        endDate: end,
+        pricePaid: pricePaid ? parseInt(pricePaid) : undefined,
+        promoCode: promoCode || undefined,
+        discountApplied: discountApplied ? parseInt(discountApplied) : undefined,
+        adminComment: adminComment && typeof adminComment === 'string' ? adminComment.trim() : undefined,
+      });
+
+      // Send Telegram Notification to Owner (non-blocking)
+      try {
+        const { sendTelegramNotification } = await import('@/lib/telegram');
+        const startStr = start.toLocaleDateString('ru-RU');
+        const endStr = end.toLocaleDateString('ru-RU');
+        
+        const tgMsg = `🔔 <b>Новое бронирование №${newBooking.id}</b>\n\n` +
+          `👤 <b>Гость:</b> ${name.trim()}\n` +
+          `📞 <b>Телефон:</b> ${phone.trim()}\n` +
+          (email?.trim() ? `✉️ <b>Email:</b> ${email.trim()}\n` : '') +
+          `🏨 <b>Номер ID:</b> ${roomId}\n` +
+          `📅 <b>Даты:</b> ${startStr} — ${endStr}\n` +
+          (pricePaid ? `💰 <b>Сумма:</b> ${pricePaid} грн\n` : '');
+        
+        sendTelegramNotification(tgMsg).catch(err => console.error("Failed to send telegram notification:", err));
+      } catch (notifyError) {
+        console.error("Failed to send telegram notification", notifyError);
+      }
     }
 
     return NextResponse.json(newBooking, { status: 201 });

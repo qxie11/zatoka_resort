@@ -206,6 +206,8 @@ export default function BookingForm({
       email: data.email || undefined,
       pricePaid: data.pricePaid,
       adminComment: data.adminComment || undefined,
+      isAdmin: true,
+      source: "admin",
     };
     await onSubmit(submissionData as unknown as Omit<Booking, "id">, booking?.id);
   });
