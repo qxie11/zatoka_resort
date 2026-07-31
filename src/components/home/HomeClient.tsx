@@ -659,7 +659,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
             <ScrollReveal variant="scale-in" delay={300}>
               <div className="pt-6">
                 <Button asChild size="lg" className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 hover:scale-105 active:scale-95 transition-all duration-300 h-12 px-8 rounded-xl water-reflection animate-deep-pulse">
-                  <Link href="/booking" className="flex items-center">
+                  <Link href={`/${lang}/booking`} className="flex items-center">
                     {translate("bookNowBtn", "Забронировать номер сейчас")}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>

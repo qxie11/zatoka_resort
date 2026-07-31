@@ -45,12 +45,21 @@ export function ExitIntentPopup() {
   }, [pathname]);
 
   useEffect(() => {
-    // Show popup after 15 seconds of browsing
+    // Desktop: real exit intent (cursor leaves viewport towards top)
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY <= 5) {
+        showPopup();
+      }
+    };
+    document.documentElement.addEventListener("mouseleave", handleMouseLeave);
+
+    // Mobile fallback: show popup after 20 seconds of browsing
     timerRef.current = setTimeout(() => {
       showPopup();
-    }, 15000);
+    }, 20000);
 
     return () => {
+      document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [showPopup]);

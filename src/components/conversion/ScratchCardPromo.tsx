@@ -11,6 +11,13 @@ interface ScratchCardPromoProps {
 
 export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showButton, setShowButton] = useState(false);
+
+  // Delay the gift button appearance (15s) to avoid clutter initially
+  useEffect(() => {
+    const timer = setTimeout(() => setShowButton(true), 15000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Disable background scrolling when the modal is open
   useEffect(() => {
@@ -24,7 +31,12 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
     };
   }, [isOpen]);
   const [scratchedPercent, setScratchedPercent] = useState(0);
-  const [isRevealed, setIsRevealed] = useState(false);
+  const [isRevealed, setIsRevealed] = useState(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("scratch-promo-revealed") === "true";
+    }
+    return false;
+  });
   const [isCopied, setIsCopied] = useState(false);
   const [timeLeft, setTimeLeft] = useState(900); // 15 minutes in seconds
 
@@ -33,7 +45,7 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
 
   const t = {
     ru: {
-      btnTitle: "Получить подарок",
+      btnTitle: "Подарок",
       modalTitle: "Сотрите защитный слой",
       modalDesc: "Проведите пальцем или мышкой по карточке, чтобы стереть слой и забрать ваш секретный подарок при бронировании!",
       congrats: "Поздравляем!",
@@ -43,7 +55,7 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
       timerDesc: "Промокод сгорит через:",
     },
     uk: {
-      btnTitle: "Отримати подарунок",
+      btnTitle: "Подарунок",
       modalTitle: "Зітріть захисний шар",
       modalDesc: "Проведіть пальцем або мишкою по картці, щоб стерти шар і забрати ваш секретний подарунок при бронюванні!",
       congrats: "Вітаємо!",
@@ -53,7 +65,7 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
       timerDesc: "Промокод згорить через:",
     },
     en: {
-      btnTitle: "Get a Gift",
+      btnTitle: "Gift",
       modalTitle: "Scratch to Reveal",
       modalDesc: "Drag your mouse or finger over the card to scratch off the layer and claim your secret booking reward!",
       congrats: "Congratulations!",
@@ -172,6 +184,9 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
 
     if (percent > 45) {
       setIsRevealed(true);
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("scratch-promo-revealed", "true");
+      }
     }
   };
 
@@ -189,16 +204,48 @@ export default function ScratchCardPromo({ lang }: ScratchCardPromoProps) {
 
   return (
     <>
-      {/* Floating Gift Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-32 right-3 md:bottom-36 md:right-6 z-40 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 h-14 w-14 hover:w-[220px] rounded-full shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 animate-deep-pulse flex items-center justify-center hover:justify-start hover:px-4 group border border-white/20"
-      >
-        <Gift className="h-6 w-6 shrink-0" />
-        <span className="max-w-0 overflow-hidden group-hover:max-w-[160px] group-hover:ml-2 transition-all duration-500 ease-in-out font-bold text-xs uppercase tracking-wider whitespace-nowrap">
-          {current.btnTitle}
-        </span>
-      </button>
+      {/* Floating Gift Button — appears after 15s */}
+      {showButton && (
+        <div className="fixed bottom-32 right-3 md:bottom-36 md:right-6 z-40 select-none animate-tide-in">
+          <div className="relative group">
+            {/* Glowing outer pulse aura (only before promo code is revealed) */}
+            {!isRevealed && (
+              <>
+                <span className="absolute -inset-2 rounded-full bg-gradient-to-r from-amber-400 via-orange-500 to-amber-300 opacity-60 blur-lg animate-ping pointer-events-none" />
+                <span className="absolute -inset-1 rounded-full bg-amber-400/40 blur-sm animate-pulse pointer-events-none" />
+              </>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              className={`relative h-14 w-14 hover:w-[155px] rounded-full flex items-center justify-center hover:justify-start hover:px-4 transition-all duration-500 ease-out hover:scale-105 active:scale-95 group overflow-hidden ${
+                isRevealed
+                  ? "bg-slate-900/90 backdrop-blur-xl border border-white/15 text-amber-300 shadow-xl"
+                  : "bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 hover:from-amber-300 hover:to-orange-400 text-slate-950 shadow-[0_0_30px_rgba(245,158,11,0.5)] border-2 border-amber-200/60"
+              }`}
+            >
+              {/* Shimmer overlay (only before reveal) */}
+              {!isRevealed && (
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              )}
+              
+              {/* Icon Container with Sparkles (sparkles only before reveal) */}
+              <div className="relative shrink-0 flex items-center justify-center">
+                <Gift className={`h-6 w-6 group-hover:rotate-12 transition-transform duration-300 ${isRevealed ? "text-amber-400" : "text-slate-950"}`} />
+                {!isRevealed && (
+                  <Sparkles className="absolute -top-2 -right-2 h-4 w-4 text-white animate-spin-slow drop-shadow" />
+                )}
+              </div>
+
+              {/* Text label revealed on hover: "Подарок" */}
+              <span className={`max-w-0 overflow-hidden group-hover:max-w-[100px] group-hover:ml-2.5 transition-all duration-500 ease-out font-black text-xs uppercase tracking-wider whitespace-nowrap ${isRevealed ? "text-slate-200" : "text-slate-950"}`}>
+                {current.btnTitle}
+              </span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Modal */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>

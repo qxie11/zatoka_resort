@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
-import { getRoomBySlugOrId, getBookingsByRoomId } from '@/lib/db';
+import { getRoomBySlugOrId, getBookingsByRoomId, getReviewsByRoomId } from '@/lib/db';
 import RoomBookingForm, { ViewImagesButton } from './components/RoomBookingForm';
+import BookingPageExtras from './components/BookingPageExtras';
 import Image from 'next/image';
 import { BedDouble } from 'lucide-react';
 import { Metadata } from 'next';
@@ -39,7 +40,10 @@ export default async function RoomBookingPage({ params }: PageProps) {
 
   if (!room) notFound();
 
-  const bookings = await getBookingsByRoomId(room.id);
+  const [bookings, reviews] = await Promise.all([
+    getBookingsByRoomId(room.id),
+    getReviewsByRoomId(room.id),
+  ]);
 
   const t = {
     home: { ru: "Главная", uk: "Головна", en: "Home" },
@@ -84,9 +88,29 @@ export default async function RoomBookingPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* --- ВЕРСТКА ОСНОВНОГО КОНТЕНТА --- */}
-      <section className="container mx-auto px-4 py-12 max-w-4xl relative z-30">
-        <RoomBookingForm room={room} existingBookings={bookings} />
+      {/* --- MAIN CONTENT: FORM + SIDEBAR --- */}
+      <section className="container mx-auto px-4 py-12 max-w-6xl relative z-30">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Booking Form */}
+          <div className="lg:col-span-7 xl:col-span-8">
+            <RoomBookingForm room={room} existingBookings={bookings} />
+          </div>
+
+          {/* Sidebar: Trust + Urgency + Reviews */}
+          <div className="lg:col-span-5 xl:col-span-4 space-y-6">
+            <BookingPageExtras
+              lang={lang}
+              room={room}
+              reviews={reviews}
+              recentBookingsCount={bookings.filter(b => {
+                const created = new Date(b.startDate);
+                const weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                return created > weekAgo;
+              }).length}
+            />
+          </div>
+        </div>
       </section>
     </div>
   );

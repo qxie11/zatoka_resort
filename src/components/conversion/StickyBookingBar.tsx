@@ -19,6 +19,11 @@ export function StickyBookingBar({ minPrice = 1500 }: StickyBookingBarProps) {
   const { t } = useTranslation();
   const [, setLangUpdate] = useState(i18n.language || "ru");
 
+  // Extract lang from pathname
+  const segments = pathname?.split("/") || [];
+  const lang = ["ru", "uk", "en"].includes(segments[1]) ? segments[1] : "ru";
+  const bookingHref = `/${lang}/booking`;
+
   useEffect(() => {
     const onScroll = () => {
       setVisible(window.scrollY > 500);
@@ -69,7 +74,7 @@ export function StickyBookingBar({ minPrice = 1500 }: StickyBookingBarProps) {
             </div>
             <div className="flex items-center gap-1.5 shrink-0">
               <Link
-                href="/booking"
+                href={bookingHref}
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold text-xs transition-all duration-300 shadow-lg shadow-teal-500/25 animate-gentle-nudge"
               >
                 <CalendarDays className="h-3.5 w-3.5" />
@@ -112,7 +117,7 @@ export function StickyBookingBar({ minPrice = 1500 }: StickyBookingBarProps) {
             {/* Right: CTA */}
             <div className="flex items-center gap-2 shrink-0">
               <Link
-                href="/booking"
+                href={bookingHref}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold text-sm transition-all duration-300 hover:scale-[1.03] shadow-lg shadow-teal-500/25 animate-gentle-nudge"
               >
                 <CalendarDays className="h-4 w-4" />

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { Users, Mail, Phone, User, Eye, Minus, Plus, Zap, Moon, ShieldCheck, CheckCircle2, Flame, BellRing } from "lucide-react";
+import { Users, Mail, Phone, User, Eye, Minus, Plus, Zap, Moon, ShieldCheck, CheckCircle2, Flame, BellRing, ChevronDown } from "lucide-react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 
@@ -127,6 +127,10 @@ export default function RoomBookingForm({
   const [quickName, setQuickName] = useState("");
   const [quickPhone, setQuickPhone] = useState("");
   const [isQuickSubmitting, setIsQuickSubmitting] = useState(false);
+
+  // Collapsible extras (email + promo)
+  const [showEmailField, setShowEmailField] = useState(false);
+  const [showPromoField, setShowPromoField] = useState(false);
 
   const quickBookTexts = {
     ru: {
@@ -613,7 +617,7 @@ export default function RoomBookingForm({
               )}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -652,147 +656,175 @@ export default function RoomBookingForm({
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-teal-300 font-bold mb-2">{t("emailLabel")}</FormLabel>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-teal-400" />
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="example@email.com"
-                          className="pl-10 bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
-                          suppressHydrationWarning
-                          {...field}
-                        />
-                      </FormControl>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
 
-            {/* Promo Code Entry */}
-            <div className="pt-4 border-t border-white/5 space-y-2">
-              <label className="text-sm font-bold text-teal-300">{t("promoLabel")}</label>
-              <div className="flex gap-2 max-w-sm">
-                <Input
-                  placeholder={t("promoPlaceholder")}
-                  value={promoInput}
-                  onChange={(e) => setPromoInput(e.target.value)}
-                  className="bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
-                />
-                <Button
+            {/* Collapsible Email Field */}
+            <div className="pt-2">
+              {!showEmailField ? (
+                <button
                   type="button"
-                  onClick={handleValidatePromo}
-                  disabled={isValidatingPromo || !promoInput.trim()}
-                  className="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-xl px-4 h-11"
+                  onClick={() => setShowEmailField(true)}
+                  className="flex items-center gap-2 text-xs text-slate-400 hover:text-teal-300 transition-colors duration-300 group"
                 >
-                  {isValidatingPromo ? "..." : t("applyPromo")}
-                </Button>
-              </div>
-              {promoError && <p className="text-xs text-rose-400">{promoError}</p>}
-              {appliedPromo && <p className="text-xs text-teal-400">{t("appliedPromoText", { appliedPromo, discount })}</p>}
+                  <Mail className="h-3.5 w-3.5 text-slate-500 group-hover:text-teal-400 transition-colors" />
+                  <span>{lang === "uk" ? "+ Додати email (необов'язково)" : lang === "en" ? "+ Add email (optional)" : "+ Добавить email (необязательно)"}</span>
+                  <ChevronDown className="h-3 w-3" />
+                </button>
+              ) : (
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="animate-fade-in max-w-md">
+                      <FormLabel className="text-teal-300 font-bold mb-2">{t("emailLabel")}</FormLabel>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-teal-400" />
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="example@email.com"
+                            className="pl-10 bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
+                            suppressHydrationWarning
+                            {...field}
+                          />
+                        </FormControl>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between pt-4 border-t border-white/5">
-              <div>
-                {form.watch("dateRange")?.from &&
-                  form.watch("dateRange")?.to && (
-                    <div className="text-sm w-full sm:min-w-[280px] bg-slate-950/60 border border-white/10 rounded-2xl p-4 shadow-[0_10px_30px_rgba(0,0,0,0.3)] backdrop-blur-sm animate-fade-in-up">
-                      <div className="text-slate-450 flex justify-between items-center gap-4">
-                        <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                          <Moon className="h-3.5 w-3.5 text-teal-400" />
-                          {t("nightsCount")}
-                        </span>
-                        <span className="font-bold text-white text-base">
-                          {Math.ceil(
-                            (form.watch("dateRange").to!.getTime() -
-                              form.watch("dateRange").from!.getTime()) /
-                            (1000 * 60 * 60 * 24)
-                          )}
-                        </span>
-                      </div>
-                      {(() => {
-                        const nights = Math.ceil(
+            {/* Collapsible Promo Code */}
+            <div className="pt-2">
+              {!showPromoField && !appliedPromo ? (
+                <button
+                  type="button"
+                  onClick={() => setShowPromoField(true)}
+                  className="flex items-center gap-2 text-xs text-slate-400 hover:text-amber-300 transition-colors duration-300 group"
+                >
+                  <span className="text-sm group-hover:scale-110 transition-transform">🎟️</span>
+                  <span>{lang === "uk" ? "Є промокод?" : lang === "en" ? "Have a promo code?" : "Есть промокод?"}</span>
+                  <ChevronDown className="h-3 w-3" />
+                </button>
+              ) : (
+                <div className="space-y-2 animate-fade-in">
+                  <label className="text-sm font-bold text-teal-300">{t("promoLabel")}</label>
+                  <div className="flex gap-2 max-w-sm">
+                    <Input
+                      placeholder={t("promoPlaceholder")}
+                      value={promoInput}
+                      onChange={(e) => setPromoInput(e.target.value)}
+                      className="bg-slate-950/40 border-white/10 focus:border-teal-400/50 text-white rounded-xl h-11"
+                    />
+                    <Button
+                      type="button"
+                      onClick={handleValidatePromo}
+                      disabled={isValidatingPromo || !promoInput.trim()}
+                      className="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-xl px-4 h-11"
+                    >
+                      {isValidatingPromo ? "..." : t("applyPromo")}
+                    </Button>
+                  </div>
+                  {promoError && <p className="text-xs text-rose-400">{promoError}</p>}
+                  {appliedPromo && <p className="text-xs text-teal-400">{t("appliedPromoText", { appliedPromo, discount })}</p>}
+                </div>
+              )}
+            </div>
+
+            <div className="pt-6 border-t border-white/10 space-y-6">
+              {/* Price Summary Card when dates are chosen */}
+              {form.watch("dateRange")?.from &&
+                form.watch("dateRange")?.to && (
+                  <div className="text-sm w-full bg-slate-950/70 border border-white/10 rounded-2xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.3)] backdrop-blur-sm animate-fade-in-up">
+                    <div className="text-slate-400 flex justify-between items-center gap-4">
+                      <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        <Moon className="h-3.5 w-3.5 text-teal-400" />
+                        {t("nightsCount")}
+                      </span>
+                      <span className="font-bold text-white text-base">
+                        {Math.ceil(
                           (form.watch("dateRange").to!.getTime() -
                             form.watch("dateRange").from!.getTime()) /
                           (1000 * 60 * 60 * 24)
-                        );
-                        // Auto-discount for long stay: 7+ nights = 5%, 10+ nights = 10%
-                        const longStayDiscount = nights >= 10 ? 10 : nights >= 7 ? 5 : 0;
-                        const totalDiscountPercent = Math.min(100, discount + longStayDiscount);
-                        const originalPrice = nights * room.price;
-                        const finalPrice = Math.round(originalPrice * (1 - totalDiscountPercent / 100));
-
-                        return (
-                          <>
-                            {longStayDiscount > 0 && (
-                              <div className="mt-2.5 px-3 py-1.5 rounded-xl bg-teal-500/10 border border-teal-500/25 flex items-center justify-between text-xs text-teal-300">
-                                <span>
-                                  🎁 {lang === "uk"
-                                    ? `Скидка ${longStayDiscount}% за проживання від ${nights >= 10 ? 10 : 7} ночей!`
-                                    : lang === "en"
-                                      ? `${longStayDiscount}% discount for staying ${nights >= 10 ? 10 : 7}+ nights!`
-                                      : `Скидка ${longStayDiscount}% за проживание от ${nights >= 10 ? 10 : 7} ночей!`}
-                                </span>
-                              </div>
-                            )}
-                            {totalDiscountPercent > 0 ? (
-                              <div className="mt-3 pt-3 border-t border-white/5 space-y-2">
-                                <div className="text-xs text-slate-500 line-through flex justify-between gap-4">
-                                  <span>{t("totalWithoutDiscount")}</span>
-                                  <span>
-                                    {originalPrice} {t("currency")}
-                                  </span>
-                                </div>
-                                <div className="flex justify-between items-center gap-4">
-                                  <span className="text-slate-200 font-bold flex items-center gap-1.5">
-                                    {t("totalLabel")}
-                                    <span className="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold rounded-lg px-1.5 py-0.5">
-                                      -{totalDiscountPercent}%
-                                    </span>
-                                  </span>
-                                  <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-350 to-teal-400 drop-shadow-sm">
-                                    {finalPrice} {t("currency")}
-                                  </span>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="mt-3 pt-3 border-t border-white/5 flex justify-between items-center gap-4">
-                                <span className="text-slate-200 font-bold flex items-center gap-1.5">{t("totalLabel")}</span>
-                                <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-350 to-teal-400 drop-shadow-sm">
-                                  {originalPrice} {t("currency")}
-                                </span>
-                              </div>
-                            )}
-                          </>
-                        );
-                      })()}
+                        )}
+                      </span>
                     </div>
-                  )}
-              </div>
-              <div className="flex flex-col gap-4 w-full sm:w-auto sm:items-end">
-                <div className="flex items-center justify-center sm:justify-end gap-5 text-[11px] sm:text-xs text-slate-400 font-medium pb-1 w-full opacity-80">
-                  <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-teal-400" /> {lang === "uk" ? "Безпечна бронь" : lang === "en" ? "Secure Booking" : "Безопасная бронь"}</span>
-                  <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-teal-400" /> {lang === "uk" ? "Без комісій" : lang === "en" ? "No Fees" : "Без предоплат"}</span>
+                    {(() => {
+                      const nights = Math.ceil(
+                        (form.watch("dateRange").to!.getTime() -
+                          form.watch("dateRange").from!.getTime()) /
+                        (1000 * 60 * 60 * 24)
+                      );
+                      // Auto-discount for long stay: 7+ nights = 5%, 10+ nights = 10%
+                      const longStayDiscount = nights >= 10 ? 10 : nights >= 7 ? 5 : 0;
+                      const totalDiscountPercent = Math.min(100, discount + longStayDiscount);
+                      const originalPrice = nights * room.price;
+                      const finalPrice = Math.round(originalPrice * (1 - totalDiscountPercent / 100));
+
+                      return (
+                        <>
+                          {longStayDiscount > 0 && (
+                            <div className="mt-3 px-3.5 py-2 rounded-xl bg-teal-500/10 border border-teal-500/25 flex items-center justify-between text-xs text-teal-300">
+                              <span>
+                                🎁 {lang === "uk"
+                                  ? `Скидка ${longStayDiscount}% за проживання від ${nights >= 10 ? 10 : 7} ночей!`
+                                  : lang === "en"
+                                    ? `${longStayDiscount}% discount for staying ${nights >= 10 ? 10 : 7}+ nights!`
+                                    : `Скидка ${longStayDiscount}% за проживание от ${nights >= 10 ? 10 : 7} ночей!`}
+                              </span>
+                            </div>
+                          )}
+                          {totalDiscountPercent > 0 ? (
+                            <div className="mt-3 pt-3 border-t border-white/5 flex flex-wrap items-center justify-between gap-2">
+                              <div className="text-xs text-slate-500 line-through">
+                                {t("totalWithoutDiscount")}: {originalPrice} {t("currency")}
+                              </div>
+                              <div className="flex items-center gap-3 ml-auto">
+                                <span className="text-slate-200 font-bold flex items-center gap-1.5">
+                                  {t("totalLabel")}
+                                  <span className="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold rounded-lg px-1.5 py-0.5">
+                                    -{totalDiscountPercent}%
+                                  </span>
+                                </span>
+                                <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-350 to-teal-400 drop-shadow-sm">
+                                  {finalPrice} {t("currency")}
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="mt-3 pt-3 border-t border-white/5 flex justify-between items-center gap-4">
+                              <span className="text-slate-200 font-bold flex items-center gap-1.5">{t("totalLabel")}</span>
+                              <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-sky-350 to-teal-400 drop-shadow-sm">
+                                {originalPrice} {t("currency")}
+                              </span>
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
+                  </div>
+                )}
+
+              {/* Actions block */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between gap-4 text-xs text-slate-400 font-medium opacity-90 px-1">
+                  <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-teal-400 shrink-0" /> {lang === "uk" ? "Безпечна бронь" : lang === "en" ? "Secure Booking" : "Безопасная бронь"}</span>
+                  <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-teal-400 shrink-0" /> {lang === "uk" ? "Без комісій" : lang === "en" ? "No Fees" : "Без предоплат"}</span>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-center">
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
                   <Dialog open={isQuickBookOpen} onOpenChange={setIsQuickBookOpen}>
                     <DialogTrigger asChild>
                       <Button
                         type="button"
                         variant="outline"
                         size="lg"
-                        className="w-full sm:w-auto border-teal-500/30 bg-teal-500/5 text-teal-300 hover:bg-teal-500/10 hover:border-teal-500/50 transition-all duration-300 rounded-xl flex items-center justify-center gap-1.5"
+                        className="w-full border-teal-500/30 bg-teal-500/5 text-teal-300 hover:bg-teal-500/10 hover:border-teal-500/50 transition-all duration-300 rounded-xl flex items-center justify-center gap-2 h-12 text-sm font-semibold"
                       >
-                        <Zap className="h-4 w-4 fill-teal-300/20 animate-pulse text-teal-400" />
-                        {qbt.btn}
+                        <Zap className="h-4 w-4 fill-teal-300/20 animate-pulse text-teal-400 shrink-0" />
+                        <span className="truncate">{qbt.btn}</span>
                       </Button>
                     </DialogTrigger>
                     <DialogContent aria-describedby={undefined} className="bg-slate-900 border border-white/10 text-white rounded-2xl max-w-md shadow-2xl p-6">
@@ -842,7 +874,7 @@ export default function RoomBookingForm({
                     type="submit"
                     size="lg"
                     loading={isSubmitting}
-                    className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl"
+                    className="w-full h-12 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-extrabold border-0 shadow-lg shadow-orange-500/20 rounded-xl text-base"
                   >
                     {t("bookBtn")}
                   </Button>

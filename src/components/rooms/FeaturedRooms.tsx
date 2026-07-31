@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useParams, useSearchParams } from 'next/navigation';
 import type { Room } from '@/lib/types';
-import { ArrowRight, BedDouble, Waves } from 'lucide-react';
+import { ArrowRight, BedDouble, Waves, Moon } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 interface FeaturedRoomsProps {
@@ -22,6 +22,18 @@ export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
   const queryString = searchParams?.toString();
   const lang = params?.lang || 'ru';
   const featuredRooms = rooms.slice(0, 3);
+
+  // Calculate nights from query params if available
+  const checkin = searchParams?.get('checkin') || searchParams?.get('from');
+  const checkout = searchParams?.get('checkout') || searchParams?.get('to');
+  let nights = 0;
+  if (checkin && checkout) {
+    const from = new Date(checkin);
+    const to = new Date(checkout);
+    if (!isNaN(from.getTime()) && !isNaN(to.getTime()) && to > from) {
+      nights = Math.ceil((to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24));
+    }
+  }
 
   if (featuredRooms.length === 0) {
     return (
@@ -75,7 +87,17 @@ export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
                  <CardDescription className="mt-4 text-slate-300 text-sm font-light leading-relaxed">{room.description}</CardDescription>
               </CardContent>
               <CardFooter className="flex flex-col gap-4 p-5 sm:p-6 border-t border-white/5">
-                <p className="text-xl font-extrabold text-teal-300 mr-auto">{room.price} {t("currency") || "грн"} <span className="text-xs text-slate-400 font-normal">/ {t("perNight") || "ночь"}</span></p>
+                <div className="mr-auto">
+                  <p className="text-xl font-extrabold text-teal-300">{room.price} {t("currency") || "грн"} <span className="text-xs text-slate-400 font-normal">/ {t("perNight") || "ночь"}</span></p>
+                  {nights > 0 && (
+                    <div className="flex items-center gap-1.5 mt-1">
+                      <Moon className="h-3 w-3 text-sky-400" />
+                      <span className="text-xs text-sky-300 font-semibold">
+                        {nights} {nights === 1 ? (t("night") || "ночь") : (t("nightsShort") || "ноч.")} = <span className="text-white font-bold">{room.price * nights} {t("currency") || "грн"}</span>
+                      </span>
+                    </div>
+                  )}
+                </div>
                 <div className="flex flex-col sm:flex-row gap-3 w-full">
                   <Button asChild variant="outline" className="w-full sm:flex-1 border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 rounded-xl">
                     <Link href={`/${lang}/rooms/${room.slug}${queryString ? `?${queryString}` : ""}`} className="flex items-center justify-center">
