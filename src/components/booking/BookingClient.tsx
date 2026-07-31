@@ -88,7 +88,7 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-teal-500/30">
       {/* BUBBLE HERO SECTION */}
-      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-center overflow-hidden bg-slate-950 pt-16">
+      <section className="relative min-h-[75vh] lg:min-h-[85vh] flex items-center overflow-hidden bg-slate-950 pt-24 lg:pt-36 pb-20 lg:pb-28">
         <BackgroundBubbles count={15} />
         {/* Background Image & Gradients */}
         <div className="absolute inset-0 z-0">
@@ -104,7 +104,7 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
         </div>
 
-        <div className="container relative z-10 mx-auto px-4 lg:px-8 grid lg:grid-cols-2 gap-8 items-center h-full pt-10 pb-12">
+        <div className="container relative z-10 mx-auto px-4 lg:px-8 grid lg:grid-cols-2 gap-10 items-center h-full">
           
           <div className="flex flex-col items-start text-left animate-fade-in-up space-y-8 max-w-xl">
             {/* Minimal Premium Badge */}

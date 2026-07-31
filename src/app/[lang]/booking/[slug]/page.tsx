@@ -96,13 +96,13 @@ export default async function RoomBookingPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 pb-12">
-      <section className="relative h-[55vh] min-h-[330px] lg:min-h-[600px] flex items-end justify-start overflow-hidden bg-slate-900 text-white">
+      <section className="relative min-h-[55vh] lg:min-h-[600px] flex items-end justify-start overflow-hidden bg-slate-900 text-white pt-28 lg:pt-36 pb-16">
         <div className="absolute inset-0 z-0">
           <Image src={room.imageUrl} alt={room.name} fill className="object-cover scale-105 opacity-65 brightness-[0.45]" priority />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
         </div>
 
-        <div className="relative container mx-auto px-4 pb-12 z-10 max-w-6xl flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div className="relative container mx-auto px-4 z-10 max-w-6xl flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
             <nav className="mb-6 flex flex-wrap items-center gap-1.5 text-xs md:text-sm text-teal-200/90 font-medium">
               <Link href={`/${lang}`} className="hover:text-teal-300 hover:underline">{t.home[lang as keyof typeof t.home]}</Link>
