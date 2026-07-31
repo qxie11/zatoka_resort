@@ -120,73 +120,62 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
   return (
     <div className="flex flex-col min-h-dvh bg-slate-950 text-slate-100">
       <div className="flex-1">
-        <section className="relative w-full min-h-[90vh] lg:min-h-screen flex items-center overflow-hidden bg-slate-950 py-16 lg:py-0">
+        <section className="relative w-full min-h-[95vh] lg:min-h-screen flex items-center overflow-hidden bg-slate-950 py-16 lg:py-0">
           <OceanSceneClient />
 
+          {/* Glowing Radial Background Flares */}
+          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-teal-500/10 rounded-full blur-[140px] pointer-events-none z-[6] animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-sky-500/10 rounded-full blur-[160px] pointer-events-none z-[6]" />
+
           {/* Dark gradient overlays */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/60 to-transparent pointer-events-none z-[8]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40 pointer-events-none z-[8]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/70 to-slate-950/30 pointer-events-none z-[8]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-slate-950/60 pointer-events-none z-[8]" />
 
           {/* Underwater light rays */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-[7]">
-            <div className="absolute top-0 left-[15%] w-24 h-full bg-gradient-to-b from-teal-300/5 via-sky-300/3 to-transparent skew-x-12 animate-light-ray" />
-            <div className="absolute top-0 left-[35%] w-16 h-full bg-gradient-to-b from-sky-200/4 via-teal-300/2 to-transparent skew-x-6 animate-light-ray" style={{ animationDelay: '2s' }} />
-            <div className="absolute top-0 right-[20%] w-20 h-full bg-gradient-to-b from-teal-400/4 via-transparent to-transparent -skew-x-8 animate-light-ray" style={{ animationDelay: '4s' }} />
+            <div className="absolute top-0 left-[15%] w-28 h-full bg-gradient-to-b from-teal-300/10 via-sky-300/5 to-transparent skew-x-12 animate-light-ray" />
+            <div className="absolute top-0 left-[38%] w-20 h-full bg-gradient-to-b from-sky-200/8 via-teal-300/3 to-transparent skew-x-6 animate-light-ray" style={{ animationDelay: '2s' }} />
+            <div className="absolute top-0 right-[22%] w-24 h-full bg-gradient-to-b from-teal-400/8 via-transparent to-transparent -skew-x-8 animate-light-ray" style={{ animationDelay: '4s' }} />
           </div>
 
           {/* Swimming fish layer */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-[7]">
             <svg
-              className="absolute animate-fish w-6 h-4 text-teal-300/40 fill-current"
-              style={{ top: '28%', '--fish-duration': '32s', '--fish-delay': '3s' } as React.CSSProperties}
+              className="absolute animate-fish w-7 h-5 text-teal-300/50 fill-current"
+              style={{ top: '25%', '--fish-duration': '32s', '--fish-delay': '3s' } as React.CSSProperties}
               viewBox="0 0 40 24"
             >
               <path d="M30,12 C30,12 40,6 40,12 C40,18 30,12 30,12 Z M5,12 C5,12 0,6 5,12 C5,18 10,22 20,20 C28,18 30,14 30,12 C30,10 28,6 20,4 C10,2 5,6 5,12 Z M8,11 C8,10 9,9 10,9 C11,9 12,10 12,11 C12,12 11,13 10,13 C9,13 8,12 8,11 Z" />
             </svg>
             <svg
-              className="absolute animate-fish-2 w-8 h-5 text-sky-300/35 fill-current"
-              style={{ top: '62%', '--fish-duration': '45s', '--fish-delay': '8s' } as React.CSSProperties}
+              className="absolute animate-fish-2 w-9 h-6 text-sky-300/40 fill-current"
+              style={{ top: '58%', '--fish-duration': '45s', '--fish-delay': '8s' } as React.CSSProperties}
               viewBox="0 0 40 24"
             >
               <path d="M30,12 C30,12 40,6 40,12 C40,18 30,12 30,12 Z M5,12 C5,12 0,6 5,12 C5,18 10,22 20,20 C28,18 30,14 30,12 C30,10 28,6 20,4 C10,2 5,6 5,12 Z M8,11 C8,10 9,9 10,9 C11,9 12,10 12,11 C12,12 11,13 10,13 C9,13 8,12 8,11 Z" />
             </svg>
             <svg
-              className="absolute animate-fish w-4 h-3 text-teal-200/30 fill-current"
-              style={{ top: '78%', '--fish-duration': '25s', '--fish-delay': '15s' } as React.CSSProperties}
+              className="absolute animate-fish w-5 h-4 text-teal-200/40 fill-current"
+              style={{ top: '75%', '--fish-duration': '25s', '--fish-delay': '15s' } as React.CSSProperties}
               viewBox="0 0 40 24"
             >
               <path d="M30,12 C30,12 40,6 40,12 C40,18 30,12 30,12 Z M5,12 C5,12 0,6 5,12 C5,18 10,22 20,20 C28,18 30,14 30,12 C30,10 28,6 20,4 C10,2 5,6 5,12 Z M8,11 C8,10 9,9 10,9 C11,9 12,10 12,11 C12,12 11,13 10,13 C9,13 8,12 8,11 Z" />
             </svg>
           </div>
 
-          <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
-            <svg className="absolute animate-seagull w-8 h-8 text-white/20 fill-current" viewBox="0 0 24 24">
-              <path d="M12,6.5C11,7.5 9.5,9 7,9C4.5,9 2.5,7.5 1.5,6.5C1,6 0.5,6.5 1,7C2,8 4,10.5 7,10.5C10,10.5 11.5,9 12,8C12.5,9 14,10.5 17,10.5C20,10.5 22,8 23,7C23.5,6.5 23,6 22.5,6.5C21.5,7.5 19.5,9 17,9C14.5,9 13,7.5 12,6.5Z" />
-            </svg>
-          </div>
+          <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full pt-28 pb-20 lg:pt-36 lg:pb-24">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
-          <div className="absolute inset-0 opacity-15 pointer-events-none z-0">
-            <div className="absolute top-1/4 left-10 animate-float">
-              <Waves className="h-24 w-24 text-teal-300" />
-            </div>
-            <div className="absolute top-1/3 right-1/4 animate-float-slow" style={{ animationDelay: "3s" }}>
-              <Waves className="h-16 w-16 text-sky-300" />
-            </div>
-            <div className="absolute bottom-1/4 left-1/3 animate-float" style={{ animationDelay: "5s" }}>
-              <Waves className="h-20 w-20 text-teal-200" />
-            </div>
-          </div>
+              {/* LEFT COLUMN: Hero Copy & Command Booking Bar */}
+              <div className="lg:col-span-7 flex flex-col items-start text-left text-white space-y-7">
 
-          <div className="relative container mx-auto px-4 lg:px-8 z-10 w-full pt-24 pb-16 lg:pt-32 lg:pb-20">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-
-              {/* LEFT COLUMN: Family Copy & Streamlined CTAs */}
-              <div className="lg:col-span-7 flex flex-col items-start text-left text-white space-y-8">
-
-                {/* Family Micro-Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/20 text-xs font-bold text-teal-300 uppercase tracking-widest animate-fade-in shadow-[0_0_15px_rgba(20,184,166,0.15)]">
-                  <Sun className="h-4 w-4 text-teal-400 animate-pulse" />
-                  <span>{translate("familyBadge", "Уютный семейный гостевой дом")}</span>
+                {/* Live Status Glass Pill */}
+                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/80 backdrop-blur-xl border border-teal-500/40 text-xs font-extrabold text-teal-300 tracking-wider shadow-[0_0_25px_rgba(20,184,166,0.25)] animate-fade-in">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-400"></span>
+                  </span>
+                  <span className="uppercase">{translate("familyBadge", "Сезон 2026 • 5 минут до Чёрного Моря")}</span>
                 </div>
 
                 {/* Heading */}
@@ -197,17 +186,37 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                   </span>
                 </h1>
 
-                {/* Description */}
-                <p className="max-w-xl text-base md:text-xl text-slate-200 font-normal leading-relaxed animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards] drop-shadow-lg">
-                  {translate("heroDescription", "Семейный отель «Отдых в Затоке». Зеленый двор с мангалами, детская игровая зона, общая кухня, кондиционеры, Wi-Fi и бесплатная парковка. Всего 5 минут ходьбы до песчаного пляжа.")}
-                </p>
+                {/* Glassmorphic Luxury Description Box */}
+                <div className="max-w-xl animate-fade-in-up [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards]">
+                  <div className="p-4 sm:p-5 rounded-2xl rounded-tl-sm bg-slate-900/60 backdrop-blur-xl border border-white/10 border-l-4 border-l-teal-400 shadow-xl">
+                    <p className="text-base sm:text-lg text-slate-100 font-medium leading-relaxed">
+                      {translate("heroDescription", "Семейный отель «Отдых в Затоке». Зеленый двор с мангалами, детская игровая зона, общая кухня, кондиционеры, Wi-Fi и бесплатная парковка. Всего 5 минут ходьбы до песчаного пляжа.")}
+                    </p>
+                  </div>
+                </div>
 
-                {/* Horizontal Booking Widget */}
-                <div className="w-full pt-4 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards] z-20 relative">
+                {/* Feature Micro-Pills */}
+                <div className="flex flex-wrap items-center gap-2 pt-1 animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards]">
+                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900/60 border border-white/10 text-xs font-semibold text-teal-300 backdrop-blur-md shadow-sm">
+                    🌴 Зелёный двор
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900/60 border border-white/10 text-xs font-semibold text-amber-300 backdrop-blur-md shadow-sm">
+                    🔥 Мангальная зона
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900/60 border border-white/10 text-xs font-semibold text-rose-300 backdrop-blur-md shadow-sm">
+                    🧸 Детская площадка
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900/60 border border-white/10 text-xs font-semibold text-sky-300 backdrop-blur-md shadow-sm">
+                    ❄️ Кондиционеры
+                  </span>
+                </div>
+
+                {/* Floating Command Glass Booking Bar */}
+                <div className="w-full pt-3 animate-fade-in-up [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards] z-20 relative">
                   <Form {...widgetForm}>
                     <form
                       onSubmit={widgetForm.handleSubmit(onWidgetSubmit)}
-                      className="flex flex-col md:flex-row gap-4 p-4 rounded-2xl bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl items-end w-full"
+                      className="flex flex-col md:flex-row gap-4 p-5 rounded-3xl bg-slate-900/80 backdrop-blur-2xl border border-teal-500/30 shadow-[0_20px_60px_rgba(0,0,0,0.6)] hover:border-teal-400/50 transition-all duration-500 items-end w-full group/bar"
                     >
                       <div className="w-full md:flex-1 relative group/field">
                         <FormField
@@ -233,7 +242,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                               {translate("guests", "Гости")}
                             </div>
                             <FormControl>
-                              <div className="flex items-center justify-between bg-slate-950/80 border border-white/[0.06] hover:border-white/15 focus-within:border-teal-500/50 rounded-xl h-12 px-3 w-full transition-all duration-300 shadow-inner">
+                              <div className="flex items-center justify-between bg-slate-950/90 border border-white/10 hover:border-teal-400/40 focus-within:border-teal-400 rounded-xl h-12 px-3 w-full transition-all duration-300 shadow-inner">
                                 <button
                                   type="button"
                                   onClick={() => field.onChange(Math.max(1, field.value - 1))}
@@ -260,74 +269,102 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                       <Button
                         type="submit"
                         disabled={!isFormValid}
-                        className="w-full md:w-auto h-12 px-8 bg-gradient-to-r from-teal-400 via-sky-400 to-sky-500 hover:from-teal-300 hover:via-sky-300 hover:to-sky-400 disabled:opacity-50 disabled:pointer-events-none text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap"
+                        className="w-full md:w-auto h-12 px-8 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 disabled:opacity-50 disabled:pointer-events-none text-slate-950 font-black border-0 shadow-lg shadow-orange-500/25 hover:scale-[1.03] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap"
                       >
+                        <Sun className="h-4 w-4 fill-slate-950" />
                         {translate("checkAvailability", "Найти номера")}
                       </Button>
                     </form>
                   </Form>
                 </div>
 
-                {/* Minimalist Trust Features */}
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-6 animate-fade-in-up [animation-delay:0.5s] opacity-0 [animation-fill-mode:forwards] text-xs font-bold uppercase tracking-wider text-slate-300">
-                  <div className="flex items-center gap-2 bg-slate-900/40 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-white/5">
-                    <XCircle className="h-4 w-4 text-emerald-400" />
+                {/* Trust Guarantees */}
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-2 animate-fade-in-up [animation-delay:0.5s] opacity-0 [animation-fill-mode:forwards] text-xs font-bold uppercase tracking-wider text-slate-300">
+                  <div className="flex items-center gap-2 bg-slate-900/60 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shadow-sm">
+                    <ShieldCheck className="h-4 w-4 text-teal-400" />
                     <span>{translate("trustBadge1", "Отмена за 7 дней")}</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-slate-900/40 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-white/5">
+                  <div className="flex items-center gap-2 bg-slate-900/60 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shadow-sm">
                     <CreditCard className="h-4 w-4 text-amber-400" />
                     <span>{translate("trustBadge2", "Оплата при заезде")}</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-slate-900/40 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-white/5">
+                  <div className="flex items-center gap-2 bg-slate-900/60 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shadow-sm">
                     <Star className="h-4 w-4 text-sky-400" />
-                    <span>{translate("trustBadge3", "Цена ниже рынка")}</span>
+                    <span>{translate("trustBadge3", "Гарантия лучшей цены")}</span>
                   </div>
                 </div>
 
               </div>
 
-              {/* RIGHT COLUMN: Redesigned Family Float Image */}
+              {/* RIGHT COLUMN: Interactive 3D Glass Showcase Card & Floating Badges */}
               <div className="lg:col-span-5 relative hidden lg:flex items-center justify-center animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards] select-none mt-8 lg:mt-0">
-                {/* Main Image Container */}
-                <div className="relative w-full max-w-[420px] aspect-[4/5] rounded-[2rem] overflow-hidden border-[6px] border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group hover:border-white/20 transition-all duration-700 bg-slate-900 -rotate-2 hover:rotate-0">
+                
+                {/* Outer Glow Halo */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/20 via-sky-500/20 to-amber-500/10 rounded-[2.5rem] blur-2xl transform scale-95 animate-pulse" />
+
+                {/* Main Glass Showcase Card */}
+                <div className="relative w-full max-w-[430px] aspect-[4/5] rounded-[2.2rem] overflow-hidden border-[6px] border-white/15 shadow-[0_25px_70px_rgba(0,0,0,0.7)] group hover:border-teal-400/40 transition-all duration-700 bg-slate-900 -rotate-2 hover:rotate-0 hover:scale-[1.02]">
                   <Image
                     src="/zatoka-hero.png"
-                    alt="Family Beach Holiday"
+                    alt="Zatoka Resort Family Vacation"
                     fill
                     priority
-                    sizes="(max-width: 768px) 100vw, 420px"
+                    sizes="(max-width: 768px) 100vw, 430px"
                     className="object-cover transition-all [transition-duration:10s] group-hover:scale-110 brightness-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-900/30 to-transparent" />
 
-                  {/* Floating Family Badge */}
-                  <div className="absolute bottom-6 left-6 right-6 p-4 md:p-5 rounded-2xl bg-slate-900/85 backdrop-blur-md text-white border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.6)] transition-all duration-500 group-hover:-translate-y-1">
+                  {/* Floating Price Tag inside Card */}
+                  <div className="absolute top-5 left-5 px-4 py-2 rounded-2xl bg-slate-950/80 backdrop-blur-md border border-amber-400/30 text-amber-300 font-extrabold text-sm shadow-xl flex items-center gap-2">
+                    <span>🔥</span>
+                    <span>от 400 грн / ночь</span>
+                  </div>
+
+                  {/* Floating Family Card Info */}
+                  <div className="absolute bottom-6 left-6 right-6 p-5 rounded-2xl bg-slate-950/90 backdrop-blur-xl text-white border border-teal-500/30 shadow-[0_15px_40px_rgba(0,0,0,0.8)] transition-all duration-500 group-hover:-translate-y-1">
                     <div className="flex items-center gap-4">
                       <div className="flex -space-x-3">
-                        <div className="w-10 h-10 rounded-full border-2 border-slate-900 bg-rose-400 flex items-center justify-center shadow-lg"><Baby className="w-5 h-5 text-white" /></div>
-                        <div className="w-10 h-10 rounded-full border-2 border-slate-900 bg-teal-400 flex items-center justify-center shadow-lg"><Sun className="w-5 h-5 text-white" /></div>
-                        <div className="w-10 h-10 rounded-full border-2 border-slate-900 bg-amber-400 flex items-center justify-center shadow-lg"><UtensilsCrossed className="w-5 h-5 text-white" /></div>
+                        <div className="w-10 h-10 rounded-full border-2 border-slate-950 bg-amber-400 flex items-center justify-center shadow-lg"><Sun className="w-5 h-5 text-slate-950" /></div>
+                        <div className="w-10 h-10 rounded-full border-2 border-slate-950 bg-teal-400 flex items-center justify-center shadow-lg"><Baby className="w-5 h-5 text-slate-950" /></div>
+                        <div className="w-10 h-10 rounded-full border-2 border-slate-950 bg-sky-400 flex items-center justify-center shadow-lg"><UtensilsCrossed className="w-5 h-5 text-slate-950" /></div>
                       </div>
                       <div>
-                        <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">{translate("idealForFamily", "Идеально для семей")}</p>
-                        <p className="text-sm font-bold text-white mt-0.5">{translate("kidsFriendly", "Детская зона и двор")}</p>
+                        <p className="text-[11px] font-extrabold text-teal-300 uppercase tracking-wider">{translate("idealForFamily", "Идеально для семей")}</p>
+                        <p className="text-sm font-bold text-white mt-0.5">{translate("kidsFriendly", "Детская игровая зона и мангалы")}</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Floating Distance Badge */}
-                <div className="absolute -top-6 -right-4 p-4 rounded-2xl bg-slate-900/60 backdrop-blur-md text-white border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.5)] animate-float hidden sm:block rotate-3">
+                {/* Floating Rating Badge (Top Right) */}
+                <div className="absolute -top-5 -right-4 p-4 rounded-2xl bg-slate-900/90 backdrop-blur-xl text-white border border-teal-500/30 shadow-[0_15px_40px_rgba(0,0,0,0.6)] animate-float hidden sm:block rotate-3">
                   <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded-full bg-sky-400/20 border border-sky-300/30 flex items-center justify-center">
+                    <div className="h-11 w-11 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center">
+                      <Star className="h-6 w-6 fill-amber-400 text-amber-400 animate-pulse" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-base font-black text-white">4.9</span>
+                        <span className="text-xs text-amber-300 font-bold">/ 5.0</span>
+                      </div>
+                      <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">120+ отзывов гостей</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating Distance Badge (Bottom Right) */}
+                <div className="absolute -bottom-4 -right-4 p-4 rounded-2xl bg-slate-900/90 backdrop-blur-xl text-white border border-sky-500/30 shadow-[0_15px_40px_rgba(0,0,0,0.6)] animate-float-slow hidden sm:block -rotate-2">
+                  <div className="flex items-center gap-3">
+                    <div className="h-11 w-11 rounded-xl bg-sky-400/20 border border-sky-400/40 flex items-center justify-center">
                       <MapPin className="h-6 w-6 text-sky-300" />
                     </div>
                     <div>
-                      <p className="text-[11px] text-slate-300 uppercase tracking-widest font-bold">{translate("distanceToSea", "До моря")}</p>
-                      <p className="text-base font-black text-white mt-0.5">{translate("fiveMinutes", "5 минут")}</p>
+                      <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">{translate("distanceToSea", "До моря")}</p>
+                      <p className="text-sm font-black text-sky-300 mt-0.5">{translate("fiveMinutes", "5 минут ходьбы")}</p>
                     </div>
                   </div>
                 </div>
+
               </div>
 
             </div>
