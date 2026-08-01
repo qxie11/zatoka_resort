@@ -76,6 +76,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', 'AW-18286115803');
+              gtag('config', 'G-DWTXJJNTJF');
             `,
           }}
         />
