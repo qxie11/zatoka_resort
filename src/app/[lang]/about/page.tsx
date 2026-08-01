@@ -46,7 +46,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const meta = data[lang as keyof typeof data] || data.ru;
   const canonicalUrl = `${baseUrl}/${lang}/about`;
-  const ogImageUrl = `${baseUrl}/hero-bg.jpg`;
 
   return {
     title: meta.title,
@@ -55,26 +54,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        "x-default": `${baseUrl}/ru/about`,
         ru: `${baseUrl}/ru/about`,
         uk: `${baseUrl}/uk/about`,
         en: `${baseUrl}/en/about`,
       },
     },
     openGraph: {
+      type: "website",
+      locale: lang,
+      url: canonicalUrl,
       title: meta.title,
       description: meta.desc,
-      url: canonicalUrl,
       siteName: "Zatoka Resort",
-      locale: lang,
-      type: "website",
-      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: meta.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: meta.title,
       description: meta.desc,
-      images: [ogImageUrl],
     },
   };
 }

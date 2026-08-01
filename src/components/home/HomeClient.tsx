@@ -175,7 +175,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-400"></span>
                   </span>
-                  <span className="uppercase">{translate("familyBadge", "Сезон 2026 • 5 минут до Чёрного Моря")}</span>
+                  <span className="uppercase">{translate("familyBadge", `Сезон ${new Date().getFullYear()} • 5 минут до Чёрного Моря`)}</span>
                 </div>
 
                 {/* Heading */}

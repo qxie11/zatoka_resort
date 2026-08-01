@@ -139,7 +139,7 @@ export default function ImageGallery({
                       : "w-14 h-10 md:w-18 md:h-12 opacity-40 hover:opacity-80 hover:scale-105 border border-white/10"
                   }`}
                 >
-                  <img src={imageUrl} className="w-full h-full object-cover" alt="" />
+                  <img src={imageUrl} className="w-full h-full object-cover" alt={`${roomName} - фото ${index + 1}`} />
                   {current === index && (
                     <div className="absolute inset-0 bg-teal-400/10 pointer-events-none" />
                   )}

@@ -13,10 +13,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const data = {
     ru: {
-      title: "Отдых в Затоке 2026 — Семейный Отель Zatoka Resort у Моря",
+      title: `Отдых в Затоке ${currentYear} — Семейный Отель Zatoka Resort у Моря`,
       desc: `Снять номер в Затоке у моря на станции Лиманская. Комфортные номера, детская площадка, мангальная зона, Wi-Fi, цены ${currentYear}. Забронируйте отдых напрямую!`,
       keywords: [
-        "отдых в затоке 2026",
+        `отдых в затоке ${currentYear}`,
         "снять номер в затоке у моря",
         "отель затока лиманская",
         "семейный отдых затока",
@@ -26,10 +26,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ]
     },
     uk: {
-      title: "Відпочинок в Затоці 2026 — Сімейний Готель Zatoka Resort біля Моря",
+      title: `Відпочинок в Затоці ${currentYear} — Сімейний Готель Zatoka Resort біля Моря`,
       desc: `Зняти номер в Затоці біля моря на станції Лиманська. Комфортні номери, дитячий майданчик, мангальна зона, Wi-Fi, ціни ${currentYear}. Забронюйте відпочинок напряму!`,
       keywords: [
-        "відпочинок в затоці 2026",
+        `відпочинок в затоці ${currentYear}`,
         "зняти номер в затоці біля моря",
         "готель затока лиманська",
         "сімейний відпочинок затока",
@@ -38,10 +38,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ]
     },
     en: {
-      title: "Zatoka Resort 2026 — Family Hotel near the Black Sea Beach",
+      title: `Zatoka Resort ${currentYear} — Family Hotel near the Black Sea Beach`,
       desc: `Book a hotel room in Zatoka, Ukraine. Comfortable air-conditioned rooms, barbecue area, Wi-Fi, playground, best rates ${currentYear}. Direct online booking.`,
       keywords: [
-        "zatoka resort 2026",
+        `zatoka resort ${currentYear}`,
         "book room zatoka beach",
         "zatoka hotel limanskaya",
         "family vacation zatoka ukraine",
@@ -52,7 +52,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const meta = data[lang as keyof typeof data] || data.ru;
   const canonicalUrl = `${baseUrl}/${lang}`;
-  const ogImageUrl = `${baseUrl}/hero-bg.jpg`;
 
   return {
     title: meta.title,
@@ -73,13 +72,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: meta.title,
       description: meta.desc,
       siteName: "Zatoka Resort",
-      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: meta.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: meta.title,
       description: meta.desc,
-      images: [ogImageUrl],
     },
   };
 }

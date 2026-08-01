@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 
   const i18n = {
     ru: {
-      title: "Отдых в Затоке 2026 | Отель Zatoka Resort у моря",
+      title: `Отдых в Затоке ${currentYear} | Отель Zatoka Resort у моря`,
       desc: `Официальный сайт отеля Zatoka Resort в Затоке (Лиманская). Комфортабельные номера с кондиционером в 5 минутах от моря. Цены ${currentYear}, скидки и бронирование без комиссии.`,
       keywords: [
         "отдых в затоке",
         "отель в затоке",
-        "гостиница затока 2026",
+        `гостиница затока ${currentYear}`,
         "снять номер в затоке",
         "затока отель у моря",
         "отель с кондиционером затока",
@@ -37,12 +37,12 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       ]
     },
     uk: {
-      title: "Відпочинок в Затоці 2026 | Готель Zatoka Resort біля моря",
+      title: `Відпочинок в Затоці ${currentYear} | Готель Zatoka Resort біля моря`,
       desc: `Офіційний сайт готелю Zatoka Resort в Затоці (Лиманська). Комфортні номери з кондиціонером за 5 хвилин від моря. Ціни ${currentYear}, знижки та бронювання без комісії.`,
       keywords: [
         "відпочинок в затоці",
         "готель в затоці",
-        "готель затока 2026",
+        `готель затока ${currentYear}`,
         "зняти номер в затоці",
         "затока готель біля моря",
         "готель з кондиціонером затока",
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       ]
     },
     en: {
-      title: "Zatoka Resort 2026 | Family Beachfront Hotel in Zatoka",
+      title: `Zatoka Resort ${currentYear} | Family Beachfront Hotel in Zatoka`,
       desc: `Official website of Zatoka Resort in Zatoka, Ukraine. Comfortable air-conditioned rooms 5 minutes from the beach. Best rates ${currentYear}, direct booking with no fees.`,
       keywords: [
         "zatoka hotel",
@@ -67,8 +67,6 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   };
 
   const { title, desc, keywords } = i18n[lang as keyof typeof i18n] || i18n.ru;
-  const ogImageUrl = `${baseUrl}/hero-bg.jpg`;
-
   return {
     metadataBase: new URL(baseUrl),
     verification: {
@@ -96,20 +94,11 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       siteName: "Zatoka Resort",
       title,
       description: desc,
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: "Zatoka Resort - Seaside Hotel",
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description: desc,
-      images: [ogImageUrl],
     },
   };
 }
