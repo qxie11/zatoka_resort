@@ -109,7 +109,8 @@ export default function GuestImpressions() {
 
   const translate = (key: string, fallback: string) => {
     if (!mounted) return fallback;
-    return t(key);
+    const val = t(key);
+    return val && val !== key ? val : fallback;
   };
 
   const lang = i18n.language || "ru";
@@ -279,6 +280,19 @@ export default function GuestImpressions() {
                 <span className="text-white font-semibold">96%</span>{" "}
                 {translate("reviewsRecommend", "рекомендуют")}
               </span>
+            </div>
+
+            {/* Google Review Link Button */}
+            <div className="flex justify-center mt-6">
+              <a
+                href="https://g.page/r/CSGM2-yYfvgJEBM/review"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-gradient-to-r from-teal-500/20 via-sky-500/20 to-teal-500/20 hover:from-teal-500/30 hover:to-sky-500/30 border border-teal-500/40 text-teal-200 hover:text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:scale-105 shadow-lg shadow-teal-500/10 group/glink"
+              >
+                <Star className="h-4 w-4 fill-amber-400 text-amber-400 shrink-0 group-hover/glink:rotate-12 transition-transform" />
+                <span>{translate("leaveGoogleReview", "Оставить отзыв в Google Maps")}</span>
+              </a>
             </div>
           </div>
         </ScrollReveal>
