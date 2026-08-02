@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: meta.title,
       description: meta.desc,
       url: canonicalUrl,
-      siteName: "Zatoka Resort",
+      siteName: "Grean Beam",
       locale: lang,
       type: "website",
     },

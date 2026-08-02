@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { LogOut, Home, Bed, LayoutDashboard, CalendarDays, PhoneCall, BookOpen, MessageSquare, Menu, Tag, Waves } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { GreanBeamLogo } from "@/components/layout/Header";
 
 const navLinks = [
   { href: "/admin", label: "Обзор", icon: LayoutDashboard },
@@ -118,8 +119,8 @@ export default function AdminLayout({
           <div className="flex items-center gap-4">
             {/* Mobile Logo & Brand (hidden on desktop) */}
             <Link href="/" className="flex items-center gap-2 font-extrabold text-white md:hidden">
-              <Waves className="h-5 w-5 text-teal-400 shrink-0" />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-sky-300 to-amber-300 text-sm">
+              <GreanBeamLogo scrolled={true} className="h-5 w-5 shrink-0" />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 text-sm">
                 Админ-панель
               </span>
             </Link>

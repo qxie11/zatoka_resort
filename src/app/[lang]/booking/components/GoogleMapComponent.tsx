@@ -72,7 +72,7 @@ interface Attraction {
 const ATTRACTIONS: Attraction[] = [
   {
     id: "hotel",
-    name: { ru: "Zatoka Resort (Отель)", uk: "Zatoka Resort (Готель)", en: "Zatoka Resort (Hotel)" },
+    name: { ru: "Grean Beam (Отель)", uk: "Grean Beam (Готель)", en: "Grean Beam (Hotel)" },
     desc: { ru: "Наш отель — отправная точка вашего отдыха у моря.", uk: "Наш готель — стартова точка вашого відпочинку біля моря.", en: "Our hotel — the starting point of your seaside vacation." },
     lat: 46.13355,
     lng: 30.51818,

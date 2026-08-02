@@ -40,7 +40,7 @@ export async function GET(request: Request) {
 <Transaction timestamp="${now}" partner="zatoka-hotel">
   <PropertyDataSet>
     <Property>zatoka_hotel</Property>
-    <Name>Отель "Zatoka Resort"</Name>
+    <Name>Отель "Grean Beam"</Name>
     <Address>ул. Садовая, 1835, Затока, Одесская область, Украина</Address>
     <Currency>UAH</Currency>
     <MinPrice>${minPrice}</MinPrice>
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
     const jsonFeed = {
       hotel: {
         id: "zatoka_hotel",
-        name: "Отель \"Zatoka Resort\"",
+        name: "Отель \"Grean Beam\"",
         address: "ул. Садовая, 1835, Затока, Одесская область, Украина",
         currency: "UAH",
         website: "https://www.zatoka-hotel.com",

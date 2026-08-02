@@ -61,8 +61,11 @@ export default function RoomsClient({ rooms, lang }: RoomsClientProps) {
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-xs font-semibold uppercase tracking-wider">
-            <Waves className="w-3.5 h-3.5" />
-            Zatoka Resort {new Date().getFullYear()}
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
+            </span>
+            Grean Beam {new Date().getFullYear()}
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-white font-heading tracking-tight">
             {t.heading}
@@ -83,7 +86,7 @@ export default function RoomsClient({ rooms, lang }: RoomsClientProps) {
               <div className="relative h-64 w-full overflow-hidden bg-slate-950">
                 <Image
                   src={room.imageUrl || "/og-image.png"}
-                  alt={`${room.name} - отель Zatoka Resort`}
+                  alt={`${room.name} - отель Grean Beam`}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

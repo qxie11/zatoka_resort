@@ -21,6 +21,7 @@ import { FaViber, FaTelegramPlane } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { GreanBeamLogo } from "./Header";
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -85,10 +86,10 @@ export default function Footer() {
           {/* Brand & Description Column */}
           <div className="lg:col-span-4 flex flex-col items-start space-y-6">
             <Link href={getLocalizedHref("/")} className="flex items-center gap-3 group">
-              <div className="p-2.5 rounded-2xl bg-white/5 border border-white/10 group-hover:border-teal-400/40 group-hover:bg-teal-400/10 group-hover:shadow-[0_0_20px_rgba(45,212,191,0.2)] transition-all duration-500">
-                <Waves className="h-6 w-6 text-teal-400 group-hover:text-teal-300 transition-colors duration-500" />
+              <div className="p-2.5 rounded-2xl bg-white/5 border border-white/10 group-hover:border-emerald-400/40 group-hover:bg-emerald-400/10 group-hover:shadow-[0_0_20px_rgba(52,211,153,0.2)] transition-all duration-500 flex items-center justify-center">
+                <GreanBeamLogo scrolled={true} className="h-6 w-6" />
               </div>
-              <span className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white via-teal-100 to-teal-400 tracking-tight drop-shadow-sm">
+              <span className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white via-emerald-100 to-emerald-400 tracking-tight drop-shadow-sm">
                 {t("brandName")}
               </span>
             </Link>

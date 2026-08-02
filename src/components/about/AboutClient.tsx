@@ -497,7 +497,7 @@ export default function AboutClient({ lang }: AboutClientProps) {
             </h2>
             <WavyUnderline colorClassName="text-teal-400" />
             <p className="mt-4 max-w-2xl mx-auto text-slate-300 text-lg font-light">
-              {translate("attractionsDesc", "Исследуйте самые интересные места рядом с Zatoka Resort: от песчаных пляжей и лимана до старинной крепости и центра культуры вина.")}
+              {translate("attractionsDesc", "Исследуйте самые интересные места рядом с Grean Beam: от песчаных пляжей и лимана до старинной крепости и центра культуры вина.")}
             </p>
           </div>
 

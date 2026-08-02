@@ -21,7 +21,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
   const titles = {
     ru: "Блог и полезные советы | Отдых в Затоке",
     uk: "Блог та корисні поради | Відпочинок в Затоці",
-    en: "Blog & Travel Tips | Zatoka Resort",
+    en: "Blog & Travel Tips | Grean Beam",
   };
 
   const currentYear = new Date().getFullYear();
@@ -41,7 +41,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
   const keywords = {
     ru: ["блог затока", "новости затоки", "советы туристам затока", "отдых в затоке статьи", "гид по затоке"],
     uk: ["блог затока", "новини затоки", "поради туристам затока", "відпочинок в затоці статті", "гід по затоці"],
-    en: ["zatoka blog", "zatoka travel guide", "black sea vacation tips", "zatoka resort news"]
+    en: ["zatoka blog", "zatoka travel guide", "black sea vacation tips", "grean beam blog"]
   };
 
   return {
@@ -61,7 +61,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
       title,
       description,
       url: canonicalPath,
-      siteName: "Zatoka Resort",
+      siteName: "Grean Beam",
       locale: lang,
       type: "website",
     },

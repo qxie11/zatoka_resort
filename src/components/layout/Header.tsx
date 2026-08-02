@@ -11,6 +11,43 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
 
+export const GreanBeamLogo = ({ className, scrolled = false }: { className?: string; scrolled?: boolean }) => (
+  <span className={cn("relative flex h-8 w-8 items-center justify-center shrink-0 select-none", className)}>
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="relative z-10">
+      <defs>
+        <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#10b981" />
+          <stop offset="50%" stopColor="#059669" />
+          <stop offset="100%" stopColor="#00c9a7" />
+        </linearGradient>
+        <linearGradient id="beamGrad" x1="50%" y1="100%" x2="50%" y2="0%">
+          <stop offset="0%" stopColor="#059669" />
+          <stop offset="50%" stopColor="#10b981" />
+          <stop offset="100%" stopColor="#34d399" />
+        </linearGradient>
+        <radialGradient id="auraGlow" cx="50%" cy="40%" r="40%">
+          <stop offset="0%" stopColor="#34d399" stopOpacity="0.5" />
+          <stop offset="60%" stopColor="#10b981" stopOpacity="0.15" />
+          <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      
+      {/* Soft emerald glow behind beam */}
+      <circle cx="16" cy="13" r="10" fill="url(#auraGlow)" />
+      
+      {/* Vertical Green Beam */}
+      <path d="M14.2 23.5 L15.4 3 L16.6 3 L17.8 23.5 Z" fill="url(#beamGrad)" />
+      <path d="M15.4 23.5 L15.8 3 L16.2 3 L16.6 23.5 Z" fill="#ffffff" opacity="0.7" />
+      
+      {/* Arch / Sun Dome */}
+      <path d="M10 23.5 C10 18.5 22 18.5 22 23.5" stroke="url(#emeraldGrad)" strokeWidth="2.4" strokeLinecap="round" fill="none" />
+      
+      {/* Bottom Wave Line */}
+      <path d="M4 27.5 C10 25.5 22 29.5 28 27.5" stroke="url(#emeraldGrad)" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+    </svg>
+  </span>
+);
+
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
@@ -89,6 +126,12 @@ export default function Header() {
     return `/${lang}`;
   };
 
+  const getLocalizedHref = (href: string) => {
+    const langPrefix = `/${currentLang}`;
+    if (href === "/") return langPrefix;
+    return `${langPrefix}${href}`;
+  };
+
   const langNames: Record<string, { label: string; flag?: string }> = {
     ru: { label: "RU" },
     uk: { label: "UA", flag: "🇺🇦" },
@@ -155,16 +198,10 @@ export default function Header() {
     </div>
   );
 
-  const getLocalizedHref = (href: string) => {
-    const langPrefix = `/${currentLang}`;
-    if (href === "/") return langPrefix;
-    return `${langPrefix}${href}`;
-  };
-
   return (
     <header className={cn(
-      "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-700 flex justify-center pointer-events-none",
-      scrolled ? "pt-4" : "pt-6 lg:pt-8"
+      "fixed top-0 left-0 right-0 z-50 transition-all duration-700 pointer-events-none",
+      scrolled ? "pt-4" : "pt-0"
     )}>
       <div className={cn(
         "relative flex items-center justify-between transition-all duration-700 pointer-events-auto",
@@ -179,15 +216,12 @@ export default function Header() {
           className="flex items-center gap-2.5 group"
           onClick={() => setIsMobileMenuOpen(false)}
         >
-          <Waves className={cn(
-            "h-7 w-7 transition-colors duration-500 group-hover:scale-105",
-            scrolled ? "text-teal-400 group-hover:text-cyan-300" : "text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
-          )} />
+          <GreanBeamLogo scrolled={scrolled} className="group-hover:scale-110 transition-transform duration-300" />
           <div className="flex flex-col text-left hidden sm:flex">
             <span className={cn(
               "text-[13px] font-black tracking-[0.25em] uppercase transition-colors duration-500",
               scrolled 
-                ? "bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-sky-400 group-hover:from-teal-300 group-hover:to-sky-300" 
+                ? "bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400 group-hover:from-emerald-300 group-hover:to-teal-300" 
                 : "text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
             )}>
               {t("brandName")}
@@ -320,8 +354,8 @@ export default function Header() {
                     className="flex items-center gap-3"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <Waves className="h-7 w-7 text-teal-400" />
-                    <span className="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-sky-400">
+                    <GreanBeamLogo scrolled={true} className="h-6 w-6" />
+                    <span className="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400">
                       {t("brandName")}
                     </span>
                   </Link>

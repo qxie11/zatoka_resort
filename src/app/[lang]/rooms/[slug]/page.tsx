@@ -26,17 +26,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const currentYear = new Date().getFullYear();
   const title = lang === 'uk'
-    ? `${room.name} — Зняти Номер у Затоці ${currentYear} | Zatoka Resort`
+    ? `${room.name} — Зняти Номер у Затоці ${currentYear} | Grean Beam`
     : lang === 'en'
-    ? `${room.name} — Book Beachfront Room in Zatoka | Zatoka Resort`
-    : `${room.name} — Снять Номер в Затоке ${currentYear} | Zatoka Resort`;
+    ? `${room.name} — Book Beachfront Room in Zatoka | Grean Beam`
+    : `${room.name} — Снять Номер в Затоке ${currentYear} | Grean Beam`;
 
   const description = room.description || (
     lang === 'uk'
-      ? `Зняти номер ${room.name} в готелі Zatoka Resort. До ${room.capacity} гостей, ціна від ${room.price} грн/ніч. Забронювати відпочинок біля моря.`
+      ? `Зняти номер ${room.name} в готелі Grean Beam. До ${room.capacity} гостей, ціна від ${room.price} грн/ніч. Забронювати відпочинок біля моря.`
       : lang === 'en'
-      ? `Book ${room.name} at Zatoka Resort. Up to ${room.capacity} guests, rates from ${room.price} UAH/night. Air conditioning, Wi-Fi, near beach.`
-      : `Снять номер ${room.name} в отеле Zatoka Resort. До ${room.capacity} гостей, цена от ${room.price} грн/ночь. Забронировать отдых у моря.`
+      ? `Book ${room.name} at Grean Beam. Up to ${room.capacity} guests, rates from ${room.price} UAH/night. Air conditioning, Wi-Fi, near beach.`
+      : `Снять номер ${room.name} в отеле Grean Beam. До ${room.capacity} гостей, цена от ${room.price} грн/ночь. Забронировать отдых у моря.`
   );
 
   const keywords = [
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       url: canonicalUrl,
-      siteName: "Zatoka Resort",
+      siteName: "Grean Beam",
       images: [
         {
           url: room.imageUrl,

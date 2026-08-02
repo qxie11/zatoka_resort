@@ -13,8 +13,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const data = {
     ru: {
-      title: `Номера и Цены ${currentYear} — Отель Zatoka Resort в Затоке`,
-      desc: `Каталог номеров отеля Zatoka Resort. Цены ${currentYear} года, фотографии, удобства (кондиционер, Wi-Fi, кухонная зона). Забронируйте номер у моря без комиссии!`,
+      title: `Номера и Цены ${currentYear} — Отель Grean Beam в Затоке`,
+      desc: `Каталог номеров отеля Grean Beam. Цены ${currentYear} года, фотографии, удобства (кондиционер, Wi-Fi, кухонная зона). Забронируйте номер у моря без комиссии!`,
       keywords: [
         "номера в затоке",
         `цены затока ${currentYear}`,
@@ -25,8 +25,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ]
     },
     uk: {
-      title: `Номери та Ціни ${currentYear} — Готель Zatoka Resort у Затоці`,
-      desc: `Каталог номерів готелю Zatoka Resort. Ціни ${currentYear} року, фотографії, зручності (кондиціонер, Wi-Fi, кухонна зона). Забронюйте номер біля моря без комісії!`,
+      title: `Номери та Ціни ${currentYear} — Готель Grean Beam у Затоці`,
+      desc: `Каталог номерів готелю Grean Beam. Ціни ${currentYear} року, фотографії, зручності (кондиціонер, Wi-Fi, кухонна зона). Забронюйте номер біля моря без комісії!`,
       keywords: [
         "номери в затоці",
         `ціни затока ${currentYear}`,
@@ -37,9 +37,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ]
     },
     en: {
-      title: `Hotel Rooms & Rates ${currentYear} — Zatoka Resort Beachfront Hotel`,
-      desc: `Browse rooms at Zatoka Resort. Best rates for ${currentYear}, photos, air conditioning, Wi-Fi, and kitchen facilities. Book your seaside vacation direct!`,
+      title: `Hotel Rooms & Rates ${currentYear} — Grean Beam Beachfront Hotel`,
+      desc: `Browse rooms at Grean Beam. Best rates for ${currentYear}, photos, air conditioning, Wi-Fi, and kitchen facilities. Book your seaside vacation direct!`,
       keywords: [
+        "grean beam rooms",
         "zatoka hotel rooms",
         "zatoka room rates",
         "beachfront accommodation zatoka",
@@ -70,7 +71,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: canonicalUrl,
       title: meta.title,
       description: meta.desc,
-      siteName: "Zatoka Resort",
+      siteName: "Grean Beam",
       images: [{ url: ogImageUrl, width: 1200, height: 630, alt: meta.title }],
     },
     twitter: {

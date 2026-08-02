@@ -63,11 +63,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     "блог затока",
     "отдых в затоке статьи",
     "затока море гид",
-    "zatoka resort blog"
+    "grean beam blog"
   ];
 
   return {
-    title: `${title} | Блог Zatoka Resort`,
+    title: `${title} | Блог Grean Beam`,
     description: cleanTruncate(excerpt, 155),
     keywords,
     alternates: {
@@ -84,7 +84,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: cleanTruncate(excerpt, 155),
       type: "article",
       url: canonicalUrl,
-      siteName: "Zatoka Resort",
+      siteName: "Grean Beam",
       images: [
         {
           url: absoluteImageUrl,
@@ -176,12 +176,12 @@ export default async function BlogPostPage({ params }: PageProps) {
     "keywords": `${category}, hotel resort, zatoka, seaside hotel`,
     "author": {
       "@type": "Organization",
-      "name": "Zatoka Resort",
+      "name": "Grean Beam",
       "url": baseUrl
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Zatoka Resort",
+      "name": "Grean Beam",
       "logo": {
         "@type": "ImageObject",
         "url": `${baseUrl}/logo.png`

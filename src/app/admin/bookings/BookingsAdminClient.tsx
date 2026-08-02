@@ -275,7 +275,7 @@ export default function BookingsAdminClient({
 
       {/* Printable Header for print mode */}
       <div className="hidden print:block mb-6 text-black">
-        <h1 className="text-2xl font-bold">Zatoka Resort — Список бронирований</h1>
+        <h1 className="text-2xl font-bold">Grean Beam — Список бронирований</h1>
         <p className="text-sm text-gray-600">Дата распечатки: {new Date().toLocaleDateString("ru-RU")}</p>
       </div>
 

@@ -13,30 +13,31 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const data = {
     ru: {
-      title: "О Нас — Семейный Отель Zatoka Resort в Затоке",
-      desc: `Узнайте больше о семейном отеле Zatoka Resort в Затоке: 5 минут до пляжа, мангалы, детская зона, Wi-Fi. Прямое бронирование по ценам ${currentYear}.`,
+      title: "О Нас — Семейный Отель Grean Beam в Затоке",
+      desc: `Узнайте больше о семейном отеле Grean Beam в Затоке: 5 минут до пляжа, мангалы, детская зона, Wi-Fi. Прямое бронирование по ценам ${currentYear}.`,
       keywords: [
-        "о нас затока ресорт",
+        "о нас grean beam",
         "отель в затоке информация",
         "гостиница затока лиманская",
         "отдых в затоке отель"
       ]
     },
     uk: {
-      title: "Про Нас — Сімейний Готель Zatoka Resort у Затоці",
-      desc: `Дізнайтеся більше про сімейний готель Zatoka Resort у Затоці: 5 хвилин до пляжу, мангали, дитяча зона, Wi-Fi. Пряме бронювання за цінами ${currentYear}.`,
+      title: "Про Нас — Сімейний Готель Grean Beam у Затоці",
+      desc: `Дізнайтеся більше про сімейний готель Grean Beam у Затоці: 5 хвилин до пляжу, мангали, дитяча зона, Wi-Fi. Пряме бронювання за цінами ${currentYear}.`,
       keywords: [
-        "про нас затока ресорт",
+        "про нас grean beam",
         "готель в затоці інформація",
         "готель затока лиманська",
         "відпочинок в затоці готель"
       ]
     },
     en: {
-      title: "About Us — Family Hotel Zatoka Resort in Ukraine",
-      desc: `Learn more about Zatoka Resort: peaceful seaside location 5 minutes walk to the Black Sea, cozy air-conditioned rooms, barbecue area, best rates ${currentYear}.`,
+      title: "About Us — Family Hotel Grean Beam in Ukraine",
+      desc: `Learn more about Grean Beam: peaceful seaside location 5 minutes walk to the Black Sea, cozy air-conditioned rooms, barbecue area, best rates ${currentYear}.`,
       keywords: [
-        "about zatoka resort",
+        "about grean beam",
+        "grean beam zatoka",
         "zatoka hotel info",
         "seaside hotel ukraine",
         "zatoka accommodation overview"
@@ -65,7 +66,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: canonicalUrl,
       title: meta.title,
       description: meta.desc,
-      siteName: "Zatoka Resort",
+      siteName: "Grean Beam",
     },
     twitter: {
       card: "summary_large_image",
@@ -82,11 +83,11 @@ export default async function AboutPage({ params }: PageProps) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    "name": "About Zatoka Resort",
+    "name": "About Grean Beam",
     "url": `${baseUrl}/${lang}/about`,
     "mainEntity": {
       "@type": "Hotel",
-      "name": "Zatoka Resort",
+      "name": "Grean Beam",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "ул. Садовая, 1835, станция Лиманская",

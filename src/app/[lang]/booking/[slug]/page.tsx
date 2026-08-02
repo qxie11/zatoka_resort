@@ -20,16 +20,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const currentYear = new Date().getFullYear();
   const title = lang === 'uk'
-    ? `Бронювання номера ${room.name} | Zatoka Resort`
+    ? `Бронювання номера ${room.name} | Grean Beam`
     : lang === 'en'
-    ? `Book ${room.name} Online | Zatoka Resort`
-    : `Бронирование номера ${room.name} | Zatoka Resort`;
+    ? `Book ${room.name} Online | Grean Beam`
+    : `Бронирование номера ${room.name} | Grean Beam`;
 
   const description = lang === 'uk'
-    ? `Онлайн-бронювання номера ${room.name} в Zatoka Resort. Ціна від ${room.price} грн/ніч. Гарантія кращої ціни, миттєве підтвердження.`
+    ? `Онлайн-бронювання номера ${room.name} в Grean Beam. Ціна від ${room.price} грн/ніч. Гарантія кращої ціни, миттєве підтвердження.`
     : lang === 'en'
-    ? `Online booking for ${room.name} at Zatoka Resort. Rates from ${room.price} UAH/night. Best rate guarantee, instant confirmation.`
-    : `Онлайн-бронирование номера ${room.name} в Zatoka Resort. Цена от ${room.price} грн/ночь. Гарантия лучшей цены, мгновенное подтверждение.`;
+    ? `Online booking for ${room.name} at Grean Beam. Rates from ${room.price} UAH/night. Best rate guarantee, instant confirmation.`
+    : `Онлайн-бронирование номера ${room.name} в Grean Beam. Цена от ${room.price} грн/ночь. Гарантия лучшей цены, мгновенное подтверждение.`;
 
   const keywords = [
     `бронирование ${room.name}`,
@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       url: canonicalUrl,
-      siteName: "Zatoka Resort",
+      siteName: "Grean Beam",
       images: [
         {
           url: room.imageUrl,

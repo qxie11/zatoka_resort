@@ -252,7 +252,7 @@ export default function QuizClient({ lang }: { lang: "ru" | "uk" | "en" }) {
   const t = {
     ru: {
       title: "Насколько хорошо ты знаешь Затоку?",
-      subtitle: "Пройди короткий интерактивный тест из 10 вопросов, проверь свои знания и получи эксклюзивный промокод на проживание в Zatoka Resort!",
+      subtitle: "Пройди короткий интерактивный тест из 10 вопросов, проверь свои знания и получи эксклюзивный промокод на проживание в Grean Beam!",
       startBtn: "Начать викторину",
       nextBtn: "Следующий вопрос",
       finishBtn: "Посмотреть результаты",
@@ -274,7 +274,7 @@ export default function QuizClient({ lang }: { lang: "ru" | "uk" | "en" }) {
     },
     uk: {
       title: "Наскільки добре ти знаєш Затоку?",
-      subtitle: "Пройди короткий інтерактивний тест із 10 питань, перевір свої знання та отримай ексклюзивний промокод на проживання в Zatoka Resort!",
+      subtitle: "Пройди короткий інтерактивний тест із 10 питань, перевір свої знання та отримай екологічний промокод на проживання в Grean Beam!",
       startBtn: "Почати вікторину",
       nextBtn: "Наступне питання",
       finishBtn: "Подивитися результати",
@@ -296,7 +296,7 @@ export default function QuizClient({ lang }: { lang: "ru" | "uk" | "en" }) {
     },
     en: {
       title: "How well do you know Zatoka?",
-      subtitle: "Take our short 10-question interactive trivia test, prove your knowledge, and claim an exclusive promo code for your stay at Zatoka Resort!",
+      subtitle: "Take our short 10-question interactive trivia test, prove your knowledge, and claim an exclusive promo code for your stay at Grean Beam!",
       startBtn: "Start Quiz",
       nextBtn: "Next Question",
       finishBtn: "View Results",

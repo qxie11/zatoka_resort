@@ -45,7 +45,7 @@ export async function POST(req: Request) {
         if (bookingInfo) {
           const startDateStr = new Date(bookingInfo.startDate).toLocaleDateString('ru-RU');
           const endDateStr = new Date(bookingInfo.endDate).toLocaleDateString('ru-RU');
-          const roomName = bookingInfo.room?.name || 'Номер в Zatoka Resort';
+          const roomName = bookingInfo.room?.name || 'Номер в Grean Beam';
 
           const voucherMsg = 
             `🎉 <b>Ваше бронирование подтверждено!</b>\n` +
@@ -81,5 +81,5 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
-  return NextResponse.json({ message: "Zatoka Resort Telegram Webhook Endpoint Active" });
+  return NextResponse.json({ message: "Grean Beam Telegram Webhook Endpoint Active" });
 }

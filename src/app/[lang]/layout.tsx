@@ -21,8 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 
   const i18n = {
     ru: {
-      title: `Отдых в Затоке ${currentYear} | Отель Zatoka Resort у моря`,
-      desc: `Официальный сайт отеля Zatoka Resort в Затоке (Лиманская). Комфортабельные номера с кондиционером в 5 минутах от моря. Цены ${currentYear}, скидки и бронирование без комиссии.`,
+      title: `Отдых в Затоке ${currentYear} | Отель Grean Beam у моря`,
+      desc: `Официальный сайт отеля Grean Beam в Затоке (Лиманская). Комфортабельные номера с кондиционером в 5 минутах от моря. Цены ${currentYear}, скидки и бронирование без комиссии.`,
       keywords: [
         "отдых в затоке",
         "отель в затоке",
@@ -37,8 +37,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       ]
     },
     uk: {
-      title: `Відпочинок в Затоці ${currentYear} | Готель Zatoka Resort біля моря`,
-      desc: `Офіційний сайт готелю Zatoka Resort в Затоці (Лиманська). Комфортні номери з кондиціонером за 5 хвилин від моря. Ціни ${currentYear}, знижки та бронювання без комісії.`,
+      title: `Відпочинок в Затоці ${currentYear} | Готель Grean Beam біля моря`,
+      desc: `Офіційний сайт готелю Grean Beam в Затоці (Лиманская). Комфортні номери з кондиціонером за 5 хвилин від моря. Ціни ${currentYear}, знижки та бронювання без комісії.`,
       keywords: [
         "відпочинок в затоці",
         "готель в затоці",
@@ -53,9 +53,11 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       ]
     },
     en: {
-      title: `Zatoka Resort ${currentYear} | Family Beachfront Hotel in Zatoka`,
-      desc: `Official website of Zatoka Resort in Zatoka, Ukraine. Comfortable air-conditioned rooms 5 minutes from the beach. Best rates ${currentYear}, direct booking with no fees.`,
+      title: `Grean Beam ${currentYear} | Family Beachfront Hotel in Zatoka`,
+      desc: `Official website of Grean Beam in Zatoka, Ukraine. Comfortable air-conditioned rooms 5 minutes from the beach. Best rates ${currentYear}, direct booking with no fees.`,
       keywords: [
+        "grean beam hotel",
+        "grean beam zatoka",
         "zatoka hotel",
         "resort in zatoka",
         "zatoka beach accommodation",
@@ -74,7 +76,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     },
     title: {
       default: title,
-      template: "%s | Zatoka Resort",
+      template: "%s | Grean Beam",
     },
     description: desc,
     keywords,
@@ -91,7 +93,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       type: "website",
       locale: lang,
       url: `${baseUrl}/${lang}`,
-      siteName: "Zatoka Resort",
+      siteName: "Grean Beam",
       title,
       description: desc,
     },
@@ -130,8 +132,8 @@ export default async function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Hotel",
-    "name": "Zatoka Resort",
-    "description": "Premium family hotel in Zatoka, Odesa Region, 5 minutes walk to the Black Sea beach.",
+    "name": "Grean Beam",
+    "description": "Cozy family hotel in Zatoka, Odesa Region, 5 minutes walk to the Black Sea beach.",
     "url": `${baseUrl}/${lang}`,
     "telephone": "+380669212275",
     "priceRange": `${minPrice} - ${maxPrice} UAH`,

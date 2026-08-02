@@ -33,7 +33,7 @@ const locales = {
 const translations = {
   ru: {
     title: "Бронирование подтверждено!",
-    subtitle: "Ваш незабываемый отдых в Zatoka Resort начинается здесь",
+    subtitle: "Ваш незабываемый отдых в Grean Beam начинается здесь",
     detailsTitle: "Детали вашей брони",
     guestName: "Гость",
     room: "Категория номера",
@@ -50,7 +50,7 @@ const translations = {
     btnShare: "Поделиться",
     btnShareCopied: "Скопировано!",
     shareText: (room: string, dates: string, price: string) =>
-      `🏨 Я забронировал ${room} в Затока Resort!\n📅 Даты: ${dates}\n💰 Сумма: ${price} грн\n\nЗаписывайте: zatoka-hotel.com`,
+      `🏨 Я забронировал ${room} в Grean Beam!\n📅 Даты: ${dates}\n💰 Сума: ${price} грн\n\nЗаписывайте: zatoka-hotel.com`,
     guestsCount: (count: number) => {
       const lastDigit = count % 10;
       const lastTwoDigits = count % 100;
@@ -62,7 +62,7 @@ const translations = {
   },
   uk: {
     title: "Бронювання підтверджено!",
-    subtitle: "Ваш незабутній відпочинок у Zatoka Resort починається тут",
+    subtitle: "Ваш незабутній відпочинок у Grean Beam починається тут",
     detailsTitle: "Деталі вашої броні",
     guestName: "Гість",
     room: "Категорія номера",
@@ -79,7 +79,7 @@ const translations = {
     btnShare: "Поділитись",
     btnShareCopied: "Скопійовано!",
     shareText: (room: string, dates: string, price: string) =>
-      `🏨 Я забронював ${room} у Zatoka Resort!\n📅 Дати: ${dates}\n💰 Сума: ${price} грн\n\nЗаписуйте: zatoka-hotel.com`,
+      `🏨 Я забронював ${room} у Grean Beam!\n📅 Дати: ${dates}\n💰 Сума: ${price} грн\n\nЗаписуйте: zatoka-hotel.com`,
     guestsCount: (count: number) => {
       const lastDigit = count % 10;
       const lastTwoDigits = count % 100;
@@ -91,7 +91,7 @@ const translations = {
   },
   en: {
     title: "Booking Confirmed!",
-    subtitle: "Your unforgettable vacation at Zatoka Resort starts here",
+    subtitle: "Your unforgettable vacation at Grean Beam starts here",
     detailsTitle: "Your Booking Details",
     guestName: "Guest",
     room: "Room Category",
@@ -108,7 +108,7 @@ const translations = {
     btnShare: "Share",
     btnShareCopied: "Copied!",
     shareText: (room: string, dates: string, price: string) =>
-      `🏨 I just booked ${room} at Zatoka Resort!\n📅 Dates: ${dates}\n💰 Total: ${price} UAH\n\nBook at: zatoka-hotel.com`,
+      `🏨 I just booked ${room} at Grean Beam!\n📅 Dates: ${dates}\n💰 Total: ${price} UAH\n\nBook at: zatoka-hotel.com`,
     guestsCount: (count: number) => `${count} ${count === 1 ? 'guest' : 'guests'}`
   }
 };
@@ -185,7 +185,7 @@ function SuccessContent({ lang }: { lang: string }) {
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
         await navigator.share({
-          title: "Zatoka Resort — бронирование",
+          title: "Grean Beam — бронирование",
           text,
           url: "https://zatoka-hotel.com",
         });

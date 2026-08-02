@@ -6,15 +6,15 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const titles = {
     ru: "Забронировать проживание | Отдых в Затоке",
     uk: "Забронювати проживання | Відпочинок в Затоці",
-    en: "Book Your Stay | Zatoka Resort",
+    en: "Book Your Stay | Grean Beam",
   };
 
   const currentYear = new Date().getFullYear();
 
   const descriptions = {
-    ru: `Прямое бронирование номеров в отеле Zatoka Resort. Комфортный семейный отдых в Затоке ${currentYear} в 5 минутах от моря, кондиционер, лучшие цены без посредников.`,
-    uk: `Пряме бронювання номерів в готелі Zatoka Resort. Комфортний сімейний відпочинок в Затоці ${currentYear} в 5 хвилинах від моря, кондиціонер, кращі ціни без посередників.`,
-    en: `Direct room booking at Zatoka Resort. Affordable family holidays in Zatoka ${currentYear} just a 5-minute walk to the beach, air conditioning, and booking without intermediaries.`,
+    ru: `Прямое бронирование номеров в отеле Grean Beam. Комфортный семейный отдых в Затоке ${currentYear} в 5 минутах от моря, кондиционер, лучшие цены без посредников.`,
+    uk: `Пряме бронювання номерів в готелі Grean Beam. Комфортний сімейний відпочинок в Затоці ${currentYear} в 5 хвилинах від моря, кондиціонер, кращі ціни без посередників.`,
+    en: `Direct room booking at Grean Beam. Affordable family holidays in Zatoka ${currentYear} just a 5-minute walk to the beach, air conditioning, and booking without intermediaries.`,
   };
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       title,
       description,
       url: canonicalUrl,
-      siteName: "Zatoka Resort",
+      siteName: "Grean Beam",
       locale: lang,
       type: "website",
     },

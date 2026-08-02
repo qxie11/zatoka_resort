@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Zatoka Resort — Премиум-отель у моря";
+export const alt = "Grean Beam — Семейный отель у моря";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -14,19 +14,19 @@ export default async function OGImage({
 
   const i18n: Record<string, { title: string; subtitle: string; tagline: string }> = {
     ru: {
-      title: "ZATOKA RESORT",
-      subtitle: "Погрузитесь в роскошь черноморского побережья",
-      tagline: "Премиум-отель • Песчаный пляж • Комфорт и сервис",
+      title: "GREAN BEAM",
+      subtitle: "Уютный летний отдых для всей вашей семьи",
+      tagline: "Семейный отель • Зеленый двор • 5 минут до моря",
     },
     uk: {
-      title: "ZATOKA RESORT",
-      subtitle: "Поринте в розкіш чорноморського узбережжя",
-      tagline: "Преміум-готель • Піщаний пляж • Комфорт та сервіс",
+      title: "GREAN BEAM",
+      subtitle: "Затишний літній відпочинок для всієї вашої родини",
+      tagline: "Сімейний готель • Зелений двір • 5 хвилин до моря",
     },
     en: {
-      title: "ZATOKA RESORT",
-      subtitle: "Dive into the luxury of the Black Sea coast",
-      tagline: "Premium Hotel • Sandy Beach • Comfort & Service",
+      title: "GREAN BEAM",
+      subtitle: "Cozy summer getaway for your entire family",
+      tagline: "Family Hotel • Green Yard • 5 min to the beach",
     },
   };
 

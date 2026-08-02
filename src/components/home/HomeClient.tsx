@@ -188,7 +188,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
 
                 {/* Subtitle / Description - NOW VISIBLE ON MOBILE */}
                 <p className="text-sm sm:text-lg text-slate-200/95 font-medium leading-snug sm:leading-relaxed max-w-xl animate-fade-in-up [animation-delay:0.15s] opacity-0 [animation-fill-mode:forwards]">
-                  {translate("heroDescription", "Семейный отель «Zatoka Resort». Зелёный двор, детская площадка, зона барбекю, Wi-Fi и бесплатная парковка. Всего 5 минут ходьбы до моря!")}
+                  {translate("heroDescription", "Семейный отель «Grean Beam». Зелёный двор, детская площадка, зона барбекю, Wi-Fi и бесплатная парковка. Всего 5 минут ходьбы до моря!")}
                 </p>
 
                 {/* Feature Micro-Pills - NOW VISIBLE ON MOBILE */}
@@ -302,7 +302,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 <div className="relative w-full max-w-[430px] aspect-[4/5] rounded-[2.2rem] overflow-hidden border-[6px] border-white/15 shadow-[0_25px_70px_rgba(0,0,0,0.7)] group hover:border-teal-400/40 transition-all duration-700 bg-slate-900 -rotate-2 hover:rotate-0 hover:scale-[1.02]">
                   <Image
                     src="/zatoka-hero.png"
-                    alt="Zatoka Resort Family Vacation"
+                    alt="Grean Beam Family Vacation"
                     fill
                     priority
                     sizes="(max-width: 768px) 100vw, 430px"
