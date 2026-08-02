@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Compass, Anchor, Sparkles, ChevronDown, Waves, Star } from "lucide-react";
+import { Compass, Anchor, Sparkles, ChevronDown, Waves, ShieldCheck } from "lucide-react";
 import { WavyUnderline } from "@/components/ui/wavy-underline";
 import SuccessMessage from "@/app/[lang]/booking/components/SuccessMessage";
 import BookingPageClient from "@/app/[lang]/booking/components/BookingPageClient";
@@ -54,8 +54,8 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
       title2: "идеальный отдых",
       desc: "Мы предлагаем уникальный баланс между домашним уютом и первоклассным гостиничным сервисом прямо на берегу моря.",
       btn: "Начать бронирование",
-      card1Title: "Премиум сервис",
-      card1Desc: "Гарантия лучшей цены",
+      card1Title: "Гарантия лучшей цены",
+      card1Desc: "Прямое бронирование без комиссий",
       card2Title: "5 минут до моря",
       card2Desc: "Первая линия",
     },
@@ -65,8 +65,8 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
       title2: "ідеальний відпочинок",
       desc: "Ми пропонуємо унікальний баланс між домашнім затишком та першокласним готельним сервісом прямо на березі моря.",
       btn: "Почати бронювання",
-      card1Title: "Преміум сервіс",
-      card1Desc: "Гарантія найкращої ціни",
+      card1Title: "Гарантія кращої ціни",
+      card1Desc: "Пряме бронювання без комісій",
       card2Title: "5 хвилин до моря",
       card2Desc: "Перша лінія",
     },
@@ -76,8 +76,8 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
       title2: "perfect getaway",
       desc: "We offer a unique balance of home comfort and first-class hotel service right on the seaside.",
       btn: "Start Booking",
-      card1Title: "Premium Service",
-      card1Desc: "Best price guarantee",
+      card1Title: "Best Price Guarantee",
+      card1Desc: "Direct booking without fees",
       card2Title: "5 mins to the sea",
       card2Desc: "First line",
     }
@@ -134,18 +134,15 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
           
           {/* Decorative Floating Elements for Right Side */}
           <div className="hidden lg:flex flex-col justify-center items-end gap-6 relative h-full">
-             <div className="glass-card-dark p-6 rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-float-slow max-w-[280px] w-full backdrop-blur-xl">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="h-12 w-12 rounded-full bg-teal-500/20 flex items-center justify-center">
-                    <Star className="h-6 w-6 text-teal-400 fill-teal-400" />
+             <div className="glass-card-dark p-5 rounded-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-float-slow max-w-[320px] w-full backdrop-blur-xl">
+                <div className="flex items-center gap-3.5">
+                  <div className="h-11 w-11 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center shrink-0">
+                    <ShieldCheck className="h-6 w-6 text-teal-400" />
                   </div>
                   <div>
-                    <h3 className="text-white font-bold text-lg">{tHero.card1Title}</h3>
-                    <p className="text-slate-400 text-sm">{tHero.card1Desc}</p>
+                    <h3 className="text-white font-bold text-base leading-tight">{tHero.card1Title}</h3>
+                    <p className="text-slate-400 text-xs mt-1 leading-snug">{tHero.card1Desc}</p>
                   </div>
-                </div>
-                <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-teal-400 to-sky-400 w-3/4 rounded-full"></div>
                 </div>
              </div>
              
