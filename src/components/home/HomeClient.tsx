@@ -194,16 +194,16 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 {/* Feature Micro-Pills - NOW VISIBLE ON MOBILE */}
                 <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-0.5 animate-fade-in-up [animation-delay:0.25s] opacity-0 [animation-fill-mode:forwards]">
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-slate-900/80 border border-teal-500/30 text-[11px] sm:text-xs font-semibold text-teal-300 backdrop-blur-md shadow-sm">
-                    🌴 Зелёный двор
+                    🌴 {translate("heroPill1", "Зелёный двор")}
                   </span>
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-slate-900/80 border border-amber-500/30 text-[11px] sm:text-xs font-semibold text-amber-300 backdrop-blur-md shadow-sm">
-                    🔥 Мангалы
+                    🔥 {translate("heroPill2", "Мангалы")}
                   </span>
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-slate-900/80 border border-rose-500/30 text-[11px] sm:text-xs font-semibold text-rose-300 backdrop-blur-md shadow-sm">
-                    🧸 Детям
+                    🧸 {translate("heroPill3", "Детям")}
                   </span>
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-slate-900/80 border border-sky-500/30 text-[11px] sm:text-xs font-semibold text-sky-300 backdrop-blur-md shadow-sm">
-                    🌊 5 мин до моря
+                    🌊 {translate("heroPill4", "5 мин до моря")}
                   </span>
                 </div>
 
