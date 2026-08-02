@@ -41,6 +41,7 @@ export type Booking = {
   discountApplied?: number;
   adminComment?: string;
   status?: string;
+  createdAt?: Date | string;
 };
 
 export type BlogPost = {

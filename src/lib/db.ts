@@ -243,6 +243,7 @@ export const getBookings = async (): Promise<Booking[]> => {
     discountApplied: booking.discountApplied || undefined,
     adminComment: booking.adminComment || undefined,
     status: booking.status || "CONFIRMED",
+    createdAt: booking.createdAt,
   }));
 };
 
@@ -267,6 +268,7 @@ export const getBookingsByRoomId = async (roomId: string): Promise<Booking[]> =>
     promoCode: booking.promoCode || undefined,
     discountApplied: booking.discountApplied || undefined,
     adminComment: booking.adminComment || undefined,
+    createdAt: booking.createdAt,
   }));
 };
 
@@ -292,6 +294,7 @@ export const getBookingById = async (id: string): Promise<Booking | null> => {
     promoCode: booking.promoCode || undefined,
     discountApplied: booking.discountApplied || undefined,
     adminComment: (booking as any).adminComment || undefined,
+    createdAt: booking.createdAt,
   };
 };
 
@@ -343,6 +346,7 @@ export const createBooking = async (booking: Omit<Booking, 'id'>): Promise<Booki
     promoCode: newBooking.promoCode ?? undefined,
     discountApplied: newBooking.discountApplied ?? undefined,
     adminComment: (newBooking as any).adminComment ?? undefined,
+    createdAt: newBooking.createdAt,
   };
 };
 
@@ -402,6 +406,7 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
       discountApplied: updatedBooking.discountApplied ?? undefined,
       adminComment: (updatedBooking as any).adminComment ?? undefined,
       status: (updatedBooking as any).status || "PENDING",
+      createdAt: updatedBooking.createdAt,
     };
   } catch (error) {
     return null;

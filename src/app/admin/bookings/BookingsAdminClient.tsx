@@ -379,6 +379,23 @@ export default function BookingsAdminClient({
 
             return (
               <div className="space-y-3 mt-4 max-h-[70vh] overflow-y-auto pr-1">
+                {viewBooking.createdAt && (
+                  <div
+                    onClick={() => handleCopy(new Date(viewBooking.createdAt!).toLocaleString("ru-RU"), "Дата создания")}
+                    className="group/item flex flex-col p-2.5 rounded-xl bg-slate-950/40 border border-white/5 hover:border-teal-500/30 hover:bg-teal-500/5 cursor-pointer transition-all duration-200"
+                  >
+                    <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Дата создания</span>
+                    <span className="text-sm font-semibold mt-0.5 text-white flex justify-between items-center">
+                      {new Date(viewBooking.createdAt).toLocaleString("ru-RU")}
+                      {copiedField === "Дата создания" ? (
+                        <Check className="h-3.5 w-3.5 text-teal-400 font-bold" />
+                      ) : (
+                        <Copy className="h-3.5 w-3.5 text-slate-500 group-hover/item:text-teal-400 opacity-0 group-hover/item:opacity-100 transition-opacity" />
+                      )}
+                    </span>
+                  </div>
+                )}
+
                 <div
                   onClick={() => handleCopy(roomDisplay, "Номер")}
                   className="group/item flex flex-col p-2.5 rounded-xl bg-slate-950/40 border border-white/5 hover:border-teal-500/30 hover:bg-teal-500/5 cursor-pointer transition-all duration-200"

@@ -114,6 +114,25 @@ export const columns = ({ onEdit, onDelete, onView, onStatusChange }: ColumnsPro
     },
   },
   {
+    accessorKey: "createdAt",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Создано
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const val = row.getValue("createdAt");
+      if (!val) return <span className="text-slate-500">—</span>;
+      return <span className="whitespace-nowrap">{format(new Date(val as any), "dd.MM.yyyy HH:mm")}</span>;
+    }
+  },
+  {
     accessorKey: "startDate",
     header: "Дата заезда",
     cell: ({ row }) => {
