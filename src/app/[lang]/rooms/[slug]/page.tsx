@@ -285,7 +285,7 @@ export default async function RoomDetailsPage({ params, searchParams }: PageProp
                   </div>
 
                   <Button asChild className="w-full bg-slate-950 border border-white/10 text-white hover:bg-slate-900 rounded-xl py-5 transition-all">
-                    <a href="https://www.google.com/maps/search/?api=1&query=46.13355,30.51818" target="_blank" rel="noopener noreferrer">
+                    <a href="https://maps.app.goo.gl/FRbi3YGnf12CbJaz5" target="_blank" rel="noopener noreferrer">
                       <Navigation className="mr-2 h-4 w-4 text-teal-400" />
                       {t.openMaps[lang as keyof typeof t.openMaps]}
                     </a>
