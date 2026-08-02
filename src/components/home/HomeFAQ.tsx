@@ -20,9 +20,9 @@ export default function HomeFAQ({ lang }: { lang: string }) {
     },
     q2: { ru: "Какие варианты питания доступны?", uk: "Які варіанти харчування доступні?", en: "What dining options are available?" },
     a2: { 
-      ru: "У нас есть собственное кафе с домашней кухней, а также общие кухни для самостоятельного приготовления пищи.", 
-      uk: "У нас є власне кафе з домашньою кухнею, а також загальні кухні для самостійного приготування їжі.", 
-      en: "We have our own cafe with home-cooked meals, as well as shared kitchens for self-catering." 
+      ru: "Готовое питание в отеле не предоставляется, но для гостей оборудованы кухни со всей необходимой посудой и техникой для самостоятельного приготовления пищи. Также в шаговой доступности работают кафе и столовые.", 
+      uk: "Готове харчування в готелі не надається, але для гостей обладнано кухні з усім необхідним посудом та технікою для самостійного приготування їжі. Також у кроковій доступності працюють кафе та їдальні.", 
+      en: "Meals are not provided directly by the hotel, but fully equipped kitchens with cookware and appliances are available for self-catering. Cafes and dining venues are also nearby." 
     },
     q3: { ru: "Есть ли парковка на территории?", uk: "Чи є парковка на території?", en: "Is parking available on site?" },
     a3: { 
