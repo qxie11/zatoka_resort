@@ -235,7 +235,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <div className="bg-slate-950 text-slate-100 min-h-screen pb-12">
-        <section className="relative h-[60vh] min-h-[400px] flex items-end justify-start overflow-hidden bg-slate-900 text-white">
+        <section className="relative min-h-[440px] pt-28 sm:pt-36 lg:pt-40 pb-12 flex flex-col justify-end overflow-hidden bg-slate-900 text-white">
           <div className="absolute inset-0 z-0">
             <Image
               src={post.imageUrl}
@@ -247,7 +247,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
           </div>
 
-          <div className="relative container mx-auto px-4 pb-12 z-10 max-w-4xl">
+          <div className="relative container mx-auto px-4 z-10 max-w-4xl">
             <nav className="mb-6 flex flex-wrap items-center gap-1.5 text-xs md:text-sm text-teal-200/90 font-medium">
               <Link
                 href={`/${lang}`}

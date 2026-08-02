@@ -196,7 +196,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
   return (
     <div className="bg-slate-950 text-slate-100 min-h-screen pb-12">
       {/* --- PREMIUM SPLIT HERO HEADER --- */}
-      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-center overflow-hidden bg-slate-950 pt-16">
+      <section className="relative min-h-[70vh] lg:min-h-[85vh] flex items-center overflow-hidden bg-slate-950 pt-24 sm:pt-28 lg:pt-32">
         <BackgroundBubbles count={15} />
         {/* Background Image & Gradients */}
         <div className="absolute inset-0 z-0">
