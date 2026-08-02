@@ -203,7 +203,7 @@ export default function Header() {
  
         {/* Desktop Navigation Capsule */}
         <nav className={cn(
-          "hidden lg:flex items-center gap-1 p-1 rounded-full transition-all duration-700",
+          "hidden lg:flex items-center gap-1 p-1 rounded-full transition-all duration-700 lg:absolute lg:left-1/2 lg:-translate-x-1/2",
           scrolled ? "bg-white/5 border border-white/5 shadow-inner" : "bg-black/20 backdrop-blur-md border border-white/10"
         )}>
           {navLinks.map((link) => {
