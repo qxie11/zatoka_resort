@@ -179,31 +179,31 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                 </div>
 
                 {/* Heading */}
-                <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.15] sm:leading-[1.1] animate-fade-in-up drop-shadow-2xl font-heading">
+                <h1 className="text-3.5xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.12] sm:leading-[1.1] animate-fade-in-up drop-shadow-2xl font-heading">
                   {translate("heroTitle1", "Уютный летний отдых")}{" "}
-                  <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 animate-ocean-shimmer font-black">
+                  <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-amber-300 animate-ocean-shimmer font-black drop-shadow-md">
                     {translate("heroTitle2", "для всей вашей семьи")}
                   </span>
                 </h1>
 
-                {/* Subtitle / Description - shown only on desktop/tablet to keep mobile hero airy */}
-                <p className="hidden sm:block text-base md:text-lg text-slate-200/90 font-medium leading-relaxed max-w-xl animate-fade-in-up [animation-delay:0.15s] opacity-0 [animation-fill-mode:forwards]">
-                  {translate("heroDescription", "Семейный отель «Отдых в Затоке». Зеленый двор с мангалами, детская игровая зона, общая кухня, кондиционеры, Wi-Fi и бесплатная парковка. Всего 5 минут ходьбы до песчаного пляжа.")}
+                {/* Subtitle / Description - NOW VISIBLE ON MOBILE */}
+                <p className="text-sm sm:text-lg text-slate-200/95 font-medium leading-snug sm:leading-relaxed max-w-xl animate-fade-in-up [animation-delay:0.15s] opacity-0 [animation-fill-mode:forwards]">
+                  {translate("heroDescription", "Семейный отель «Zatoka Resort». Зелёный двор, детская площадка, зона барбекю, Wi-Fi и бесплатная парковка. Всего 5 минут ходьбы до моря!")}
                 </p>
 
-                {/* Feature Micro-Pills - shown on tablet/desktop */}
-                <div className="hidden sm:flex flex-wrap items-center gap-2 pt-0.5 animate-fade-in-up [animation-delay:0.25s] opacity-0 [animation-fill-mode:forwards]">
-                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-900/70 border border-white/10 text-xs font-semibold text-teal-300 backdrop-blur-md shadow-sm">
+                {/* Feature Micro-Pills - NOW VISIBLE ON MOBILE */}
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-0.5 animate-fade-in-up [animation-delay:0.25s] opacity-0 [animation-fill-mode:forwards]">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-slate-900/80 border border-teal-500/30 text-[11px] sm:text-xs font-semibold text-teal-300 backdrop-blur-md shadow-sm">
                     🌴 Зелёный двор
                   </span>
-                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-900/70 border border-white/10 text-xs font-semibold text-amber-300 backdrop-blur-md shadow-sm">
-                    🔥 Мангальная зона
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-slate-900/80 border border-amber-500/30 text-[11px] sm:text-xs font-semibold text-amber-300 backdrop-blur-md shadow-sm">
+                    🔥 Мангалы
                   </span>
-                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-900/70 border border-white/10 text-xs font-semibold text-rose-300 backdrop-blur-md shadow-sm">
-                    🧸 Детская площадка
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-slate-900/80 border border-rose-500/30 text-[11px] sm:text-xs font-semibold text-rose-300 backdrop-blur-md shadow-sm">
+                    🧸 Детям
                   </span>
-                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-900/70 border border-white/10 text-xs font-semibold text-sky-300 backdrop-blur-md shadow-sm">
-                    ❄️ Кондиционеры
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-slate-900/80 border border-sky-500/30 text-[11px] sm:text-xs font-semibold text-sky-300 backdrop-blur-md shadow-sm">
+                    🌊 5 мин до моря
                   </span>
                 </div>
 
@@ -274,19 +274,19 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                   </Form>
                 </div>
 
-                {/* Trust Guarantees */}
-                <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-1 animate-fade-in-up [animation-delay:0.45s] opacity-0 [animation-fill-mode:forwards] text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-300">
-                  <div className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-sm">
-                    <ShieldCheck className="h-3.5 w-3.5 text-teal-400" />
-                    <span>{translate("trustBadge1", "Отмена за 7 дней")}</span>
+                {/* Trust Guarantees - Grid on mobile */}
+                <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3 pt-1 animate-fade-in-up [animation-delay:0.45s] opacity-0 [animation-fill-mode:forwards] text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-300 w-full">
+                  <div className="flex items-center justify-center sm:justify-start gap-1.5 bg-slate-900/80 backdrop-blur-md px-2.5 py-2 rounded-xl border border-teal-500/25 shadow-sm">
+                    <ShieldCheck className="h-3.5 w-3.5 text-teal-400 shrink-0" />
+                    <span className="truncate">{translate("trustBadge1", "Отмена за 7 дней")}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-sm">
-                    <CreditCard className="h-3.5 w-3.5 text-amber-400" />
-                    <span>{translate("trustBadge2", "Оплата при заезде")}</span>
+                  <div className="flex items-center justify-center sm:justify-start gap-1.5 bg-slate-900/80 backdrop-blur-md px-2.5 py-2 rounded-xl border border-amber-500/25 shadow-sm">
+                    <CreditCard className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                    <span className="truncate">{translate("trustBadge2", "Оплата при заезде")}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-sm">
-                    <Star className="h-3.5 w-3.5 text-sky-400" />
-                    <span>{translate("trustBadge3", "Гарантия лучшей цены")}</span>
+                  <div className="col-span-2 sm:col-span-1 flex items-center justify-center sm:justify-start gap-1.5 bg-slate-900/80 backdrop-blur-md px-2.5 py-2 rounded-xl border border-sky-500/25 shadow-sm">
+                    <Star className="h-3.5 w-3.5 text-sky-400 shrink-0" />
+                    <span className="truncate">{translate("trustBadge3", "Гарантия лучшей цены")}</span>
                   </div>
                 </div>
 
