@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
-import { Menu, Waves, LogOut, ChevronDown } from "lucide-react";
+import { Menu, Waves, LogOut, ChevronDown, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
@@ -247,7 +247,7 @@ export default function Header() {
         <div className="flex items-center gap-3 sm:gap-4">
           {mounted && renderLanguageSelector()}
  
-          {mounted && isAuthenticated ? (
+          {mounted && isAuthenticated && (
             <div className="hidden lg:flex items-center gap-3">
               <span className={cn(
                 "text-[10px] font-bold tracking-widest px-3 py-1.5 rounded-full border transition-colors",
@@ -270,23 +270,23 @@ export default function Header() {
                 <LogOut className="h-4 w-4" />
               </Button>
             </div>
-          ) : (
-            !pathname.includes("/booking") && (
-              <Button
-                asChild
-                className={cn(
-                  "relative overflow-hidden font-bold border-0 transition-all duration-500 rounded-full text-[10px] sm:text-xs uppercase tracking-wider flex items-center gap-2 h-9 sm:h-10 px-5 sm:px-6 shadow-lg hover:scale-105 active:scale-95",
-                  scrolled 
-                    ? "bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 shadow-teal-500/20" 
-                    : "bg-white text-slate-950 hover:bg-white/90 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-                )}
-              >
-                <Link href={getLocalizedHref("/booking")}>
-                  {t("booking")}
-                </Link>
-              </Button>
-            )
           )}
+
+          <a
+            href="tel:+380669212275"
+            className={cn(
+              "group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 hover:scale-[1.03] active:scale-95 shrink-0",
+              scrolled
+                ? "bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30"
+                : "bg-black/25 hover:bg-black/40 text-white border border-white/25 backdrop-blur-sm"
+            )}
+          >
+            <Phone className="h-3.5 w-3.5 shrink-0 opacity-80" />
+            <span className="font-semibold opacity-75">
+              {currentLang === "uk" ? "Бронь:" : currentLang === "en" ? "Book:" : "Бронь:"}
+            </span>
+            <span className="font-bold tracking-tight">066 921-22-75</span>
+          </a>
           
           {/* Mobile Actions and Hamburger */}
           <div className="lg:hidden flex items-center">
@@ -320,15 +320,15 @@ export default function Header() {
                     className="flex items-center gap-3"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <Waves className="h-8 w-8 text-teal-400" />
-                    <span className="text-xl font-black tracking-[0.15em] uppercase bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500">
+                    <Waves className="h-7 w-7 text-teal-400" />
+                    <span className="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-sky-400">
                       {t("brandName")}
                     </span>
                   </Link>
                 </SheetHeader>
                 
-                <div className="flex-1 overflow-y-auto relative z-10 px-8 py-12 flex flex-col justify-center gap-8">
-                  {navLinks.map((link, index) => {
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 relative z-10">
+                  {navLinks.map((link) => {
                     const localizedHref = getLocalizedHref(link.href);
                     const isActive = pathname === localizedHref;
                     return (
@@ -383,16 +383,13 @@ export default function Header() {
                       <LogOut className="mr-2 h-5 w-5 text-rose-400" /> {t("logout")}
                     </Button>
                   ) : (
-                    !pathname.includes("/booking") && (
-                      <Button
-                        asChild
-                        className="w-full bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-black border-0 shadow-[0_0_30px_rgba(245,158,11,0.25)] rounded-2xl py-7 text-sm sm:text-base uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all"
-                      >
-                        <Link href={getLocalizedHref("/booking")} onClick={() => setIsMobileMenuOpen(false)}>
-                          {t("booking")}
-                        </Link>
-                      </Button>
-                    )
+                    <a
+                      href="tel:+380669212275"
+                      className="flex items-center justify-center gap-2.5 w-full bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold rounded-2xl py-4 text-sm tracking-wide transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+                    >
+                      <Phone className="h-4 w-4" />
+                      <span>+38 (066) 921-22-75</span>
+                    </a>
                   )}
                 </div>
               </SheetContent>
