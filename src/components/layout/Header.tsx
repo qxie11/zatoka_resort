@@ -249,12 +249,6 @@ export default function Header() {
  
           {mounted && isAuthenticated && (
             <div className="hidden lg:flex items-center gap-3">
-              <span className={cn(
-                "text-[10px] font-bold tracking-widest px-3 py-1.5 rounded-full border transition-colors",
-                scrolled ? "bg-white/5 border-white/5 text-slate-300" : "bg-black/30 border-white/10 text-white backdrop-blur-sm"
-              )}>
-                {t("welcomeAdmin")}
-              </span>
               <Button
                 variant="ghost"
                 size="icon"
