@@ -8,6 +8,8 @@ import i18n from "@/lib/i18n";
 import { usePathname } from "next/navigation";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
+import { trackGoogleAdsConversion } from "@/lib/gtag";
+
 export function ExitIntentPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
@@ -88,6 +90,7 @@ export function ExitIntentPopup() {
       if (!res.ok) throw new Error("API request failed");
 
       setSuccess(true);
+      trackGoogleAdsConversion();
       setName("");
       setPhone("");
       setTimeout(() => {

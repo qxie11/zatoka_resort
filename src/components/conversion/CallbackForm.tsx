@@ -6,6 +6,7 @@ import { MessageSquare, X, Phone, User, Send, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button";
 import i18n from "@/lib/i18n";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { trackGoogleAdsConversion } from "@/lib/gtag";
 
 export function CallbackForm() {
   const { t } = useTranslation();
@@ -88,6 +89,7 @@ export function CallbackForm() {
       }
 
       setSuccess(true);
+      trackGoogleAdsConversion();
       setName("");
       setPhone("");
       setMessage("");
