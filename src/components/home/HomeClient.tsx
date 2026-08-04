@@ -212,9 +212,9 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                   <Form {...widgetForm}>
                     <form
                       onSubmit={widgetForm.handleSubmit(onWidgetSubmit)}
-                      className="flex flex-col md:flex-row gap-4 p-5 sm:p-6 rounded-3xl bg-slate-900/90 backdrop-blur-2xl border border-teal-500/40 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8),0_0_30px_rgba(20,184,166,0.15)] hover:border-teal-400/50 transition-all duration-500 items-stretch md:items-end w-full group/bar"
+                      className="grid grid-cols-1 md:grid-cols-2 xl:flex xl:flex-row gap-3.5 sm:gap-4 p-4 sm:p-6 rounded-3xl bg-slate-900/90 backdrop-blur-2xl border border-teal-500/40 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8),0_0_30px_rgba(20,184,166,0.15)] hover:border-teal-400/50 transition-all duration-500 items-stretch xl:items-end w-full group/bar"
                     >
-                      <div className="w-full md:flex-1 relative group/field">
+                      <div className="w-full md:col-span-1 xl:flex-1 relative group/field">
                         <FormField
                           control={widgetForm.control}
                           name="dateRange"
@@ -232,7 +232,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                         control={widgetForm.control}
                         name="guests"
                         render={({ field }) => (
-                          <FormItem className="flex flex-col relative w-full md:w-36">
+                          <FormItem className="flex flex-col relative w-full md:col-span-1 xl:w-36">
                             <div className="text-teal-300 font-bold mb-2 flex items-center gap-1.5 tracking-wide text-xs uppercase">
                               <Users className="h-3.5 w-3.5 text-teal-400" />
                               {translate("guests", "Гости")}
@@ -265,7 +265,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                       <Button
                         type="submit"
                         disabled={!isFormValid}
-                        className="w-full md:w-auto h-12 px-8 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 disabled:opacity-50 disabled:pointer-events-none text-slate-950 font-black border-0 shadow-lg shadow-orange-500/25 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap"
+                        className="w-full md:col-span-2 xl:w-auto h-12 px-6 sm:px-8 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 disabled:opacity-50 disabled:pointer-events-none text-slate-950 font-black border-0 shadow-lg shadow-orange-500/25 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap shrink-0"
                       >
                         <Sun className="h-4 w-4 fill-slate-950 shrink-0" />
                         <span>{translate("checkAvailability", "Найти номера")}</span>

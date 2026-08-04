@@ -203,7 +203,7 @@ export default function Header() {
  
         {/* Desktop Navigation Capsule */}
         <nav className={cn(
-          "hidden lg:flex items-center gap-1 p-1 rounded-full transition-all duration-700 lg:absolute lg:left-1/2 lg:-translate-x-1/2",
+          "hidden xl:flex items-center gap-1 p-1 rounded-full transition-all duration-700 xl:absolute xl:left-1/2 xl:-translate-x-1/2",
           scrolled ? "bg-white/5 border border-white/5 shadow-inner" : "bg-black/20 backdrop-blur-md border border-white/10"
         )}>
           {navLinks.map((link) => {
@@ -214,13 +214,13 @@ export default function Header() {
                 key={link.href}
                 href={localizedHref}
                 className={cn(
-                  "text-[11px] uppercase tracking-[0.15em] font-bold transition-all duration-300 px-4 py-2 rounded-full relative overflow-hidden group/link",
+                  "text-[11px] uppercase tracking-[0.15em] font-bold transition-all duration-300 px-4 py-2 rounded-full relative overflow-hidden group/link whitespace-nowrap",
                   isActive
                     ? (scrolled ? "bg-white/10 text-white shadow-sm" : "bg-white text-slate-950 shadow-lg")
                     : (scrolled ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-white/90 hover:text-white hover:bg-white/20")
                 )}
               >
-                <span className="relative z-10">{link.label}</span>
+                <span className="relative z-10 whitespace-nowrap">{link.label}</span>
                 {/* Glow effect on hover */}
                 {!isActive && (
                   <div className="absolute inset-0 bg-gradient-to-r from-teal-500/0 via-teal-400/20 to-sky-500/0 opacity-0 group-hover/link:opacity-100 transition-opacity duration-500" />
@@ -232,7 +232,7 @@ export default function Header() {
             <Link
               href="/admin"
               className={cn(
-                "text-[11px] uppercase tracking-[0.15em] font-bold transition-all duration-300 px-4 py-2 rounded-full",
+                "text-[11px] uppercase tracking-[0.15em] font-bold transition-all duration-300 px-4 py-2 rounded-full whitespace-nowrap",
                 pathname === "/admin"
                   ? (scrolled ? "bg-white/10 text-white shadow-sm" : "bg-white text-slate-950 shadow-lg")
                   : (scrolled ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-white/90 hover:text-white hover:bg-white/20")
@@ -244,11 +244,11 @@ export default function Header() {
         </nav>
  
         {/* Right Actions */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-3">
           {mounted && renderLanguageSelector()}
  
           {mounted && isAuthenticated && (
-            <div className="hidden lg:flex items-center gap-3">
+            <div className="hidden xl:flex items-center gap-3">
               <Button
                 variant="ghost"
                 size="icon"
@@ -269,21 +269,21 @@ export default function Header() {
           <a
             href="tel:+380669212275"
             className={cn(
-              "group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 hover:scale-[1.03] active:scale-95 shrink-0",
+              "group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 hover:scale-[1.03] active:scale-95 shrink-0 whitespace-nowrap",
               scrolled
                 ? "bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30"
                 : "bg-black/25 hover:bg-black/40 text-white border border-white/25 backdrop-blur-sm"
             )}
           >
             <Phone className="h-3.5 w-3.5 shrink-0 opacity-80" />
-            <span className="font-semibold opacity-75">
+            <span className="font-semibold opacity-75 hidden sm:inline">
               {currentLang === "uk" ? "Бронь:" : currentLang === "en" ? "Book:" : "Бронь:"}
             </span>
             <span className="font-bold tracking-tight">066 921-22-75</span>
           </a>
           
-          {/* Mobile Actions and Hamburger */}
-          <div className="lg:hidden flex items-center">
+          {/* Mobile/Tablet Actions and Hamburger */}
+          <div className="xl:hidden flex items-center">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button

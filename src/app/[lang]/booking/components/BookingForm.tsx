@@ -249,7 +249,7 @@ export default function BookingForm({
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-end"
+              className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-8 items-end"
             >
               <div className="relative group/field">
                 <FormField
