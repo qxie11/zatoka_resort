@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { Room } from "@/lib/types";
-import { BedDouble, ArrowRight, Eye, Scale, Waves, Sparkles } from "lucide-react";
+import { BedDouble, ArrowRight, Eye, Scale, Waves, Sparkles, CheckCircle2, Send } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 interface RoomCardProps {
@@ -23,6 +23,8 @@ const translations = {
     book: "Забронировать",
     pricePerNight: "грн",
     perNight: "/ ночь",
+    payOnArrival: "Оплата при заезде",
+    askTg: "Спросить в Telegram",
   },
   uk: {
     upTo: "До",
@@ -34,6 +36,8 @@ const translations = {
     book: "Забронювати",
     pricePerNight: "грн",
     perNight: "/ ніч",
+    payOnArrival: "Оплата при заїзді",
+    askTg: "Запитати в Telegram",
   },
   en: {
     upTo: "Up to",
@@ -45,6 +49,8 @@ const translations = {
     book: "Book Now",
     pricePerNight: "UAH",
     perNight: "/ night",
+    payOnArrival: "Pay at check-in",
+    askTg: "Ask on Telegram",
   }
 };
 
@@ -141,7 +147,10 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
               <div className="text-2xl sm:text-3xl font-black text-amber-400 tracking-tight leading-none">
                 {room.price} <span className="text-xs font-bold text-amber-300/80">{t.pricePerNight}</span>
               </div>
-              <div className="text-[11px] text-slate-400 font-medium">{t.perNight}</div>
+              <div className="flex items-center gap-1 mt-1 text-[10px] font-bold text-emerald-400">
+                <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0" />
+                <span>{t.payOnArrival}</span>
+              </div>
             </div>
 
             <div className="flex items-center gap-1.5">
@@ -170,16 +179,29 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
             </div>
           </div>
 
-          {/* Full-width Book Button Row */}
-          <Button 
-            asChild 
-            className="w-full h-11 rounded-xl bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-extrabold border-0 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 uppercase tracking-wider text-xs sm:text-sm"
-          >
-            <Link href={bookingHref} className="flex items-center justify-center gap-2">
-              <span>{t.book}</span>
-              <ArrowRight className="h-4 w-4 shrink-0" />
-            </Link>
-          </Button>
+          {/* Action Buttons: Book & Telegram Quick Contact */}
+          <div className="flex items-center gap-2">
+            <Button 
+              asChild 
+              className="flex-1 h-11 rounded-xl bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-black border-0 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 uppercase tracking-wider text-xs sm:text-sm"
+            >
+              <Link href={bookingHref} className="flex items-center justify-center gap-2">
+                <span>{t.book}</span>
+                <ArrowRight className="h-4 w-4 shrink-0" />
+              </Link>
+            </Button>
+
+            <a
+              href="https://t.me/+380669212275"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-11 px-3.5 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-300 hover:bg-sky-500/30 hover:text-white transition-all duration-300 flex items-center justify-center gap-1.5 text-xs font-extrabold shrink-0"
+              title={t.askTg}
+            >
+              <Send className="h-4 w-4 text-sky-400 shrink-0" />
+              <span className="hidden sm:inline">TG</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
