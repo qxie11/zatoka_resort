@@ -304,11 +304,38 @@ export function DateRangePicker({
               onDayMouseLeave={() => setHoveredDate(undefined)}
               onSelect={(range, selectedDay) => {
                 setHoveredDate(undefined);
+
+                // Case 1: Both dates were already selected -> reset and start new selection with tapped date
                 if (value?.from && value?.to) {
                   onChange({ from: selectedDay, to: undefined });
                   return;
                 }
 
+                // Case 2: Check-in date is already selected, picking Check-out date
+                if (value?.from && !value?.to) {
+                  const start = startOfDay(value.from);
+                  const selected = startOfDay(selectedDay);
+
+                  if (selected > start) {
+                    const newRange = { from: value.from, to: selectedDay };
+                    if (validateDateRange(newRange)) {
+                      onChange(newRange);
+                      setPopoverOpen(false);
+                    } else {
+                      toast({
+                        title: t("datesOccupiedTitle"),
+                        description: t("datesOccupiedDesc"),
+                        variant: "destructive",
+                      });
+                    }
+                  } else {
+                    // Selected earlier or same date -> reset check-in to this date
+                    onChange({ from: selectedDay, to: undefined });
+                  }
+                  return;
+                }
+
+                // Case 3: Initial check-in date selection
                 if (range?.from && range?.to) {
                   const start = startOfDay(range.from);
                   const end = startOfDay(range.to);
@@ -326,8 +353,10 @@ export function DateRangePicker({
                       variant: "destructive",
                     });
                   }
+                } else if (range?.from) {
+                  onChange({ from: range.from, to: undefined });
                 } else {
-                  onChange(range);
+                  onChange({ from: selectedDay, to: undefined });
                 }
               }}
               numberOfMonths={isMobile ? 1 : 2}
