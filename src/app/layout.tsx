@@ -10,6 +10,8 @@ import NextTopLoader from 'nextjs-toploader';
 import { GlobalMarineBackground } from "@/components/decorative/GlobalMarineBackground";
 import CursorTrail from "@/components/decorative/CursorTrail";
 
+import AnalyticsScript from "@/components/analytics/AnalyticsScript";
+
 const fontSans = Nunito({
   subsets: ["latin", "cyrillic"],
   variable: "--font-sans",
@@ -50,36 +52,7 @@ export default async function RootLayout({
   return (
     <html lang={lang} suppressHydrationWarning>
       <head>
-        {/* Google Tag Manager */}
-        <Script
-          id="google-tag-manager"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TJSF2635');`
-          }}
-        />
-        {/* Google Ads Tag */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18286115803"
-          strategy="afterInteractive"
-        />
-        <Script
-          id="google-ads"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'AW-18286115803');
-              gtag('config', 'G-DWTXJJNTJF');
-            `,
-          }}
-        />
+        <AnalyticsScript />
       </head>
       <body
         className={cn(
