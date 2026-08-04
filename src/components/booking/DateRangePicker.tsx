@@ -292,16 +292,18 @@ export function DateRangePicker({
               mode="range"
               defaultMonth={value?.from}
               selected={value?.from ? { from: value.from, to: value.to } : undefined}
-              onDayMouseEnter={(date) => {
-                if (value?.from && !value?.to && date > value.from) {
-                  if (validateDateRange({ from: value.from, to: date })) {
-                    setHoveredDate(date);
-                  } else {
-                    setHoveredDate(undefined);
+              {...(!isMobile && {
+                onDayMouseEnter: (date: Date) => {
+                  if (value?.from && !value?.to && date > value.from) {
+                    if (validateDateRange({ from: value.from, to: date })) {
+                      setHoveredDate(date);
+                    } else {
+                      setHoveredDate(undefined);
+                    }
                   }
-                }
-              }}
-              onDayMouseLeave={() => setHoveredDate(undefined)}
+                },
+                onDayMouseLeave: () => setHoveredDate(undefined),
+              })}
               onSelect={(range, selectedDay) => {
                 setHoveredDate(undefined);
 
