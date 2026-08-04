@@ -130,6 +130,15 @@ export function DateRangePicker({
     return disabledDatesList;
   }, [existingBookings, excludeBookingId, totalUnitsCount]);
 
+  // O(1) lookup set for disabled dates
+  const disabledSet = useMemo(() => {
+    const s = new Set<number>();
+    for (const d of disabledDates) {
+      s.add(startOfDay(d).getTime());
+    }
+    return s;
+  }, [disabledDates]);
+
   const isDateDisabled = (date: Date) => {
     if (customDisabled && customDisabled(date)) return true;
 
@@ -138,10 +147,7 @@ export function DateRangePicker({
 
     if (dateStart < today) return true;
 
-    return disabledDates.some((disabledDate) => {
-      const disabledStart = startOfDay(disabledDate);
-      return dateStart.getTime() === disabledStart.getTime();
-    });
+    return disabledSet.has(dateStart.getTime());
   };
 
   const isDateRangeDisabled = (date: Date) => {
@@ -190,15 +196,19 @@ export function DateRangePicker({
     return true;
   };
 
-  const rangeHoverModifier = (date: Date) => {
-    if (value?.from && !value?.to && hoveredDate && hoveredDate > value.from) {
-      const d = startOfDay(date);
-      const from = startOfDay(value.from);
-      const hover = startOfDay(hoveredDate);
-      return d > from && d <= hover;
+  // Pre-compute hover range dates as an array for the modifier (avoids per-cell Date allocations)
+  const rangeHoverDates = useMemo(() => {
+    if (!value?.from || value?.to || !hoveredDate || hoveredDate <= value.from) return [];
+    const dates: Date[] = [];
+    const current = new Date(startOfDay(value.from));
+    current.setDate(current.getDate() + 1);
+    const end = startOfDay(hoveredDate).getTime();
+    while (current.getTime() <= end) {
+      dates.push(new Date(current));
+      current.setDate(current.getDate() + 1);
     }
-    return false;
-  };
+    return dates;
+  }, [value?.from, value?.to, hoveredDate]);
 
   return (
     <FormItem className={cn("flex flex-col relative", popoverOpen ? "z-50" : "z-10", className)}>
@@ -374,7 +384,7 @@ export function DateRangePicker({
               }}
               modifiers={{
                 booked: disabledDates,
-                rangeHover: rangeHoverModifier,
+                rangeHover: rangeHoverDates,
               }}
               modifiersClassNames={{
                 booked: "opacity-40 line-through text-slate-500 bg-slate-900/30 cursor-not-allowed",
