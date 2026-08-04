@@ -6,13 +6,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { LogOut, Home, Bed, LayoutDashboard, CalendarDays, PhoneCall, BookOpen, MessageSquare, Menu, Tag, Waves } from 'lucide-react';
+import { LogOut, Home, Bed, LayoutDashboard, CalendarDays, PhoneCall, BookOpen, MessageSquare, Menu, Tag, Waves, ArrowRightLeft } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 const navLinks = [
   { href: "/admin", label: "Обзор", icon: LayoutDashboard },
   { href: "/admin/analytics", label: "Аналитика", icon: LayoutDashboard },
   { href: "/admin/calendar", label: "Шахматка", icon: CalendarDays },
+  { href: "/admin/sync", label: "Синхронизация (Booking)", icon: ArrowRightLeft },
   { href: "/admin/rooms", label: "Номера", icon: Bed },
   { href: "/admin/bookings", label: "Бронирования (Список)", icon: CalendarDays },
   { href: "/admin/callbacks", label: "Заявки", icon: PhoneCall },
@@ -140,6 +141,7 @@ export default function AdminLayout({
                       if (seg === "reviews") return "Отзывы";
                       if (seg === "analytics") return "Аналитика";
                       if (seg === "calendar") return "Шахматка";
+                      if (seg === "sync") return "Синхронизация Booking";
                       if (seg === "promo") return "Промокоды";
                       return seg;
                     }).join(" / ")}
