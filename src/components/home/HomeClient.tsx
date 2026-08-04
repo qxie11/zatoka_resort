@@ -214,7 +214,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                       onSubmit={widgetForm.handleSubmit(onWidgetSubmit)}
                       className="grid grid-cols-1 md:grid-cols-2 xl:flex xl:flex-row gap-3.5 sm:gap-4 p-4 sm:p-6 rounded-3xl bg-slate-900/90 backdrop-blur-2xl border border-teal-500/40 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8),0_0_30px_rgba(20,184,166,0.15)] hover:border-teal-400/50 transition-all duration-500 items-stretch xl:items-end w-full group/bar"
                     >
-                      <div className="w-full md:col-span-1 xl:flex-1 relative group/field">
+                      <div className="w-full md:col-span-1 xl:flex-1 min-w-0 relative group/field">
                         <FormField
                           control={widgetForm.control}
                           name="dateRange"
