@@ -10,30 +10,17 @@ import type { Room } from '@/lib/types';
 import { ArrowRight, BedDouble, Waves, Moon } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
+import RoomCard from "@/app/[lang]/booking/components/RoomCard";
+
 interface FeaturedRoomsProps {
   rooms: Room[];
 }
 
 export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
   const { t } = useTranslation();
-
   const params = useParams();
-  const searchParams = useSearchParams();
-  const queryString = searchParams?.toString();
   const lang = params?.lang || 'ru';
-  const featuredRooms = rooms.slice(0, 3);
-
-  // Calculate nights from query params if available
-  const checkin = searchParams?.get('checkin') || searchParams?.get('from');
-  const checkout = searchParams?.get('checkout') || searchParams?.get('to');
-  let nights = 0;
-  if (checkin && checkout) {
-    const from = new Date(checkin);
-    const to = new Date(checkout);
-    if (!isNaN(from.getTime()) && !isNaN(to.getTime()) && to > from) {
-      nights = Math.ceil((to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24));
-    }
-  }
+  const featuredRooms = rooms.slice(0, 6);
 
   if (featuredRooms.length === 0) {
     return (
@@ -47,71 +34,8 @@ export default function FeaturedRooms({ rooms }: FeaturedRoomsProps) {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {featuredRooms.map((room, index) => (
-          <ScrollReveal key={room.id} variant="wave-in" delay={index * 150}>
-            <Card className="overflow-hidden flex flex-col group transition-all duration-500 marine-3d-card min-w-0 shadow-2xl border border-white/10 bg-slate-900/60 backdrop-blur-md rounded-3xl text-white hover:border-teal-400/30 h-full">
-              <CardHeader className="p-0">
-                 <div className="relative h-56 sm:h-64 w-full overflow-hidden">
-                    <Image src={room.imageUrl} alt={room.name} fill className="object-cover transition-smooth group-hover:scale-110" data-ai-hint={room.imageHint} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    {/* Water shimmer overlay on hover */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-                      style={{
-                        background: 'linear-gradient(135deg, transparent 40%, rgba(20,184,166,0.12) 50%, rgba(56,189,248,0.08) 60%, transparent 70%)',
-                        backgroundSize: '200% 200%',
-                        animation: 'ocean-shimmer 4s ease-in-out infinite',
-                      }}
-                    />
-                    {/* Distance to sea badge */}
-                    {(() => {
-                      const seaAmenity = room.amenities.find((a) => 
-                        /до моря|до пляжа|до пляжу|Береговая линия|Перша лінія|Beach/i.test(a)
-                      );
-                      
-                      if (!seaAmenity) return null;
-                      
-                      return (
-                        <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/70 backdrop-blur-md border border-sky-500/30 text-white text-xs font-medium z-10 shadow-lg">
-                          <Waves className="h-3.5 w-3.5 text-sky-400" />
-                          <span>{seaAmenity}</span>
-                        </div>
-                      );
-                    })()}
-                 </div>
-              </CardHeader>
-              <CardContent className="p-5 sm:p-6 flex-grow">
-                 <CardTitle className="text-xl font-extrabold text-white">{room.name}</CardTitle>
-                 <div className="flex items-center gap-2 mt-2 text-teal-300 font-medium text-sm">
-                     <BedDouble className="h-4 w-4 text-teal-400" />
-                     <span>{t("capacityGuests")?.replace("{{capacity}}", room.capacity.toString()) || `${room.capacity} Гостей`}</span>
-                 </div>
-                 <CardDescription className="mt-4 text-slate-300 text-sm font-light leading-relaxed">{room.description}</CardDescription>
-              </CardContent>
-              <CardFooter className="flex flex-col gap-4 p-5 sm:p-6 border-t border-white/5">
-                <div className="mr-auto">
-                  <p className="text-xl font-extrabold text-teal-300">{room.price} {t("currency") || "грн"} <span className="text-xs text-slate-400 font-normal">/ {t("perNight") || "ночь"}</span></p>
-                  {nights > 0 && (
-                    <div className="flex items-center gap-1.5 mt-1">
-                      <Moon className="h-3 w-3 text-sky-400" />
-                      <span className="text-xs text-sky-300 font-semibold">
-                        {nights} {nights === 1 ? (t("night") || "ночь") : (t("nightsShort") || "ноч.")} = <span className="text-white font-bold">{room.price * nights} {t("currency") || "грн"}</span>
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="flex flex-col sm:flex-row gap-3 w-full">
-                  <Button asChild variant="outline" className="w-full sm:flex-1 border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 rounded-xl">
-                    <Link href={`/${lang}/rooms/${room.slug}${queryString ? `?${queryString}` : ""}`} className="flex items-center justify-center">
-                      {t("moreDetails") || "Подробнее"} <ArrowRight className="ml-1.5 h-4 w-4 text-teal-400" />
-                    </Link>
-                  </Button>
-                  <Button asChild className="w-full sm:flex-1 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-bold border-0 shadow-lg shadow-orange-500/20 rounded-xl water-reflection">
-                    <Link href={`/${lang}/booking/${room.slug}${queryString ? `?${queryString}` : ""}`}>
-                      {t("book") || "Забронировать"}
-                    </Link>
-                  </Button>
-                </div>
-              </CardFooter>
-            </Card>
+          <ScrollReveal key={room.id} variant="wave-in" delay={index * 150} className="h-full">
+            <RoomCard room={room} />
           </ScrollReveal>
         ))}
       </div>

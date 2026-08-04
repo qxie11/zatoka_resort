@@ -68,7 +68,7 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
   return (
     <div
       id={room.id}
-      className="group relative flex flex-col justify-between overflow-hidden bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-[2rem] transition-all duration-500 hover:border-teal-500/40 hover:shadow-[0_0_40px_-10px_rgba(20,184,166,0.25)] hover:bg-slate-900/80"
+      className="group relative flex flex-col justify-between overflow-hidden bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-[2rem] transition-all duration-500 hover:border-teal-500/40 hover:shadow-[0_0_40px_-10px_rgba(20,184,166,0.25)] hover:bg-slate-900/80 h-full"
     >
       {/* Decorative Glow */}
       <div className="absolute top-0 left-0 w-full h-[250px] bg-teal-500/5 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
@@ -126,7 +126,6 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
           <div className="flex flex-wrap gap-1.5 pt-1">
             {room.amenities
               .filter(a => !/до моря|до пляжа|до пляжу|Береговая линия|Перша лінія|Beach/i.test(a))
-              .slice(0, 4)
               .map((amenity) => (
               <span 
                 key={amenity} 
