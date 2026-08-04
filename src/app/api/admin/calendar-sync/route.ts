@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
             });
 
             if (!existing) {
-              await createBooking({
+              const createdBooking = await createBooking({
                 roomId: feed.roomId,
                 startDate: ev.startDate,
                 endDate: ev.endDate,
@@ -141,6 +141,42 @@ export async function POST(request: NextRequest) {
                 adminComment: `[iCal Sync] Автоматически загружено из ${feed.sourceName || "Booking.com"}. UID: ${ev.uid}`,
               });
               totalImported++;
+
+              // Send Telegram & Email Notifications
+              try {
+                const startStr = ev.startDate.toLocaleDateString("ru-RU");
+                const endStr = ev.endDate.toLocaleDateString("ru-RU");
+                const roomTitle = feed.roomName || feed.roomId;
+
+                // 1. Telegram Notification
+                const { sendTelegramNotification } = await import("@/lib/telegram");
+                const tgMsg =
+                  `🔄 <b>Новая бронь с ${feed.sourceName || "Booking.com"}</b>\n\n` +
+                  `🏨 <b>Номер:</b> ${roomTitle}\n` +
+                  `📅 <b>Даты:</b> ${startStr} — ${endStr}\n` +
+                  `ℹ️ <b>Источник:</b> Автосинхронизация iCal\n` +
+                  `🆔 <b>ID брони:</b> #${createdBooking.id}`;
+
+                sendTelegramNotification(tgMsg).catch((err) =>
+                  console.error("Failed to send telegram notification for iCal sync:", err)
+                );
+
+                // 2. Email Notification
+                const { sendBookingNotification } = await import("@/lib/email");
+                sendBookingNotification({
+                  name: `Бронь ${feed.sourceName || "Booking.com"}`,
+                  phone: "iCal Sync",
+                  email: "ical-sync@zatoka-hotel.com",
+                  roomId: feed.roomId,
+                  startDate: ev.startDate,
+                  endDate: ev.endDate,
+                  adminComment: `[iCal Sync] Автоматический импорт из ${feed.sourceName || "Booking.com"}. UID: ${ev.uid}`,
+                }).catch((err) =>
+                  console.error("Failed to send email notification for iCal sync:", err)
+                );
+              } catch (notifyErr) {
+                console.error("Failed sending sync notifications:", notifyErr);
+              }
             }
           }
 
