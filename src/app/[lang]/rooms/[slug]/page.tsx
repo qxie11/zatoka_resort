@@ -89,11 +89,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function RoomDetailsPage({ params, searchParams }: PageProps) {
   const { slug, lang } = await params;
   const sParams = searchParams ? await searchParams : {};
-  const room = await getRoomBySlugOrId(slug);
+  const [room, allRooms] = await Promise.all([
+    getRoomBySlugOrId(slug),
+    getRooms(),
+  ]);
 
   if (!room) notFound();
-
-  const allRooms = await getRooms();
 
   // Preserve query parameters (checkin, checkout, guests, from, to)
   const query = new URLSearchParams();

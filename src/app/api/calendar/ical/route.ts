@@ -15,8 +15,7 @@ export async function GET(request: NextRequest) {
     const roomId = searchParams.get("roomId");
     const unitId = searchParams.get("unitId");
 
-    const allBookings = await getBookings();
-    const rooms = await getRooms();
+    const [allBookings, rooms] = await Promise.all([getBookings(), getRooms()]);
     const roomsMap = new Map(rooms.map((r) => [r.id, r.name]));
 
     // Filter active bookings

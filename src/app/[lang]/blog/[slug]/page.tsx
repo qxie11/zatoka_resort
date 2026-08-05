@@ -105,7 +105,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug, lang } = await params;
-  const post = await getBlogPostBySlug(slug);
+  const [post, blogPosts] = await Promise.all([
+    getBlogPostBySlug(slug),
+    getBlogPosts(),
+  ]);
 
   if (!post) {
     notFound();
@@ -136,8 +139,6 @@ export default async function BlogPostPage({ params }: PageProps) {
   }[lang] || post.excerptRu;
 
   const fullContent = Array.isArray(contentParagraphs) ? contentParagraphs.join('\n\n') : contentParagraphs;
-
-  const blogPosts = await getBlogPosts();
 
   const relatedPosts = blogPosts
     .filter((p) => p.slug !== slug && (p.categoryRu === post.categoryRu || p.categoryEn === post.categoryEn))
