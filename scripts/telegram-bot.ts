@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const token = process.env.TELEGRAM_BOT_TOKEN || "8779062587:AAGxIcFMD-yPsJIuMqhHi8RKkwgZTrHiHBg";
+const token = process.env.TELEGRAM_BOT_TOKEN;
 
 async function sendTelegramMessage(chatId: number | string, text: string, replyMarkup?: any) {
   if (process.env.NODE_ENV === "development" && process.env.ENABLE_TELEGRAM_IN_DEV !== "true") {

@@ -4,7 +4,7 @@ export const sendTelegramNotification = async (message: string) => {
     return false;
   }
 
-  const token = process.env.TELEGRAM_BOT_TOKEN || "8779062587:AAGxIcFMD-yPsJIuMqhHi8RKkwgZTrHiHBg";
+  const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID || "495881827";
 
   if (!token || !chatId) {
@@ -43,7 +43,7 @@ export const sendTelegramMessageToChat = async (chatId: string | number, message
     return false;
   }
 
-  const token = process.env.TELEGRAM_BOT_TOKEN || "8779062587:AAGxIcFMD-yPsJIuMqhHi8RKkwgZTrHiHBg";
+  const token = process.env.TELEGRAM_BOT_TOKEN;
 
   if (!token || !chatId) {
     return false;
