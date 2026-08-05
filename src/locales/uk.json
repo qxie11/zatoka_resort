@@ -143,6 +143,7 @@
   "guests": "Гості",
   "guestsPlaceholder": "Кількість гостей",
   "checkAvailability": "Перевірити наявність",
+  "checkingAvailability": "Перевіряємо...",
   "roomsNotFoundToastTitle": "Кімнати не знайдено",
   "dateAlreadyBooked": "Цей день вже зайнятий, спробуйте інший номер",
   "roomsNotFoundToastDesc": "На жаль, на вибрані дати немає вільних кімнат з відповідною місткістю.",

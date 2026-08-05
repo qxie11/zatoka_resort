@@ -139,6 +139,7 @@
   "guests": "Guests",
   "guestsPlaceholder": "Number of guests",
   "checkAvailability": "Check Availability",
+  "checkingAvailability": "Checking...",
   "roomsNotFoundToastTitle": "No Rooms Found",
   "dateAlreadyBooked": "This date is already booked, please try another room",
   "roomsNotFoundToastDesc": "Unfortunately, there are no rooms available with the requested capacity for the selected dates.",

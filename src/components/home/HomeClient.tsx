@@ -14,7 +14,7 @@ import { WavyUnderline } from "@/components/ui/wavy-underline";
 import OceanSceneClient from "@/components/three/OceanSceneClient";
 import FeaturedRooms from "@/components/rooms/FeaturedRooms";
 import GuestImpressions from "@/components/home/GuestImpressions";
-import { Users, Minus, Plus, CalendarDays } from "lucide-react";
+import { Users, Minus, Plus, CalendarDays, Loader2 } from "lucide-react";
 import {
   ArrowRight,
   Waves,
@@ -75,6 +75,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
   const { t } = useTranslation();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [, setLangUpdate] = useState(i18n.language);
 
   const widgetForm = useForm({
@@ -88,6 +89,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
   const isFormValid = dateRange?.from && dateRange?.to;
 
   const onWidgetSubmit = (data: any) => {
+    setIsSearching(true);
     const params = new URLSearchParams();
     if (data.dateRange?.from) {
       params.set("checkin", data.dateRange.from.toISOString());
@@ -212,8 +214,14 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                   <Form {...widgetForm}>
                     <form
                       onSubmit={widgetForm.handleSubmit(onWidgetSubmit)}
-                      className="grid grid-cols-1 md:grid-cols-2 xl:flex xl:flex-row gap-3.5 sm:gap-4 p-4 sm:p-6 rounded-3xl bg-slate-900/90 backdrop-blur-2xl border border-teal-500/40 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8),0_0_30px_rgba(20,184,166,0.15)] hover:border-teal-400/50 transition-all duration-500 items-stretch xl:items-end w-full group/bar"
+                      className="relative overflow-hidden grid grid-cols-1 md:grid-cols-2 xl:flex xl:flex-row gap-3.5 sm:gap-4 p-4 sm:p-6 rounded-3xl bg-slate-900/90 backdrop-blur-2xl border border-teal-500/40 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8),0_0_30px_rgba(20,184,166,0.15)] hover:border-teal-400/50 transition-all duration-500 items-stretch xl:items-end w-full group/bar"
                     >
+                      {/* Animated Loading Bar */}
+                      {isSearching && (
+                        <div className="absolute top-0 left-0 right-0 h-[3px] bg-slate-950 overflow-hidden z-30">
+                          <div className="h-full bg-gradient-to-r from-teal-400 via-amber-400 to-sky-400 animate-pulse w-full" />
+                        </div>
+                      )}
                       <div className="w-full md:col-span-1 xl:flex-1 min-w-0 relative group/field">
                         <FormField
                           control={widgetForm.control}
@@ -264,11 +272,20 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
 
                       <Button
                         type="submit"
-                        disabled={!isFormValid}
+                        disabled={!isFormValid || isSearching}
                         className="w-full md:col-span-2 xl:w-auto h-12 px-6 sm:px-8 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 disabled:opacity-50 disabled:pointer-events-none text-slate-950 font-black border-0 shadow-lg shadow-orange-500/25 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap shrink-0"
                       >
-                        <Sun className="h-4 w-4 fill-slate-950 shrink-0" />
-                        <span>{translate("checkAvailability", "Найти номера")}</span>
+                        {isSearching ? (
+                          <>
+                            <Loader2 className="h-4 w-4 text-slate-950 animate-spin shrink-0" />
+                            <span>{translate("checkingAvailability", "Проверяем...")}</span>
+                          </>
+                        ) : (
+                          <>
+                            <Sun className="h-4 w-4 fill-slate-950 shrink-0" />
+                            <span>{translate("checkAvailability", "Найти номера")}</span>
+                          </>
+                        )}
                       </Button>
                     </form>
                   </Form>

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ru, uk, enUS } from "date-fns/locale";
-import { Users, Minus, Plus, Search } from "lucide-react";
+import { Users, Minus, Plus, Search, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 
@@ -50,6 +50,7 @@ export default function BookingForm({
   const router = useRouter();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentLang, setCurrentLang] = useState<SupportedLanguage>("ru");
 
   useEffect(() => {
@@ -177,54 +178,60 @@ export default function BookingForm({
   }
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const maxCapacity = rooms.length > 0 ? Math.max(...rooms.map(r => r.capacity)) : 4;
+    setIsLoading(true);
 
-    const filteredRooms = rooms.filter((room) => {
-      if (data.guests <= maxCapacity) {
-        if (room.capacity < data.guests) {
-          return false;
+    setTimeout(() => {
+      const maxCapacity = rooms.length > 0 ? Math.max(...rooms.map(r => r.capacity)) : 4;
+
+      const filteredRooms = rooms.filter((room) => {
+        if (data.guests <= maxCapacity) {
+          if (room.capacity < data.guests) {
+            return false;
+          }
         }
+
+        return isRoomAvailable(room, data.dateRange.from!, data.dateRange.to!);
+      }).sort((a, b) => {
+        // Sort by capacity closest to requested guests first
+        const diffA = Math.abs(a.capacity - data.guests);
+        const diffB = Math.abs(b.capacity - data.guests);
+        if (diffA === diffB) {
+          // If capacities are equidistant, sort by price (cheaper first)
+          return a.price - b.price;
+        }
+        return diffA - diffB;
+      });
+
+      onFilterChange(filteredRooms, data.guests);
+
+      // Update query parameters in URL
+      if (data.dateRange.from && data.dateRange.to) {
+        const fromStr = `${data.dateRange.from.getFullYear()}-${String(data.dateRange.from.getMonth() + 1).padStart(2, "0")}-${String(data.dateRange.from.getDate()).padStart(2, "0")}`;
+        const toStr = `${data.dateRange.to.getFullYear()}-${String(data.dateRange.to.getMonth() + 1).padStart(2, "0")}-${String(data.dateRange.to.getDate()).padStart(2, "0")}`;
+        
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("checkin", fromStr);
+        params.set("checkout", toStr);
+        params.set("guests", data.guests.toString());
+
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
       }
 
-      return isRoomAvailable(room, data.dateRange.from!, data.dateRange.to!);
-    }).sort((a, b) => {
-      // Sort by capacity closest to requested guests first
-      const diffA = Math.abs(a.capacity - data.guests);
-      const diffB = Math.abs(b.capacity - data.guests);
-      if (diffA === diffB) {
-        // If capacities are equidistant, sort by price (cheaper first)
-        return a.price - b.price;
+      if (filteredRooms.length === 0) {
+        toast({
+          title: t("roomsNotFoundToastTitle"),
+          description: t("roomsNotFoundToastDesc"),
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: t("roomsFoundToastTitle"),
+          description: t("roomsFoundToastDesc", { count: filteredRooms.length }),
+        });
       }
-      return diffA - diffB;
-    });
 
-    onFilterChange(filteredRooms, data.guests);
-
-    // Update query parameters in URL
-    if (data.dateRange.from && data.dateRange.to) {
-      const fromStr = `${data.dateRange.from.getFullYear()}-${String(data.dateRange.from.getMonth() + 1).padStart(2, "0")}-${String(data.dateRange.from.getDate()).padStart(2, "0")}`;
-      const toStr = `${data.dateRange.to.getFullYear()}-${String(data.dateRange.to.getMonth() + 1).padStart(2, "0")}-${String(data.dateRange.to.getDate()).padStart(2, "0")}`;
-      
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("checkin", fromStr);
-      params.set("checkout", toStr);
-      params.set("guests", data.guests.toString());
-
-      router.push(`${pathname}?${params.toString()}`, { scroll: false });
-    }
-
-    if (filteredRooms.length === 0) {
-      toast({
-        title: t("roomsNotFoundToastTitle"),
-        description: t("roomsNotFoundToastDesc"),
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: t("roomsFoundToastTitle"),
-        description: t("roomsFoundToastDesc", { count: filteredRooms.length }),
-      });
-    }
+      setIsLoading(false);
+    }, 450);
   }
 
   const translate = (key: string, fallback: string) => {
@@ -244,6 +251,13 @@ export default function BookingForm({
         
         {/* Gradient border indicator */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-teal-500/80 via-sky-400/80 to-amber-300/80" />
+        
+        {/* Animated Loading Bar */}
+        {isLoading && (
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-slate-900 overflow-hidden z-30">
+            <div className="h-full bg-gradient-to-r from-teal-400 via-sky-400 to-amber-300 animate-pulse w-full" />
+          </div>
+        )}
         
         <CardContent className="p-8 md:p-10 pb-12 md:pb-14 relative z-10">
           <Form {...form}>
@@ -306,11 +320,20 @@ export default function BookingForm({
               <div className="relative">
                 <Button 
                   type="submit" 
-                  disabled={!form.watch("dateRange")?.from || !form.watch("dateRange")?.to}
+                  disabled={isLoading || !form.watch("dateRange")?.from || !form.watch("dateRange")?.to}
                   className="w-full h-12 bg-gradient-to-r from-teal-400 via-sky-400 to-amber-300 hover:from-teal-300 hover:via-sky-300 hover:to-amber-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100 text-slate-950 font-black border-0 shadow-lg shadow-teal-500/10 hover:shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider text-xs"
                 >
-                  <Search className="h-4 w-4 text-slate-950 stroke-[2.5]" />
-                  {translate("checkAvailability", "Проверить наличие")}
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 text-slate-950 animate-spin" />
+                      {translate("checkingAvailability", "Проверяем...")}
+                    </>
+                  ) : (
+                    <>
+                      <Search className="h-4 w-4 text-slate-950 stroke-[2.5]" />
+                      {translate("checkAvailability", "Проверить наличие")}
+                    </>
+                  )}
                 </Button>
               </div>
             </form>
