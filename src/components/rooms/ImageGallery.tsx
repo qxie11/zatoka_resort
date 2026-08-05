@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 interface ImageGalleryProps {
@@ -56,6 +56,7 @@ export default function ImageGallery({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
+        aria-describedby={undefined}
         onKeyDown={handleKey}
         className="max-w-none w-screen h-[100dvh] bg-black/95 border-none p-0 rounded-none z-[100] [&>button]:hidden overflow-hidden grid"
         style={{ gridTemplateRows: "auto 1fr auto" }}
@@ -63,6 +64,9 @@ export default function ImageGallery({
         <DialogTitle className="sr-only">
           {t("galleryOf")?.replace("{{name}}", roomName) || `Галерея фотографий ${roomName}`}
         </DialogTitle>
+        <DialogDescription className="sr-only">
+          {`Галерея фотографий номера ${roomName}`}
+        </DialogDescription>
 
         {/* ── ROW 1: Header ── */}
         <div className="flex justify-between items-start px-4 py-4 md:px-8 md:py-6 bg-gradient-to-b from-black/80 to-transparent pointer-events-none relative z-10">
