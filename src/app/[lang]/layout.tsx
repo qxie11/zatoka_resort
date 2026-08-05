@@ -114,11 +114,13 @@ export default async function RootLayout({
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zatoka-hotel.com";
 
   // Fetch rooms on the Server Side to get min and max prices
-  let minPrice = 400;
-  let maxPrice = 2200;
+  let minPrice = 390;
+  let maxPrice = 2190;
+  let fetchedRooms: any[] = [];
   try {
     const rooms = await getRooms();
     if (rooms && rooms.length) {
+      fetchedRooms = rooms;
       const prices = rooms.map((r) => r.price);
       minPrice = Math.min(...prices);
       maxPrice = Math.max(...prices);
@@ -129,18 +131,20 @@ export default async function RootLayout({
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Hotel",
+    "@type": ["Hotel", "Resort"],
     "name": "Zatoka Resort",
-    "description": "Premium family hotel in Zatoka, Odesa Region, 5 minutes walk to the Black Sea beach.",
+    "description": lang === "uk"
+      ? "Офіційний сайт отелю Zatoka Resort у Затоці. Номери зі своєю кухнею, басейн, мангали, 5 хвилин до моря."
+      : "Официальный сайт отеля Zatoka Resort в Затоке. Номера со своей кухней, бассейн, мангалы, 5 минут до моря.",
     "url": `${baseUrl}/${lang}`,
     "telephone": "+380669212275",
     "priceRange": `${minPrice} - ${maxPrice} UAH`,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Sadovaya St, 1835, Limanskaya Station",
-      "addressLocality": "Zatoka",
-      "addressRegion": "Odesa region",
-      "postalCode": "67772",
+      "streetAddress": "ул. Садовая, 1835",
+      "addressLocality": "Затока",
+      "addressRegion": "Одесская область",
+      "postalCode": "67770",
       "addressCountry": "UA"
     },
     "geo": {
@@ -153,11 +157,64 @@ export default async function RootLayout({
       "ratingValue": "4.9"
     },
     "amenityFeature": [
+      { "@type": "LocationFeatureSpecification", "name": "Своя кухня (Променад и Коттедж)", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Бассейн", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "5 минут до моря", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Мангальная зона и BBQ", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Детская площадка", "value": true },
       { "@type": "LocationFeatureSpecification", "name": "Free Wi-Fi", "value": true },
       { "@type": "LocationFeatureSpecification", "name": "Air Conditioning", "value": true },
-      { "@type": "LocationFeatureSpecification", "name": "Free Parking", "value": true },
-      { "@type": "LocationFeatureSpecification", "name": "Beachfront Access", "value": true },
-      { "@type": "LocationFeatureSpecification", "name": "Barbecue Zone", "value": true }
+      { "@type": "LocationFeatureSpecification", "name": "Free Parking", "value": true }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Номера отеля Zatoka Resort",
+      "itemListElement": fetchedRooms.map((room) => ({
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "HotelRoom",
+          "name": room.name,
+          "description": room.description || `${room.name} — отель Zatoka Resort`
+        },
+        "price": room.price.toString(),
+        "priceCurrency": "UAH",
+        "url": `${baseUrl}/${lang}/booking/${room.slug || room.id}`
+      }))
+    }
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": lang === "uk" ? "Де знаходиться готель Zatoka Resort?" : "Где находится отель Zatoka Resort?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": lang === "uk"
+            ? "Готель Zatoka Resort розташований у Затоці (Одеська область) за адресою вул. Садова, 1835. Всього 5 хвилин пішки до піщаного пляжу Чорного моря."
+            : "Отель Zatoka Resort расположен в Затоке (Одесская область) по адресу ул. Садовая, 1835. Всего в 5 минутах ходьбы от песчаного пляжа Чёрного моря."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": lang === "uk" ? "Чи є номери зі своєю кухнею в Zatoka Resort?" : "Есть ли в отеле Zatoka Resort номера со своей кухней?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": lang === "uk"
+            ? "Так! У номерах категорій 'Променад' та 'Котедж' обладнана власна індивідуальна кухня з усією необхідною технікою та посудом."
+            : "Да! В номерах категорий 'Променад' и 'Коттедж' оборудована собственная индивидуальная кухня со всей необходимой кухонной техникой и посудой."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": lang === "uk" ? "Які ціни на проживання в Zatoka Resort?" : "Каковы цены на проживание в опеле Zatoka Resort?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `Цены на проживание варьируются от ${minPrice} грн/сутки до ${maxPrice} грн/сутки в зависимости от выбранного номера.`
+        }
+      }
     ]
   };
 
@@ -166,6 +223,10 @@ export default async function RootLayout({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <LanguageSync lang={lang} />
       <Header />
