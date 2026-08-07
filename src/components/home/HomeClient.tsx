@@ -48,6 +48,7 @@ import SeasideStatusWidget from "@/components/conversion/SeasideStatusWidget";
 import RoomFinderQuiz from "@/components/conversion/RoomFinderQuiz";
 import BackgroundBubbles from "@/components/decorative/BackgroundBubbles";
 import HomeFAQ from "@/components/home/HomeFAQ";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 const iconMap: { [key: string]: React.FC<LucideProps> } = {
   Waves,
@@ -416,17 +417,11 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
                         <label className="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wider">
                           {translate("yourPhone", "Номер телефона")} <span className="text-teal-400">*</span>
                         </label>
-                        <div className="relative">
-                          <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-teal-400" />
-                          <input
-                            type="tel"
-                            required
-                            value={heroCbPhone}
-                            onChange={(e) => setHeroCbPhone(e.target.value)}
-                            placeholder="+380 (__) ___-__-__"
-                            className="w-full bg-slate-950/80 border border-teal-500/40 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all"
-                          />
-                        </div>
+                        <PhoneInput
+                          value={heroCbPhone}
+                          onChange={(v) => setHeroCbPhone(v || "")}
+                          placeholder="+380 66 123 4567"
+                        />
                       </div>
 
                       {heroCbError && (
