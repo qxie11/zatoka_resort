@@ -262,5 +262,18 @@
   "sunset": "Sunset",
   "tipOfDay": "Today's Tip: perfect water temperature for evening swimming & paddleboarding.",
   "allRightsReserved": "All rights reserved.",
-  "perNight": "night"
+  "perNight": "night",
+  "adminOnline": "Manager Viktor Online",
+  "heroFormTitle": "Quick Room Availability Check",
+  "heroFormSub": "Enter your name and phone number — we will send available rooms with photos and prices via Telegram or Viber within 3 minutes.",
+  "yourName": "Your Name",
+  "namePlaceholder": "Alexander",
+  "yourPhone": "Phone Number",
+  "heroFormBtn": "Get Available Rooms",
+  "sending": "Sending...",
+  "noSpam": "No Spam",
+  "noPrepay": "0% Prepayment",
+  "seaDistShort": "5 min to the beach",
+  "heroFormSuccessTitle": "Thank You for Request!",
+  "heroFormSuccessDesc": "Manager Viktor will contact you within 5 minutes with available options."
 }

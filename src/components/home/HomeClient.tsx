@@ -35,6 +35,10 @@ import {
   CreditCard,
   Baby,
   Eye,
+  User,
+  Phone,
+  Send,
+  CheckCircle2,
 } from "lucide-react";
 import type { LucideProps } from "lucide-react";
 import type { Room } from "@/lib/types";
@@ -78,6 +82,44 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
   const [isSearching, setIsSearching] = useState(false);
   const [, setLangUpdate] = useState(i18n.language);
 
+  const [heroCbName, setHeroCbName] = useState("");
+  const [heroCbPhone, setHeroCbPhone] = useState("");
+  const [heroCbLoading, setHeroCbLoading] = useState(false);
+  const [heroCbSuccess, setHeroCbSuccess] = useState(false);
+  const [heroCbError, setHeroCbError] = useState("");
+
+  const handleHeroCbSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!heroCbPhone.trim()) {
+      setHeroCbError(translate("phoneRequired", "Укажите номер телефона"));
+      return;
+    }
+    setHeroCbLoading(true);
+    setHeroCbError("");
+    try {
+      const res = await fetch("/api/callbacks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: heroCbName || "Гость с сайта (Главный экран)",
+          phone: heroCbPhone,
+          message: "Быстрый запрос подбора свободных номеров с первого экрана сайта",
+        }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      setHeroCbSuccess(true);
+      if (typeof window !== "undefined" && (window as any).gtag) {
+        (window as any).gtag("event", "conversion", {
+          send_to: "AW-16858169999/callback",
+        });
+      }
+    } catch {
+      setHeroCbError(translate("callbackError", "Ошибка отправки. Попробуйте еще раз."));
+    } finally {
+      setHeroCbLoading(false);
+    }
+  };
+
   const widgetForm = useForm({
     defaultValues: {
       dateRange: { from: undefined, to: undefined },
@@ -116,7 +158,8 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
   // Use a fallback flag to prevent hydration mismatch for localized strings
   const translate = (key: string, fallback: string) => {
     if (!mounted) return fallback;
-    return t(key);
+    const val = t(key);
+    return val && val !== key ? val : fallback;
   };
 
   return (
@@ -309,73 +352,122 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
 
               </div>
 
-              {/* RIGHT COLUMN: Interactive 3D Glass Showcase Card & Floating Badges */}
+              {/* RIGHT COLUMN: Interactive Feedback & Quick Room Selection Form */}
               <div className="lg:col-span-5 relative hidden lg:flex items-center justify-center animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards] select-none mt-8 lg:mt-0">
                 
                 {/* Outer Glow Halo */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/20 via-sky-500/20 to-amber-500/10 rounded-[2.5rem] blur-2xl transform scale-95 animate-pulse" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/25 via-sky-500/25 to-amber-500/15 rounded-[2.5rem] blur-3xl transform scale-95 animate-pulse" />
 
-                {/* Main Glass Showcase Card */}
-                <div className="relative w-full max-w-[430px] aspect-[4/5] rounded-[2.2rem] overflow-hidden border-[6px] border-white/15 shadow-[0_25px_70px_rgba(0,0,0,0.7)] group hover:border-teal-400/40 transition-all duration-700 bg-slate-900 -rotate-2 hover:rotate-0 hover:scale-[1.02]">
-                  <Image
-                    src="/zatoka-hero.png"
-                    alt="Zatoka Resort Family Vacation"
-                    fill
-                    priority
-                    sizes="(max-width: 768px) 100vw, 430px"
-                    className="object-cover transition-all [transition-duration:10s] group-hover:scale-110 brightness-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-900/30 to-transparent" />
+                {/* Main Glass Form Card */}
+                <div className="relative w-full max-w-[440px] rounded-[2.2rem] overflow-hidden border-[2px] border-white/20 shadow-[0_25px_70px_rgba(0,0,0,0.8)] bg-slate-900/90 backdrop-blur-2xl p-6 sm:p-8 text-white transition-all duration-500 hover:border-teal-400/40">
+                  
+                  {/* Top accent bar */}
+                  <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-teal-400 via-sky-400 to-amber-400" />
 
-                  {/* Floating Price Tag inside Card */}
-                  <div className="absolute top-5 left-5 px-4 py-2 rounded-2xl bg-slate-950/80 backdrop-blur-md border border-amber-400/30 text-amber-300 font-extrabold text-sm shadow-xl flex items-center gap-2">
-                    <span>🔥</span>
-                    <span>от 400 грн / ночь</span>
+                  {/* Admin status & Rating header */}
+                  <div className="flex items-center justify-between gap-2 mb-5">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                      </span>
+                      {translate("adminOnline", "Администратор Виктор онлайн")}
+                    </div>
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/25 text-amber-300 text-xs font-bold">
+                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                      <span>4.9 / 5.0</span>
+                      <span className="text-[10px] text-slate-400 font-medium">(120+)</span>
+                    </div>
                   </div>
 
-                  {/* Floating Family Card Info */}
-                  <div className="absolute bottom-6 left-6 right-6 p-5 rounded-2xl bg-slate-950/90 backdrop-blur-xl text-white border border-teal-500/30 shadow-[0_15px_40px_rgba(0,0,0,0.8)] transition-all duration-500 group-hover:-translate-y-1">
-                    <div className="flex items-center gap-4">
-                      <div className="flex -space-x-3">
-                        <div className="w-10 h-10 rounded-full border-2 border-slate-950 bg-amber-400 flex items-center justify-center shadow-lg"><Sun className="w-5 h-5 text-slate-950" /></div>
-                        <div className="w-10 h-10 rounded-full border-2 border-slate-950 bg-teal-400 flex items-center justify-center shadow-lg"><Baby className="w-5 h-5 text-slate-950" /></div>
-                        <div className="w-10 h-10 rounded-full border-2 border-slate-950 bg-sky-400 flex items-center justify-center shadow-lg"><UtensilsCrossed className="w-5 h-5 text-slate-950" /></div>
+                  <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white leading-snug mb-5">
+                    {translate("heroFormTitle", "Быстрый подбор свободного номера")}
+                  </h3>
+
+                  {heroCbSuccess ? (
+                    <div className="py-8 text-center space-y-3 animate-fade-in">
+                      <div className="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">
+                        <CheckCircle2 className="w-8 h-8" />
                       </div>
+                      <h4 className="text-lg font-bold text-white">{translate("heroFormSuccessTitle", "Спасибо за заявку!")}</h4>
+                      <p className="text-xs text-slate-300 max-w-xs mx-auto">
+                        {translate("heroFormSuccessDesc", "Администратор Виктор свяжется с вами в течение 5 минут для уточнения свободных мест.")}
+                      </p>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleHeroCbSubmit} className="space-y-4">
                       <div>
-                        <p className="text-[11px] font-extrabold text-teal-300 uppercase tracking-wider">{translate("idealForFamily", "Идеально для семей")}</p>
-                        <p className="text-sm font-bold text-white mt-0.5">{translate("kidsFriendly", "Детская игровая зона и мангалы")}</p>
+                        <label className="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wider">
+                          {translate("yourName", "Ваше имя")}
+                        </label>
+                        <div className="relative">
+                          <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <input
+                            type="text"
+                            value={heroCbName}
+                            onChange={(e) => setHeroCbName(e.target.value)}
+                            placeholder={translate("namePlaceholder", "Александр")}
+                            className="w-full bg-slate-950/80 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Floating Rating Badge (Top Right) */}
-                <div className="absolute -top-5 -right-4 p-4 rounded-2xl bg-slate-900/90 backdrop-blur-xl text-white border border-teal-500/30 shadow-[0_15px_40px_rgba(0,0,0,0.6)] animate-float hidden sm:block rotate-3">
-                  <div className="flex items-center gap-3">
-                    <div className="h-11 w-11 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center">
-                      <Star className="h-6 w-6 fill-amber-400 text-amber-400 animate-pulse" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-base font-black text-white">4.9</span>
-                        <span className="text-xs text-amber-300 font-bold">/ 5.0</span>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wider">
+                          {translate("yourPhone", "Номер телефона")} <span className="text-teal-400">*</span>
+                        </label>
+                        <div className="relative">
+                          <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-teal-400" />
+                          <input
+                            type="tel"
+                            required
+                            value={heroCbPhone}
+                            onChange={(e) => setHeroCbPhone(e.target.value)}
+                            placeholder="+380 (__) ___-__-__"
+                            className="w-full bg-slate-950/80 border border-teal-500/40 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all"
+                          />
+                        </div>
                       </div>
-                      <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">120+ отзывов гостей</p>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Floating Distance Badge (Bottom Right) */}
-                <div className="absolute -bottom-4 -right-4 p-4 rounded-2xl bg-slate-900/90 backdrop-blur-xl text-white border border-sky-500/30 shadow-[0_15px_40px_rgba(0,0,0,0.6)] animate-float-slow hidden sm:block -rotate-2">
-                  <div className="flex items-center gap-3">
-                    <div className="h-11 w-11 rounded-xl bg-sky-400/20 border border-sky-400/40 flex items-center justify-center">
-                      <MapPin className="h-6 w-6 text-sky-300" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">{translate("distanceToSea", "До моря")}</p>
-                      <p className="text-sm font-black text-sky-300 mt-0.5">{translate("fiveMinutes", "5 минут ходьбы")}</p>
-                    </div>
-                  </div>
+                      {heroCbError && (
+                        <p className="text-xs text-rose-400 font-medium text-center">{heroCbError}</p>
+                      )}
+
+                      <Button
+                        type="submit"
+                        disabled={heroCbLoading}
+                        className="w-full h-12 bg-gradient-to-r from-teal-500 via-sky-500 to-teal-400 hover:from-teal-400 hover:to-sky-400 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider rounded-xl shadow-lg shadow-teal-500/25 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                      >
+                        {heroCbLoading ? (
+                          <div className="flex items-center gap-2">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span>{translate("sending", "Отправляем...")}</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2 justify-center">
+                            <Send className="w-4 h-4" />
+                            <span>{translate("heroFormBtn", "Получить варианты номеров")}</span>
+                          </div>
+                        )}
+                      </Button>
+
+                      {/* Guarantees footer */}
+                      <div className="pt-2 flex items-center justify-around text-[11px] text-slate-400 border-t border-white/10 mt-4">
+                        <span className="flex items-center gap-1.5">
+                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                          {translate("noSpam", "Без спама")}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <CreditCard className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                          {translate("noPrepay", "0% предоплаты")}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <MapPin className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                          {translate("seaDistShort", "5 мин до моря")}
+                        </span>
+                      </div>
+                    </form>
+                  )}
                 </div>
 
               </div>
