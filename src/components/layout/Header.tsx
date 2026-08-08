@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
-import { Menu, Waves, LogOut, ChevronDown, Phone } from "lucide-react";
+import { Menu, LogOut, ChevronDown, Phone, Waves } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
@@ -46,7 +46,7 @@ export default function Header() {
         setIsLangOpen(false);
       }
     };
-    
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 30);
     };
@@ -54,7 +54,7 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("storage", checkAuth);
     document.addEventListener("click", handleOutsideClick);
-    
+
     handleScroll(); // Check initial scroll
 
     return () => {
@@ -101,8 +101,8 @@ export default function Header() {
         onClick={() => setIsLangOpen(!isLangOpen)}
         className={cn(
           "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all duration-300 focus:outline-none backdrop-blur-md",
-          scrolled 
-            ? "bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 text-slate-200 hover:text-white shadow-lg" 
+          scrolled
+            ? "bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 text-slate-200 hover:text-white shadow-lg"
             : "bg-black/30 hover:bg-black/50 border border-white/20 text-white"
         )}
       >
@@ -168,39 +168,24 @@ export default function Header() {
     )}>
       <div className={cn(
         "relative flex items-center justify-between transition-all duration-700 pointer-events-auto",
-        scrolled 
+        scrolled
           ? "w-full max-w-6xl mx-4 lg:mx-auto h-16 rounded-full border border-white/10 bg-slate-950/60 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] px-4 lg:px-6"
           : "w-full container px-4 lg:px-8 h-16 border-transparent bg-transparent"
       )}>
-        
+
         {/* Brand / Logo */}
         <Link
           href={getLocalizedHref("/")}
           className="flex items-center gap-2.5 group"
           onClick={() => setIsMobileMenuOpen(false)}
         >
-          <Waves className={cn(
-            "h-7 w-7 transition-colors duration-500 group-hover:scale-105",
-            scrolled ? "text-teal-400 group-hover:text-cyan-300" : "text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
-          )} />
-          <div className="flex flex-col text-left hidden sm:flex">
-            <span className={cn(
-              "text-[13px] font-black tracking-[0.25em] uppercase transition-colors duration-500",
-              scrolled 
-                ? "bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-sky-400 group-hover:from-teal-300 group-hover:to-sky-300" 
-                : "text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
-            )}>
-              {t("brandName")}
-            </span>
-            <span className={cn(
-              "text-[7px] font-bold tracking-[0.45em] uppercase -mt-0.5 transition-colors duration-500",
-              scrolled ? "text-slate-400" : "text-white/80 drop-shadow-[0_2px_2px_rgba(0,0,0,0.4)]"
-            )}>
-              Seaside Family Hotel
-            </span>
-          </div>
+          <img 
+            src="/logo.png" 
+            alt="Zatoka Resort" 
+            className="h-10 sm:h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+          />
         </Link>
- 
+
         {/* Desktop Navigation Capsule */}
         <nav className={cn(
           "hidden xl:flex items-center gap-1 p-1 rounded-full transition-all duration-700 xl:absolute xl:left-1/2 xl:-translate-x-1/2",
@@ -242,11 +227,11 @@ export default function Header() {
             </Link>
           )}
         </nav>
- 
+
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
           {mounted && renderLanguageSelector()}
- 
+
           {mounted && isAuthenticated && (
             <div className="hidden xl:flex items-center gap-3">
               <Button
@@ -256,8 +241,8 @@ export default function Header() {
                 aria-label={t("logout")}
                 className={cn(
                   "rounded-full transition-all duration-300 h-9 w-9",
-                  scrolled 
-                    ? "text-slate-400 hover:text-rose-400 hover:bg-rose-500/10" 
+                  scrolled
+                    ? "text-slate-400 hover:text-rose-400 hover:bg-rose-500/10"
                     : "text-white hover:text-rose-400 hover:bg-black/40 backdrop-blur-md"
                 )}
               >
@@ -281,7 +266,7 @@ export default function Header() {
             </span>
             <span className="font-bold tracking-tight">066 921-22-75</span>
           </a>
-          
+
           {/* Mobile/Tablet Actions and Hamburger */}
           <div className="xl:hidden flex items-center">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -320,7 +305,7 @@ export default function Header() {
                     </span>
                   </Link>
                 </SheetHeader>
-                
+
                 <div className="flex-1 overflow-y-auto p-6 space-y-6 relative z-10">
                   {navLinks.map((link) => {
                     const localizedHref = getLocalizedHref(link.href);
