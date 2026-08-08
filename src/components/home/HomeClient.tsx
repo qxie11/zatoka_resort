@@ -145,7 +145,7 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
   };
 
   useEffect(() => {
-     
+
     setMounted(true);
     const handleLangChange = (lng: string) => {
       setLangUpdate(lng);
@@ -355,13 +355,13 @@ export default function HomeClient({ rooms, lang }: HomeClientProps) {
 
               {/* RIGHT COLUMN: Interactive Feedback & Quick Room Selection Form */}
               <div className="lg:col-span-5 relative hidden lg:flex items-center justify-center animate-fade-in-up [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards] select-none mt-8 lg:mt-0">
-                
+
                 {/* Outer Glow Halo */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/25 via-sky-500/25 to-amber-500/15 rounded-[2.5rem] blur-3xl transform scale-95 animate-pulse" />
 
                 {/* Main Glass Form Card */}
                 <div className="relative w-full max-w-[440px] rounded-[2.2rem] overflow-hidden border-[2px] border-white/20 shadow-[0_25px_70px_rgba(0,0,0,0.8)] bg-slate-900/90 backdrop-blur-2xl p-6 sm:p-8 text-white transition-all duration-500 hover:border-teal-400/40">
-                  
+
                   {/* Top accent bar */}
                   <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-teal-400 via-sky-400 to-amber-400" />
 

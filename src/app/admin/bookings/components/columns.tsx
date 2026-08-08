@@ -2,7 +2,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { MoreHorizontal, ArrowUpDown, Eye } from "lucide-react"
+import { MoreHorizontal, ArrowUpDown, Eye, Clock, CheckCircle2, Home, LogOut } from "lucide-react"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
 
@@ -79,16 +79,28 @@ export const columns = ({ onEdit, onDelete, onView, onStatusChange }: ColumnsPro
           </SelectTrigger>
           <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-2xl z-[9999]">
             <SelectItem value="PENDING" className="text-amber-400 focus:bg-white/10 focus:text-amber-300 rounded-lg cursor-pointer">
-              ⏳ Ожидает
+              <span className="flex items-center gap-2">
+                <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span>Ожидает</span>
+              </span>
             </SelectItem>
             <SelectItem value="CONFIRMED" className="text-teal-300 focus:bg-white/10 focus:text-teal-200 rounded-lg cursor-pointer">
-              ✅ Подтверждено
+              <span className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                <span>Подтверждено</span>
+              </span>
             </SelectItem>
             <SelectItem value="CHECKED_IN" className="text-sky-300 focus:bg-white/10 focus:text-sky-200 rounded-lg cursor-pointer">
-              🏨 Проживает
+              <span className="flex items-center gap-2">
+                <Home className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                <span>Проживает</span>
+              </span>
             </SelectItem>
             <SelectItem value="CHECKED_OUT" className="text-emerald-300 focus:bg-white/10 focus:text-emerald-200 rounded-lg cursor-pointer">
-              🏁 Выехал
+              <span className="flex items-center gap-2">
+                <LogOut className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span>Выехал</span>
+              </span>
             </SelectItem>
           </SelectContent>
         </Select>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PhoneCall, Trash2, Calendar, User, MessageSquare, Loader2, Eye, Copy, Check } from "lucide-react";
+import { PhoneCall, Trash2, Calendar, User, MessageSquare, Loader2, Eye, Copy, Check, Bell, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
@@ -391,13 +391,22 @@ export default function CallbacksAdminClient({ initialData }: CallbacksAdminClie
                         </SelectTrigger>
                         <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl shadow-2xl">
                           <SelectItem value="NEW" className="text-rose-400 focus:bg-white/10 focus:text-rose-300 rounded-lg cursor-pointer">
-                            🔴 Новая
+                            <span className="flex items-center gap-2">
+                              <Bell className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                              <span>Новая</span>
+                            </span>
                           </SelectItem>
                           <SelectItem value="IN_PROGRESS" className="text-amber-400 focus:bg-white/10 focus:text-amber-300 rounded-lg cursor-pointer">
-                            🟡 В работе
+                            <span className="flex items-center gap-2">
+                              <PhoneCall className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                              <span>В работе</span>
+                            </span>
                           </SelectItem>
                           <SelectItem value="COMPLETED" className="text-emerald-400 focus:bg-white/10 focus:text-emerald-300 rounded-lg cursor-pointer">
-                            🟢 Перезвонили
+                            <span className="flex items-center gap-2">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                              <span>Перезвонили</span>
+                            </span>
                           </SelectItem>
                         </SelectContent>
                       </Select>
