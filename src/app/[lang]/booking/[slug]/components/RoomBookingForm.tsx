@@ -883,6 +883,29 @@ export default function RoomBookingForm({
                     {t("bookBtn")}
                   </Button>
                 </div>
+
+                {/* 1-Click Messenger Booking Row */}
+                <div className="pt-3 flex items-center justify-between gap-2 border-t border-white/10 mt-1">
+                  <span className="text-xs text-slate-400 font-medium">Быстрая связь в 1 клик:</span>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={`viber://chat?number=%2B380669212275`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="h-9 px-3 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/30 hover:text-white transition-all text-xs font-black flex items-center justify-center"
+                    >
+                      Viber
+                    </a>
+                    <a
+                      href={`https://t.me/+380669212275?text=${encodeURIComponent(`Здравствуйте! Интересует номер "${room.name}" (${room.price} грн/ночь). Подскажите по наличию свободных дат?`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="h-9 px-3 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-300 hover:bg-sky-500/30 hover:text-white transition-all text-xs font-black flex items-center justify-center"
+                    >
+                      Telegram
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </form>

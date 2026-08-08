@@ -75,6 +75,17 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
   const detailsHref = `/${langKey}/rooms/${room.slug}${queryString ? `?${queryString}` : ""}`;
   const bookingHref = `/${langKey}/booking/${room.slug}${queryString ? `?${queryString}` : ""}`;
 
+  const messengerText = encodeURIComponent(
+    langKey === "uk"
+      ? `Доброго дня! Цікавить номер "${room.name}" (${room.price} грн/ніч). Підкажіть, будь ласка, чи є вільні дати?`
+      : langKey === "en"
+      ? `Hello! I am interested in room "${room.name}" (${room.price} UAH/night). Could you check availability?`
+      : `Здравствуйте! Интересует номер "${room.name}" (${room.price} грн/ночь). Подскажите по наличию свободных дат?`
+  );
+
+  const tgUrl = `https://t.me/+380669212275?text=${messengerText}`;
+  const viberUrl = `viber://chat?number=%2B380669212275`;
+
   return (
     <>
       <div
@@ -258,7 +269,7 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
             </div>
           </div>
 
-          {/* Action Buttons: Book & Telegram Quick Contact */}
+          {/* Action Buttons: Book & 1-Click Viber / Telegram Deep Links */}
           <div className="flex items-center gap-2">
             <Button 
               asChild 
@@ -270,15 +281,27 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
               </Link>
             </Button>
 
+            {/* 1-Click Viber Deep Link */}
             <a
-              href="https://t.me/+380669212275"
+              href={viberUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="h-11 px-3.5 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-300 hover:bg-sky-500/30 hover:text-white transition-all duration-300 flex items-center justify-center gap-1.5 text-xs font-extrabold shrink-0"
+              className="h-11 px-3 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/30 hover:text-white transition-all duration-300 flex items-center justify-center gap-1 text-xs font-black shrink-0"
+              title="Viber"
+            >
+              <span className="text-purple-300 font-black text-xs">Viber</span>
+            </a>
+
+            {/* 1-Click Telegram Deep Link */}
+            <a
+              href={tgUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-11 px-3 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-300 hover:bg-sky-500/30 hover:text-white transition-all duration-300 flex items-center justify-center gap-1.5 text-xs font-black shrink-0"
               title={t.askTg}
             >
-              <Send className="h-4 w-4 text-sky-400 shrink-0" />
-              <span className="hidden sm:inline">TG</span>
+              <Send className="h-3.5 w-3.5 text-sky-400 shrink-0" />
+              <span className="font-black text-xs">TG</span>
             </a>
           </div>
         </div>
