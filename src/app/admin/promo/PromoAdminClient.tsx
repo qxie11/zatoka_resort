@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Tag, Trash2, Calendar, Plus, Minus, Save, X, ToggleLeft, ToggleRight, Loader2, Sparkles, Mail, Send, Users } from "lucide-react";
+import { Tag, Trash2, Calendar, Plus, Minus, Save, X, ToggleLeft, ToggleRight, Loader2, Sparkles, Mail, Send, Users, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -44,16 +44,25 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
   const [customBody, setCustomBody] = useState("");
   const [sendingCampaign, setSendingCampaign] = useState(false);
   const [subscribersCount, setSubscribersCount] = useState(0);
+  const [smsPhonesCount, setSmsPhonesCount] = useState(0);
+  const [campaignType, setCampaignType] = useState<"email" | "sms">("email");
 
   const fetchSubscribersCount = async () => {
     try {
-      const res = await fetch("/api/admin/promo/send");
-      if (res.ok) {
-        const data = await res.json();
+      const [resEmail, resSms] = await Promise.all([
+        fetch("/api/admin/promo/send"),
+        fetch("/api/admin/promo/sms-count")
+      ]);
+      if (resEmail.ok) {
+        const data = await resEmail.json();
         setSubscribersCount(data.count);
       }
+      if (resSms.ok) {
+        const data = await resSms.json();
+        setSmsPhonesCount(data.count);
+      }
     } catch (e) {
-      console.error("Failed to load subscribers count", e);
+      console.error("Failed to load campaign counts", e);
     }
   };
 
@@ -81,14 +90,22 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
 
     setSendingCampaign(true);
     try {
-      const res = await fetch("/api/admin/promo/send", {
+      const url = campaignType === "email" ? "/api/admin/promo/send" : "/api/admin/promo/send-sms";
+      const payload = campaignType === "email" 
+        ? {
+            promoId: selectedPromoId,
+            customSubject: customSubject.trim() || undefined,
+            customBody: customBody.trim() || undefined,
+          }
+        : {
+            promoId: selectedPromoId,
+            customMessage: customBody.trim() || undefined,
+          };
+
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          promoId: selectedPromoId,
-          customSubject: customSubject.trim() || undefined,
-          customBody: customBody.trim() || undefined,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
@@ -279,8 +296,8 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
             variant="outline"
             className="border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl flex items-center gap-2"
           >
-            <Mail className="h-4 w-4 text-teal-400" />
-            Запустить рассылку ({subscribersCount})
+            <Send className="h-4 w-4 text-teal-400" />
+            Запустить рассылку
           </Button>
           <Button onClick={handleOpenCreate} className="bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-950 font-bold rounded-xl flex items-center gap-2">
             <Plus className="h-4 w-4" />
@@ -295,8 +312,33 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
             <Send className="h-5 w-5 text-teal-400" />
             Рассылка по клиентам
           </h2>
+          
+          <div className="flex gap-2 p-1 bg-slate-950/50 rounded-xl border border-white/5">
+            <button
+              type="button"
+              onClick={() => setCampaignType("email")}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-bold transition-all ${
+                campaignType === "email" ? "bg-slate-800 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <Mail className="w-4 h-4" /> Email ({subscribersCount})
+            </button>
+            <button
+              type="button"
+              onClick={() => setCampaignType("sms")}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-bold transition-all ${
+                campaignType === "sms" ? "bg-slate-800 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <Smartphone className="w-4 h-4" /> SMS ({smsPhonesCount})
+            </button>
+          </div>
+
           <p className="text-xs text-slate-400">
-            Письмо будет отправлено на все {subscribersCount} сохраненных email-адресов. Будет прикреплена ссылка на <span className="text-teal-300 font-semibold">zatoka-hotel.com</span>.
+            {campaignType === "email" 
+              ? `Письмо будет отправлено на ${subscribersCount} email-адресов. Будет прикреплена ссылка на zatoka-hotel.com.`
+              : `SMS будет отправлено на ${smsPhonesCount} уникальных номеров из бронирований и заявок.`
+            }
           </p>
           
           <div className="space-y-2">
@@ -316,24 +358,37 @@ export default function PromoAdminClient({ initialData }: PromoAdminClientProps)
             </select>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-400 uppercase">Тема письма (необязательно)</label>
-            <Input
-              placeholder="🎁 Эксклюзивный подарок для Вас от Затока Resort"
-              value={customSubject}
-              onChange={(e) => setCustomSubject(e.target.value)}
-              className="bg-slate-950/40 border-white/10 text-white rounded-xl"
-            />
-          </div>
+          {campaignType === "email" && (
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-400 uppercase">Тема письма (необязательно)</label>
+              <Input
+                placeholder="🎁 Эксклюзивный подарок для Вас от Затока Resort"
+                value={customSubject}
+                onChange={(e) => setCustomSubject(e.target.value)}
+                className="bg-slate-950/40 border-white/10 text-white rounded-xl"
+              />
+            </div>
+          )}
 
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-400 uppercase">Текст письма (необязательно)</label>
+            <label className="text-xs font-bold text-slate-400 uppercase">
+              {campaignType === "email" ? "Текст письма (необязательно)" : "Текст SMS (необязательно)"}
+            </label>
             <textarea
-              placeholder="Мы приготовили для Вас особое предложение для идеального отдыха на побережье..."
+              placeholder={
+                campaignType === "email" 
+                  ? "Мы приготовили для Вас особое предложение для идеального отдыха на побережье..."
+                  : "Скидка на отдых! Используйте промокод..."
+              }
               value={customBody}
               onChange={(e) => setCustomBody(e.target.value)}
               className="w-full bg-slate-950/40 border border-white/10 text-white rounded-xl p-3 min-h-[100px] text-sm focus:outline-none focus:ring-1 focus:ring-teal-400"
             />
+            {campaignType === "sms" && (
+              <p className="text-[10px] text-slate-500">
+                1 SMS вмещает около 70 символов кириллицей. Если текст будет длиннее, он разобьется на несколько SMS.
+              </p>
+            )}
           </div>
 
           <div className="flex items-center gap-4 pt-2">
