@@ -80,19 +80,28 @@ export default function RoomGallery({ images, roomName }: RoomGalleryProps) {
           />
         </div>
 
-        {/* Main Displayed Image */}
-        <div className="relative w-full h-full z-10 flex items-center justify-center">
-          <Image
-            src={validImages[activeIndex]}
-            alt={`${roomName} - ${activeIndex + 1}`}
-            fill
-            className={cn(
-              "object-cover transition-all duration-500 ease-in-out select-none",
-              isTransitioning ? "opacity-40 scale-[1.03]" : "opacity-100 scale-100"
-            )}
-            sizes="(max-width: 768px) 100vw, 80vw"
-            priority
-          />
+        {/* Main Displayed Image - Render all for instant transitions */}
+        <div className="relative w-full h-full z-10">
+          {validImages.map((imageUrl, idx) => (
+            <div
+              key={idx}
+              className={cn(
+                "absolute inset-0 flex items-center justify-center transition-all duration-500 ease-in-out",
+                idx === activeIndex
+                  ? isTransitioning ? "opacity-40 scale-[1.03]" : "opacity-100 scale-100"
+                  : "opacity-0 scale-95 pointer-events-none"
+              )}
+            >
+              <Image
+                src={imageUrl}
+                alt={`${roomName} - ${idx + 1}`}
+                fill
+                className="object-cover select-none"
+                sizes="(max-width: 768px) 100vw, 80vw"
+                priority={idx === 0}
+              />
+            </div>
+          ))}
         </div>
 
         {/* Hover Action Indicators */}

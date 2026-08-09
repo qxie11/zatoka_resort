@@ -5,6 +5,7 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ImageGalleryProps {
   images: string[];
@@ -94,15 +95,20 @@ export default function ImageGallery({
             style={{ backgroundImage: `url(${validImages[current]})` }}
           />
 
-          {/* Image */}
+          {/* Images - Render all for instant transitions */}
           <div className="relative z-10 w-full h-full flex items-center justify-center px-14 md:px-20 py-2">
-            <img
-              key={current}
-              src={validImages[current]}
-              alt={`${roomName} - ${current + 1}`}
-              className="max-w-full max-h-full w-auto h-auto object-contain rounded-xl shadow-2xl select-none"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-            />
+            {validImages.map((imageUrl, idx) => (
+              <img
+                key={idx}
+                src={imageUrl}
+                alt={`${roomName} - ${idx + 1}`}
+                className={cn(
+                  "absolute max-w-full max-h-full w-auto h-auto object-contain rounded-xl shadow-2xl select-none transition-opacity duration-300",
+                  idx === current ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+                )}
+                onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+              />
+            ))}
           </div>
 
           {/* Nav arrows */}
