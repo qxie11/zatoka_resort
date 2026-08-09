@@ -163,15 +163,18 @@ export default function Header() {
 
   return (
     <header className={cn(
-      "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-700 flex justify-center pointer-events-none",
+      "fixed top-0 left-0 right-0 z-50 w-full transition-[padding] duration-500 ease-out flex justify-center pointer-events-none",
       scrolled ? "pt-4" : "pt-6 lg:pt-8"
     )}>
-      <div className={cn(
-        "relative flex items-center justify-between transition-all duration-700 pointer-events-auto",
-        scrolled
-          ? "w-full max-w-6xl mx-4 lg:mx-auto h-16 rounded-full border border-white/10 bg-slate-950/60 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] px-4 lg:px-6"
-          : "w-full container px-4 lg:px-8 h-16 border-transparent bg-transparent"
-      )}>
+      <div className="relative w-full max-w-6xl mx-4 lg:mx-auto h-16 px-4 lg:px-6 flex items-center justify-between pointer-events-auto group">
+        
+        {/* Animated Background Pill (Hardware Accelerated Opacity) */}
+        <div 
+          className={cn(
+            "absolute inset-0 rounded-full border border-white/10 bg-slate-950/70 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-opacity duration-500 ease-out z-[-1]",
+            scrolled ? "opacity-100" : "opacity-0"
+          )}
+        />
 
         {/* Brand / Logo */}
         <Link
