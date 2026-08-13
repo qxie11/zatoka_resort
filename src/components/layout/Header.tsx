@@ -10,6 +10,7 @@ import { Menu, LogOut, ChevronDown, Phone, Waves } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
+import { trackGoogleAdsConversion } from "@/lib/gtag";
 
 export default function Header() {
   const pathname = usePathname();
@@ -256,6 +257,7 @@ export default function Header() {
 
           <a
             href="tel:+380669212275"
+            onClick={() => trackGoogleAdsConversion()}
             className={cn(
               "group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 hover:scale-[1.03] active:scale-95 shrink-0 whitespace-nowrap",
               scrolled

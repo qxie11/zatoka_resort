@@ -6,6 +6,7 @@ import type { Room } from "@/lib/types";
 import { BedDouble, ArrowRight, Eye, Scale, Waves, Sparkles, CheckCircle2, Send, ChevronLeft, ChevronRight, Camera } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import ImageGallery from "@/components/rooms/ImageGallery";
+import { trackGoogleAdsConversion } from "@/lib/gtag";
 
 interface RoomCardProps {
   room: Room;
@@ -286,6 +287,7 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
               href={viberUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackGoogleAdsConversion()}
               className="h-11 px-3 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/30 hover:text-white transition-all duration-300 flex items-center justify-center gap-1 text-xs font-black shrink-0"
               title="Viber"
             >
@@ -297,6 +299,7 @@ export default function RoomCard({ room, onCompareClick }: RoomCardProps) {
               href={tgUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackGoogleAdsConversion()}
               className="h-11 px-3 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-300 hover:bg-sky-500/30 hover:text-white transition-all duration-300 flex items-center justify-center gap-1.5 text-xs font-black shrink-0"
               title={t.askTg}
             >
