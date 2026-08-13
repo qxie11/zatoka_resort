@@ -21,14 +21,16 @@ interface BookingClientProps {
 export default function BookingClient({ rooms, bookings, lang = "ru" }: BookingClientProps) {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
-  const [, setLangUpdate] = useState(i18n.language);
+  const [currentLang, setCurrentLang] = useState(lang);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
+    if (i18n.language) {
+      setCurrentLang(i18n.language);
+    }
     const handleLangChange = (lng: string) => {
-       
-      setLangUpdate(lng);
+      setCurrentLang(lng);
     };
     i18n.on("languageChanged", handleLangChange);
     return () => {
@@ -48,53 +50,34 @@ export default function BookingClient({ rooms, bookings, lang = "ru" }: BookingC
     }
   };
 
-  const heroTranslations = {
+  const pageTranslations = {
     ru: {
-      badge: "Бронирование комнат",
-      title1: "Откройте для себя",
-      title2: "идеальный отдых",
-      desc: "Мы предлагаем уникальный баланс между домашним уютом и первоклассным гостиничным сервисом прямо на берегу моря.",
-      btn: "Начать бронирование",
-      card1Title: "Гарантия лучшей цены",
-      card1Desc: "Прямое бронирование без комиссий",
-      card2Title: "5 минут до моря",
-      card2Desc: "Первая линия",
+      title: "Бронирование номеров",
     },
     uk: {
-      badge: "Бронювання номерів",
-      title1: "Відкрийте для себе",
-      title2: "ідеальний відпочинок",
-      desc: "Ми пропонуємо унікальний баланс між домашнім затишком та першокласним готельним сервісом прямо на березі моря.",
-      btn: "Почати бронювання",
-      card1Title: "Гарантія кращої ціни",
-      card1Desc: "Пряме бронювання без комісій",
-      card2Title: "5 хвилин до моря",
-      card2Desc: "Перша лінія",
+      title: "Бронювання номерів",
     },
     en: {
-      badge: "Room Booking",
-      title1: "Discover your",
-      title2: "perfect getaway",
-      desc: "We offer a unique balance of home comfort and first-class hotel service right on the seaside.",
-      btn: "Start Booking",
-      card1Title: "Best Price Guarantee",
-      card1Desc: "Direct booking without fees",
-      card2Title: "5 mins to the sea",
-      card2Desc: "First line",
+      title: "Room Booking",
     }
   };
-  const langKey = (i18n.language || "ru") as "ru" | "uk" | "en";
-  const tHero = heroTranslations[langKey] || heroTranslations.ru;
+  const langKey = (currentLang || lang || "ru").slice(0, 2) as "ru" | "uk" | "en";
+  const tTitle = pageTranslations[langKey]?.title || pageTranslations.ru.title;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-teal-500/30">
       <section id="booking-section" className="relative pt-28 lg:pt-36 pb-12 bg-slate-950 z-30 min-h-screen">
         <div className="container mx-auto px-4 relative z-10">
+          <div className="mb-8 md:mb-12 text-center">
+            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-lg">
+              {tTitle}
+            </h1>
+          </div>
           <Suspense fallback={null}>
             <SuccessMessage />
           </Suspense>
           <Suspense fallback={<div className="text-center py-12 md:py-16 text-slate-400">Загрузка формы бронирования...</div>}>
-            <BookingPageClient rooms={rooms} bookings={bookings} lang={lang} />
+            <BookingPageClient rooms={rooms} bookings={bookings} lang={currentLang} />
           </Suspense>
         </div>
       </section>
