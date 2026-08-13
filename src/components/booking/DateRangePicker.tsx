@@ -374,7 +374,7 @@ export function DateRangePicker({
               numberOfMonths={isMobile ? 1 : 2}
               disabled={isDateRangeDisabled}
               locale={activeLocale}
-              className="bg-slate-950 text-white border-0"
+              className="bg-slate-950 text-white border-0 w-full flex justify-center mx-auto"
               classNames={{
                 day_range_start: "day-range-start gradient-sunset text-slate-950 font-bold rounded-l-xl rounded-r-none shadow-md z-30",
                 day_range_end: "day-range-end gradient-sunset text-slate-950 font-bold rounded-r-xl rounded-l-none shadow-md z-30",
