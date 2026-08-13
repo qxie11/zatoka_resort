@@ -134,11 +134,11 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
             </div>
             <div>
               <h4 className="text-base font-bold text-white">
-                {langKey === "uk" ? "Скидки за тривале проживание" : langKey === "en" ? "Long Stay Discounts" : "Скидки за длительное проживание"}
+                {langKey === "uk" ? "Знижки за тривале проживання" : langKey === "en" ? "Long Stay Discounts" : "Скидки за длительное проживание"}
               </h4>
               <p className="text-xs text-slate-300 mt-1">
                 {langKey === "uk" 
-                  ? "Автоматично: від 7 ночей — скидка 5%, від 10 ночей — скидка 10%!"
+                  ? "Автоматично: від 7 ночей — знижка 5%, від 10 ночей — знижка 10%!"
                   : langKey === "en"
                   ? "Automatic: 7+ nights = 5% off, 10+ nights = 10% off!"
                   : "Автоматически: от 7 ночей — скидка 5%, от 10 ночей — скидка 10%!"}

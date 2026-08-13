@@ -479,11 +479,11 @@ export default function RoomBookingForm({
           <div className="text-xl shrink-0">🎁</div>
           <div>
             <span className="font-bold text-amber-300 block mb-0.5">
-              {lang === "uk" ? "Скидка за тривале проживання:" : lang === "en" ? "Long Stay Discount:" : "Скидка за длительное проживание:"}
+              {lang === "uk" ? "Знижка за тривале проживання:" : lang === "en" ? "Long Stay Discount:" : "Скидка за длительное проживание:"}
             </span>
             <span className="text-slate-300">
               {lang === "uk"
-                ? "Забронюйте від 7 ночей (-5%) або від 10 ночей (-10%) — скидка застосується автоматично!"
+                ? "Забронюйте від 7 ночей (-5%) або від 10 ночей (-10%) — знижка застосується автоматично!"
                 : lang === "en"
                   ? "Book 7+ nights (-5%) or 10+ nights (-10%) — discount applies automatically!"
                   : "Забронируйте от 7 ночей (-5%) или от 10 ночей (-10%) — скидка применится автоматически!"}
@@ -773,7 +773,7 @@ export default function RoomBookingForm({
                             <div className="mt-3 px-3.5 py-2 rounded-xl bg-teal-500/10 border border-teal-500/25 flex items-center justify-between text-xs text-teal-300">
                               <span>
                                 🎁 {lang === "uk"
-                                  ? `Скидка ${longStayDiscount}% за проживання від ${nights >= 10 ? 10 : 7} ночей!`
+                                  ? `Знижка ${longStayDiscount}% за проживання від ${nights >= 10 ? 10 : 7} ночей!`
                                   : lang === "en"
                                     ? `${longStayDiscount}% discount for staying ${nights >= 10 ? 10 : 7}+ nights!`
                                     : `Скидка ${longStayDiscount}% за проживание от ${nights >= 10 ? 10 : 7} ночей!`}
