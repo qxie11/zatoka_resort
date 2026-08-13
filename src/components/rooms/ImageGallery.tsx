@@ -1,8 +1,7 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
-
 import * as React from "react";
 import { useTranslation } from "react-i18next";
+import Image from "next/image";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -26,15 +25,13 @@ export default function ImageGallery({
 
   const [current, setCurrent] = React.useState(initialSlide);
   const thumbsRef = React.useRef<HTMLDivElement>(null);
+  const [loadedImages, setLoadedImages] = React.useState<Record<number, boolean>>({});
 
   const validImages = images?.filter(Boolean) || [];
 
-  React.useEffect(() => {
-    if (isOpen) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setCurrent(initialSlide);
-    }
-  }, [isOpen, initialSlide]);
+  const handleImageLoad = (idx: number) => {
+    setLoadedImages((prev) => ({ ...prev, [idx]: true }));
+  };
 
   React.useEffect(() => {
     if (thumbsRef.current) {
@@ -87,43 +84,75 @@ export default function ImageGallery({
           </button>
         </div>
 
-        {/* ── ROW 2: Image (takes all remaining space) ── */}
-        <div className="relative min-h-0 w-full overflow-hidden">
-          {/* Blurred bg */}
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-25 blur-[50px] scale-110 transition-all duration-700 pointer-events-none"
-            style={{ backgroundImage: `url(${validImages[current]})` }}
-          />
-
-          {/* Images - Render all for instant transitions */}
-          <div className="relative z-10 w-full h-full flex items-center justify-center px-14 md:px-20 py-2">
-            {validImages.map((imageUrl, idx) => (
-              <img
-                key={idx}
-                src={imageUrl}
-                alt={`${roomName} - ${idx + 1}`}
-                className={cn(
-                  "absolute max-w-full max-h-full w-auto h-auto object-contain rounded-xl shadow-2xl select-none transition-opacity duration-300",
-                  idx === current ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-                )}
-                onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-              />
-            ))}
+        {/* ── ROW 2: Image Container ── */}
+        <div className="relative min-h-0 w-full overflow-hidden bg-black">
+          {/* Blurred background image */}
+          <div className="absolute inset-0 pointer-events-none opacity-25 blur-[50px] scale-110">
+            <Image
+              src={validImages[current]}
+              alt=""
+              fill
+              sizes="100vw"
+              className="object-cover"
+              priority
+            />
           </div>
+
+          {/* Main Gallery Images */}
+          <div className="relative z-10 w-full h-full flex items-center justify-center px-14 md:px-20 py-2 overflow-auto">
+            {validImages.map((imageUrl, idx) => {
+              const isLoaded = loadedImages[idx];
+              const isActive = idx === current;
+
+              return (
+                <div
+                  key={idx}
+                  className={cn(
+                    "absolute inset-4 md:inset-12 flex items-center justify-center transition-all duration-500 ease-in-out",
+                    !isLoaded && isActive && "translate-y-4 blur-sm opacity-0",
+                    isActive ? "opacity-100 z-10 visible" : "opacity-0 z-0 invisible pointer-events-none"
+                  )}
+                >
+                  <Image
+                    src={imageUrl}
+                    alt={`${roomName} - ${idx + 1}`}
+                    fill
+                    sizes="100vw"
+                    className={cn(
+                      "object-contain rounded-xl shadow-2xl select-none transition-opacity duration-300",
+                      isLoaded ? "opacity-100" : "opacity-0"
+                    )}
+                    onLoad={() => handleImageLoad(idx)}
+                    onError={(e) => {
+                      handleImageLoad(idx);
+                      (e.target as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Четкий спиннер загрузки поверх всего (вне зоны размытия) */}
+          {!loadedImages[current] && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+              <div className="w-12 h-12 border-4 border-white/20 border-t-teal-400 rounded-full animate-spin shadow-[0_0_15px_rgba(45,212,191,0.5)]" />
+            </div>
+          )}
 
           {/* Nav arrows */}
           {validImages.length > 1 && (
             <>
               <button
                 onClick={prev}
-                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 md:h-14 md:w-14 rounded-full bg-black/40 hover:bg-black/70 text-white border border-white/10 backdrop-blur-md flex items-center justify-center transition-all hover:scale-110 active:scale-90 shadow-2xl"
+                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-30 h-12 w-12 md:h-14 md:w-14 rounded-full bg-black/40 hover:bg-black/70 text-white border border-white/10 backdrop-blur-md flex items-center justify-center transition-all hover:scale-110 active:scale-90 shadow-2xl"
                 aria-label={t("prevPhoto") || "Предыдущее фото"}
               >
                 <ChevronLeft className="w-6 h-6 md:w-7 md:h-7" />
               </button>
               <button
                 onClick={next}
-                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 md:h-14 md:w-14 rounded-full bg-black/40 hover:bg-black/70 text-white border border-white/10 backdrop-blur-md flex items-center justify-center transition-all hover:scale-110 active:scale-90 shadow-2xl"
+                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-30 h-12 w-12 md:h-14 md:w-14 rounded-full bg-black/40 hover:bg-black/70 text-white border border-white/10 backdrop-blur-md flex items-center justify-center transition-all hover:scale-110 active:scale-90 shadow-2xl"
                 aria-label={t("nextPhoto") || "Следующее фото"}
               >
                 <ChevronRight className="w-6 h-6 md:w-7 md:h-7" />
@@ -134,7 +163,7 @@ export default function ImageGallery({
 
         {/* ── ROW 3: Thumbnails ── */}
         {validImages.length > 1 && (
-          <div className="bg-gradient-to-t from-black/90 to-transparent px-2 py-2 flex justify-center flex-shrink-0">
+          <div className="bg-gradient-to-t from-black/90 to-transparent px-2 py-2 flex justify-center flex-shrink-0 z-20">
             <div
               ref={thumbsRef}
               className="flex gap-2 md:gap-3 overflow-x-auto overflow-y-visible max-w-full [&::-webkit-scrollbar]:hidden snap-x items-center px-2 py-4"
@@ -143,15 +172,20 @@ export default function ImageGallery({
                 <button
                   key={index}
                   onClick={() => setCurrent(index)}
-                  className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all duration-300 snap-center outline-none ${
-                    current === index
-                      ? "w-20 h-14 md:w-24 md:h-16 ring-2 ring-teal-400 scale-105 opacity-100 shadow-[0_0_20px_rgba(45,212,191,0.4)]"
-                      : "w-14 h-10 md:w-18 md:h-12 opacity-40 hover:opacity-80 hover:scale-105 border border-white/10"
-                  }`}
+                  className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all duration-300 snap-center outline-none ${current === index
+                    ? "w-20 h-14 md:w-24 md:h-16 ring-2 ring-teal-400 scale-105 opacity-100 shadow-[0_0_20px_rgba(45,212,191,0.4)]"
+                    : "w-14 h-10 md:w-18 md:h-12 opacity-40 hover:opacity-80 hover:scale-105 border border-white/10"
+                    }`}
                 >
-                  <img src={imageUrl} className="w-full h-full object-cover" alt={`${roomName} - фото ${index + 1}`} />
+                  <Image
+                    src={imageUrl}
+                    fill
+                    sizes="96px"
+                    className="object-cover"
+                    alt={`${roomName} - фото ${index + 1}`}
+                  />
                   {current === index && (
-                    <div className="absolute inset-0 bg-teal-400/10 pointer-events-none" />
+                    <div className="absolute inset-0 bg-teal-400/10 pointer-events-none z-10" />
                   )}
                 </button>
               ))}
