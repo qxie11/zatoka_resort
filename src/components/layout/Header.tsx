@@ -234,7 +234,9 @@ export default function Header() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {mounted && renderLanguageSelector()}
+          <div className="hidden xl:block">
+            {mounted && renderLanguageSelector()}
+          </div>
 
           {mounted && isAuthenticated && (
             <div className="hidden xl:flex items-center gap-3">
@@ -312,6 +314,11 @@ export default function Header() {
                 </SheetHeader>
 
                 <div className="flex-1 overflow-y-auto p-6 space-y-6 relative z-10">
+                  {/* Language Selector in Mobile Menu */}
+                  <div className="flex items-center justify-between pb-2 border-b border-white/5">
+                    <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">{t("language", "Язык")}</span>
+                    {mounted && renderLanguageSelector()}
+                  </div>
                   {navLinks.map((link) => {
                     const localizedHref = getLocalizedHref(link.href);
                     const isActive = pathname === localizedHref;
