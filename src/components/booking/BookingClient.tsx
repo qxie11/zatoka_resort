@@ -15,9 +15,10 @@ import BackgroundFishes from "@/components/decorative/BackgroundFishes";
 interface BookingClientProps {
   rooms: Room[];
   bookings: Booking[];
+  lang?: string;
 }
 
-export default function BookingClient({ rooms, bookings }: BookingClientProps) {
+export default function BookingClient({ rooms, bookings, lang = "ru" }: BookingClientProps) {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   const [, setLangUpdate] = useState(i18n.language);
@@ -93,7 +94,7 @@ export default function BookingClient({ rooms, bookings }: BookingClientProps) {
             <SuccessMessage />
           </Suspense>
           <Suspense fallback={<div className="text-center py-12 md:py-16 text-slate-400">Загрузка формы бронирования...</div>}>
-            <BookingPageClient rooms={rooms} bookings={bookings} />
+            <BookingPageClient rooms={rooms} bookings={bookings} lang={lang} />
           </Suspense>
         </div>
       </section>

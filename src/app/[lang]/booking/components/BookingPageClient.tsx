@@ -13,9 +13,10 @@ import { ShieldCheck, Check, HelpCircle } from "lucide-react";
 interface BookingPageClientProps {
   rooms: Room[];
   bookings: Booking[];
+  lang?: string;
 }
 
-export default function BookingPageClient({ rooms, bookings }: BookingPageClientProps) {
+export default function BookingPageClient({ rooms, bookings, lang = "ru" }: BookingPageClientProps) {
   const [filteredRooms, setFilteredRooms] = useState<Room[] | null>(null);
   const [showComparison, setShowComparison] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -72,7 +73,7 @@ export default function BookingPageClient({ rooms, bookings }: BookingPageClient
       multipleRooms: (g: number, m: number) => `For a group of ${g} guests, we don't have a single shared room (our largest accommodates ${m}). However, you can book several rooms next to each other! Please select suitable options below and book them separately.`
     }
   };
-  const langKey = (i18n.language || "ru").slice(0, 2) as "ru" | "uk" | "en";
+  const langKey = (lang || i18n.language || "ru").slice(0, 2) as "ru" | "uk" | "en";
   const tLocal = localTranslations[langKey] || localTranslations.ru;
 
   // Gather all unique amenities across all rooms
