@@ -31,12 +31,16 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { roomId, startDate, endDate, name, phone, email, adminComment, status } = body;
+    const { roomId, unitId, startDate, endDate, name, phone, email, adminComment, status, pricePaid } = body;
 
     const updates: any = {};
 
     if (roomId !== undefined) updates.roomId = roomId;
+    if (unitId !== undefined) updates.unitId = unitId;
     if (status !== undefined) updates.status = status;
+    if (pricePaid !== undefined) {
+      updates.pricePaid = pricePaid === null || pricePaid === "" ? null : Number(pricePaid);
+    }
 
     const parseDateSafe = (d: string | Date) => {
       if (typeof d === "string") {
