@@ -8,8 +8,8 @@ export default async function AdminCalendarPage() {
   ]);
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Шахматка бронирований</h1>
+    <div className="space-y-4">
+      <h1 className="text-2xl font-bold">Шахматка бронирований</h1>
       <AdminBookingGrid bookings={bookings} rooms={rooms} />
     </div>
   );

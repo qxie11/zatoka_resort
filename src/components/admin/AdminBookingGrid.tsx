@@ -65,27 +65,27 @@ export default function AdminBookingGrid({ bookings, rooms }: AdminBookingGridPr
         </div>
       )}
 
-      <div className="p-4 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h3 className="text-xl font-bold">Шахматка бронирований</h3>
-        <div className="flex flex-wrap gap-2">
-          <button onClick={goPrev} className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-md text-xs sm:text-sm font-medium">Пред. неделя</button>
-          <button onClick={goToday} className="px-3 py-1.5 bg-teal-500/20 text-teal-400 hover:bg-teal-500/30 rounded-md text-xs sm:text-sm font-bold">Сегодня</button>
-          <button onClick={goNext} className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-md text-xs sm:text-sm font-medium">След. неделя</button>
+      <div className="p-3 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <h3 className="text-lg font-bold">Шахматка бронирований</h3>
+        <div className="flex flex-wrap gap-1.5">
+          <button onClick={goPrev} className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded-md text-xs font-medium">Пред. неделя</button>
+          <button onClick={goToday} className="px-2.5 py-1 bg-teal-500/20 text-teal-400 hover:bg-teal-500/30 rounded-md text-xs font-bold">Сегодня</button>
+          <button onClick={goNext} className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded-md text-xs font-medium">След. неделя</button>
         </div>
       </div>
       
-      <div className="overflow-x-auto">
+      <div className="overflow-auto max-h-[calc(100vh-280px)]">
         <div className="min-w-[800px]">
           {/* Header row */}
           <div className="flex border-b border-slate-800 sticky top-0 bg-slate-900 z-30 shadow-md">
-            <div className="w-24 sm:w-48 shrink-0 border-r border-slate-800 p-2 sm:p-3 font-semibold text-slate-400 text-xs sm:text-sm flex items-center sticky left-0 bg-slate-900 z-40 shadow-[4px_0_10px_-5px_rgba(0,0,0,0.5)]">
+            <div className="w-24 sm:w-48 shrink-0 border-r border-slate-800 p-1.5 sm:p-2 font-semibold text-slate-400 text-xs sm:text-sm flex items-center sticky left-0 bg-slate-900 z-40 shadow-[4px_0_10px_-5px_rgba(0,0,0,0.5)]">
               Номера / Даты
             </div>
             <div className="flex flex-1">
               {dates.map((date, i) => (
-                <div key={i} className="flex-1 min-w-[50px] border-r border-slate-800/50 p-2 text-center flex flex-col items-center justify-center">
-                  <span className="text-xs text-slate-500 uppercase">{format(date, 'E', { locale: ru })}</span>
-                  <span className={`text-sm font-bold ${isSameDay(date, new Date()) ? 'text-teal-400' : 'text-slate-300'}`}>
+                <div key={i} className="flex-1 min-w-[50px] border-r border-slate-800/50 p-1 text-center flex flex-col items-center justify-center">
+                  <span className="text-[10px] text-slate-500 uppercase leading-tight">{format(date, 'E', { locale: ru })}</span>
+                  <span className={`text-xs sm:text-sm font-bold ${isSameDay(date, new Date()) ? 'text-teal-400' : 'text-slate-300'}`}>
                     {format(date, 'd')}
                   </span>
                 </div>
@@ -104,15 +104,15 @@ export default function AdminBookingGrid({ bookings, rooms }: AdminBookingGridPr
               return (
                 <div key={room.id} className="flex flex-col">
                   {/* Category header for room */}
-                  <div className="bg-slate-800/40 px-3 py-2 border-b border-slate-800/50 flex justify-between items-center sticky left-0 w-full z-20 backdrop-blur-sm">
-                    <span className="font-bold text-xs uppercase tracking-wider text-teal-400">{room.name}</span>
-                    <span className="text-[10px] sm:text-xs font-semibold text-slate-500 whitespace-nowrap ml-4">{room.price} грн/сутки</span>
+                  <div className="bg-slate-800/40 px-3 py-1 border-b border-slate-800/50 flex justify-between items-center sticky left-0 w-full z-20 backdrop-blur-sm">
+                    <span className="font-bold text-[10px] sm:text-xs uppercase tracking-wider text-teal-400">{room.name}</span>
+                    <span className="text-[9px] sm:text-xs font-semibold text-slate-500 whitespace-nowrap ml-4">{room.price} грн/сутки</span>
                   </div>
 
                   {units.map((unit, index) => (
                     <div key={unit.id || `${room.id}-${index}`} className="flex border-b border-slate-800/50 hover:bg-slate-800/30 group">
-                      <div className="w-24 sm:w-48 shrink-0 border-r border-slate-800 p-2 sm:p-3 flex flex-col justify-center sticky left-0 bg-slate-900 group-hover:bg-slate-800/90 z-10 shadow-[4px_0_10px_-5px_rgba(0,0,0,0.5)] transition-colors">
-                        <span className="font-bold text-[10px] sm:text-sm text-slate-200 truncate" title={unit.name}>{unit.name}</span>
+                      <div className="w-24 sm:w-48 shrink-0 border-r border-slate-800 p-1.5 sm:p-2 flex flex-col justify-center sticky left-0 bg-slate-900 group-hover:bg-slate-800/90 z-10 shadow-[4px_0_10px_-5px_rgba(0,0,0,0.5)] transition-colors">
+                        <span className="font-bold text-[10px] sm:text-xs text-slate-200 truncate" title={unit.name}>{unit.name}</span>
                       </div>
                       <div className="flex flex-1 relative">
                         {/* Grid columns background */}
@@ -148,7 +148,7 @@ export default function AdminBookingGrid({ bookings, rooms }: AdminBookingGridPr
                               <div 
                                 key={booking.id}
                                 onClick={() => setSelectedBooking(booking)}
-                                className={`absolute top-1 bottom-1 rounded-md border ${colorClass} px-2 py-1 shadow-sm overflow-hidden text-xs font-medium flex items-center cursor-pointer hover:bg-teal-500/30 hover:border-teal-400 z-10 transition-all`}
+                                className={`absolute top-0.5 bottom-0.5 rounded-md border ${colorClass} px-2 py-0.5 shadow-sm overflow-hidden text-[10px] sm:text-xs font-medium flex items-center cursor-pointer hover:bg-teal-500/30 hover:border-teal-400 z-10 transition-all`}
                                 style={{
                                   left: `calc(${(startIndex / daysToShow) * 100}%)`,
                                   width: `calc(${(span / daysToShow) * 100}%)`
