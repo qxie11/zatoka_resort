@@ -19,7 +19,7 @@ import {
   BedDouble
 } from "lucide-react";
 import type { Booking, Room } from "@/lib/types";
-import { useGetBookingsQuery } from "@/lib/api";
+import { useGetBookingLogsQuery } from "@/lib/api";
 
 interface LogsClientProps {
   initialBookings: Booking[];
@@ -27,8 +27,8 @@ interface LogsClientProps {
 }
 
 export default function LogsClient({ initialBookings, initialRooms }: LogsClientProps) {
-  // Use RTK Query to get real-time bookings, fallback to initialBookings
-  const { data: bookings = initialBookings } = useGetBookingsQuery();
+  // Use RTK Query to get real-time bookings logs, fallback to initialBookings
+  const { data: bookings = initialBookings } = useGetBookingLogsQuery();
   const rooms = initialRooms;
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -55,17 +55,17 @@ export default function LogsClient({ initialBookings, initialRooms }: LogsClient
       const end = startOfDay(new Date(b.endDate));
       
       // Active now: today is between start and end
-      if (today >= start && today < end && b.status !== "CANCELLED") {
+      if (today >= start && today < end && b.status !== "CANCELLED" && !b.isDeleted) {
         activeNow++;
       }
       
       // Checking out today
-      if (isToday(end) && b.status !== "CANCELLED") {
+      if (isToday(end) && b.status !== "CANCELLED" && !b.isDeleted) {
         checkOutsToday++;
       }
       
       // Upcoming bookings
-      if (start > today && b.status !== "CANCELLED") {
+      if (start > today && b.status !== "CANCELLED" && !b.isDeleted) {
         upcoming++;
       }
     });
@@ -94,20 +94,23 @@ export default function LogsClient({ initialBookings, initialRooms }: LogsClient
           const today = startOfDay(new Date());
           const start = startOfDay(new Date(b.startDate));
           const end = startOfDay(new Date(b.endDate));
-          return matchesSearch && today >= start && today < end && b.status !== "CANCELLED";
+          return matchesSearch && today >= start && today < end && b.status !== "CANCELLED" && !b.isDeleted;
         }
         if (statusFilter === "COMPLETED") {
           const today = startOfDay(new Date());
           const end = startOfDay(new Date(b.endDate));
-          return matchesSearch && today >= end && b.status !== "CANCELLED";
+          return matchesSearch && today >= end && b.status !== "CANCELLED" && !b.isDeleted;
         }
         if (statusFilter === "UPCOMING") {
           const today = startOfDay(new Date());
           const start = startOfDay(new Date(b.startDate));
-          return matchesSearch && start > today && b.status !== "CANCELLED";
+          return matchesSearch && start > today && b.status !== "CANCELLED" && !b.isDeleted;
         }
         if (statusFilter === "CANCELLED") {
-          return matchesSearch && b.status === "CANCELLED";
+          return matchesSearch && b.status === "CANCELLED" && !b.isDeleted;
+        }
+        if (statusFilter === "DELETED") {
+          return matchesSearch && b.isDeleted === true;
         }
         return matchesSearch;
       })
@@ -194,6 +197,7 @@ export default function LogsClient({ initialBookings, initialRooms }: LogsClient
             { id: "UPCOMING", label: "Предстоящие" },
             { id: "COMPLETED", label: "Завершённые" },
             { id: "CANCELLED", label: "Отменённые" },
+            { id: "DELETED", label: "Удалённые" },
           ].map((filter) => (
             <button
               key={filter.id}
@@ -243,7 +247,7 @@ export default function LogsClient({ initialBookings, initialRooms }: LogsClient
                   return (
                     <tr 
                       key={b.id} 
-                      className="hover:bg-white/5 transition-colors group"
+                      className={`hover:bg-white/5 transition-colors group ${b.isDeleted ? "opacity-60 bg-slate-950/20" : ""}`}
                     >
                       {/* Guest Contacts */}
                       <td className="py-3.5 px-4">
@@ -308,7 +312,11 @@ export default function LogsClient({ initialBookings, initialRooms }: LogsClient
 
                       {/* Status */}
                       <td className="py-3.5 px-4 text-center">
-                        {b.status === "CANCELLED" ? (
+                        {b.isDeleted ? (
+                          <span className="inline-flex items-center px-2 py-1 rounded-md text-[10px] sm:text-xs font-bold tracking-wide bg-rose-500/10 text-rose-500 border border-rose-500/20">
+                            Удалено
+                          </span>
+                        ) : b.status === "CANCELLED" ? (
                           <span className="inline-flex items-center px-2 py-1 rounded-md text-[10px] sm:text-xs font-bold tracking-wide bg-rose-500/15 text-rose-400 border border-rose-500/20">
                             Отменено
                           </span>

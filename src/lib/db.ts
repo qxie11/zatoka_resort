@@ -224,6 +224,7 @@ export const deleteRoom = async (id: string): Promise<boolean> => {
 // Bookings CRUD
 export const getBookings = async (): Promise<Booking[]> => {
   const bookings = await prisma.booking.findMany({
+    where: { isDeleted: false },
     orderBy: { createdAt: 'desc' },
     include: { unit: true },
   });
@@ -244,12 +245,13 @@ export const getBookings = async (): Promise<Booking[]> => {
     adminComment: booking.adminComment || undefined,
     status: booking.status || "CONFIRMED",
     createdAt: booking.createdAt,
+    isDeleted: booking.isDeleted,
   }));
 };
 
 export const getBookingsByRoomId = async (roomId: string): Promise<Booking[]> => {
   const bookings = await prisma.booking.findMany({
-    where: { roomId },
+    where: { roomId, isDeleted: false },
     orderBy: { startDate: 'asc' },
     include: { unit: true },
   });
@@ -269,12 +271,13 @@ export const getBookingsByRoomId = async (roomId: string): Promise<Booking[]> =>
     discountApplied: booking.discountApplied || undefined,
     adminComment: booking.adminComment || undefined,
     createdAt: booking.createdAt,
+    isDeleted: booking.isDeleted,
   }));
 };
 
 export const getBookingById = async (id: string): Promise<Booking | null> => {
-  const booking = await prisma.booking.findUnique({
-    where: { id },
+  const booking = await prisma.booking.findFirst({
+    where: { id, isDeleted: false },
     include: { unit: true },
   });
   
@@ -295,7 +298,34 @@ export const getBookingById = async (id: string): Promise<Booking | null> => {
     discountApplied: booking.discountApplied || undefined,
     adminComment: (booking as any).adminComment || undefined,
     createdAt: booking.createdAt,
+    isDeleted: booking.isDeleted,
   };
+};
+
+export const getBookingLogs = async (): Promise<Booking[]> => {
+  const bookings = await prisma.booking.findMany({
+    orderBy: { startDate: 'desc' },
+    include: { unit: true },
+  });
+  
+  return bookings.map((booking: any) => ({
+    id: booking.id,
+    roomId: booking.roomId,
+    unitId: booking.unitId || undefined,
+    unitName: booking.unit?.name || undefined,
+    startDate: booking.startDate,
+    endDate: booking.endDate,
+    name: booking.name,
+    phone: booking.phone,
+    email: booking.email || undefined,
+    pricePaid: booking.pricePaid || undefined,
+    promoCode: booking.promoCode || undefined,
+    discountApplied: booking.discountApplied || undefined,
+    adminComment: booking.adminComment || undefined,
+    status: booking.status || "CONFIRMED",
+    createdAt: booking.createdAt,
+    isDeleted: booking.isDeleted,
+  }));
 };
 
 const saveCustomerEmail = async (email: string, name: string, phone: string) => {
@@ -415,8 +445,9 @@ export const updateBooking = async (id: string, booking: Partial<Omit<Booking, '
 
 export const deleteBooking = async (id: string): Promise<boolean> => {
   try {
-    await prisma.booking.delete({
+    await prisma.booking.update({
       where: { id },
+      data: { isDeleted: true },
     });
     return true;
   } catch (error) {

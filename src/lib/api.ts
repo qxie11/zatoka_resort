@@ -78,6 +78,17 @@ export const bookingsApi = createApi({
         }));
       },
     }),
+    getBookingLogs: builder.query<Booking[], void>({
+      query: () => "/admin/logs",
+      providesTags: ["Booking"],
+      transformResponse: (response: Booking[]) => {
+        return response.map((booking) => ({
+          ...booking,
+          startDate: new Date(booking.startDate),
+          endDate: new Date(booking.endDate),
+        }));
+      },
+    }),
     getBookingById: builder.query<Booking, string>({
       query: (id) => `/bookings/${id}`,
       providesTags: (result, error, id) => [{ type: "Booking", id }],
@@ -199,6 +210,7 @@ export const {
 
 export const {
   useGetBookingsQuery,
+  useGetBookingLogsQuery,
   useGetBookingByIdQuery,
   useCreateBookingMutation,
   useUpdateBookingMutation,

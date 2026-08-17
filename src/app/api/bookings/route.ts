@@ -90,6 +90,7 @@ export async function POST(request: NextRequest) {
           roomId,
           startDate: { lt: end },
           endDate: { gt: start },
+          isDeleted: false,
         },
       });
 

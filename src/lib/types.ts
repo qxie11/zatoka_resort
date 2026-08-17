@@ -42,6 +42,7 @@ export type Booking = {
   adminComment?: string;
   status?: string;
   createdAt?: Date | string;
+  isDeleted?: boolean;
 };
 
 export type BlogPost = {

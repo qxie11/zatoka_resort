@@ -74,8 +74,8 @@ export default function AdminBookingGrid({ bookings, rooms }: AdminBookingGridPr
         </div>
       </div>
       
-      <div className="overflow-auto max-h-[calc(100vh-280px)]">
-        <div className="min-w-[800px]">
+      <div className="w-full">
+        <div className="w-full">
           {/* Header row */}
           <div className="flex border-b border-slate-800 sticky top-0 bg-slate-900 z-30 shadow-md">
             <div className="w-24 sm:w-48 shrink-0 border-r border-slate-800 p-1.5 sm:p-2 font-semibold text-slate-400 text-xs sm:text-sm flex items-center sticky left-0 bg-slate-900 z-40 shadow-[4px_0_10px_-5px_rgba(0,0,0,0.5)]">
